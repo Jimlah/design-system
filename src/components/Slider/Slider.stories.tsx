@@ -96,6 +96,23 @@ export const ThumbPosition: Story = {
     await expect(parseFloat(getComputedStyle(thumb).borderTopLeftRadius)).toBe(
       0,
     )
+
+    // **...and that the handle is *painted*, which no measurement above can tell you.** The rail used to
+    // compose the progress bar's recipe, which is `overflow-hidden` — and an ancestor that clips leaves
+    // `getBoundingClientRect` reporting the full 20x20 box while painting four pixels of it. Every
+    // assertion in this file passed with the grip rendered as a white notch at the end of the fill.
+    // Clipping is invisible to layout, so the clip itself is what has to be checked.
+    await expect(getComputedStyle(track).overflow).toBe('visible')
+    await expect(handle.height).toBeGreaterThan(rail.height)
+
+    // **...and that it straddles the rail rather than hanging over it.** React Aria's inline style
+    // centres the handle with `translate(-50%,-50%)`, which assumes the box it translates already starts
+    // at the rail's centre — and it did not, because `top` was `auto`: measured, a 20px grip sat 10px
+    // above a 4px rail. React Aria's own slider CSS says `top: 50%` for exactly this; the centring in the
+    // cross axis is now asserted here, in both orientations.
+    const railMiddle = rail.top + rail.height / 2
+    const handleMiddle = handle.top + handle.height / 2
+    await expect(Math.abs(handleMiddle - railMiddle)).toBeLessThanOrEqual(1)
   },
 }
 
@@ -216,6 +233,17 @@ export const Vertical: Story = {
       ?.parentElement as HTMLElement
     const box = rail.getBoundingClientRect()
     await expect(box.height).toBeGreaterThan(box.width)
+
+    // ...and the handle is centred on the rail's width, which is the same claim as the horizontal
+    // story's, turned ninety degrees. It needs its own line rather than the same one twice: the
+    // centring is `left: 50%` here and `top: 50%` there, and each was missing on its own.
+    const thumb = canvasElement.querySelector(
+      '[data-slot=thumb]',
+    ) as HTMLElement
+    const grip = thumb.getBoundingClientRect()
+    await expect(
+      Math.abs(grip.left + grip.width / 2 - (box.left + box.width / 2)),
+    ).toBeLessThanOrEqual(1)
   },
 }
 
