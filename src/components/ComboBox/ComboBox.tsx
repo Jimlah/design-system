@@ -73,7 +73,7 @@ const ROOT = [
 const CARET = [
   'h-1.5 w-2.5',
   'rotate-(--dropdown-caret-rotate) [color:var(--dropdown-caret-ink)]',
-  'transition-[rotate,color] duration-[160ms] ease-pulse',
+  'motion-safe:transition-[rotate,color] motion-safe:duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /**
@@ -84,8 +84,12 @@ const TRIGGER = [
   'absolute top-1/2 right-3.5 z-10 flex size-3 -translate-y-1/2',
   'items-center justify-center',
   'cursor-pointer',
+  // 12px is the drawing, not the target: the pseudo-element grows the target to 24 without moving
+  // the glyph. The outline is transparent at rest, so the ring has something to colour in.
+  'after:absolute after:content-[""] after:-inset-1.5',
+  'outline-1 outline-offset-1 outline-transparent',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed',
-  'data-[focus-visible]:outline-none',
 ].join(' ')
 
 /** The same drawing the Button shows while `isPending`, so a loading menu looks like one. */
@@ -93,7 +97,7 @@ const SPINNER = 'size-[1.25cap] motion-safe:animate-spin'
 
 /** The sheet's `.ds-select-menu`, shared down to the class list with `Select`. */
 const MENU = [
-  'flex w-(--trigger-width) flex-col overflow-hidden',
+  'flex w-(--trigger-width) flex-col overflow-clip',
   'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
@@ -442,6 +446,7 @@ export function ComboBoxPopover({
 }: ComboBoxPopoverProps) {
   return (
     <AriaPopover
+      data-slot="dropdown"
       offset={offset}
       className={[MENU, className].filter(Boolean).join(' ')}
       {...props}

@@ -42,6 +42,7 @@ const CONTROL = [
   '[--selection-mark:0]',
   '[--selection-mark-dash:0]',
   '[--selection-scale:0.4]',
+  'motion-reduce:[--selection-scale:1]',
   '[--selection-ring:transparent]',
   // hover strengthens the border...
   'data-[hovered]:[--selection-border:var(--color-foreground)]',
@@ -73,7 +74,7 @@ const BOX = [
   // A transparent outline rather than `outline-none`, so the ring fades in with
   // everything else instead of switching the outline on and off.
   'outline-1 outline-offset-[3px] outline-(--selection-ring)',
-  'transition-[background-color,border-color,outline-color] duration-[120ms] ease-pulse',
+  'transition-[background-color,border-color,outline-color] duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 /**
@@ -85,15 +86,17 @@ const MARK = [
   // Both the tick and the dash sit in the box's single grid cell, so swapping one for the other
   // cannot change the box's size.
   'col-start-1 row-start-1',
-  'size-[11px] text-ink opacity-(--selection-mark)',
-  'transition-opacity duration-[120ms] ease-pulse',
+  // The tick scales in as the box fills — the value the root publishes and that nothing read
+  // until now, so the "scales the centre" the comment above describes never happened.
+  'size-[11px] text-ink opacity-(--selection-mark) scale-(--selection-scale)',
+  'transition-[opacity,scale] duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 /** The dash an indeterminate checkbox shows instead of a tick. */
 const DASH = [
   'col-start-1 row-start-1',
   'h-0.5 w-[9px] bg-ink opacity-(--selection-mark-dash)',
-  'transition-opacity duration-[120ms] ease-pulse',
+  'transition-opacity duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 /** The sheet's `.ds-check-label`: 13px, foreground at 80%. */

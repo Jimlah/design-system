@@ -36,13 +36,16 @@ const LIST = [
 const TAB = [
   'relative cursor-pointer select-none',
   'bg-transparent px-[18px] py-3 text-[13px] tracking-[0.02em] text-foreground/55',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:text-foreground',
   'data-[selected]:text-foreground',
+  'data-[pressed]:text-foreground',
   // The indicator spans the tab's own text, not its padding, so it reads as belonging to the
   // label rather than to the cell.
   'after:absolute after:inset-x-[18px] after:-bottom-px after:h-0.5',
-  'after:bg-primary after:opacity-0 after:transition-opacity after:duration-[120ms]',
+  'after:bg-primary after:opacity-0 after:transition-opacity after:duration-(--duration-fast)',
+  // The indicator fades on the system's own curve, not on Tailwind's default one.
+  'after:ease-pulse',
   // The same indicator, turned: down the tab's own text rather than across it, over the strip's
   // hairline at its trailing edge. Written against the list's `aria-orientation` rather than a
   // group variant, because a group variant ties on specificity with the rules above and would
@@ -68,7 +71,13 @@ const TAB = [
 const COUNT = 'ms-2 text-[11px] text-warning'
 
 /** The sheet's `.ds-tabpanel`: the panel clears the list by 18px and nothing more. */
-const PANEL = 'pt-[18px] outline-none'
+const PANEL = [
+  'pt-[18px]',
+  // A focusable tabpanel that draws nothing is a focusable tabpanel with no focus: the
+  // same transparent-outline-at-rest pattern `Table`'s column and `GridList`'s row use.
+  'outline-1 -outline-offset-2 outline-transparent',
+  'data-[focus-visible]:outline-ring',
+].join(' ')
 
 export interface TabsProps extends Omit<
   AriaTabsProps,

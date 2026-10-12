@@ -31,11 +31,11 @@ export const TRACK_WASH = 'bg-foreground/12'
  * The bar's rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be
  * coloured — the reader cannot tell how full it is.
  *
- * `overflow-hidden` belongs to the **bar**, where the fill is the whole drawing. It is not part of what
+ * The clip belongs to the **bar**, where the fill is the whole drawing. It is not part of what
  * a rail is: a slider's handle is 20px square on a 4px rail, and inheriting this clip painted it as a
  * 4px sliver. See `Slider`'s `RAIL` for the measurement.
  */
-export const TRACK = 'relative h-1 w-full overflow-hidden ' + TRACK_WASH
+export const TRACK = 'relative h-1 w-full overflow-clip ' + TRACK_WASH
 
 /**
  * The bar. Its width is a **value**, not a style — which is why it arrives as `--fill` and the
@@ -44,7 +44,7 @@ export const TRACK = 'relative h-1 w-full overflow-hidden ' + TRACK_WASH
  */
 export const FILL = [
   'h-full w-(--fill)',
-  'transition-[width] duration-200 ease-pulse',
+  'transition-[width] duration-(--duration-slow) ease-pulse',
 ].join(' ')
 
 /**

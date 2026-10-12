@@ -1,6 +1,6 @@
 import { parseDate } from '@internationalized/date'
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, screen, userEvent } from 'storybook/test'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
 import { TextField } from '../TextField/TextField'
 import {
@@ -131,9 +131,13 @@ export const Open: Story = {
     // The month is drawn whole — heading, arrows, weekday row and days — from one slot.
     // Asked for by role, not by text: React Aria renders the heading twice — once for the
     // accessibility tree and once for the eye — and only the accessible one survives a role query.
-    await expect(
-      screen.getByRole('heading', { name: /october 2026/i }),
-    ).toBeVisible()
+    // Waited for rather than read straight away: the popover fades in over 160ms, and the first
+    // frame of that fade is `opacity: 0`, so a synchronous visibility check races it and loses.
+    await waitFor(() =>
+      expect(
+        screen.getByRole('heading', { name: /october 2026/i }),
+      ).toBeVisible(),
+    )
     await expect(screen.getAllByRole('gridcell').length).toBeGreaterThan(27)
     await expect(
       screen.getByRole('button', { name: /previous month/i }),
@@ -176,7 +180,10 @@ export const Pick: Story = {
     )
     // Picking writes back into the segments and closes the calendar.
     await expect(segmentsOf(canvasElement)).toEqual(['10', '20', '2026'])
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // The calendar leaves with an animation now, so the node outlives the click by one duration.
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+    )
   },
 }
 

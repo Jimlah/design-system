@@ -113,7 +113,7 @@ export interface SliderThumbProps extends Omit<
  * height paints a 1px line across a vertical slider and looks like a rendering fault.
  */
 const RAIL = [
-  // **Not `TRACK`, and the difference is the whole of a bug.** That rail is `overflow-hidden`, which
+  // **Not `TRACK`, and the difference is the whole of a bug.** That rail clips (`overflow-clip`), which
   // the bar can afford — its fill is the whole drawing. A slider's handle is 20px square on a 4px rail,
   // so the clip painted it as a **4px sliver**: a white notch at the end of the fill instead of a grip.
   //
@@ -203,7 +203,7 @@ const THUMB = [
   'opacity-(--slider-dim)',
   // Hover is on the browser's pseudo-class rather than `data-hovered`: the handle is a 14px target and
   // the state has to arrive the moment the pointer is over it, which is what `:hover` guarantees.
-  'transition-[background-color,scale] duration-150 ease-pulse',
+  'motion-safe:transition-[background-color,scale] motion-safe:duration-(--duration-fast) ease-pulse',
   // **The state signals are scale, not colour.** With the handle already white at rest, hover and drag
   // have nothing left to brighten — so they grow. Dragging used to turn the handle teal, which is the
   // exact colour of the fill underneath it: invisible on the filled half of the rail, the same mistake

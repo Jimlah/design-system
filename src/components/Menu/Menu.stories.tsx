@@ -94,7 +94,10 @@ export const Action: Story = {
     )
 
     // ...and focus comes back to the control it came from, rather than being left on the body.
-    await expect(canvas.getByRole('button', { name: 'Actions' })).toHaveFocus()
+    // The menu animates out first, and the restore lands with the unmount.
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Actions' })).toHaveFocus(),
+    )
   },
 }
 
@@ -216,7 +219,7 @@ export const Keyboard: Story = {
     await waitFor(() =>
       expect(screen.queryByRole('menu')).not.toBeInTheDocument(),
     )
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
   },
 }
 

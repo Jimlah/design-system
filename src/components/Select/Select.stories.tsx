@@ -124,7 +124,10 @@ export const Default: Story = {
 
     // Picking one closes the menu and moves the value.
     await userEvent.click(screen.getByRole('option', { name: /^http$/i }))
-    await expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    // The list fades out before it is unmounted.
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument(),
+    )
     await expect(trigger).toHaveTextContent('HTTP')
   },
 }
@@ -497,14 +500,21 @@ export const Keyboard: Story = {
     await expect(http).not.toHaveAttribute('data-focused', 'true')
 
     await userEvent.keyboard('{Enter}')
-    await expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument(),
+    )
+    // Focus comes back with the unmount, and the next Enter has to land on the trigger rather than
+    // on the body — so the restore is waited for, not assumed.
+    await waitFor(() => expect(trigger).toHaveFocus())
     await expect(trigger).toHaveTextContent('HTTPS')
 
     // Escape leaves the value alone, which is the other half of the contract.
     await userEvent.keyboard('{Enter}')
     await screen.findByRole('listbox')
     await userEvent.keyboard('{Escape}')
-    await expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument(),
+    )
     await expect(trigger).toHaveTextContent('HTTPS')
   },
 }

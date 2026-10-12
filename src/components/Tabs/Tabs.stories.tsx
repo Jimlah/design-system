@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, userEvent } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 import { User } from '@react-aria/test-utils'
 
 import {
@@ -188,7 +188,11 @@ export const Panels: Story = {
     ).toHaveLength(1)
     await userEvent.tab()
     await userEvent.keyboard('{ArrowRight}')
-    await expect(canvas.getByText(/three checks are failing/i)).toBeVisible()
+    // A panel that has just been revealed arrives with React Aria's own commit, so the text is waited
+    // for rather than read on the line after the key press.
+    await waitFor(() =>
+      expect(canvas.getByText(/three checks are failing/i)).toBeVisible(),
+    )
   },
 }
 

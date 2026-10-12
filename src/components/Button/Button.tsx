@@ -99,7 +99,7 @@ export const BUTTON_BASE = [
   // otherwise. Every button, toggle and segment in the library wears this one line.
   'font-mono font-medium uppercase tracking-[0.04em] rounded-md',
   'border cursor-pointer select-none',
-  'transition-[background-color,color,border-color,opacity] duration-[120ms] ease-pulse',
+  'transition-[background-color,color,border-color,opacity] duration-(--duration-fast) ease-pulse',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px] data-[focus-visible]:outline-ring',
   /* Hover and pressed derive from `--btn` rather than replacing it, so a state
      can never drift away from the colour it belongs to. Written here, on the

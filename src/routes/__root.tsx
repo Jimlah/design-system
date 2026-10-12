@@ -19,7 +19,10 @@ export const Route = createRootRoute({
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        // `viewport-fit=cover` is what makes the safe-area insets non-zero on a notched phone;
+        // without it `env(safe-area-inset-*)` is `0px` everywhere and the padding that uses it
+        // does nothing. See the toast region and the sheet's bottom edge.
+        content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
         // Lets the browser paint the right canvas before the stylesheet loads,

@@ -34,7 +34,7 @@ export const CHIP = [
   'inline-flex items-center',
   'border rounded-md px-2.5 py-1',
   'text-[12px] tracking-[-0.01em] uppercase',
-  'transition-[color,background-color,border-color] duration-[120ms] ease-pulse',
+  'transition-[color,background-color,border-color] duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 export const TAG_CHIP = [
@@ -102,7 +102,12 @@ const HREF = createContext<string | undefined>(undefined)
 export const TAG_REMOVE = [
   'ms-1.5 -me-1 grid size-3.5 shrink-0 cursor-pointer place-items-center',
   'text-current opacity-55',
-  'transition-opacity duration-[120ms] ease-pulse',
+  'transition-opacity duration-(--duration-fast) ease-pulse',
+  // **14px was the smallest target in the library**, on the control that deletes something. The
+  // pseudo-element grows it to 24 — WCAG 2.5.8's minimum — without moving the × or reaching into
+  // the label beside it, which is the tag's own press target.
+  'relative after:absolute after:content-[""] after:-inset-1.5',
+  'data-[pressed]:opacity-100',
   'hover:opacity-100',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-1',
   'data-[focus-visible]:outline-current',
@@ -255,7 +260,7 @@ export function TagItem({
                   viewBox="0 0 8 8"
                   fill="none"
                   aria-hidden="true"
-                  className="size-2"
+                  className="size-[1cap]"
                 >
                   <path
                     d="M1 1L7 7M7 1L1 7"

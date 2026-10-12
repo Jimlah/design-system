@@ -464,7 +464,7 @@ export function Create({ preset }: CreateProps) {
           </p>
           <pre
             data-slot="tokens"
-            className="mt-4 max-h-[26rem] overflow-auto border border-border-strong bg-card p-4 font-mono text-[12px] leading-[1.7]"
+            className="mbs-4 max-h-[26rem] overflow-auto overscroll-contain border border-border-strong bg-card p-4 font-mono text-[12px] leading-[1.7]"
           >
             {css}
           </pre>
@@ -1035,7 +1035,7 @@ function GridCard() {
         aria-label="Monitors"
         selectionMode="multiple"
         defaultSelectedKeys={['fra1']}
-        className="grid grid-cols-2 gap-3"
+        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-3"
       >
         {MONITORS.map((monitor) => (
           <GridList.Item
@@ -1279,7 +1279,7 @@ function ChartsCard() {
       title="Charts"
       note="A series in a cell, a series that never moved, and a histogram with one bar in the accent."
     >
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-6">
         <div className="flex flex-col gap-3">
           <p className={CHART_LABEL}>Sparkline</p>
           <Sparkline

@@ -62,7 +62,7 @@ export const NAV_LEVEL: Record<number, string> = {
 export const NAV_ITEM = [
   'relative flex cursor-pointer items-center gap-2 pe-[18px] py-2.5',
   'text-[14px] tracking-[-0.01em] uppercase',
-  'outline-none transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   // The row is the tree's interactive surface, so this is where every state lands — and where every
   // rule is written. The anchor inside only inherits, which is what keeps React Aria's state and
   // this system's colours from meeting on two different elements. Nothing else may set a colour
@@ -75,13 +75,23 @@ export const NAV_ITEM = [
   // saying which one you are on.
   'data-[current]:text-primary',
   'data-[current-ancestor]:text-foreground',
-  // The ring is drawn on the row, because the row is what the tree focuses; the anchor inside is
-  // taken out of the tab order so a row is one tab stop rather than two.
-  // The tree keeps a *virtual* focus: the grid holds real focus and names the active row with
-  // `aria-activedescendant`, so the row is marked `data-focused` rather than `data-focus-visible`
-  // and the ring follows that.
+  // The reset removes the tap highlight, so a row that does not answer a press is silent on a phone.
+  // It dims rather than recolours: `text-foreground` would be the same as hover, and on the current
+  // row — which carries the accent — it would substitute a different colour instead of deepening
+  // the one it has, which is the rule this system's states follow.
+  'data-[pressed]:opacity-80',
+  // **The ring is on the row for the arrow keys, and on the anchor for Tab.** The row is what the
+  // tree marks `data-focused` when its *virtual* focus moves (`aria-activedescendant`, the grid
+  // holding the real focus). Tab is a different route: it lands on the anchor inside the row, and
+  // React Aria does **not** move `focusedKey` when DOM focus moves between anchors — measured, by
+  // tabbing twice and reading `data-focused`: the first row keeps it. So a ring on the row alone
+  // would stay behind on the first row while the second anchor drew nothing. The anchor therefore
+  // carries the ring itself on `focus-visible`, and the row's own ring is suppressed while an
+  // an anchor inside it has the focus, so exactly one ring is drawn either way.
   'data-[focused]:outline-1 data-[focused]:outline-offset-[-3px]',
   'data-[focused]:outline-ring',
+  // The anchor inside has the focus: its own ring is the one to draw.
+  'data-[focused]:has-[:focus-visible]:outline-transparent',
 ].join(' ')
 
 /** The sheet's field legend: 12px, uppercase, `0.04em`, quieter than the items beneath it. */
@@ -96,8 +106,11 @@ export const NAV_ITEM = [
 export const NAV_CHEVRON = [
   'grid size-4 shrink-0 place-items-center',
   'cursor-pointer text-foreground/45',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-[color,opacity] duration-(--duration-fast) ease-pulse',
+  // 16px of caret, 24px of target.
+  'relative after:absolute after:content-[""] after:-inset-1',
   'data-[hovered]:text-foreground',
+  'data-[pressed]:opacity-70',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-ring',
 ].join(' ')
 
@@ -108,7 +121,7 @@ export const NAV_CHEVRON = [
  */
 export const NAV_LABEL =
   'flex min-w-0 flex-1 items-center gap-2 text-inherit no-underline'
-const NAV_LABEL_LINK = `${NAV_LABEL} focus:outline-none`
+const NAV_LABEL_LINK = `${NAV_LABEL} outline-1 outline-offset-[-3px] outline-transparent focus-visible:outline-ring`
 
 export const NAV_HEADER = [
   'px-[18px] pt-3 pb-1.5',
@@ -285,7 +298,7 @@ export function NavCaret({ expanded }: { expanded: boolean }) {
       aria-hidden="true"
       className={[
         'size-1.5 border-e border-b border-current',
-        'transition-[rotate] duration-[120ms] ease-pulse',
+        'motion-safe:transition-[rotate] motion-safe:duration-(--duration-fast) ease-pulse',
         expanded ? 'rotate-45' : 'rotate-[-45deg]',
       ].join(' ')}
     />

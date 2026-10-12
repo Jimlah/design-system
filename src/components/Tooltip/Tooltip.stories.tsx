@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, screen, userEvent } from 'storybook/test'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
 import { Button } from '../Button/Button'
 import { Tooltip, TooltipContent, TooltipText, TooltipTitle } from './Tooltip'
@@ -76,7 +76,10 @@ export const Default: Story = {
     ).toContain(tip.id)
 
     await userEvent.keyboard('{Escape}')
-    await expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    // The tooltip animates out, so the removal is waited for rather than assumed.
+    await waitFor(() =>
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument(),
+    )
     // Escape closes the tooltip and leaves focus where it was, so a keyboard user is not trapped
     // behind the thing that was meant to help.
     await expect(trigger).toHaveFocus()

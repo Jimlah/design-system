@@ -49,7 +49,7 @@ const ITEM = [
   // one block, heading included, not a heading with a tinted paragraph under it.
   'data-[expanded]:[--accordion-row-bg:var(--color-card)]',
   '[background:var(--accordion-row-bg)]',
-  'transition-colors duration-[160ms] ease-pulse',
+  'transition-colors duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /**
@@ -64,8 +64,9 @@ const HEADER = [
   'flex w-full items-center justify-between gap-4 ps-5 pe-4 py-3.5 text-start',
   'text-[12px] uppercase tracking-[0.06em] [color:var(--accordion-ink)]',
   'cursor-pointer select-none',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:bg-foreground/5 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/10',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-ring',
   // Inset, because an outset ring on a row that reaches the panel's edges would be clipped by
   // whatever the accordion sits in.
@@ -78,7 +79,7 @@ const HEADER = [
 const CARET = [
   'h-2 w-3 shrink-0 rotate-(--accordion-caret-rotate)',
   '[color:var(--accordion-caret-ink)]',
-  'transition-[rotate,color] duration-[160ms] ease-pulse',
+  'motion-safe:transition-[rotate,color] motion-safe:duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /**

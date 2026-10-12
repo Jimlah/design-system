@@ -87,17 +87,36 @@ export const Rows: Story = {
       <TextArea.Input rows={6} />
     </TextArea>
   ),
-  // `rows` is the native attribute and the honest way to ask for height — a field's `size` sets a
-  // fixed control height, and a textarea does not have one. `resize: vertical` is the other half:
-  // the user may make it taller, never wider, because widening it would drag the control out of its
-  // own column.
+  // **`rows` is passed through, but it is no longer the height.** The control grows with what is
+  // typed (`field-sizing: content`), so its floor is the field's 92px minimum and its ceiling is
+  // twelve lines. The attribute stays because it is the native one — and because it is what sizes
+  // the box before any of this CSS is parsed. `resize: none` follows: a box that already fits its
+  // content has nothing for a drag handle to do.
   play: async ({ canvas }) => {
     const area = canvas.getByRole<HTMLTextAreaElement>('textbox', {
       name: /notes/i,
     })
     await expect(area.rows).toBe(6)
-    await expect(area.getBoundingClientRect().height).toBeGreaterThan(92)
-    await expect(getComputedStyle(area).resize).toBe('vertical')
+    await expect(getComputedStyle(area).resize).toBe('none')
+
+    // The floor is the field's own minimum, not a fixed height of its own.
+    const empty = area.getBoundingClientRect().height
+    await expect(empty).toBe(92)
+
+    // Four lines is past the 92px floor (3 × 24px of line box plus 24px of padding), so the box
+    // has to have grown — nothing measured the text to make that happen.
+    await userEvent.click(area)
+    await userEvent.type(
+      area,
+      'First line{Enter}Second line{Enter}Third line{Enter}Fourth line',
+    )
+    await expect(area.getBoundingClientRect().height).toBeGreaterThan(empty)
+
+    // And twelve lines is the ceiling: past it the control scrolls rather than growing.
+    await userEvent.paste(
+      Array.from({ length: 20 }, (_, i) => `Line ${i}`).join('\n'),
+    )
+    await expect(area.scrollHeight).toBeGreaterThan(area.clientHeight)
   },
 }
 

@@ -116,12 +116,17 @@
         "--sidebar-ring": "var(--primary)",
         "--radius": "0",
         "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+        "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+        "--duration-fast": "120ms",
+        "--duration-base": "160ms",
+        "--duration-slow": "200ms",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
         "overflow-wrap": "break-word",
         "font-synthesis": "none",
-        "color-scheme": "dark"
+        "color-scheme": "dark",
+        "overscroll-behavior-y": "none"
       },
       "*,\n*::before,\n*::after": {
         "min-width": "0"
@@ -151,8 +156,10 @@
         "line-height": "1.5",
         "letter-spacing": "0",
         "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
-        "text-rendering": "optimizeLegibility"
+        "-moz-osx-font-smoothing": "grayscale"
+      },
+      ":where(button, a, [role='button'])": {
+        "touch-action": "manipulation"
       },
       "::selection": {
         "background": "var(--primary)",

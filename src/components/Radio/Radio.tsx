@@ -53,14 +53,17 @@ const DOT = [
   'relative size-[18px] flex-none rounded-full',
   'border border-(--selection-border) bg-transparent',
   'outline-1 outline-offset-[3px] outline-(--selection-ring)',
-  'transition-[border-color,outline-color] duration-[120ms] ease-pulse',
+  'transition-[border-color,outline-color] duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 /** The 10px centre, the sheet's `::after` at `inset: 4px`. */
 const CENTRE = [
   'absolute inset-[3px] rounded-full bg-primary',
   'opacity-(--selection-mark) scale-(--selection-scale)',
-  'transition-[opacity,transform] duration-[120ms] ease-pulse',
+  // **`scale`, not `transform`.** The property this animates is the CSS `scale` at `:62`, and a
+  // transition that names `transform` does not cover it — the centre popped in while only the
+  // fade ran. The `motion-reduce` rule above keeps it still for anyone who asked for that.
+  'transition-[opacity,scale] duration-(--duration-fast) ease-pulse',
 ].join(' ')
 
 /** The sheet shares `.ds-check-label` between the two controls: 13px, 80%. */

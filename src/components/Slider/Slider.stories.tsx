@@ -98,7 +98,7 @@ export const ThumbPosition: Story = {
     )
 
     // **...and that the handle is *painted*, which no measurement above can tell you.** The rail used to
-    // compose the progress bar's recipe, which is `overflow-hidden` — and an ancestor that clips leaves
+    // compose the progress bar's recipe, which clips (`overflow-clip`) — and an ancestor that clips leaves
     // `getBoundingClientRect` reporting the full 20x20 box while painting four pixels of it. Every
     // assertion in this file passed with the grip rendered as a white notch at the end of the fill.
     // Clipping is invisible to layout, so the clip itself is what has to be checked.

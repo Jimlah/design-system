@@ -22,15 +22,20 @@ import type {
  * toast gets wrong, and `role="status"` on a div does not get them right.
  */
 const REGION =
-  'fixed end-4 bottom-4 z-50 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2'
+  // The inset is added to the 16px rather than replacing it, and the `0px` fallback is not
+  // optional: inside a `calc()` an unsupported `env()` invalidates the whole declaration.
+  'fixed end-4 bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] z-50 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2'
 
 const TOAST = [
   'flex items-start gap-3',
   'border border-border-strong bg-card rounded-xl p-3.5',
-  // React Aria puts `data-animation="entering" | "exiting"` on the toast for the duration of its
-  // entry and exit, so an animation can be hung off it rather than off a class that is always on.
-  // No keyframes are shipped with it: which way a toast should move is a house decision, not this
-  // component's.
+  // **RAC sets no entering or exiting attribute on a toast, and this file used to say it did.**
+  // `Toast` in react-aria-components 1.22.1 writes `data-hovered`, `data-focused` and
+  // `data-focus-visible` — the string "animation" does not appear in it — so its entry cannot hang
+  // off a hook the way the dialogs' does. It comes from the shared overlay block in `styles.css`
+  // instead, keyed on `data-slot="toast"`, which is the same animation every other panel gets on
+  // mount. The exit still snaps: RAC removes the node as it leaves, and that is the hook it does
+  // not give.
 ].join(' ')
 
 const CONTENT = 'flex min-w-0 flex-1 flex-col gap-1'
@@ -41,10 +46,15 @@ const TITLE = 'text-[12px] uppercase tracking-[0.06em] text-foreground'
 const TEXT = 'text-[13px] leading-[1.5] text-foreground/70'
 
 const CLOSE = [
-  'flex size-5 shrink-0 items-center justify-center',
+  // `relative` is load-bearing: without it the hit area below resolves against the *region*, which
+  // is `fixed`, and the whole toast stack becomes one dismiss target.
+  'relative flex size-5 shrink-0 items-center justify-center',
   'cursor-pointer text-foreground/45',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-[color,opacity] duration-(--duration-fast) ease-pulse',
+  // 20px of drawing, 40px of target.
+  'after:absolute after:content-[""] after:-inset-2.5',
   'data-[hovered]:text-foreground',
+  'data-[pressed]:opacity-70',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
   'data-[focus-visible]:outline-ring',
 ].join(' ')
@@ -112,6 +122,7 @@ export function ToastRegion<T>({
 }: ToastRegionProps<T>) {
   return (
     <AriaToastRegion
+      data-slot="toast-region"
       className={[REGION, className].filter(Boolean).join(' ')}
       {...props}
     >
@@ -128,6 +139,7 @@ export function ToastRegion<T>({
 export function ToastItem<T>({ className, children, ...props }: ToastProps<T>) {
   return (
     <AriaToast
+      data-slot="toast"
       className={[TOAST, className].filter(Boolean).join(' ')}
       {...props}
     >

@@ -65,7 +65,7 @@ const TRACK = [
   // Transparent at rest rather than `outline-none`, so the ring fades in with the
   // track's own colours instead of switching on and off.
   'outline-1 outline-offset-[3px] outline-(--switch-ring)',
-  'transition-[background-color,border-color,outline-color] duration-[160ms] ease-pulse',
+  'transition-[background-color,border-color,outline-color] duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /**
@@ -79,7 +79,7 @@ const TRACK = [
 const KNOB = [
   'absolute top-0.5 left-0.5 size-3.5 rounded-full',
   'bg-(--switch-knob) translate-x-(--switch-knob-x)',
-  'transition-[translate,background-color] duration-[160ms] ease-pulse',
+  'transition-[translate,background-color] duration-(--duration-base) ease-pulse',
   'motion-reduce:transition-none',
 ].join(' ')
 

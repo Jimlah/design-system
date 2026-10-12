@@ -379,6 +379,7 @@ export function DatePickerPopover({
 }: DatePickerPopoverProps) {
   return (
     <AriaPopover
+      data-slot="dropdown"
       className={[DATE_MENU, className].filter(Boolean).join(' ')}
       {...props}
     >

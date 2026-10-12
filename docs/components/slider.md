@@ -104,7 +104,8 @@ The grip the section above describes was not what the browser drew, and it took 
 rendered control to see it. Two separate faults, both from `Slider.Track` composing the progress bar's
 recipe instead of its own:
 
-1. **The rail clips.** `progress.ts` exports `TRACK` as `overflow-hidden`, which the bar can afford —
+1. **The rail clips.** `progress.ts` exports `TRACK` as clipping (`overflow-clip` now, `overflow-hidden`
+   when this was found), which the bar can afford —
    its fill is the whole drawing. A slider's handle is a **20px square on a 4px rail**, so the clip painted
    it as a 4px white notch at the end of the fill. React Aria's own docs CSS for a slider track has no
    overflow rule at all. What the two rails share is the **wash**, not the clip; that is now its own

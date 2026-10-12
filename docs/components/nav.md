@@ -49,6 +49,20 @@ here and they must stay in the tab order.
 For the same reason the tree is `aria-activedescendant`-driven, so a row is marked `data-focused`
 rather than `data-focus-visible`, and the focus ring follows that.
 
+**A ring on the row alone was not enough, and for a while there was none at all.** `NAV_ITEM` carried
+`outline-none` in the same class list as its `data-[focused]:outline-1` ring, which sets Tailwind's
+shared `--tw-outline-style` and makes the ring unwritable — the same mistake `Table` and `GridList`
+had made, and the third one in the repo. The anchor, meanwhile, carried `focus:outline-none`, and the
+anchor is the real Tab stop here, so a keyboard user tabbing the sidebar got nothing.
+
+The row is right for the **arrow keys**: React Aria moves a _virtual_ focus with
+`aria-activedescendant` and marks the row `data-focused`. Tab is a different route, and there the row
+cannot carry it: RAC does not move `focusedKey` when DOM focus travels from one anchor to the next —
+measured by tabbing twice and reading `data-focused`, which stayed on the first row. So the anchor
+draws the ring itself on `focus-visible`, the row keeps its own for the arrow keys, and the row's ring
+is switched off while an anchor inside it has the focus (`data-[focused]:has-[:focus-visible]`). One
+ring, whichever way focus arrived.
+
 ### An expandable item must contain a real button
 
 React Aria says so at runtime: _"Expandable tree items must contain a expand button so screen reader

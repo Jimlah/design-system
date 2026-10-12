@@ -415,10 +415,14 @@ The element reports `outline-width: 2px` with `outline-style: none` and looks pe
 ring as a **transparent outline at rest** instead, the way `Radio`, `Checkbox`, `Switch` and
 `ColorSwatchPicker` all do, and change only its colour on state.
 
-**This rule was written down and then broken twice in the same repo** — `Table`'s column and `GridList`'s
-row each carried `outline-none` beside their ring, so neither could ever draw. A file-level grep for
-`outline-none` does not find them, because both utilities are frequently in _different_ class lists in the
-same file; the check has to be per element, and the cheapest reliable one is the computed style:
+**This rule was written down and then broken three times in the same repo** — `Table`'s column and
+`GridList`'s row each carried `outline-none` beside their ring, and an audit against
+[good-css](https://good-css.com/) afterwards found a third in `Nav`'s `NAV_ITEM` row, which `Tree`
+composes: the sidebar row's `data-[focused]` ring could never draw, and the anchor beside it — the real
+Tab stop — carried `focus:outline-none` with nothing replacing it, so a keyboard user had no focus
+indicator in the sidebar at all. All four draw now. A file-level grep for `outline-none` does not find
+them, because both utilities are frequently in _different_ class lists in the same file; the check has
+to be per element, and the cheapest reliable one is the computed style:
 
 ```js
 // In the browser, for an element that should have a ring but is not focused:

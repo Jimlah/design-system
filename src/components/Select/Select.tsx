@@ -47,7 +47,7 @@ const TRIGGER = [
   'h-(--field-control-h) ps-3.5 pe-3.5 text-left',
   'border border-(--field-border) bg-muted text-foreground',
   'cursor-pointer rounded-md',
-  'transition-[border-color,background-color] duration-[120ms] ease-pulse',
+  'transition-[border-color,background-color] duration-(--duration-fast) ease-pulse',
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
   // The sheet turns the border teal on focus and leaves the UA ring off; Chrome gives a
   // focused button `outline-style: auto` regardless, so it has to be said explicitly.
@@ -93,7 +93,7 @@ const ICON = 'flex size-3 shrink-0 items-center justify-center'
 const ICON_CARET = [
   ICON,
   'rotate-(--dropdown-caret-rotate) [color:var(--dropdown-caret-ink)]',
-  'transition-[rotate,color] duration-[160ms] ease-pulse',
+  'motion-safe:transition-[rotate,color] motion-safe:duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /** Same box, no rotation: a spinner that turned when the menu opened would read as a fault. */
@@ -105,12 +105,12 @@ const ICON_SPINNER = [ICON, '[color:var(--dropdown-caret-ink)]'].join(' ')
  * under a fixed frame rather than dragging the frame's edges with them.
  */
 const MENU = [
-  'flex w-(--trigger-width) flex-col overflow-hidden',
+  'flex w-(--trigger-width) flex-col overflow-clip',
   'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
-const LIST = 'max-h-[264px] overflow-auto p-0 outline-none'
+const LIST = 'max-h-[264px] overflow-auto overscroll-contain p-0 outline-none'
 
 /** The sheet's `.ds-select-option`: 13px, 75%, with the accent reserved for the choice. */
 const OPTION = [
@@ -118,6 +118,7 @@ const OPTION = [
   'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/12',
   'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
   'data-[selected]:text-primary',
 ].join(' ')
@@ -551,6 +552,7 @@ export function SelectPopover({
   // no search at all.
   return (
     <AriaPopover
+      data-slot="dropdown"
       offset={offset}
       className={[MENU, className].filter(Boolean).join(' ')}
       {...props}

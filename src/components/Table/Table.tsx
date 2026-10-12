@@ -67,13 +67,14 @@ const COLUMN = [
  */
 const ROW = [
   'border-b border-border bg-card last:border-b-0',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   // The native `:hover`, not `data-[hovered]` — which React Aria does set, but wires to pointer
   // *enter*, so a pointer over a cell does not shade its row. For a static surface like a row the
   // pseudo-class is both correct and what the sheet uses (`.ds-row--hover:hover`). Note that
   // neither route can be driven from a story: see the note in Table.stories.tsx.
   'hover:bg-muted',
   'data-[selected]:bg-muted',
+  'data-[pressed]:bg-foreground/10',
   'data-[focus-visible]:outline-1 data-[focus-visible]:-outline-offset-2',
   'data-[focus-visible]:outline-ring',
   'data-[disabled]:opacity-40',
@@ -88,6 +89,14 @@ const CELL = [
   'px-5 py-3.5 align-middle',
   SELECTION_GUTTER,
   'text-[13px] leading-[1.5] text-foreground/75',
+  // **A number in a column must not move as it changes.** The body font is monospace today, so
+  // this is invisible — which is exactly why it has to come from the property and not from the
+  // typeface: the day a theme picks a proportional family, the column starts dancing.
+  'tabular-nums',
+  // The other half of a table that survives its data. An auto-layout table ignores the root's
+  // `overflow-wrap: break-word` while it measures a cell, so a long hostname or URL widens the
+  // table instead of wrapping inside it.
+  'wrap-anywhere',
   '[&[role=rowheader]]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:-outline-offset-2',
   'data-[focus-visible]:outline-ring',
@@ -387,7 +396,7 @@ export function TableResizable({
   return (
     <AriaResizableTableContainer
       data-slot="resizable-table"
-      className={['w-full overflow-x-auto', className]
+      className={['w-full overflow-x-auto overscroll-x-contain', className]
         .filter(Boolean)
         .join(' ')}
       {...props}
@@ -418,7 +427,7 @@ export function TableResizer({ className, ...props }: AriaColumnResizerProps) {
       className={[
         'absolute inset-y-0 -end-px z-10 w-1.5 cursor-col-resize touch-none select-none',
         'outline-2 outline-offset-1 outline-transparent',
-        'transition-colors duration-[120ms] ease-pulse',
+        'transition-colors duration-(--duration-fast) ease-pulse',
         'data-[hovered]:bg-input',
         'data-[resizing]:bg-primary',
         'data-[focus-visible]:outline-ring',

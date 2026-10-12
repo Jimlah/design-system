@@ -151,6 +151,38 @@ compiles to `font-family: var(--type-mono)` and follows the element it is used o
 This is what the [`/create`](./create.md) page needed in order to offer a typeface at all, and it is the
 one token a value can move that a variable could not.
 
+**One size does grow with the screen.** `--text-display` is `clamp(2rem, 1.5rem + 2.5vw, 2.5rem)`, and
+the landing hero is its only consumer. The preferred value is written `rem + vw` — never `vw` alone, which
+would ignore the reader's font size — and its top is 2.5× its bottom, which is WCAG 1.4.4's limit for fluid
+text. The 10–18px chrome is deliberately fixed: this is a dense monitoring UI, and type that grew under it
+would fight the density it is built on.
+
+## Motion
+
+Three durations and one curve, declared once in `:root` and read by every transition in the library:
+
+| Token             | Utility                      | Value                          |
+| ----------------- | ---------------------------- | ------------------------------ |
+| `--duration-fast` | `duration-(--duration-fast)` | `120ms` — a state change       |
+| `--duration-base` | `duration-(--duration-base)` | `160ms` — something that moves |
+| `--duration-slow` | `duration-(--duration-slow)` | `200ms` — the ceiling          |
+| `--ease-pulse`    | `ease-pulse`                 | `cubic-bezier(0.4, 0, 0.2, 1)` |
+
+A component asks for them through the variable form of the utility, so retiming the whole system is these
+three numbers and nothing else. The transitions that _move_ something are additionally inside
+`motion-safe:` — movement is what someone who has asked for less motion wants less of, and the state
+change still happens.
+
+**They are in `:root` and not in `@theme inline`, on purpose.** Tailwind has no `--duration-*` theme
+namespace, so an entry in the theme block would produce neither a variable nor a utility;
+`var(--duration-fast)` inside `duration-(…)` is the form that works, and a one-off can still be written as
+`duration-[220ms]`. Four components that used 150ms before the tokens existed now read
+`--duration-fast` — one number for the system rather than two.
+
+The one thing that is not a utility is the overlay entry and exit animation, which lives in the OVERLAYS
+block of `styles.css`; that block carries the measurements behind it, including why the entry hangs off
+the mount and the exit off React Aria's `data-exiting`.
+
 ## What this costs in the registry
 
 The generator walks every `@theme` at-rule and every top-level rule, so the values and the theme

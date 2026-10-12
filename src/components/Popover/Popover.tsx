@@ -85,12 +85,14 @@ export function PopoverContent({
   return (
     <AriaPopover
       data-slot="popover"
-      className={[SURFACE, 'outline-none', className].filter(Boolean).join(' ')}
+      className={[SURFACE, 'focus-visible:outline-ring', className]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     >
       <AriaDialog
         aria-describedby={id}
-        className="flex flex-col gap-3 p-4 outline-none"
+        className="flex flex-col gap-3 p-4 outline-1 -outline-offset-2 outline-transparent focus-visible:outline-ring"
       >
         <DescriptionId.Provider value={id}>{children}</DescriptionId.Provider>
       </AriaDialog>

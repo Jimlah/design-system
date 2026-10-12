@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, screen, userEvent } from 'storybook/test'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
 import { startsWith } from '../Select/Select'
 import { TextField } from '../TextField/TextField'
@@ -144,7 +144,10 @@ export const Default: Story = {
     await expect(
       canvas.getByRole('combobox', { name: /monitor/i }),
     ).toHaveValue('fra1 · Frankfurt')
-    await expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    // The menu fades out before React Aria unmounts it.
+    await waitFor(() =>
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument(),
+    )
 
     // The icon is an affix the Group makes room for, not something the input knows about.
     await expect(
@@ -294,7 +297,10 @@ export const Empty: Story = {
     // would read as a control that has stopped working. React Aria gives that message the
     // `option` role, so it is counted here rather than filtered out; what matters is that no
     // *monitor* is offered.
-    await expect(screen.getByText(/no monitors match that/i)).toBeVisible()
+    // The empty state arrives inside the menu, so it fades in with it.
+    await waitFor(() =>
+      expect(screen.getByText(/no monitors match that/i)).toBeVisible(),
+    )
     await expect(
       screen.queryByRole('option', { name: /fra1/i }),
     ).not.toBeInTheDocument()

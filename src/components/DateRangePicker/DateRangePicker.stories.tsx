@@ -1,6 +1,6 @@
 import { parseDate } from '@internationalized/date'
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, screen, userEvent } from 'storybook/test'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
 import { TextField } from '../TextField/TextField'
 import {
@@ -123,10 +123,13 @@ export const Open: Story = {
     await openCalendar(canvas)
 
     // Asked for by role: React Aria renders the heading twice, and the duplicate is aria-hidden.
-    await expect(
-      // Both months are one heading now that the picker always shows two.
-      screen.getByRole('heading', { name: /october to november 2026/i }),
-    ).toBeVisible()
+    // The calendar fades in; the first frame of that is `opacity: 0`.
+    await waitFor(() =>
+      expect(
+        // Both months are one heading now that the picker always shows two.
+        screen.getByRole('heading', { name: /october to november 2026/i }),
+      ).toBeVisible(),
+    )
     // The ends carry the accent whole, and everything between them takes it as a wash — which is
     // the whole difference from two unrelated picks.
     // A range calendar renders more than one node carrying a day's name, so the day is asked for
@@ -181,8 +184,10 @@ export const Pick: Story = {
       '8',
       '2026',
     ])
-    // Picking both ends closes the calendar.
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // Picking both ends closes the calendar — which is animated, so the node is waited out.
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+    )
   },
 }
 

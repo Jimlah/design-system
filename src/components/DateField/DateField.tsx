@@ -96,7 +96,7 @@ export interface DateFieldErrorProps extends Omit<
 const GROUP = [
   'flex w-fit items-center',
   'border border-(--field-border) bg-card',
-  'transition-colors duration-150 ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[focus-within]:border-primary',
   'data-[invalid]:border-destructive',
   'data-[disabled]:opacity-40',

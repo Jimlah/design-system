@@ -46,7 +46,7 @@ export const DATE_ROOT = [
 const DATE_CARET = [
   'h-1.5 w-2.5',
   'rotate-(--dropdown-caret-rotate) [color:var(--dropdown-caret-ink)]',
-  'transition-[rotate,color] duration-[160ms] ease-pulse',
+  'motion-safe:transition-[rotate,color] motion-safe:duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 export const DATE_TRIGGER = [
@@ -54,12 +54,15 @@ export const DATE_TRIGGER = [
   'items-center justify-center',
   'cursor-pointer',
   'data-[disabled]:cursor-not-allowed',
-  'data-[focus-visible]:outline-none',
+  // 12px is the drawing, not the target — the pseudo-element makes it 24.
+  'after:absolute after:content-[""] after:-inset-1.5',
+  'outline-1 outline-offset-1 outline-transparent',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /** The sheet's `.ds-select-menu`, the same surface a select's list opens on. */
 export const DATE_MENU = [
-  'flex w-fit flex-col overflow-hidden',
+  'flex w-fit flex-col overflow-clip',
   'border border-border-strong bg-card rounded-xl p-2',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
@@ -74,8 +77,9 @@ export const DATE_MENU = [
 export const DATE_CELL: string = [
   'flex size-8 items-center justify-center rounded-md',
   'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/15',
   'data-[outside-month]:text-foreground/30',
   // A day outside `minValue`/`maxValue` is `data-unavailable`; a day in a wholly disabled
   // calendar is `data-disabled`. Both mean the same thing to the eye, so both are marked.
@@ -111,7 +115,7 @@ export const DATE_SEGMENT = [
 export const DATE_NAV = [
   'flex size-7 items-center justify-center rounded-md',
   'text-foreground/70 cursor-pointer',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
   'data-[focus-visible]:outline-ring',
@@ -189,7 +193,7 @@ function Chevron({ className }: { className: string }) {
 const DATE_PICKER = [
   'cursor-pointer appearance-none border-0 bg-transparent p-0',
   'font-mono text-[12px] font-medium tracking-[0.08em] uppercase text-foreground',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'hover:text-primary',
   'outline-2 outline-offset-2 outline-transparent',
   'data-[focus-visible]:outline-ring focus-visible:outline-ring',

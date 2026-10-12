@@ -7,7 +7,7 @@
  */
 
 /** The scrolling list itself. `p-0` because padding belongs to the option, so a hovered row reaches the edge. */
-export const OPTION_LIST = 'max-h-[264px] overflow-auto p-0'
+export const OPTION_LIST = 'max-h-[264px] overflow-auto overscroll-contain p-0'
 
 /**
  * The sheet's `.ds-select-option`: 13px at 75%, with the accent reserved for the choice.
@@ -22,6 +22,7 @@ export const OPTION = [
   'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/12',
   'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
   'data-[selected]:text-primary',
   // **Disabled dims and does not recolour**, the house rule every other control follows. This was missing

@@ -52,9 +52,12 @@ remembers, and getting it wrong still renders.
 - **`toast` is a required prop**, so there is nothing for Storybook to put in `args` and the meta
   is `as Meta<typeof Toast>` rather than `satisfies`. Every story supplies its own `render`.
 
-`data-animation="entering" | "exiting"` is on the toast for the length of its entry and exit, so an
-animation can hang off state rather than off a class that is always on. No keyframes ship with it:
-which way a toast should move is a house decision.
+**RAC sets no animation attribute on a toast, and this file used to say it did.** `Toast` writes
+`data-hovered`, `data-focused` and `data-focus-visible` — the string "animation" does not appear in
+`react-aria-components@1.22.1`'s `Toast.js` at all — so there was nothing for an entry to hang off and
+the toast appeared in one frame. Its entry now comes from the shared block in `styles.css`, keyed on the
+`data-slot="toast"` this component carries, as the same animation every other panel gets on mount. The
+exit still snaps: RAC removes the node as it leaves, and that is the hook it does not give.
 
 ### A toast announces itself, so it should not be the only place anything is said
 

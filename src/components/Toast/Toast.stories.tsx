@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, screen, userEvent } from 'storybook/test'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
 import { Button } from '../Button/Button'
 import {
@@ -105,7 +105,9 @@ export const Default: Story = {
     // The region is the landmark a screen reader hears; the toast is inside it.
     const region = await screen.findByRole('region', { name: /notifications/i })
     await expect(region).toBeInTheDocument()
-    await expect(screen.getByText(/check failed/i)).toBeVisible()
+    // A toast arrives with the same entry animation every other panel has, and its first frame
+    // is `opacity: 0` — so the text is waited for rather than read on the frame it appears.
+    await waitFor(() => expect(screen.getByText(/check failed/i)).toBeVisible())
     await expect(screen.getByText(/stopped responding/i)).toBeVisible()
   },
 }

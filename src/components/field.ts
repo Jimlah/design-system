@@ -104,13 +104,16 @@ export const INPUT = [
   'w-full font-mono rounded-md border border-(--field-border)',
   'h-(--field-control-h) px-3.5',
   'bg-muted text-foreground placeholder:text-foreground/35',
-  'transition-[border-color,background-color] duration-[120ms] ease-pulse',
+  'transition-[border-color,background-color] duration-(--duration-fast) ease-pulse',
   // Focus and invalid stay literal, so they outrank the published border and always
   // win — including on a read-only field, which is still focusable and still the
   // field the caret should be able to reach.
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
   'data-[focused]:outline-none data-[focused]:border-primary',
   'data-[invalid]:not-data-[focused]:border-destructive',
+  // The browser already knows when someone has left a field invalid, so the state needs no
+  // "touched" class and no blur listener — it only needed a rule. Same line in `TextArea`.
+  'user-invalid:not-data-[focused]:border-destructive',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   // Read-only gets the cursor and nothing else that dims it. `opacity` here would
   // take the *value* down with it — at 40% the text measures 3.42:1, under the 4.5:1

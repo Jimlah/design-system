@@ -34,8 +34,12 @@ const SIZES: Record<SheetSide, string> = {
   left: 'h-full w-96',
   start: 'h-full w-96',
   end: 'h-full w-96',
-  bottom: 'max-h-[80vh] w-full',
-  top: 'max-h-[80vh] w-full',
+  // An edge-anchored sheet meets the home indicator and the notch, so its panel is inset from
+  // them. The insets are `0px` until the document asks for `viewport-fit=cover`, which the root
+  // route now does.
+  bottom:
+    'max-h-[80vh] w-full [padding-block-end:env(safe-area-inset-bottom,0px)]',
+  top: 'max-h-[80vh] w-full [padding-block-start:env(safe-area-inset-top,0px)]',
 }
 
 export interface SheetProps extends Omit<
@@ -140,11 +144,26 @@ export function SheetContent({
       */}
       <AriaSheet
         data-slot="sheet"
-        className={['flex outline-none', SIZES[side]].join(' ')}
+        className={[
+          'flex outline-1 outline-offset-[-2px] outline-transparent',
+          // React Aria renders this surface without a `data-focus-visible`, so the ring is keyed on
+          // the pseudo-class the browser gives it rather than on an attribute that never arrives.
+          'focus-visible:outline-ring',
+          SIZES[side],
+        ].join(' ')}
       >
         <AriaSheetContent
           aria-describedby={id}
-          className={[SURFACE, 'flex flex-col p-6'].filter(Boolean).join(' ')}
+          className={[
+            // Scrolling lives on the panel, because the layer above is pinned to `height: 100%`
+            // and cannot be sized from outside. Without it a sheet taller than the viewport had
+            // no scrollbar anywhere: `mt-auto` on the footer had no free space to claim, and the
+            // content below the fold was unreachable.
+            SURFACE,
+            'flex min-h-0 flex-col overflow-y-auto overscroll-contain p-6',
+          ]
+            .filter(Boolean)
+            .join(' ')}
         >
           <DescriptionId.Provider value={id}>{children}</DescriptionId.Provider>
         </AriaSheetContent>
@@ -198,7 +217,7 @@ export function SheetDescription({
 export function SheetFooter({ className, children }: SheetFooterProps) {
   return (
     <div
-      className={[DIALOG_FOOTER, 'mt-auto', className]
+      className={[DIALOG_FOOTER, 'mbs-auto', className]
         .filter(Boolean)
         .join(' ')}
     >

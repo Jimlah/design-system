@@ -13,7 +13,7 @@
     },
     {
       "path": "src/components/chartTooltip.ts",
-      "content": "/**\n * The panel a chart shows under the pointer.\n *\n * Shared by `BarChart` and `DotMap`, because the two readouts are the same object: a small piece of text\n * on the panel surface, floating over the drawing, showing what the mark under the pointer means. The\n * replica has one `.dash-tip--chart` for the same reason — `dashboard.html` keeps a single `#pc-tip` and\n * moves it around rather than giving every chart its own.\n *\n * It is `bg-card` with a hairline, like every other floating surface here, so a readout over a chart reads\n * as the same material as a menu over a page.\n *\n * **`pointer-events-none` is part of the recipe, not decoration.** A panel that can be hovered sits between\n * the pointer and the mark it describes, so moving onto it changes what is under the pointer and the\n * readout flickers between two answers.\n */\nexport const CHART_TOOLTIP = [\n  'pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full',\n  // Small enough to take the control step, like the tooltip it is.\n  'border border-border-strong bg-card rounded-md px-2 py-1',\n  'font-mono text-[11px] tracking-[0.04em] text-foreground uppercase',\n].join(' ')\n",
+      "content": "/**\n * The panel a chart shows under the pointer.\n *\n * Shared by `BarChart` and `DotMap`, because the two readouts are the same object: a small piece of text\n * on the panel surface, floating over the drawing, showing what the mark under the pointer means. The\n * replica has one `.dash-tip--chart` for the same reason — `dashboard.html` keeps a single `#pc-tip` and\n * moves it around rather than giving every chart its own.\n *\n * It is `bg-card` with a hairline, like every other floating surface here, so a readout over a chart reads\n * as the same material as a menu over a page.\n *\n * **`pointer-events-none` is part of the recipe, not decoration.** A panel that can be hovered sits between\n * the pointer and the mark it describes, so moving onto it changes what is under the pointer and the\n * readout flickers between two answers.\n */\nexport const CHART_TOOLTIP = [\n  'pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full',\n  // Small enough to take the control step, like the tooltip it is.\n  'border border-border-strong bg-card rounded-md px-2 py-1',\n  // The readout changes as the pointer moves, so its figures hold their width.\n  'font-mono text-[11px] tabular-nums tracking-[0.04em] text-foreground uppercase',\n].join(' ')\n",
       "type": "registry:lib",
       "target": "@ui/pulse/chartTooltip.ts"
     }
@@ -114,12 +114,17 @@
         "--sidebar-ring": "var(--primary)",
         "--radius": "0",
         "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+        "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+        "--duration-fast": "120ms",
+        "--duration-base": "160ms",
+        "--duration-slow": "200ms",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
         "overflow-wrap": "break-word",
         "font-synthesis": "none",
-        "color-scheme": "dark"
+        "color-scheme": "dark",
+        "overscroll-behavior-y": "none"
       },
       "*,\n*::before,\n*::after": {
         "min-width": "0"
@@ -149,8 +154,10 @@
         "line-height": "1.5",
         "letter-spacing": "0",
         "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
-        "text-rendering": "optimizeLegibility"
+        "-moz-osx-font-smoothing": "grayscale"
+      },
+      ":where(button, a, [role='button'])": {
+        "touch-action": "manipulation"
       },
       "::selection": {
         "background": "var(--primary)",

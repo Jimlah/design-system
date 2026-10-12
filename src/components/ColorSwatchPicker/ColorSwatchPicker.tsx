@@ -60,7 +60,7 @@ export function ColorSwatchPickerItem({
         // `outline-style: none` while looking perfectly styled. `Radio`, `Checkbox` and `Switch` already
         // draw their rings this way, which is why theirs work.
         'cursor-pointer outline-2 outline-offset-2 outline-transparent',
-        'transition-[outline-color] duration-[120ms] ease-pulse',
+        'transition-[outline-color] duration-(--duration-fast) ease-pulse',
         'data-[selected]:outline-foreground',
         'data-[focus-visible]:outline-foreground',
         'data-[hovered]:border-foreground',

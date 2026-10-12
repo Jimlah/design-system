@@ -35,14 +35,23 @@ const AREA = [
   // root: it is inherited, and the sheet's `1.5 × 14px` is 21px, not the 24px a 16px base gives.
   'min-h-[92px] px-3.5 py-3',
   'bg-muted text-foreground placeholder:text-foreground/35',
-  'resize-y',
-  'transition-[border-color,background-color] duration-[120ms] ease-pulse',
+  // **The box grows with what is typed.** `field-sizing: content` sizes it to its content, so
+  // there is no mirror element and no grow script; `max-h-[12lh]` is the ceiling (twelve lines,
+  // after which it scrolls rather than pushing the page down); and `resize-none` takes away a
+  // drag handle with nothing left to do. The `min-h` above is the floor, not the height.
+  // Chrome 123, Safari 26.2, Firefox 152 — and a browser without it shows the same fixed box it
+  // did before, with a scrollbar.
+  'field-sizing-content max-h-[12lh] resize-none',
+  'transition-[border-color,background-color] duration-(--duration-fast) ease-pulse',
   // Focus and invalid stay literal on the control, exactly as they do on a field, so they outrank
   // the border the root publishes and always win — including on a read-only textarea, which is
   // still focusable and still worth being able to read.
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
   'data-[focused]:outline-none data-[focused]:border-primary',
   'data-[invalid]:not-data-[focused]:border-destructive',
+  // Native validity, which arrives the moment the user leaves the field — no "touched" class and
+  // no blur listener, and it fires before any submit. `field.ts`'s `INPUT` carries the same line.
+  'user-invalid:not-data-[focused]:border-destructive',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   'group-data-[readonly]:cursor-not-allowed',
 ].join(' ')
