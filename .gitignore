@@ -14,3 +14,4 @@ todos.json
 
 *storybook.log
 storybook-static
+.vitest/

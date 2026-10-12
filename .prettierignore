@@ -1,8 +1,0 @@
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
-
-# Build output — never format compiled bundles.
-storybook-static
-dist
-.tanstack

@@ -1,11 +1,16 @@
 # Everything this repo actually gates on.
 #
+# The toolchain is Vite+ — one `vp` CLI over Vite, Vitest, Oxlint and Oxfmt. `setup-vp`
+# installs it with Node and the package manager, restores the dependency cache and runs
+# `vp install` for us, so the `setup-node`, `npm ci` and cache steps this workflow used to
+# carry are gone. See AGENTS.md.
+#
 # Stories are the tests here (see AGENTS.md), so the story suite runs in CI instead of
 # being left to whoever remembers. It needs no Storybook server: `@storybook/addon-vitest`
 # boots its own — measured by running it with nothing on :6006 — but it does need a real
 # Chromium, because every story's `play` function runs in a browser.
 #
-# Node 24 is what this app is developed on; Vite 8 requires ^20.19 || >=22.12.
+# Node 24 is what this app is developed on; Vite+ requires ^22.18 || ^24.11 || >=26.
 name: CI
 
 on:
@@ -25,21 +30,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      # An exact release, never the `v1` tag: `v1` is frozen and no longer receives updates.
+      - uses: voidzero-dev/setup-vp@v1.21.2
         with:
-          node-version: 24
-          cache: npm
+          node-version: '24'
+          cache: true
 
-      - run: npm ci
-
-      # `npm run check` is `prettier --check .`, which reads this file too.
-      - run: npm run check
-
-      - run: npm run lint
-
-      # tsc is the correctness check for the curated prop surfaces: a re-declared React
-      # Aria prop that does not exist is a compile error, so they cannot be guessed.
-      - run: npx tsc --noEmit
+      # Oxfmt, Oxlint and the type check in one pass — the three tools this job used to run
+      # as three commands. `typeCheck: true` in vite.config.ts is what makes it cover the
+      # errors `tsc --noEmit` was there for.
+      - run: vp check
 
   build:
     name: Build app and Storybook
@@ -47,14 +47,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: voidzero-dev/setup-vp@v1.21.2
         with:
-          node-version: 24
-          cache: npm
+          node-version: '24'
+          cache: true
 
-      - run: npm ci
-
-      - run: npm run build
+      - run: vp build
 
       # The app serves this build at /storybook/, so a Storybook that fails to build
       # takes a route down with it. See storybookBuild() in vite.config.ts.
@@ -80,12 +78,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: voidzero-dev/setup-vp@v1.21.2
         with:
-          node-version: 24
-          cache: npm
-
-      - run: npm ci
+          node-version: '24'
+          cache: true
 
       # Keyed on the lockfile, which is what pins the Playwright version.
       - uses: actions/cache@v4
@@ -95,4 +91,4 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - run: npx vitest --project storybook run
+      - run: vp test run

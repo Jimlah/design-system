@@ -1,8 +1,15 @@
 // @ts-check
 
+import { definePlugin } from 'vite-plus/lint/plugins'
+
 /**
  * Require named children inside a component, wherever that component is used, and require the container
  * they belong in when they are used together.
+ *
+ * **This is an Oxlint JS plugin, not a dependency.** Vite+ bundles Oxlint, which loads it through
+ * `lint.jsPlugins` in `vite.config.ts` — that block is where its options are declared, in the same
+ * shape ESLint took. Oxlint's plugin API is ESLint's, so the rule below is written exactly as it was
+ * before the toolchain moved, and it needs no ESLint to run.
  *
  * `eslint-plugin-enforce-children` cannot express any of this, for two separate reasons, and both matter:
  *
@@ -93,7 +100,7 @@ function globToRegExp(pattern) {
   return new RegExp(`^${body}$`)
 }
 
-export const enforceRequiredChildren = {
+const enforceRequiredChildren = {
   meta: {
     type: 'problem',
     docs: {
@@ -264,3 +271,14 @@ export const enforceRequiredChildren = {
     }
   },
 }
+
+/**
+ * The plugin `lint.jsPlugins` loads. `pulse` is the name `vite.config.ts` writes the rule under;
+ * the rule itself never reads its own name, so the two only have to agree.
+ */
+export default definePlugin({
+  meta: { name: 'pulse' },
+  rules: {
+    'enforce-required-children': enforceRequiredChildren,
+  },
+})

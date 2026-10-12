@@ -19,10 +19,10 @@ root-absolute URLs, which would resolve against this app instead. See `storybook
 `vite.config.ts`.
 
 Stories are colocated with their component as `*.stories.tsx` and are runnable as tests
-with Vitest + Playwright:
+with Vitest 5 + Playwright, through Vite+:
 
 ```bash
-npx vitest --project storybook run
+npm test
 ```
 
 Shared configuration lives in `.storybook/`:
@@ -75,14 +75,17 @@ If you prefer not to use Tailwind CSS:
 3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
 4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
 
-## Linting & Formatting
+## Linting, formatting and types
 
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+The toolchain is [Vite+](https://viteplus.dev/) — one `vp` CLI over Vite, Vitest, Oxlint and
+Oxfmt, all of it configured in `vite.config.ts`. ESLint and Prettier are gone: the rules they
+used to run are carried over in that config's `lint` and `fmt` blocks, and the one rule this
+project wrote itself is an Oxlint plugin in `lint-rules/` (see AGENTS.md).
 
 ```bash
-npm run lint
-npm run format
-npm run check
+npm run lint     # vp lint  — Oxlint
+npm run format   # vp fmt . && vp lint --fix
+npm run check    # vp check — Oxfmt, Oxlint and a type check in one pass
 ```
 
 ## Routing

@@ -5,11 +5,18 @@
 TanStack Start (React 19, Vite 8, Tailwind CSS v4, TypeScript) app that hosts this
 project's design system. Storybook 10 uses the `@storybook/tanstack-react` framework.
 
+The toolchain is **Vite+** — one `vp` CLI over Vite, Vitest, Oxlint and Oxfmt, all of it
+configured in `vite.config.ts`. ESLint and Prettier are gone; their rules live in the `lint`
+and `fmt` blocks there, and the one rule that was ours is a plugin in `lint-rules/`. See
+[Local lint rules](#local-lint-rules). `vite` is an alias for Vite+'s core, so the app builds
+on Rolldown through the same Vite config.
+
 - `npm run dev` — app on http://localhost:3000
 - `npm run storybook` — Storybook on http://localhost:6006
-- `npx vitest --project storybook run` — run every story as a test (Playwright/Chromium)
-- `npx tsc --noEmit` — typecheck
-- `npm run lint` / `npm run check` — ESLint / Prettier
+- `npm test` — run every story as a test (Playwright/Chromium)
+- `npm run lint` — Oxlint
+- `npm run check` — Oxfmt, Oxlint and a type check in one pass
+- `npx tsc --noEmit` — `tsc` itself, for the type questions tsgolint should not be trusted with
 
 The Storybook dev server must be running before the MCP server below is reachable.
 
@@ -42,13 +49,13 @@ npx mcp-add --name "design-system-sb-mcp" --type http --url "http://localhost:60
 
 **Restart the dev server after adding or deleting a component or story file.** Tailwind's Vite
 plugin does not reliably add a _newly created_ source file to its scan, and Storybook keeps
-serving a deleted story from its index. Either way `pnpm build` produces the correct CSS while
+serving a deleted story from its index. Either way `npm run build` produces the correct CSS while
 the running server does not, so tests fail against class names that are perfectly valid — which
 reads exactly like a styling bug and is not one. If a new utility seems not to apply, check
 `[...document.querySelectorAll('style')].map(s => s.textContent).join('')` for the class before
 changing any code, and restart before believing the result.
 
-The same applies in the other direction: `npx vitest --project storybook run` right after
+The same applies in the other direction: `npm test` right after
 `storybook dev` starts can race its first build.
 
 ## Stories
@@ -76,7 +83,7 @@ directly, and two of its rules have already caught mistakes here:
   class or a DOM path. For a portalled surface — a menu, a popover — the query has to come from
   `screen`, because `canvas` only sees `#storybook-root` and the node is not inside it.
   **Getting this wrong is silent in one direction:** `expect(canvas.queryByRole('listbox')).not
-.toBeInTheDocument()` passes whether or not the menu is open, so it quietly asserts nothing.
+  .toBeInTheDocument()` passes whether or not the menu is open, so it quietly asserts nothing.
   Two of those sat in the Select stories until a `toBeInTheDocument` next to them failed.
 - **Simulate interactions with `user-event`, never by putting state on the element.** A click is
   a pointer sequence, and the component derives its own state from it. The Hover stories used to
@@ -478,8 +485,10 @@ inherited prop you genuinely need to publish must be re-declared the same way.
 
 ## Local lint rules
 
-`eslint-rules/` holds rules that are ours, wired in as a plugin in `eslint.config.js` — no dependency, because
-the published ones cannot express the constraints this library actually has.
+`lint-rules/` holds rules that are ours, loaded as an **Oxlint JS plugin** through `lint.jsPlugins` in the
+`lint` block of `vite.config.ts` — no dependency, because the published ones cannot express the constraints
+this library actually has. Oxlint's plugin API is ESLint's, so the rule below is the one that ran under
+ESLint; only the file it lives in, and the block that configures it, moved.
 
 **`pulse/enforce-required-children`** requires named children inside a component, wherever it is used:
 
@@ -507,7 +516,8 @@ reasons, and both matter:
   text, not as JSX. `radio.md`'s examples were the ones missing `Radio.Indicator`, and no lint rule can read
   them.
 - **Aliased imports** (`import { Radio as R }`). The rule matches on the tag name and the local import name.
-- It checks only within `src/**` and only for parents listed in the config.
+- It checks only for parents listed in the config. It now runs over every linted file — an ESLint `files`
+  entry used to scope it to `src/**`, and the Vite+ config has no such scope.
 
 **The rule is strict — it does not special-case `slot` or anything else.** `Table.Selection` renders
 `<Checkbox slot="selection">` with an `Indicator` and deliberately no `Text`, because the row it sits in is
@@ -616,11 +626,12 @@ imported**, so a probe in a file without the import reports nothing and looks li
 glob that does not match is indistinguishable from an exact path that does, so the pattern was checked
 separately with `src/components/**/Table.*`.
 
-Inline `// eslint-disable-next-line` and `/* eslint-disable */ … /* eslint-enable */` also work, and they have
-one advantage worth knowing: a directive that stops being needed is **reported** — `Unused eslint-disable
-directive (no problems were reported…)` — where an `ignore` entry that stops being needed is silent. That is
-the trade: the exemption is reviewable beside the rule and keeps lint comments out of the component, so it
-needs its reason written down, which is why the config carries one.
+Inline `// oxlint-disable-next-line` and `/* oxlint-disable */ … /* oxlint-enable */` also work — Oxlint reads
+the `eslint-disable` spellings too, and both were checked against a planted violation rather than assumed —
+and they have one advantage worth knowing: a directive that stops being needed is **reportable**, with
+`--report-unused-disable-directives`, where an `ignore` entry that stops being needed is silent. That is the
+trade: the exemption is reviewable beside the rule and keeps lint comments out of the component, so it needs
+its reason written down, which is why the config carries one.
 
 **A slot one level down still counts, and getting that wrong is silent.** The walker pushed each
 `JSXElement` and did not recurse into it, so it only ever saw _direct_ children. `<Radio.Indicator>` is a
