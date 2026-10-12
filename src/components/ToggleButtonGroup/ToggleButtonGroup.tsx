@@ -14,7 +14,7 @@ import type { ToggleButtonProps } from '../ToggleButton/ToggleButton'
  * nothing around it. The border is the group's, and each segment draws only the divider before it, so
  * there are no doubled edges at the joins.
  */
-const GROUP = 'inline-flex w-fit border border-input'
+const GROUP = 'inline-flex w-fit border border-input rounded-md'
 
 /**
  * One segment of the group.

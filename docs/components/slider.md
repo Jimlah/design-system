@@ -39,7 +39,9 @@ end of it. A story therefore matches on a prefix rather than on a name invented 
 
 A round thumb is what years of sliders have trained everyone to expect, and it would be a **third**
 exception to a rule that has exactly two — the checkbox and the radio. A slider handle is not a
-selection control; it is a grip. So it is square-cornered and it grows with `size` along with the rail.
+selection control; it is a grip. So it is square-cornered — literally, not by the theme's radius: it is
+`rounded-none` while a button and a card take `rounded-md` and `rounded-xl` — and it grows with `size`
+along with the rail.
 
 Getting there took three attempts, and the first two are worth recording because a passing suite did
 not notice either:

@@ -26,7 +26,9 @@ import { ERROR, FIELD, FIELD_SIZES, HINT, LABEL } from '../field'
  * a control out of its own column.
  */
 const AREA = [
-  'w-full font-mono rounded-none border border-(--field-border)',
+  // The control step of the radius scale, written again here: the textarea draws its own box rather
+  // than composing the shared `INPUT`.
+  'w-full font-mono rounded-md border border-(--field-border)',
   // No font-size here. The field root already sets it from `--field-control-text` — the sheet's
   // 14px — and a rule written on the control *lost* to whatever the environment puts on a
   // `textarea`, so the control inherits instead. The same reason the line-height is declared on the

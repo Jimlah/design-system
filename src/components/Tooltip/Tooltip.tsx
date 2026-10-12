@@ -15,7 +15,8 @@ import { OverlayArrow } from '../OverlayArrow/OverlayArrow'
  */
 const CONTENT = [
   'flex w-max max-w-72 flex-col gap-[5px]',
-  'border border-border-strong bg-card/94 px-3.5 pt-2.5 pb-3',
+  // The control step, not the surface one: 1.4 × the base on a box this short is most of its height.
+  'border border-border-strong bg-card/94 rounded-md px-3.5 pt-2.5 pb-3',
 ].join(' ')
 
 /** The sheet's `.ds-tip__title`: 12px, letterspaced, in the accent — not uppercase, as the sheet's labels are. */

@@ -104,7 +104,7 @@ const LIST = [
  */
 const ITEM = [
   'flex items-start gap-3 p-4',
-  'border border-border-strong bg-card',
+  'border border-border-strong bg-card rounded-xl',
   'text-foreground outline-2 -outline-offset-2 outline-transparent',
   'transition-colors duration-150 ease-pulse',
   'data-[hovered]:bg-muted',

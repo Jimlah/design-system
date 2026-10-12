@@ -18,6 +18,7 @@ import {
   BASES,
   DEFAULT_THEME,
   FONTS,
+  MAX_RADIUS,
   contrastWithBlack,
   contrastWithWhite,
   darkFill,
@@ -68,6 +69,16 @@ const SCHEME: Record<Mode | 'system', string> = {
   light: ':root { color-scheme: light; }',
   system: ':root { color-scheme: light dark; }',
 }
+
+/**
+ * The two steps of the radius scale this page offers, as multiples of the base.
+ *
+ * They are `--radius-md` and `--radius-xl` from `src/styles.css`, named here rather than re-derived
+ * so the control reads as the stylesheet's own scale. The page's test asserts a rendered control and a
+ * rendered surface against them.
+ */
+const CONTROL_SCALE = 0.8
+const SURFACE_SCALE = 1.4
 
 /** The small uppercase heading each control group carries. */
 const LEGEND =
@@ -159,9 +170,9 @@ export function Create({ preset }: CreateProps) {
             Create
           </h1>
           <p className="mt-4 max-w-2xl text-[15px] leading-[1.65] text-foreground/70">
-            Pick a base, an accent and a typeface. Everything else — the
-            hairlines, the label colour, the charts, the sidebar — is derived
-            from those four values by the rules in the library&apos;s own
+            Pick a base, an accent, a corner and a typeface. Everything else —
+            the hairlines, the label colour, the charts, the sidebar — is
+            derived from those values by the rules in the library&apos;s own
             stylesheet, so the block below is the whole theme rather than a
             patch over one.
           </p>
@@ -302,6 +313,54 @@ export function Create({ preset }: CreateProps) {
           </section>
 
           <section>
+            <h2 className={LEGEND}>Radius</h2>
+            <Slider
+              className="mt-3"
+              value={theme.radius}
+              minValue={0}
+              maxValue={MAX_RADIUS}
+              onChange={(value) => {
+                const pixels = Array.isArray(value) ? value[0] : value
+                update({ radius: Math.round(pixels) })
+              }}
+            >
+              <Slider.Header>
+                <Slider.Label>Corner</Slider.Label>
+                <Slider.Value />
+              </Slider.Header>
+              <Slider.Track>
+                <Slider.Fill />
+                <Slider.Thumb />
+              </Slider.Track>
+            </Slider>
+
+            {/*
+              One number, two steps, and both are shown because the scale is the thing a reader has
+              to take away: a control sits at 0.8 of the base and a surface at 1.4, which is what the
+              stylesheet's own `--radius-md` and `--radius-xl` already derive. At the sheet's 0 both
+              are 0, which is why Pulse looks exactly as it always has.
+            */}
+            <div className="mt-4 flex flex-col gap-2">
+              <Corner
+                label="Control"
+                sample="rounded-md"
+                scale={CONTROL_SCALE}
+                radius={theme.radius}
+              />
+              <Corner
+                label="Surface"
+                sample="rounded-xl"
+                scale={SURFACE_SCALE}
+                radius={theme.radius}
+              />
+            </div>
+            <p className={'mt-3 ' + NOTE}>
+              The base is the theme&apos;s; the scale is the stylesheet&apos;s.
+              Set it to 0 and every corner is the sheet&apos;s — square.
+            </p>
+          </section>
+
+          <section>
             <h2 className={LEGEND}>Type</h2>
             <ToggleButtonGroup
               aria-label="Typeface"
@@ -332,13 +391,15 @@ export function Create({ preset }: CreateProps) {
           </section>
 
           <section>
-            <h2 className={LEGEND}>Not here</h2>
+            <h2 className={LEGEND}>Out of reach</h2>
             <p className={'mt-3 ' + NOTE}>
-              There is no radius control. The sheet squares its buttons and
-              inputs, and no component uses the radius scale shadcn ships — so a
-              corner slider would move nothing. The checkbox&apos;s 2px and the
-              radio&apos;s full circle stay what they are, because those are the
-              radii users expect of them.
+              A few corners are deliberately not the theme&apos;s. The
+              checkbox&apos;s 2px and the radio&apos;s circle, because those are
+              the radii users expect of them; a switch, which is a pill whatever
+              the theme says; the table, whose hairline grid collapses its
+              borders and cannot carry a radius at all; the sheet, which is
+              anchored to an edge; and the swatch and slider grip, which are
+              pictures of a value rather than panels.
             </p>
           </section>
         </div>
@@ -415,6 +476,44 @@ function Fill({
         <p className="font-mono text-[12px]">{oklch(fill)}</p>
         <p className="text-[12px] text-foreground/60">
           {label} · {ink} label at {contrast.toFixed(2)}:1
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * One step of the radius scale, shown as the utility that carries it.
+ *
+ * The readings are arithmetic on the base because the *samples* are not: they wear `rounded-md` and
+ * `rounded-xl` themselves, so the corner in the panel is painted by the same rule a button and a card
+ * are. The arithmetic only names the number, and the page's test holds it to a computed style — 0.8
+ * and 1.4 are the stylesheet's own multipliers, and a change to them that the page did not follow
+ * would fail there rather than silently mislabel a corner.
+ */
+function Corner({
+  label,
+  sample,
+  scale,
+  radius,
+}: {
+  label: string
+  sample: string
+  scale: number
+  radius: number
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span
+        aria-hidden="true"
+        className={'size-6 shrink-0 border border-input bg-muted ' + sample}
+      />
+      <div className="min-w-0">
+        <p className="font-mono text-[12px]">
+          {label} · {sample}
+        </p>
+        <p className="text-[12px] text-foreground/60">
+          {(radius * scale).toFixed(1)}px
         </p>
       </div>
     </div>

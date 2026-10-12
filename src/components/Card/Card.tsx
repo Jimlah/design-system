@@ -11,7 +11,7 @@ import type { HeadingProps as AriaHeadingProps } from 'react-aria-components'
  * between its rows. That is the sheet's habit everywhere: a panel's own edge is the quieter
  * hairline and the rules inside it are the louder one.
  */
-const CARD = 'flex flex-col border border-border-strong bg-card'
+const CARD = 'flex flex-col border border-border-strong bg-card rounded-xl'
 
 /**
  * A grid rather than a flex row, so the `Action` can sit in a second column beside both the title

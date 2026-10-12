@@ -31,7 +31,7 @@ shadcn/ui speaks the vocabulary this library does:
 | `--ring`                       | `ring-ring`                 | = `--primary`                  | = `--primary`        |
 | `--chart-1` … `--chart-5`      | `bg-chart-1` …              | the bar grey, then the accents | same                 |
 | `--sidebar` … `--sidebar-ring` | `bg-sidebar` …              | Nav's anatomy                  | same                 |
-| `--radius`                     | `rounded-lg` …              | `0`                            | `0`                  |
+| `--radius`                     | `rounded-md` `rounded-xl`   | `0`                            | `0`                  |
 
 Three tokens have no shadcn equivalent. They are **extensions**, added the way shadcn's own docs
 describe adding a token — one entry in `:root`, one line in `@theme inline` — rather than a
@@ -89,11 +89,41 @@ provider's toggle works here unchanged:
 
 ## Radius
 
-`--radius: 0`, because the sheet squares off its buttons and inputs. Overriding Tailwind's
-`--radius-*` scale is safe here rather than merely convenient — measured, no component uses
-`rounded-sm`…`rounded-4xl`; only `rounded-none`, `rounded-full` and `rounded-[2px]` appear,
-and `rounded-full` is not derived from `--radius`, so the checkbox, radio, switch and avatar keep
-their radii.
+`--radius: 0`, because the sheet squares off its buttons and inputs — but the components **read the
+scale rather than squaring themselves off**, so one value moves every corner in the library:
+
+| Step         | Derived from the base | What wears it                                                                                                           |
+| ------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `rounded-md` | 0.8 × `--radius`      | a control: a button, a segment, every field's input, a select trigger, a chip, a calendar cell, a tooltip, an avatar    |
+| `rounded-xl` | 1.4 × `--radius`      | a surface: a card, a popover, a menu, a dialog, a toast, a listbox, a grid-list item, the calendar's panel, a drop zone |
+
+Two steps rather than one because a corner reads smaller on a large box, so a surface gets more of
+the base than a control does. At `0` both are `0`, which is why Pulse looks exactly as it always has,
+and [`/create`](./create.md) is where the value is dialled.
+
+The utilities compile to that arithmetic itself — measured with `@tailwindcss/node`, and it is the
+reason a subtree that sets `--radius` moves its own corners:
+
+```css
+.rounded-md {
+  border-radius: calc(var(--radius) * 0.8);
+}
+.rounded-xl {
+  border-radius: calc(var(--radius) * 1.4);
+}
+```
+
+**Some corners are deliberately not the theme's**, each for its own reason:
+
+- **`rounded-full` is not derived from `--radius`** — Tailwind computes it as `calc(infinity * 1px)` —
+  so the radio, the switch and the avatar keep their shapes whatever a theme says. The checkbox's
+  `rounded-[2px]` is the sheet's own exception and stays literal for the same reason.
+- **The table** is a stack of rows separated by collapsed hairlines, and the collapsed border model
+  cannot carry a border-radius at all.
+- **The sheet** is anchored to a viewport edge, where a rounded corner would show the page through it.
+- **The slider's grip and the colour swatch** are a handle and a picture of a value: `rounded-none` is
+  what they are, not a token somebody forgot.
+- **`OverlayArrow`** is a square rotated 45° to make a point, and a radius there rounds the point off.
 
 ## Type
 

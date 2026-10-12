@@ -94,7 +94,7 @@ const SPINNER = 'size-[1.25cap] motion-safe:animate-spin'
 /** The sheet's `.ds-select-menu`, shared down to the class list with `Select`. */
 const MENU = [
   'flex w-(--trigger-width) flex-col overflow-hidden',
-  'border border-border-strong bg-card',
+  'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 

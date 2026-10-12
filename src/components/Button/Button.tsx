@@ -95,7 +95,9 @@ export interface ButtonProps extends Omit<
 export const BUTTON_BASE = [
   // `relative` anchors the pending spinner overlay.
   'relative inline-flex items-center justify-center gap-2.5',
-  'font-mono font-medium uppercase tracking-[0.04em] rounded-none',
+  // The control step of the radius scale, which is `0` in the sheet: square unless a theme says
+  // otherwise. Every button, toggle and segment in the library wears this one line.
+  'font-mono font-medium uppercase tracking-[0.04em] rounded-md',
   'border cursor-pointer select-none',
   'transition-[background-color,color,border-color,opacity] duration-[120ms] ease-pulse',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px] data-[focus-visible]:outline-ring',

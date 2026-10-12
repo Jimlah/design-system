@@ -60,7 +60,7 @@ export const DATE_TRIGGER = [
 /** The sheet's `.ds-select-menu`, the same surface a select's list opens on. */
 export const DATE_MENU = [
   'flex w-fit flex-col overflow-hidden',
-  'border border-border-strong bg-card p-2',
+  'border border-border-strong bg-card rounded-xl p-2',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -72,7 +72,7 @@ export const DATE_MENU = [
  * `DatePicker` until a second component needed it.
  */
 export const DATE_CELL: string = [
-  'flex size-8 items-center justify-center rounded-none',
+  'flex size-8 items-center justify-center rounded-md',
   'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
   'transition-colors duration-[120ms] ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
@@ -101,7 +101,7 @@ export const DATE_CELL: string = [
  * "chosen" about one that is only being typed.
  */
 export const DATE_SEGMENT = [
-  'rounded-none px-0.5 outline-none',
+  'rounded-md px-0.5 outline-none',
   'text-foreground data-[placeholder]:text-foreground/35',
   'data-[focused]:bg-foreground/12 data-[focused]:text-foreground',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
@@ -109,7 +109,7 @@ export const DATE_SEGMENT = [
 
 /** The month's arrows. */
 export const DATE_NAV = [
-  'flex size-7 items-center justify-center rounded-none',
+  'flex size-7 items-center justify-center rounded-md',
   'text-foreground/70 cursor-pointer',
   'transition-colors duration-[120ms] ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',

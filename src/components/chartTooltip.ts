@@ -15,6 +15,7 @@
  */
 export const CHART_TOOLTIP = [
   'pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full',
-  'border border-border-strong bg-card px-2 py-1',
+  // Small enough to take the control step, like the tooltip it is.
+  'border border-border-strong bg-card rounded-md px-2 py-1',
   'font-mono text-[11px] tracking-[0.04em] text-foreground uppercase',
 ].join(' ')

@@ -240,9 +240,12 @@ Add `light` to that list the day the app gains a persisted preference.
 
 House rules that the source sheet enforces and components must preserve:
 
-- **Square corners, with two exceptions.** The sheet squares off its buttons and inputs, so
-  `rounded-none` is the default. It gives the selection controls the radius users expect of
-  them — `2px` on the checkbox, a full circle on the radio — and both of those are deliberate.
+- **A corner is a token, and Pulse sets it to `0`.** The sheet squares its buttons and inputs, but the
+  components read the radius scale rather than squaring themselves off: a control is `rounded-md`
+  (0.8 of the base) and a surface `rounded-xl` (1.4 of it). One value moves every corner, `/create`
+  dials it, and at `0` nothing looks different from the sheet. The checkbox's `2px`, the radio's
+  circle, the switch's pill, the table's collapsed grid, the edge-anchored sheet and the slider's grip
+  stay literal. See [theming.md](./docs/theming.md#radius).
 - **Uppercase, letterspaced mono labels** — `uppercase tracking-[0.04em]`.
 - **A fill carries `ink`, and `ink` inverts with the fills** — black on the luminous
   dark-theme accents, white on the deep light-theme ones. Never hardcode either.

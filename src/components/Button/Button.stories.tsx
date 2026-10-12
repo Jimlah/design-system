@@ -49,9 +49,26 @@ export const Default: Story = {
     await expect(styles.backgroundColor).toBe('oklch(0.9198 0.1236 189.5)') // --primary
     await expect(styles.color).toBe('oklch(0 0 none)') // --color-ink
     await expect(styles.height).toBe('44px') // md
-    await expect(styles.borderRadius).toBe('0px') // the sheet is square throughout
+    await expect(styles.borderRadius).toBe('0px') // --radius: 0, the sheet's own corner
     await expect(styles.textTransform).toBe('uppercase')
     await expect(styles.fontFamily).toContain('Overpass Mono')
+  },
+}
+
+export const Radius: Story = {
+  // **A button's corner is the theme's, and a subtree can set it.** This is the mechanism
+  // `/create` rests on: `rounded-md` compiles to `border-radius: calc(var(--radius) * 0.8)`, so the
+  // token is read on the element the utility lands on rather than at `:root` — which is why every
+  // corner in the library moves when one value does, and why the components had to stop saying
+  // `rounded-none`.
+  render: () => (
+    <div style={{ '--radius': '10px' } as React.CSSProperties}>
+      <Button>Restart</Button>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'Restart' })
+    await expect(getComputedStyle(button).borderRadius).toBe('8px') // 0.8 × 10
   },
 }
 

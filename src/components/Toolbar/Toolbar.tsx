@@ -65,7 +65,7 @@ function ToolbarRoot({ className, children, ...props }: ToolbarProps) {
       orientation="horizontal"
       className={[
         'flex items-center gap-1',
-        'border border-border-strong bg-card p-1',
+        'border border-border-strong bg-card rounded-md p-1',
         'data-[orientation=vertical]:w-fit data-[orientation=vertical]:flex-col',
         'data-[orientation=vertical]:items-stretch',
         className,

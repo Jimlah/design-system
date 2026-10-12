@@ -35,7 +35,9 @@ const ROOT = 'flex flex-col'
  */
 const ITEM = [
   'relative flex flex-col',
-  'border-b border-border',
+  // The open row is a panel, and a panel has a corner. A closed row's background is transparent, so
+  // the radius is invisible until there is something for it to shape.
+  'border-b border-border rounded-md',
   '[--accordion-caret-rotate:0deg]',
   '[--accordion-ink:color-mix(in_oklch,var(--color-foreground)_55%,transparent)]',
   '[--accordion-caret-ink:color-mix(in_oklch,var(--color-foreground)_45%,transparent)]',

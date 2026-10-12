@@ -123,9 +123,13 @@
   --sidebar-border: var(--border-soft);
   --sidebar-ring: var(--primary);
 
-  /* The sheet squares off its buttons and inputs. Nothing here uses
-     `rounded-sm`…`rounded-4xl`, and `rounded-full` is not derived from
-     `--radius`, so collapsing shadcn's scale changes no component. */
+  /* The one number a theme moves to change every corner in the library.
+     The sheet's own value is 0 — it squares off its buttons and inputs — but the components
+     read the scale below rather than squaring themselves off, so a design system with soft
+     corners sets this and nothing else: a control is `rounded-md` (0.8 of the base) and a
+     surface `rounded-xl` (1.4 of it). At 0 both are 0, which is where Pulse is.
+     `rounded-full` is not derived from this, which is why the radio, the switch and the avatar
+     keep their shapes whatever it says. */
   --radius: 0;
 
   /* --- type ---
@@ -196,7 +200,10 @@
   /* --- motion --- */
   --ease-pulse: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* --- shadcn's radius scale, off this system's single base --- */
+  /* --- shadcn's radius scale, off this system's single base ---
+     Two of these are in use: `--radius-md` shapes a control and `--radius-xl` a surface. The rest
+     are here because the scale is shadcn's and a component copied out of shadcn/ui may reach for
+     `rounded-sm` or `rounded-4xl`, which would otherwise land on Tailwind's fixed defaults. */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

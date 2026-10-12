@@ -350,13 +350,25 @@ export type Mode = 'dark' | 'light' | 'system'
 export interface CreateTheme {
   base: BaseId
   hue: number
+  /**
+   * The base radius, in pixels — the number `--radius` carries.
+   *
+   * It is one number because the stylesheet's scale derives everything else from it: a control sits at
+   * 0.8 of it and a surface at 1.4 (`--radius-md` and `--radius-xl`). Pulse's own value is `0`, which
+   * is the sheet: square corners throughout.
+   */
+  radius: number
   font: FontId
   mode: Mode
 }
 
+/** How far the radius may be pushed in the page's control. Past this a control stops reading as one. */
+export const MAX_RADIUS = 16
+
 export const DEFAULT_THEME: CreateTheme = {
   base: 'carbon',
   hue: 189.5,
+  radius: 0,
   font: 'overpass',
   mode: 'dark',
 }
@@ -461,7 +473,7 @@ export function themeTokens(theme: CreateTheme): Record<string, string> {
     '--sidebar-border': 'var(--border-soft)',
     '--sidebar-ring': 'var(--primary)',
 
-    '--radius': '0',
+    '--radius': theme.radius === 0 ? '0' : `${theme.radius}px`,
     '--type-mono': font.stack,
   }
 }
@@ -479,6 +491,7 @@ export function themeQuery(theme: CreateTheme): string {
   return new URLSearchParams({
     base: theme.base,
     hue: String(theme.hue),
+    radius: String(theme.radius),
     font: theme.font,
     mode: theme.mode,
   }).toString()
@@ -502,6 +515,7 @@ export function themeFrom(search: Record<string, unknown>): CreateTheme {
       : undefined
   }
   const hue = Number(text('hue'))
+  const radius = Number(text('radius'))
   const mode = text('mode')
   const base = BASES.find((entry) => entry.id === text('base'))
   const font = FONTS.find((entry) => entry.id === text('font'))
@@ -509,6 +523,10 @@ export function themeFrom(search: Record<string, unknown>): CreateTheme {
     base: base ? base.id : DEFAULT_THEME.base,
     hue:
       Number.isFinite(hue) && hue >= 0 && hue <= 360 ? hue : DEFAULT_THEME.hue,
+    radius:
+      Number.isFinite(radius) && radius >= 0 && radius <= MAX_RADIUS
+        ? radius
+        : DEFAULT_THEME.radius,
     font: font ? font.id : DEFAULT_THEME.font,
     mode:
       mode === 'light' || mode === 'system' || mode === 'dark'

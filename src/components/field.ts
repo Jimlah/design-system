@@ -98,7 +98,10 @@ export const LABEL = [
  * `Button` can carry that ring because the edge it repeats is a solid fill.
  */
 export const INPUT = [
-  'w-full font-mono rounded-none border border-(--field-border)',
+  // **The corner is a token now, and `rounded-md` is the control step of its scale.** Pulse's own
+  // `--radius` is `0`, so the sheet's square field is unchanged here; a theme that sets a radius
+  // moves every control in the library at once. See the radius note in `docs/theming.md`.
+  'w-full font-mono rounded-md border border-(--field-border)',
   'h-(--field-control-h) px-3.5',
   'bg-muted text-foreground placeholder:text-foreground/35',
   'transition-[border-color,background-color] duration-[120ms] ease-pulse',

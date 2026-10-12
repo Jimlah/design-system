@@ -7,31 +7,39 @@ would make it permanent.
 - **The page** — `src/examples/Create.tsx`, served by `src/routes/create.tsx` at `/create`.
 - **The engine** — `src/examples/createTheme.ts`: the rules the stylesheet follows, and the block
   they produce.
-- **The tests** — `src/examples/Create.browser.test.tsx`, nine of them, in Vitest's browser mode,
-  because a claim about a computed colour is only a claim a real browser can settle.
+- **The tests** — `src/examples/Create.browser.test.tsx`, eleven of them, in Vitest's browser mode,
+  because a claim about a computed colour or a corner is only a claim a real browser can settle.
 
 It is an example rather than a component, like `Login`: it shows the library being used, it is
 published in no registry item, and it has no story — a story is what puts a component into the
 manifest the MCP tools serve, and this page is not part of the library's API.
 
-## The three questions
+## The four questions
 
-shadcn asks for a component library, icons, a base colour, a theme, fonts and a radius. Three of
-those have no answer here, and the page says why instead of offering a control that moves nothing:
+shadcn asks for a component library, icons, a base colour, a theme, fonts and a radius. Two of those
+have no answer here, and the page says why instead of offering a control that moves nothing:
 
-| shadcn asks                                                                                        | here                                                                                               |
-| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Component library                                                                                  | React Aria, already: there is one, and it is the reason the components behave as they do.          |
-| Icons                                                                                              | Not a token. Nothing in the library renders an icon of its own beyond the handful it draws inline. |
-| **Base colour**                                                                                    | A neutral ramp: four surfaces, and a tint on the panels.                                           |
-| **Theme**                                                                                          | The accent hue. Everything else that carries it is a reference to it.                              |
-| **Fonts**                                                                                          | The one monospace family the whole system is set in.                                               |
-| Radius                                                                                             | **Deliberately absent.** The sheet squares its buttons and inputs, and no component uses the       |
-| `--radius` scale shadcn ships — a corner slider would move nothing. This is the one place the page |
-| is smaller than shadcn's on purpose.                                                               |
+| shadcn asks       | here                                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------------- |
+| Component library | React Aria, already: there is one, and it is the reason the components behave as they do.          |
+| Icons             | Not a token. Nothing in the library renders an icon of its own beyond the handful it draws inline. |
+| **Base colour**   | A neutral ramp: four surfaces, and a tint on the panels.                                           |
+| **Theme**         | The accent hue. Everything else that carries it is a reference to it.                              |
+| **Radius**        | The base of the corner scale: a control is `rounded-md` (0.8 of it), a surface `rounded-xl` (1.4). |
+| **Fonts**         | The one monospace family the whole system is set in.                                               |
 
-A theme is therefore `{ base, hue, font, mode }`, and `mode` is not a token: it is the
+A theme is therefore `{ base, hue, radius, font, mode }`, and `mode` is not a token: it is the
 `color-scheme` the page is shown under, because that is what switching a theme means here.
+
+**The radius control exists because the components were changed to make it mean something.** Pulse's
+own `--radius` is `0` — the sheet squares its buttons and inputs, and that is still what the library
+looks like by default — but the recipes now read the scale rather than saying `rounded-none`, so one
+number moves every corner at once: buttons, fields, selects, chips, calendars, cards, popovers, menus,
+dialogs, toasts and grid items. That is what makes the page useful to a _different_ design system,
+which is the point of the control. Some corners stay literal on purpose — the checkbox's 2px, the
+radio's circle, the switch's pill, the table's collapsed grid, the edge-anchored sheet, and the
+slider's grip — and the page lists them rather than pretending it can reach them. See
+[theming.md](./theming.md#radius).
 
 ## The rules, because a table of hexes would be a different page
 
@@ -97,9 +105,15 @@ npx vp test --project components src/examples/Create.browser.test.tsx
 npm run dev            # then open /create
 ```
 
-The claims the nine tests hold to, in order: the derivation reproduces the sheet; the default theme
+The claims the eleven tests hold to, in order: the derivation reproduces the sheet; the default theme
 _is_ the sheet token for token; a swatch is painted the colour the token names (the dark accent comes
 back as `rgb(113, 255, 246)`, the sheet's `#71FFF6`); the page wears the block it offers to copy, at
 the root; choosing an accent repaints the components; a typeface reaches the utilities; the sheet's own
-family is what the default asks for; the copy button copies the block on screen; and a theme is a link
-that survives being half-typed.
+family is what the default asks for; **a radius reaches a control at 0.8 and a surface at 1.4, and 0 is
+square everywhere**; the copy button copies the block on screen; and a theme is a link that survives
+being half-typed.
+
+```sh
+npx vp test --project components src/examples/Create.browser.test.tsx   # 11
+npx vp test --project storybook src/components/Button.stories.tsx      # the same mechanism, one node down
+```

@@ -46,7 +46,7 @@ const TRIGGER = [
   'flex w-full items-center gap-3',
   'h-(--field-control-h) ps-3.5 pe-3.5 text-left',
   'border border-(--field-border) bg-muted text-foreground',
-  'cursor-pointer rounded-none',
+  'cursor-pointer rounded-md',
   'transition-[border-color,background-color] duration-[120ms] ease-pulse',
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
   // The sheet turns the border teal on focus and leaves the UA ring off; Chrome gives a
@@ -106,7 +106,7 @@ const ICON_SPINNER = [ICON, '[color:var(--dropdown-caret-ink)]'].join(' ')
  */
 const MENU = [
   'flex w-(--trigger-width) flex-col overflow-hidden',
-  'border border-border-strong bg-card',
+  'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 

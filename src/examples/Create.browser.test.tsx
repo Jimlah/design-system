@@ -192,6 +192,7 @@ test('a theme is a link, and half a link still opens a page', () => {
   const theme = {
     base: 'sand',
     hue: 137.5,
+    radius: 6,
     font: 'plex',
     mode: 'system',
   } as const
@@ -220,4 +221,41 @@ test('a theme is a link, and half a link still opens a page', () => {
   expect(ACCENTS.map((entry) => entry.hue)).toContain(
     themeFrom({ hue: '189.5' }).hue,
   )
+
+  // A radius outside the scale the control offers is the default, not a corner nobody can undo.
+  expect(themeFrom({ radius: '999' }).radius).toBe(DEFAULT_THEME.radius)
+  expect(themeFrom({ radius: '-4' }).radius).toBe(DEFAULT_THEME.radius)
+  expect(themeFrom({ radius: 'banana' }).radius).toBe(DEFAULT_THEME.radius)
+})
+
+test('a radius reaches a control and a surface, and 0 is the sheet', async () => {
+  // **The two steps the stylesheet derives from the one value**, measured rather than restated:
+  // `--radius-md` is 0.8 of the base and shapes a control, `--radius-xl` is 1.4 of it and shapes a
+  // surface. The page's own readout names those numbers; this is what says the numbers are real.
+  const screen = await render(<Create preset={{ radius: 8 }} />)
+  const button = screen.getByRole('button', { name: 'Restart' })
+  const card = document.querySelector('[data-slot=card]') as HTMLElement
+
+  await expect.element(button).toBeVisible()
+  expect(getComputedStyle(button.element()).borderRadius).toBe('6.4px')
+  expect(getComputedStyle(card).borderRadius).toBe('11.2px')
+
+  // ...and the same token block says so, so a reader who copies it gets these corners.
+  expect(themeTokens({ ...DEFAULT_THEME, radius: 8 })['--radius']).toBe('8px')
+})
+
+test("and at the sheet's own 0 there is no rounded corner anywhere", async () => {
+  // **The must-pass half, in its own test because the theme is applied at `:root` and two renders in
+  // one test would share it.** A library that had rounded everything would pass the assertions above
+  // and lose the design language it was built for: Pulse's radius is 0, so a button and a card are
+  // square, and so is the field beside them.
+  const screen = await render(<Create />)
+  const button = screen.getByRole('button', { name: 'Restart' })
+  await expect.element(button).toBeVisible()
+
+  expect(getComputedStyle(button.element()).borderRadius).toBe('0px')
+  expect(
+    getComputedStyle(document.querySelector('[data-slot=card]') as HTMLElement)
+      .borderRadius,
+  ).toBe('0px')
 })

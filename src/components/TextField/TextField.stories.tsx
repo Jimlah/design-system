@@ -125,7 +125,7 @@ export const Default: Story = {
 
     await expect(input).toHaveValue('api.example.com')
     await expect(styles.height).toBe('44px') // md
-    await expect(styles.borderRadius).toBe('0px') // the sheet is square throughout
+    await expect(styles.borderRadius).toBe('0px') // --radius: 0, the sheet's own corner
     await expect(styles.fontFamily).toContain('Overpass Mono')
     await expect(styles.backgroundColor).toBe('oklch(0.225 0.009 255.6)') // --muted
 
