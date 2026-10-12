@@ -257,7 +257,18 @@ export function Home() {
             >
               Install the registry
             </Button>
-            <Button variant="ghost">Read the docs</Button>
+            {/*
+              **A link that navigates is an anchor, not a button.** This was a `Button` with no
+              handler, so it did nothing at all — and a button that opens a new address also gives up
+              middle-click and "open in a new tab", which is most of what a link to the docs is for.
+              The destination is the Storybook build the app serves at `/storybook/` in dev, in
+              `vite preview` and on Pages alike; see `storybookBuild()` in vite.config.ts. Read from
+              `BASE_URL` rather than written as `/storybook/`, because on Pages this whole app is
+              mounted under a repository subpath.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}storybook/`}>
+              Read the docs
+            </Link>
           </Toolbar>
         </div>
 
