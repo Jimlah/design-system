@@ -198,6 +198,15 @@ export const Hover: Story = {
     // The row transitions its colour, so a read straight after the hover returns the value it is
     // on the way *from* — the same trap as the indicator and the knob.
     row.style.transition = 'none'
+    // **The rest reading is taken with the pointer deliberately off the row.** The story used to
+    // assume the row was not already hovered when it began, and on CI it was: `before` came back as
+    // the hovered colour, so the comparison below was `oklch(1 0 none)` against itself. The mechanism
+    // did not reproduce on a developer machine — a probe with two stories sharing a page carried no
+    // hover from one to the next — which is the same shape as the transition races this suite has
+    // already been bitten by: a window that is shut locally and open on a slower runner. Clearing the
+    // hover explicitly removes the assumption either way, and a hover that does not change the colour
+    // still fails.
+    await userEvent.unhover(row)
     const before = getComputedStyle(row).color
     await userEvent.hover(row)
     await expect(row).toHaveAttribute('data-hovered')
