@@ -137,9 +137,13 @@ all 56 registry items with no generator change. The measured price:
 
 That is the same duplication [registry.md](./registry.md) already argues for — an item installs correctly
 from any address, offline — one level larger. The `:root` block of Pulse-named values reaches consumers
-under `@layer base`; the `@theme inline` mapping reaches them as `cssVars.theme`. Note that shadcn's CLI
-writes that back as a plain `@theme`, not `@theme inline`, so a consumer gets the extra `var()` hop
-rather than the inlined form — the override still holds, it is just not the canonical shape.
+under `@layer base`; the `@theme inline` mapping reaches them as `cssVars.theme`, which the CLI writes
+back **inside `@theme inline`** — measured against 4.21.4, see [registry.md](./registry.md) — so a consumer
+gets the same inlined form this file uses rather than an extra `var()` hop.
+
+The six inert `--color-color-*` extras the CLI leaves beside the derived tokens stay at six. That
+heuristic fires on any `cssVars` value containing `--color-`, and the values this layer adds are
+`var(--primary)` and its siblings — checked against the payload, the set of matching keys is unchanged.
 
 ## Using it
 
