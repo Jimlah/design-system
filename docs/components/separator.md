@@ -9,15 +9,15 @@ The sheet's five dividers, which is why there are five.
 <Separator orientation="vertical" />
 ```
 
-| Variant  | Sheet            | Treatment                         |
-| -------- | ---------------- | --------------------------------- |
-| `hair`   | `.ds-div-hair`   | `--color-line`, a fill            |
-| `soft`   | `.ds-div-soft`   | `--color-line-soft`, a fill       |
-| `strong` | `.ds-div-strong` | `--color-fg` — full white in dark |
-| `dashed` | `.ds-div-dashed` | a `border-top`, at 45%            |
-| `dotted` | `.ds-div-dotted` | a `border-top`, at 45%            |
+| Variant  | Sheet            | Treatment                           |
+| -------- | ---------------- | ----------------------------------- |
+| `hair`   | `.ds-div-hair`   | `--border`, a fill                  |
+| `soft`   | `.ds-div-soft`   | `--border-soft`, a fill             |
+| `strong` | `.ds-div-strong` | `--foreground` — full white in dark |
+| `dashed` | `.ds-div-dashed` | a `border-top`, at 45%              |
+| `dotted` | `.ds-div-dotted` | a `border-top`, at 45%              |
 
-`strong` reads `--color-fg` rather than the sheet's literal `#ffffff`, because on a white page a
+`strong` reads `--foreground` rather than the sheet's literal `#ffffff`, because on a white page a
 white rule separates nothing.
 
 `dashed` and `dotted` are **borders**, not fills — a 1px fill cannot be dashed — and they turn with

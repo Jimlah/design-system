@@ -76,7 +76,7 @@ control, so `Table.Column` and `Table.Cell` narrow themselves to 12 units when t
 
 ### No numeric variant
 
-The sheet gives its figures 16–20px, and its headline figure `--color-yellow`. That belongs to its
+The sheet gives its figures 16–20px, and its headline figure `--warning`. That belongs to its
 dashboard, where a number _is_ the point of the row. In a table it is one column of many, and a
 table of yellow figures is a table where nothing stands out. Pass a `className` when a column
 really is the point.
@@ -170,7 +170,7 @@ same fix; its rows now compute `2px solid` with a transparent colour.
 
 **A footer is not a body row that happens to be last.** It is the table's conclusion — the totals, the
 count, the average — and it is the one row a reader arrives at deliberately rather than scanning past.
-So the separation line goes _above_ it rather than below, and its type is a step quieter (`text-fg/60`)
+So the separation line goes _above_ it rather than below, and its type is a step quieter (`text-foreground/60`)
 than the data, which is the same relationship the header has at the other end. It holds `Table.Row`s like
 the body does, because it is the same collection machinery underneath.
 

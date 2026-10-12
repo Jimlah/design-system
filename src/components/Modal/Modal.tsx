@@ -21,7 +21,7 @@ import type {
  *
  * A scrim's job is to push the page back, which means it has to *darken* — and there is no token
  * that darkens in both themes. `--color-ink` is black in the dark theme and white in the light one,
- * so it would haze a white page white and separate nothing; `--color-base` is black in one and white
+ * so it would haze a white page white and separate nothing; `--background` is black in one and white
  * in the other for the same reason. `black/50` is Tailwind's own, is the same in both themes by
  * design, and says exactly what it is.
  */
@@ -36,26 +36,27 @@ const OVERLAY = [
  */
 const DIALOG = [
   'relative w-full max-w-md',
-  'border border-line-strong bg-panel p-6',
+  'border border-border-strong bg-card p-6',
   'outline-none',
 ].join(' ')
 
 /** The sheet's `.ds-panel-title`: 18px/600, measured off its Page Check reference. */
 export const DIALOG_TITLE =
-  'm-0 text-[18px] font-semibold tracking-[0.01em] text-fg'
+  'm-0 text-[18px] font-semibold tracking-[0.01em] text-foreground'
 
-export const DIALOG_DESCRIPTION = 'mt-2 text-[13px] leading-[1.5] text-fg/70'
+export const DIALOG_DESCRIPTION =
+  'mt-2 text-[13px] leading-[1.5] text-foreground/70'
 
 export const DIALOG_FOOTER = 'mt-6 flex items-center justify-end gap-3'
 
 /** The same dismiss control the toast draws, for the same reason: it is the one that is often missed. */
 export const DIALOG_CLOSE = [
   'absolute end-4 top-4 grid size-5 cursor-pointer place-items-center',
-  'text-fg/45',
+  'text-foreground/45',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:text-fg',
+  'data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 export interface ModalProps extends Omit<

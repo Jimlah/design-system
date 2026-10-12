@@ -76,11 +76,11 @@ function DropZoneRoot({ className, children, ...props }: DropZoneProps) {
       data-slot="dropzone"
       className={[
         'flex min-h-40 flex-col items-center justify-center gap-3 p-8',
-        'border border-dashed border-line bg-panel text-center',
+        'border border-dashed border-border bg-card text-center',
         // The target lights up while a file is over it, which is the only feedback a drag gets.
         'transition-colors duration-150 ease-pulse',
-        'data-[drop-target]:border-teal data-[drop-target]:bg-teal/8',
-        'data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-teal',
+        'data-[drop-target]:border-primary data-[drop-target]:bg-primary/8',
+        'data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-ring',
         'data-[disabled]:opacity-30',
         className,
       ]
@@ -101,7 +101,11 @@ function DropZoneRoot({ className, children, ...props }: DropZoneProps) {
  */
 export function DropZoneTitle({ className, children }: DropZoneTitleProps) {
   return (
-    <p className={['text-[14px] text-fg', className].filter(Boolean).join(' ')}>
+    <p
+      className={['text-[14px] text-foreground', className]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {children}
     </p>
   )
@@ -118,7 +122,7 @@ export function DropZoneHint({ className, children }: DropZoneHintProps) {
   return (
     <p
       className={[
-        'font-mono text-[11px] uppercase tracking-[0.04em] text-fg/45',
+        'font-mono text-[11px] uppercase tracking-[0.04em] text-foreground/45',
         className,
       ]
         .filter(Boolean)

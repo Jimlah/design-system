@@ -19,11 +19,11 @@ export const OPTION_LIST = 'max-h-[264px] overflow-auto p-0'
  */
 export const OPTION = [
   'flex items-center justify-between gap-3',
-  'px-3.5 py-[11px] text-[13px] text-fg/75',
+  'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
-  'data-[focus-visible]:outline-none data-[focus-visible]:bg-fg/7 data-[focus-visible]:text-fg',
-  'data-[selected]:text-teal',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
+  'data-[selected]:text-primary',
   // **Disabled dims and does not recolour**, the house rule every other control follows. This was missing
   // until `ListBox`'s own test asserted the opacity of a disabled option and got 1: an option that cannot
   // be chosen looked exactly like one that can, in this list and in the select, combo box and menu above

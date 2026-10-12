@@ -23,7 +23,7 @@ export interface ColorSwatchProps extends Omit<
  */
 export const SWATCH = [
   'size-6 shrink-0 rounded-none',
-  'border border-line-control',
+  'border border-input',
 ].join(' ')
 
 /**

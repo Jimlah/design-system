@@ -28,7 +28,7 @@ Copied from `pulse-replica/js/system.js`, which is exactly four things:
    background competing with it.
 2. a **baseline rule** — 1px at `rgba(255,255,255,.34)`. This is what makes the bars sit on something
    rather than float.
-3. the **bars**, `--color-bar` grey except the flagged one, which is the accent.
+3. the **bars**, `--chart-1` grey except the flagged one, which is the accent.
 4. the **axis row** below: the replica's `.dash-axis`, a relative 24px row with each label absolutely
    positioned under the centre of its bar. Placing them as percentages rather than pixels is what keeps
    them aligned when the chart stretches.
@@ -50,7 +50,7 @@ fills, not by trusting the prop.
 document-global, so the second chart on a page would have painted the first one's dots and lost its own
 zone the moment that one unmounted. `Sparkline` had already paid for this lesson.
 
-**`--color-bar` is a new token, and it does not invert.** The replica's `--c-bar` is `#686d73` in a
+**`--chart-1` is a new token, and it does not invert.** The replica's `--c-bar` is `#686d73` in a
 dark-only sheet. Every other colour here is `light-dark(...)` because it carries text; a bar is a _measured
 value_, so `ink`'s inversion rule does not apply. It is `oklch(45%)` in light against a white page and
 `oklch(52%)` in dark — a mid grey in both.

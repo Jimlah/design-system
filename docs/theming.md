@@ -1,59 +1,84 @@
 # Theming
 
-Pulse's colours live in one place: the `@theme` block in `src/styles.css`. Each entry becomes both a
-CSS custom property on `:root` and a Tailwind utility, and each holds **both themes** as a
-`light-dark()` pair, so switching themes means switching `color-scheme` and never redefining a token.
+The tokens live in one place, `src/styles.css`, in [shadcn's
+shape](https://ui.shadcn.com/docs/theming): **the values sit in `:root` and a single
+`@theme inline` block turns them into utilities**. Each value holds both themes as
+`light-dark(light, dark)`, so switching themes means switching `color-scheme` and never
+redefining a token.
 
-On top of that sits a **shadcn-compatible semantic layer**: a second, role-based naming for the same
-values, so a component copied out of [shadcn/ui](https://ui.shadcn.com/docs/theming) — or a consumer's
-code written against its tokens — speaks in `bg-primary` and `border-border` rather than in this
-palette's `bg-teal` and `border-line`.
+## The token set
 
-## What it is, and what it is not
+Pulse's palette used to have names of its own — `--color-teal`, `--color-panel`,
+`--color-fg`. Those are gone. The names are shadcn's now, so a component copied out of
+shadcn/ui speaks the vocabulary this library does:
 
-It is a **translation layer, not a second theme:**
+| Token                          | Utility                     | Light                          | Dark                 |
+| ------------------------------ | --------------------------- | ------------------------------ | -------------------- |
+| `--background`                 | `bg-background`             | `oklch(100% 0 none)`           | `oklch(0% 0 none)`   |
+| `--foreground`                 | `text-foreground`           | `oklch(18% 0 none)`            | `oklch(100% 0 none)` |
+| `--card`                       | `bg-card`                   | `#F7F7F7`                      | `#0D1015`            |
+| `--popover`                    | `bg-popover`                | = `--card`                     | = `--card`           |
+| `--primary`                    | `bg-primary` `text-primary` | `oklch(55% 0.0931 …)`          | `#71FFF6`            |
+| `--secondary`                  | `bg-secondary`              | `oklch(52% 0 none)`            | `#BFBFBF`            |
+| `--muted`                      | `bg-muted`                  | `#EDEDED`                      | `#191C20`            |
+| `--muted-foreground`           | `text-muted-foreground`     | 70% of `--foreground`          | same rule            |
+| `--accent`                     | `bg-accent`                 | = `--muted`                    | = `--muted`          |
+| `--destructive`                | `bg-destructive`            | `oklch(55% 0.1236 29)`         | `#FF9A8B`            |
+| `--warning`                    | `bg-warning`                | `oklch(55% 0.1103 91.2)`       | `#FAD14F`            |
+| `--success`                    | `bg-success`                | `oklch(55% 0.1236 145)`        | `#B0FBB1`            |
+| `--border`                     | `border-border`             | `--foreground` at 62%          | same rule            |
+| `--input`                      | `border-input`              | `--foreground` at 45%          | same rule            |
+| `--ring`                       | `ring-ring`                 | = `--primary`                  | = `--primary`        |
+| `--chart-1` … `--chart-5`      | `bg-chart-1` …              | the bar grey, then the accents | same                 |
+| `--sidebar` … `--sidebar-ring` | `bg-sidebar` …              | Nav's anatomy                  | same                 |
+| `--radius`                     | `rounded-lg` …              | `0`                            | `0`                  |
 
-- **Every value is a `var()` onto a Pulse token.** No colour is declared twice, and `light-dark()`
-  still resolves per element against `color-scheme`.
-- **There is deliberately no `.dark` block of token values.** `.dark` carries `color-scheme: dark`
-  and nothing else, as the name a shadcn theme provider toggles.
-- **`--radius` is `0`**, because the sheet squares off its buttons and inputs.
+Three tokens have no shadcn equivalent. They are **extensions**, added the way shadcn's own docs
+describe adding a token — one entry in `:root`, one line in `@theme inline` — rather than a
+second palette:
 
-## The shape
+- **`--ink`** (`text-ink`, `bg-ink`) — the label colour on a fill. It inverts with the fills:
+  black on the luminous dark-theme accents, white on the deep light-theme ones. It pairs with no
+  single colour, because a component chooses its fill at runtime and the label has to follow it; it
+  is also the anchor a hover or pressed state deepens toward.
+- **`--border-strong`** and **`--border-soft`** — shadcn has one border, this system has three
+  hairline strengths. `--border` is the row rule, `--border-strong` a panel boundary,
+  `--border-soft` the quietest divider.
 
-Two steps, and the middle hop is the point:
+`--accent`, `--popover` and `--sidebar` point at the same value as the surface they extend,
+which is honest rather than tidy: this design language has one subtle fill and one panel, and
+shadcn's vocabulary splits each of them into two or three roles.
 
-```css
-:root {
-  --primary: var(--color-teal);
-  --primary-foreground: var(--color-ink);
-}
+## Why `@theme inline`, and not `@theme`
 
-@theme inline {
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-}
-```
+Both were measured on this stylesheet.
 
-With `inline`, `bg-primary` compiles to `background-color: var(--primary)` — so a consumer setting
-`--primary` at any scope retints the component. Under a plain `@theme`, Tailwind writes the value
-through an intermediate `--color-primary` on `:root`; the override still works, but the utility no
-longer reads the variable directly. `inline` is the form shadcn documents and the form whose intent is
-legible.
+**`inline` decides where a utility reads its value.** Compiled from a plain `@theme`, a
+utility reads a `--color-*` snapshot taken on `:root`; with `inline` it reads the variable on
+the element itself. Measured: a subtree setting `--primary: rgb(1, 2, 3)` leaves
+`var(--color-primary)` at teal, because that declaration is substituted where it is _declared_,
+on `:root`.
 
-The `@theme inline` block is also what publishes the utilities: `bg-background`, `text-foreground`,
-`border-border`, `ring-ring`, `bg-primary`, `bg-muted`, `bg-sidebar`, and the rest.
+**It also decides whether the variable exists at all.** An `@theme inline` entry is **not
+emitted** to `:root` unless something references it. Measured: with only `text-foreground` in
+play, `--color-foreground` is absent from the output; add one recipe containing
+`var(--color-foreground)` and it appears. The components are what keep these variables alive.
 
-## Why not a `.dark` block
+**`light-dark()` is not frozen the same way.** A subtree with `color-scheme: light` flips
+`var(--primary)`, `var(--foreground)` and every other value, because `light-dark()` resolves
+where it is _used_. Theme switching through `color-scheme` therefore works in every scope; only
+redefining a _variable_ lower down the tree behaves differently.
 
-shadcn themes by redefining every variable inside `.dark`. Adopting that here would mean:
+## No `.dark` block of values
 
-- hand-writing a second value per accent, which is exactly what `light-dark()` was adopted to remove;
-- breaking the derivations — `--color-fg-muted` and the four `--color-line*` values are
-  `color-mix()` off `--color-fg`, and they need no per-theme tuning _because_ they follow one value;
-- fighting the Storybook Theme toolbar and `[data-theme]`, which set `color-scheme` only.
+Pulse is dark-first — the source sheet has no light mode, so dark is the default rather than the OS
+setting — and every value carries both themes in one `light-dark()`. shadcn themes by redefining
+every variable inside `.dark`; doing that here would mean hand-writing a second value per accent
+and losing the derivations, where `--muted-foreground` and the three hairlines are `color-mix()`
+off `--foreground` precisely so they need no per-theme tuning.
 
-So `.dark` is an alias, not a theme:
+`.dark` still exists as an alias, carrying `color-scheme` and nothing else, so a shadcn theme
+provider's toggle works here unchanged:
 
 ```css
 [data-theme='dark'],
@@ -62,140 +87,39 @@ So `.dark` is an alias, not a theme:
 }
 ```
 
-It is grouped before `[data-theme='light']` deliberately: equal specificity, so the later rule wins if
-an element somehow carries both.
-
-## The mapping
-
-| shadcn token                                     | Pulse source                            | Grounded in                                         |
-| ------------------------------------------------ | --------------------------------------- | --------------------------------------------------- |
-| `background` / `foreground`                      | `--color-base` / `--color-fg`           | the `body` and the page shell                       |
-| `card` / `card-foreground`                       | `--color-panel` / `--color-fg`          | `Table`, `Modal`, `Nav`                             |
-| `popover` / `popover-foreground`                 | `--color-panel` / `--color-fg`          | `popover.ts`, `Menu`, `Select`, `Tooltip`           |
-| `primary` / `primary-foreground`                 | `--color-teal` / `--color-ink`          | `Button`'s `COLORS.primary`                         |
-| `secondary` / `secondary-foreground`             | `--color-neutral` / `--color-ink`       | the lowest-emphasis filled button                   |
-| `muted` / `muted-foreground`                     | `--color-panel-2` / `--color-fg-muted`  | field fills in `field.ts`                           |
-| `accent` / `accent-foreground`                   | `--color-panel-2` / `--color-fg`        | `hover:bg-panel-2` on a `Table` row                 |
-| `destructive` / `destructive-foreground`         | `--color-red` / `--color-ink`           | `Button`'s `COLORS.danger`                          |
-| `warning` / `warning-foreground`                 | `--color-yellow` / `--color-ink`        | the sheet's `selected-yellow`                       |
-| `success` / `success-foreground`                 | `--color-green` / `--color-ink`         | `Button`'s `COLORS.success`                         |
-| `border`                                         | `--color-line`                          | the row rule; see below                             |
-| `input`                                          | `--color-line-control`                  | the measured 3:1 boundary of an interactive control |
-| `ring`                                           | `--color-teal`                          | the `outline-teal` focus ring                       |
-| `chart-1` … `chart-5`                            | `bar`, `teal`, `yellow`, `green`, `red` | `BarChart`, `Sparkline`, `FlatLine`                 |
-| `sidebar` / `sidebar-foreground`                 | `--color-panel` / `--color-fg`          | `Nav`'s own classes                                 |
-| `sidebar-primary` / `sidebar-primary-foreground` | `--color-teal` / `--color-ink`          | `data-[current]:text-teal`                          |
-| `sidebar-accent` / `sidebar-accent-foreground`   | `--color-panel-2` / `--color-fg`        | the hovered nav row                                 |
-| `sidebar-border`                                 | `--color-line-soft`                     | `border-e border-line-soft` on the nav              |
-| `sidebar-ring`                                   | `--color-teal`                          | the same focus ring                                 |
-| `radius`                                         | `0`                                     | square corners                                      |
-
-Three mappings are lossy, and each is a decision rather than an oversight:
-
-| shadcn wants                                    | Pulse gives                          | Why it cannot be exact                                                                                                                                                                |
-| ----------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Three surfaces: `background`, `card`, `popover` | Two: `--color-base`, `--color-panel` | `card` and `popover` both take `--color-panel`, because Modal, Popover, Menu, Tooltip, Table and Nav all draw on it. Making them differ needs a new surface token here, not an alias. |
-| One `--border`                                  | Three hairlines                      | It takes `--color-line` (62%). Components default to `--color-line-strong` (40%) for a panel boundary and `--color-line` for a row rule, so no single choice matches both.            |
-| `--secondary`                                   | `--color-neutral`, not the yellow    | shadcn defines it as the lower-emphasis fill, which is this system's neutral button. Yellow is a selected/attention colour and becomes `--warning` instead.                           |
-
-`--warning`, `--success` and `--destructive-foreground` are **extensions, not inventions**: shadcn has
-no success token, and its own "adding new tokens" example is the `--warning` pair. It leaves
-`destructive-foreground` out to write `text-white`, which this system's rule — a fill carries `ink`, and
-`ink` inverts with the fills — forbids.
-
 ## Radius
 
-`--radius: 0` collapses shadcn's derived scale to zero:
+`--radius: 0`, because the sheet squares off its buttons and inputs. Overriding Tailwind's
+`--radius-*` scale is safe here rather than merely convenient — measured, no component uses
+`rounded-sm`…`rounded-4xl`; only `rounded-none`, `rounded-full` and `rounded-[2px]` appear,
+and `rounded-full` is not derived from `--radius`, so the checkbox, radio, switch and avatar keep
+their radii.
 
-```css
-@theme inline {
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
-```
+## What this costs in the registry
 
-Overriding Tailwind's default `--radius-*` scale is safe here, and that was measured rather than
-assumed: **no component uses `rounded-sm`…`rounded-4xl`** — only `rounded-none`, `rounded-full` and
-`rounded-[2px]` appear across `src/components` — and `rounded-full` is not derived from `--radius`, so
-the checkbox, the radio, the switch and the avatar keep their radii.
+The generator walks every `@theme` at-rule and every top-level rule, so the values and the theme
+block both ride into all 56 registry items with no generator change. Because the values are now
+plain `var()` references rather than `color-mix(… var(--color-fg) …)`, the CLI's colour
+heuristic no longer matches any of them, so the six inert `--color-color-*` properties it used to
+add on install are gone with them.
 
-## What it costs
-
-`build-registry.mjs` walks **every** `@theme` at-rule and every top-level rule, so the layer rides into
-all 56 registry items with no generator change. The measured price:
-
-|                                 | before | after  |
-| ------------------------------- | ------ | ------ |
-| theme tokens in `cssVars.theme` | 19     | 62     |
-| `public/r/theme.json`           | 4.2 KB | 8.1 KB |
-| `registry.json`                 | 453 KB | 689 KB |
-
-That is the same duplication [registry.md](./registry.md) already argues for — an item installs correctly
-from any address, offline — one level larger. The `:root` block of Pulse-named values reaches consumers
-under `@layer base`; the `@theme inline` mapping reaches them as `cssVars.theme`, which the CLI writes
-back **inside `@theme inline`** — measured against 4.21.4, see [registry.md](./registry.md) — so a consumer
-gets the same inlined form this file uses rather than an extra `var()` hop.
-
-The six inert `--color-color-*` extras the CLI leaves beside the derived tokens stay at six. That
-heuristic fires on any `cssVars` value containing `--color-`, and the values this layer adds are
-`var(--primary)` and its siblings — checked against the payload, the set of matching keys is unchanged.
-
-## What the components use
-
-The recipes inside the components name the role, not the palette:
-
-| was                                 | now                                            |
-| ----------------------------------- | ---------------------------------------------- |
-| `var(--color-fg)`                   | `var(--color-foreground)`                      |
-| `var(--color-teal)`                 | `var(--color-primary)`                         |
-| `var(--color-line-control)`         | `var(--color-input)`                           |
-| `var(--color-neutral)`              | `var(--color-secondary)`                       |
-| `var(--color-fg-muted)`             | `var(--color-muted-foreground)`                |
-| `var(--color-panel)`                | `var(--color-card)`                            |
-| `var(--color-line)`                 | `var(--color-border)`                          |
-| `var(--color-yellow)` `red` `green` | `var(--color-warning)` `destructive` `success` |
-| `var(--color-bar)`                  | `var(--color-chart-1)`                         |
-
-**Two are deliberately left on the palette names**, because shadcn has no token that means
-what they mean:
-
-- **`var(--color-ink)`** — the label on whatever fill is beneath it. `ink` inverts with the
-  fills, so there is no single `*-foreground` it could take; calling it `primary-foreground`
-  would be wrong on a danger button that merely shares the value.
-- **`var(--color-line-soft)`** — the read-only field boundary in `field.ts`. `--sidebar-border`
-  maps to the same value, but only because the nav's edge happens to use it.
-
-**The class names were left alone.** `text-fg`, `bg-panel` and `border-line-strong` still read
-as Pulse; what moved is the variables behind the arbitrary-value recipes. Renaming the utilities
-is a larger, separate change, and three families — `--color-line-strong`, `--color-line-soft` and
-`ink` — have no shadcn equivalent to map onto.
-
-### Why `var(--color-foreground)` resolves at all
-
-It is a `@theme inline` entry, and Tailwind **does not emit an inline theme variable to `:root`**
-unless something references it. `text-foreground` on its own leaves `--color-foreground` undefined;
-a recipe containing `var(--color-foreground)` causes it to be emitted. Both were measured on this
-stylesheet. The components are what keep these variables alive, so the migration had to be
-all-or-nothing per token rather than a recipe at a time.
+Note that the CLI writes `cssVars.theme` back **inside `@theme inline`** in the consumer,
+measured against 4.21.4 — see [registry.md](./registry.md). That is the shape this file already
+uses, so a consumer gets the behaviour the components were written against.
 
 ## Using it
 
 ```tsx
-// Either naming reaches the same colour, in both themes.
-<div className="bg-panel text-fg" />
+// One vocabulary, role-based, in both themes.
 <div className="bg-card text-card-foreground" />
+<button className="bg-primary text-ink" />
 ```
 
-Overriding a role retints every component that uses it, in one place:
+Overriding a role retints every component that uses it:
 
 ```css
 :root {
-  --primary: var(--color-yellow);
+  --primary: oklch(0.7 0.2 300);
 }
 ```
 

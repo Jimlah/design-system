@@ -5,7 +5,7 @@ The marker that points from a floating panel back at the thing that opened it.
 ```tsx
 <Popover>
   <Popover.Arrow />
-  <p className="text-[13px] text-fg/70">Anchored to the button.</p>
+  <p className="text-[13px] text-foreground/70">Anchored to the button.</p>
 </Popover>
 ```
 
@@ -28,7 +28,7 @@ it, it is already there. That is the difference between a decision and a guess.
 
 ```tsx
 // The shape's own class list, and the reason it is a separate element:
-'block size-2 rotate-45 border-line-strong bg-panel'
+'block size-2 rotate-45 border-border-strong bg-card'
 '[[data-placement=bottom]_&]:border-t [[data-placement=bottom]_&]:border-l'
 ```
 

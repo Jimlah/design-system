@@ -63,14 +63,14 @@ const ITEM = [
   // No font size: a step is a `caps` link, and the **link owns its own type** — the sheet's
   // `.ds-link-caps` at 14px, with `.ds-link-caps--lg` as the one larger size it has. A size utility
   // here would lose the cascade to the link's anyway, which is the correct outcome rather than a bug.
-  'text-fg/45',
+  'text-foreground/45',
   // The slash between two items, and only between two: `last:` drops it from the page you are on.
-  "after:mx-2 after:text-fg/30 after:content-['/'] last:after:content-none",
+  "after:mx-2 after:text-foreground/30 after:content-['/'] last:after:content-none",
   'data-[disabled]:hidden',
 ].join(' ')
 
 /** The page you are on: named, at full strength, and not a link. */
-const CURRENT = 'text-fg'
+const CURRENT = 'text-foreground'
 
 /**
  * A trail back up the hierarchy. The last item is the page you are on and is not a link.

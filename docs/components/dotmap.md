@@ -26,7 +26,7 @@ page-level flourish rather than a property of the map.
 
 **Two colours, both derived rather than copied.** The replica writes `#5be4dc` for an accented dot and
 `rgba(255,255,255,.85)` for the rest. The first is the accent about 12% toward ink — a small dot at full
-accent is a glare, so it is dimmed by the rule every other state here uses. The second is `--color-fg` at
+accent is a glare, so it is dimmed by the rule every other state here uses. The second is `--foreground` at
 85%: white on the dark theme, near-black on the light one, which is the right behaviour for a map on a white
 page that the replica never had to consider.
 

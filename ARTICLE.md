@@ -17,12 +17,12 @@ guarantee a team building on it, and — in one section near the end — exactly
 Every colour in the system is one entry in one `@theme` block, and each entry holds **both themes**:
 
 ```css
---color-teal: light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5));
---color-panel: light-dark(#f7f7f7, #0d1015);
---color-line: color-mix(in oklch, var(--color-fg) 62%, transparent);
+--primary: light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5));
+--card: light-dark(#f7f7f7, #0d1015);
+--border: color-mix(in oklch, var(--foreground) 62%, transparent);
 ```
 
-You write `bg-panel`, not `#0D1015`. You write `text-fg`, and the three muted weights and four hairline
+You write `bg-card`, not `#0D1015`. You write `text-foreground`, and the three muted weights and four hairline
 weights that go with it are **derived** from it, so changing the text colour moves all seven.
 
 More importantly, the _states_ are not yours to choose. Hover and pressed deepen a control's own colour

@@ -36,7 +36,7 @@ export interface FormActionsProps {
 
 const ROOT = 'flex flex-col gap-5'
 
-const LEGEND = 'text-lg font-semibold text-fg'
+const LEGEND = 'text-lg font-semibold text-foreground'
 
 const SECTION = 'flex flex-col gap-4'
 

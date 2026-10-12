@@ -104,7 +104,7 @@ export const Highlighted: Story = {
     await expect(drawn[3].highlighted).toBe(true)
     await expect(drawn[3].fill).toBe('oklch(0.9198 0.1236 189.5)')
 
-    // The others are `--color-bar`, a mid grey that does **not** invert with the theme. A chart in which
+    // The others are `--chart-1`, a mid grey that does **not** invert with the theme. A chart in which
     // every bar is teal has stopped saying which one matters.
     await expect(drawn[0].fill).not.toBe(drawn[3].fill)
     await expect(new Set(drawn.map((bar) => bar.fill)).size).toBe(2)

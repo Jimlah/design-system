@@ -24,4 +24,4 @@ back from a component that looked correct.
 The class list is exported, and `ColorSwatchPicker.Item` composes it rather than repeating it — a
 swatch has to look the same whether it is being shown or being picked, the same rule `field.ts`,
 `date.tsx` and `popover.ts` exist for. The square is 24px, square-cornered, and carries
-`--color-line-control` on its edge so a near-black swatch on the dark page is still a swatch.
+`--input` on its edge so a near-black swatch on the dark page is still a swatch.

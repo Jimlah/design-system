@@ -65,7 +65,7 @@ function ToolbarRoot({ className, children, ...props }: ToolbarProps) {
       orientation="horizontal"
       className={[
         'flex items-center gap-1',
-        'border border-line-strong bg-panel p-1',
+        'border border-border-strong bg-card p-1',
         'data-[orientation=vertical]:w-fit data-[orientation=vertical]:flex-col',
         'data-[orientation=vertical]:items-stretch',
         className,
@@ -112,7 +112,7 @@ export function ToolbarSeparator({
     <AriaSeparator
       orientation="vertical"
       className={[
-        'mx-1 h-5 w-px shrink-0 self-center bg-line',
+        'mx-1 h-5 w-px shrink-0 self-center bg-border',
         'data-[orientation=vertical]:h-5',
         className,
       ]

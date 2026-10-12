@@ -34,7 +34,7 @@ must not drift apart. Reaching for one or the other is a decision about what a c
 `Nav` says where you are with `isCurrent` → `data-[current]`. A tree says which row you chose →
 `data-selected`. Sharing the constants without adding that one line left the chosen row with **no
 accent at all**: it looked selected only through the browser's own text rendering, and the screenshot
-showed a bright row where a teal one belonged. `Tree.Item` adds `data-[selected]:text-teal` — the same
+showed a bright row where a teal one belonged. `Tree.Item` adds `data-[selected]:text-primary` — the same
 accent, because "the one you are looking at" is the same idea in both.
 
 ### The chevron is a button with `slot="chevron"`, and React Aria insists on it

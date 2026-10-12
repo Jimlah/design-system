@@ -55,9 +55,9 @@ when you least need the border shouting; the error message stays red throughout.
   `currentColor`, so a field silently grows a hairline in the text colour — white in the
   dark theme, black in the light. The sheet's `.ds-input` declares
   `border: 1px solid transparent` for the same reason; this system uses
-  `border-line-control` instead.
-- **The error state is `--color-red`, not the sheet's yellow.** The sheet had two
-  accents and used yellow for warnings; here `--color-yellow` _is_ the `secondary`
+  `border-input` instead.
+- **The error state is `--destructive`, not the sheet's yellow.** The sheet had two
+  accents and used yellow for warnings; here `--warning` _is_ the `secondary`
   button, so an error and a secondary action would have been the same colour.
 
 The required marker is drawn by `TextField.Label`'s `::after` from the field's own
@@ -73,7 +73,7 @@ becomes the thing they cannot. The a11y check catches this; it is easy to ship o
 because a dimmed field _looks_ deliberate.
 
 Read-only keeps full-strength text and signals itself through the hairline instead, which is
-the affordance it actually loses: the border goes to `--color-line-soft` and no longer
+the affordance it actually loses: the border goes to `--border-soft` and no longer
 brightens on hover, because nothing there invites a click.
 
 This is the same cascade problem as `Checkbox`, and it takes the same shape: `data-readonly`
@@ -83,10 +83,10 @@ utility ties with the input's own and loses on source order. So the field publis
 on the input, so they outrank the published values and still win — including on a read-only
 field, which remains focusable and selectable.
 
-**Control boundaries carry a resting hairline.** `--color-line-control` is
-`--color-fg` at 45% — the smallest alpha that clears the 3:1 a control boundary
+**Control boundaries carry a resting hairline.** `--input` is
+`--foreground` at 45% — the smallest alpha that clears the 3:1 a control boundary
 needs on _both_ pages (4.43:1 on the dark, 3.36:1 on the light). A control's own fill
-cannot do this job: `--color-panel-2` is 1.23:1 against the dark page and 1.17:1
+cannot do this job: `--muted` is 1.23:1 against the dark page and 1.17:1
 against the light one. Alpha compositing is not symmetric, so 40% looks adequate and
 is not — 3.66:1 on black, 2.85:1 on white.
 

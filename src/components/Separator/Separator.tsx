@@ -12,25 +12,25 @@ const ORIENTATION: Record<'horizontal' | 'vertical', string> = {
  *
  * `hair` is `.ds-div-hair` and `soft` is `.ds-div-soft` — the two it uses between panels and inside
  * them. `strong` is `.ds-div-strong`, which is full white in the sheet: the one divider meant to be
- * *seen* rather than to separate quietly, so it reads `--color-fg`, which is white in the dark theme
+ * *seen* rather than to separate quietly, so it reads `--foreground`, which is white in the dark theme
  * and near-black in the light one, because a rule that is white on white separates nothing.
  *
  * `dashed` and `dotted` are the sheet's `.ds-div-dashed` and `.ds-div-dotted`, both drawn as a
  * border rather than a fill — a 1px fill cannot be dashed. They carry the same 45% the sheet gives
- * them, which is `--color-line-control`; the sheet's dotted is 50%, and a second alpha four
+ * them, which is `--input`; the sheet's dotted is 50%, and a second alpha four
  * percentage points away from an existing one is a second alpha nobody can see.
  */
 const VARIANT: Record<string, { horizontal: string; vertical: string }> = {
-  hair: { horizontal: 'bg-line', vertical: 'bg-line' },
-  soft: { horizontal: 'bg-line-soft', vertical: 'bg-line-soft' },
-  strong: { horizontal: 'bg-fg', vertical: 'bg-fg' },
+  hair: { horizontal: 'bg-border', vertical: 'bg-border' },
+  soft: { horizontal: 'bg-border-soft', vertical: 'bg-border-soft' },
+  strong: { horizontal: 'bg-foreground', vertical: 'bg-foreground' },
   dashed: {
-    horizontal: 'border-t border-dashed border-line-control',
-    vertical: 'border-s border-dashed border-line-control',
+    horizontal: 'border-t border-dashed border-input',
+    vertical: 'border-s border-dashed border-input',
   },
   dotted: {
-    horizontal: 'border-t border-dotted border-line-control',
-    vertical: 'border-s border-dotted border-line-control',
+    horizontal: 'border-t border-dotted border-input',
+    vertical: 'border-s border-dotted border-input',
   },
 }
 

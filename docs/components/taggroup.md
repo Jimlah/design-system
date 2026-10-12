@@ -33,7 +33,7 @@ why there are seven.
 | _(default)_              | `.ds-tag`          | 70% text, transparent edge |
 | `outline`                | `.ds-tag--outline` | an edge at 45%             |
 | `teal` `gray` `yellow`   | the three fills    | the fill, carrying `ink`   |
-| `outline-teal` `-yellow` | §18's two          | accent edge and text       |
+| `outline-ring` `-yellow` | §18's two          | accent edge and text       |
 
 ### A selectable or removable chip needs an `id`
 
@@ -68,12 +68,12 @@ assert something else, the same call as the tooltip's hover.
 
 The sheet's `a.ds-tag:hover { filter: brightness(1.08) }` cannot survive five fills: on a near-white
 yellow it is invisible, and on any of them it says nothing about _which_ tag the pointer is on. Fills
-deepen toward `--color-ink`, the recipe the button uses; the two accented outlines have no fill to
+deepen toward `--ink`, the recipe the button uses; the two accented outlines have no fill to
 deepen and take a wash of their own colour instead. Both derive from the base, and the `--tag-hover`
 is declared by each variant and read by the base list, so the two land on the same element.
 
-The `outline` edge is `--color-line-control` rather than the sheet's 35% white, which measures under
-the 3:1 a boundary needs — the correction `--color-line-control` exists for.
+The `outline` edge is `--input` rather than the sheet's 35% white, which measures under
+the 3:1 a boundary needs — the correction `--input` exists for.
 
 ## Removing a tag is your job, not the component's
 

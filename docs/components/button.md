@@ -48,13 +48,13 @@ The sheet declares `hover: #FFF` on its one accent, and that does not survive fi
 a danger button that turns the same white as everything else has stopped meaning danger. It is
 barely available anyway — these fills sit at L 92%, leaving 8% of headroom toward white.
 
-So hover and pressed **deepen the button's own colour**, toward `--color-ink`:
+So hover and pressed **deepen the button's own colour**, toward `--ink`:
 
 ```
 rest → hover 12% toward ink → pressed 22% toward ink
 ```
 
-Mixing with `--color-ink` rather than `black` is what makes the recipes work in both themes: `ink`
+Mixing with `--ink` rather than `black` is what makes the recipes work in both themes: `ink`
 inverts with the fills, so the same 12% deepens the luminous dark-theme accents and lightens the
 deep light-theme ones.
 

@@ -104,8 +104,8 @@ export const InARow: Story = {
   // `data` and `label` are required, so even a story that renders explicitly needs them in `args`.
   args: { data: [8, 14, 11, 19, 17, 26, 22, 31], label: 'fra1 latency' },
   render: () => (
-    <div className="flex w-96 items-center gap-4 border border-line-strong bg-panel px-4 py-3">
-      <span className="font-mono text-[12px] tracking-[0.04em] text-fg uppercase">
+    <div className="flex w-96 items-center gap-4 border border-border-strong bg-card px-4 py-3">
+      <span className="font-mono text-[12px] tracking-[0.04em] text-foreground uppercase">
         fra1
       </span>
       <Sparkline

@@ -43,7 +43,7 @@ export const TAG_CHIP = [
   'hover:bg-(--tag-hover)',
   'data-[pressed]:bg-(--tag-pressed)',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   // A tag with a remove button is still one chip, so the button sits inside the box rather than
   // beside it.
@@ -62,16 +62,17 @@ export const TAG_CHIP = [
  * source text, and `var(--color-${token})` is not source text it can see.
  */
 const VARIANT: Record<string, string> = {
-  default: 'border-transparent text-fg/70 hover:text-fg',
-  outline: 'border-line-control text-fg/70 hover:border-teal hover:text-teal',
+  default: 'border-transparent text-foreground/70 hover:text-foreground',
+  outline:
+    'border-input text-foreground/70 hover:border-primary hover:text-primary',
   teal: '[--tag:var(--color-primary)] [--tag-hover:color-mix(in_oklch,var(--color-primary)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-primary)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
   gray: '[--tag:var(--color-secondary)] [--tag-hover:color-mix(in_oklch,var(--color-secondary)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-secondary)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
   yellow:
     '[--tag:var(--color-warning)] [--tag-hover:color-mix(in_oklch,var(--color-warning)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-warning)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
-  'outline-teal':
-    '[--tag-hover:color-mix(in_oklch,var(--color-primary)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-primary)_22%,transparent)] border-teal text-teal',
-  'outline-yellow':
-    '[--tag-hover:color-mix(in_oklch,var(--color-warning)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-warning)_22%,transparent)] border-yellow text-yellow',
+  'outline-ring':
+    '[--tag-hover:color-mix(in_oklch,var(--color-primary)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-primary)_22%,transparent)] border-primary text-primary',
+  'outline-warning':
+    '[--tag-hover:color-mix(in_oklch,var(--color-warning)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-warning)_22%,transparent)] border-warning text-warning',
 }
 
 export type TagVariant =
@@ -80,8 +81,8 @@ export type TagVariant =
   | 'teal'
   | 'gray'
   | 'yellow'
-  | 'outline-teal'
-  | 'outline-yellow'
+  | 'outline-ring'
+  | 'outline-warning'
 
 /**
  * The label inside a tag, and the anchor it becomes when the tag has an `href`. React Aria reports a
@@ -296,7 +297,7 @@ function TagGroupRoot({ className, children, ...props }: TagGroupProps) {
  *   <TagGroup.List>
  *     <TagGroup.Tag variant="teal">fra1</TagGroup.Tag>
  *     <TagGroup.Tag variant="outline">iad1</TagGroup.Tag>
- *     <TagGroup.Tag variant="outline-yellow">sfo1</TagGroup.Tag>
+ *     <TagGroup.Tag variant="outline-warning">sfo1</TagGroup.Tag>
  *   </TagGroup.List>
  * </TagGroup>
  * ```
@@ -320,9 +321,9 @@ function TagGroupRoot({ className, children, ...props }: TagGroupProps) {
  * outlines, which have no fill to deepen, take a wash of their own colour instead. Both derive from
  * the base; neither substitutes a different one.
  *
- * The `outline` variant's edge is `--color-line-control` rather than the sheet's 35% white, which
+ * The `outline` variant's edge is `--input` rather than the sheet's 35% white, which
  * measures under the 3:1 a boundary needs on the dark page. It is the same correction the rest of
- * the system makes, and the reason `--color-line-control` exists.
+ * the system makes, and the reason `--input` exists.
  */
 export const TagGroup = Object.assign(TagGroupRoot, {
   Label: TagGroupLabel,

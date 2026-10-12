@@ -60,7 +60,7 @@ const preview: Preview = {
 
     // The backgrounds addon paints a fixed colour on the preview body, which
     // would sit behind the stories and ignore the theme. The canvas instead
-    // takes `--color-base` from our own stylesheet, so it flips with everything
+    // takes `--background` from our own stylesheet, so it flips with everything
     // else. Use the Theme toolbar to switch.
     backgrounds: { disable: true },
 

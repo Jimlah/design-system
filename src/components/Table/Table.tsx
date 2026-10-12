@@ -31,27 +31,27 @@ import type {
  * laying out one dashboard; a table is a table, so the columns are the table's own and the
  * surfaces are what get borrowed.
  */
-const ROOT = 'w-full border-collapse border-b border-line-soft text-start'
+const ROOT = 'w-full border-collapse border-b border-border-soft text-start'
 
 /**
  * The sheet gives a row's own label — `.ds-row__label`, the name of the thing — 12px uppercase
  * letterspaced, and its figures 16–20px. Those are cell contents, not a header. The column
  * headings take the sheet's quieter legend (`.ds-select-group-label`): 11px, spaced, at 45%.
  */
-const FOOTER = 'border-t border-line text-fg/60'
+const FOOTER = 'border-t border-border text-foreground/60'
 
 const SELECTION_GUTTER =
   'has-[[data-slot=selection]]:w-12 has-[[data-slot=selection]]:px-3'
 
 const COLUMN = [
-  'relative border-b border-line px-5 py-2.5 text-start',
+  'relative border-b border-border px-5 py-2.5 text-start',
   SELECTION_GUTTER,
-  'text-[11px] font-normal uppercase tracking-[0.08em] text-fg/45',
+  'text-[11px] font-normal uppercase tracking-[0.08em] text-foreground/45',
   // A transparent outline at rest, never `outline-none` — see AGENTS.md. With `outline-none` the
   // focus ring below could never draw: it sets the shared --tw-outline-style that outline-1 reads back.
   'outline-1 -outline-offset-2 outline-transparent',
   'data-[focus-visible]:outline-1 data-[focus-visible]:-outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
 ].join(' ')
 
@@ -61,21 +61,21 @@ const COLUMN = [
  *
  * Its hover is the native `:hover` — see below — and it is a *lighter solid*, not a wash: the
  * sheet picks `#12161c` against `.ds-panel`'s
- * `#0D1015`, which is `--color-panel-2` here. A translucent overlay would look similar over the
+ * `#0D1015`, which is `--muted` here. A translucent overlay would look similar over the
  * page and quite different over anything else, and it would leave the row see-through — a row is
  * a surface, and a surface does not become a window on hover.
  */
 const ROW = [
-  'border-b border-line bg-panel last:border-b-0',
+  'border-b border-border bg-card last:border-b-0',
   'transition-colors duration-[120ms] ease-pulse',
   // The native `:hover`, not `data-[hovered]` — which React Aria does set, but wires to pointer
   // *enter*, so a pointer over a cell does not shade its row. For a static surface like a row the
   // pseudo-class is both correct and what the sheet uses (`.ds-row--hover:hover`). Note that
   // neither route can be driven from a story: see the note in Table.stories.tsx.
-  'hover:bg-panel-2',
-  'data-[selected]:bg-panel-2',
+  'hover:bg-muted',
+  'data-[selected]:bg-muted',
   'data-[focus-visible]:outline-1 data-[focus-visible]:-outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:opacity-40',
 ].join(' ')
 
@@ -87,10 +87,10 @@ const ROW = [
 const CELL = [
   'px-5 py-3.5 align-middle',
   SELECTION_GUTTER,
-  'text-[13px] leading-[1.5] text-fg/75',
-  '[&[role=rowheader]]:text-fg',
+  'text-[13px] leading-[1.5] text-foreground/75',
+  '[&[role=rowheader]]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:-outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /**
@@ -367,7 +367,7 @@ function TableRoot({ ref, className, children, ...props }: TableProps) {
  * column marked `isRowHeader` is the row's own name, so it keeps full strength.
  *
  * `Table.Cell` has no numeric variant. The sheet's big yellow figure — 20px, letterspaced, in
- * `--color-yellow` — belongs to its dashboard, where a number is the point of the row; in a table
+ * `--warning` — belongs to its dashboard, where a number is the point of the row; in a table
  * it is one column of many, and a table of yellow figures is a table where nothing stands out.
  * Pass a `className` when a column really is the point.
  */
@@ -419,9 +419,9 @@ export function TableResizer({ className, ...props }: AriaColumnResizerProps) {
         'absolute inset-y-0 -end-px z-10 w-1.5 cursor-col-resize touch-none select-none',
         'outline-2 outline-offset-1 outline-transparent',
         'transition-colors duration-[120ms] ease-pulse',
-        'data-[hovered]:bg-(--color-line-control)',
-        'data-[resizing]:bg-(--color-teal)',
-        'data-[focus-visible]:outline-teal',
+        'data-[hovered]:bg-input',
+        'data-[resizing]:bg-primary',
+        'data-[focus-visible]:outline-ring',
         className,
       ]
         .filter(Boolean)

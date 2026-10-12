@@ -150,7 +150,7 @@ export function ColorFieldSwatch({ className }: ColorFieldSwatchProps) {
     <span
       data-slot="swatch"
       aria-hidden="true"
-      className={['size-6 shrink-0 border border-line-control', className]
+      className={['size-6 shrink-0 border border-input', className]
         .filter(Boolean)
         .join(' ')}
       style={color ? { background: color } : undefined}

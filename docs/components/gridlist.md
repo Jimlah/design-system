@@ -12,8 +12,10 @@ panels and the arrangement is an invention.
 >
   <GridList.Item id="fra1" textValue="fra1 · Frankfurt">
     <GridList.Body>
-      <span className="font-mono text-[13px] text-fg">fra1 · Frankfurt</span>
-      <span className="text-[12px] text-fg/70">up · 42ms</span>
+      <span className="font-mono text-[13px] text-foreground">
+        fra1 · Frankfurt
+      </span>
+      <span className="text-[12px] text-foreground/70">up · 42ms</span>
     </GridList.Body>
   </GridList.Item>
 </GridList>

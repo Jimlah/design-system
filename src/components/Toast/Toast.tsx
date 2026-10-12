@@ -26,7 +26,7 @@ const REGION =
 
 const TOAST = [
   'flex items-start gap-3',
-  'border border-line-strong bg-panel p-3.5',
+  'border border-border-strong bg-card p-3.5',
   // React Aria puts `data-animation="entering" | "exiting"` on the toast for the duration of its
   // entry and exit, so an animation can be hung off it rather than off a class that is always on.
   // No keyframes are shipped with it: which way a toast should move is a house decision, not this
@@ -36,17 +36,17 @@ const TOAST = [
 const CONTENT = 'flex min-w-0 flex-1 flex-col gap-1'
 
 /** The sheet's row legend, at full strength: a toast's heading is read, not scanned. */
-const TITLE = 'text-[12px] uppercase tracking-[0.06em] text-fg'
+const TITLE = 'text-[12px] uppercase tracking-[0.06em] text-foreground'
 
-const TEXT = 'text-[13px] leading-[1.5] text-fg/70'
+const TEXT = 'text-[13px] leading-[1.5] text-foreground/70'
 
 const CLOSE = [
   'flex size-5 shrink-0 items-center justify-center',
-  'cursor-pointer text-fg/45',
+  'cursor-pointer text-foreground/45',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:text-fg',
+  'data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /**

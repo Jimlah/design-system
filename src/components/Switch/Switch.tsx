@@ -55,7 +55,7 @@ const CONTROL = [
 
 /**
  * The sheet's `.ds-switch-track`: 40x20, fully rounded, a transparent fill and a
- * hairline edge. `--color-line-control` rather than the sheet's 40% white, for the
+ * hairline edge. `--input` rather than the sheet's 40% white, for the
  * same reason the inputs use it — a control boundary needs 3:1 on *both* pages, and
  * 40% measures 2.85:1 on the light one.
  */
@@ -87,7 +87,7 @@ const KNOB = [
  * The sheet shares `.ds-check-label` between the selection controls, so the switch
  * takes the same 13px at 80% rather than inventing a third label style.
  */
-const TEXT = 'text-[13px] text-fg/80'
+const TEXT = 'text-[13px] text-foreground/80'
 
 /**
  * The wrapper `SwitchField` renders. It stretches to its container by default, so it

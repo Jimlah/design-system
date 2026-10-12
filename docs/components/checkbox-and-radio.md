@@ -40,8 +40,8 @@ group is not a focusable thing a screen reader could land on.
 The control root is where React Aria puts `data-selected`, `data-hovered` and the rest, so a
 rule reaching the indicator has to go through a group variant — and **group variants sort at
 the same specificity as a plain utility**, because Tailwind wraps the ancestor in `:where()`.
-`group-data-[hovered]:border-fg` therefore ties with the indicator's own
-`border-line-control` and loses on source order, silently.
+`group-data-[hovered]:border-foreground` therefore ties with the indicator's own
+`border-input` and loses on source order, silently.
 
 Instead the root publishes `--selection-border`, `--selection-bg`, `--selection-mark`,
 `--selection-scale` and `--selection-ring`, and the indicator only reads them. Both rules

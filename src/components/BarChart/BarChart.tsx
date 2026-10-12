@@ -53,7 +53,7 @@ export interface BarChartProps {
   values: number[]
   /** One per value, under its bar. A bar with no label simply gets none. */
   labels?: string[]
-  /** The bar the page is about. It is drawn in the accent; every other bar is `--color-bar`. */
+  /** The bar the page is about. It is drawn in the accent; every other bar is `--chart-1`. */
   highlightIndex?: number
   /** Width in user units **and** rendered px. A `className` can stretch it. */
   width?: number
@@ -197,7 +197,7 @@ export function BarChart({
             <span
               key={index}
               data-slot="bar-chart-axis-label"
-              className="absolute top-0 -translate-x-1/2 font-mono text-[11px] tracking-[0.04em] text-fg/70 uppercase"
+              className="absolute top-0 -translate-x-1/2 font-mono text-[11px] tracking-[0.04em] text-foreground/70 uppercase"
               style={{ left: `${((index + 0.5) / labels.length) * 100}%` }}
             >
               {text}

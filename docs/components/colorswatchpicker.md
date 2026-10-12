@@ -29,7 +29,7 @@ system's colours are `light-dark()` pairs resolved by CSS — there is no token 
 the picker arranges presets; which presets is the application's business, exactly as `TagGroup` arranges
 chips it is given. `ColorField` is the other half: for a colour already known, that needs typing.
 
-## The ring is `--color-fg`, and this is the one place the accent cannot be used
+## The ring is `--foreground`, and this is the one place the accent cannot be used
 
 Everywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a `ToggleButton`.
 **Here teal is one of the _choices_.** A teal ring around the teal swatch says nothing, and the same is

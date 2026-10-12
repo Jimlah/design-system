@@ -24,8 +24,8 @@ import { ERROR, HINT, LABEL } from '../field'
  * indicator directly. The indicator is a child, so a rule reaching it must go
  * through a group variant — and group variants sort at the *same* specificity as a
  * plain utility (Tailwind wraps them in `:where(...)`), leaving the outcome to
- * source order. A `group-data-[hovered]:border-fg` therefore loses to the
- * indicator's own `border-line-control`, silently. Publishing a property here means
+ * source order. A `group-data-[hovered]:border-foreground` therefore loses to the
+ * indicator's own `border-input`, silently. Publishing a property here means
  * the ordinary cascade decides, because both rules land on this one element and
  * `[data-selected][data-hovered]` plainly outranks `[data-hovered]`.
  *
@@ -97,7 +97,7 @@ const DASH = [
 ].join(' ')
 
 /** The sheet's `.ds-check-label`: 13px, foreground at 80%. */
-const TEXT = 'text-[13px] text-fg/80'
+const TEXT = 'text-[13px] text-foreground/80'
 
 /**
  * The sheet's `<fieldset class="stack ds-field">`: legend, controls, then the

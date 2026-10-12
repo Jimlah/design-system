@@ -160,7 +160,7 @@ export function TreeItem<T extends object = object>({
           // vocabulary without this line left the chosen row with no accent at all — brighter only
           // through the browser's own selection handling. The accent is the same teal, because "the one
           // you are looking at" is the same idea in both.
-          'data-[selected]:text-teal',
+          'data-[selected]:text-primary',
           NAV_LEVEL[renderProps.level] ?? NAV_LEVEL[3],
           typeof className === 'function' ? className(renderProps) : className,
         )

@@ -8,12 +8,12 @@
     theme's own background while our tokens resolve to *this* system's theme. With
     the default dark theme and a light docs page that is white text on near-white:
     every label in the docs renders invisible, while the same story on its own page
-    looks correct, because there `body` already carries `--color-base`.
+    looks correct, because there `body` already carries `--background`.
 
     Setting it here rather than re-enabling the backgrounds addon keeps the canvas
     tied to the token, so the Theme toolbar still flips it.
   */
   .docs-story {
-    background: var(--color-base);
+    background: var(--background);
   }
 </style>

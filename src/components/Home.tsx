@@ -174,7 +174,7 @@ const RECENT = [
 const REGISTRY_URL = 'https://jimlah.github.io/design-system/r'
 
 /** Prose that explains a command, at the page's hint weight. */
-const NOTE = 'mt-3 text-[13px] leading-[1.6] text-fg/60'
+const NOTE = 'mt-3 text-[13px] leading-[1.6] text-foreground/60'
 
 /**
  * A command a reader is meant to copy. One component rather than the same `<pre>` three times, so
@@ -186,7 +186,7 @@ const NOTE = 'mt-3 text-[13px] leading-[1.6] text-fg/60'
  */
 function Command({ children }: { children: string }) {
   return (
-    <pre className="mt-3 border border-line-strong bg-panel p-4 font-mono text-[12px] leading-[1.9] whitespace-pre-wrap">
+    <pre className="mt-3 border border-border-strong bg-card p-4 font-mono text-[12px] leading-[1.9] whitespace-pre-wrap">
       <code>{children}</code>
     </pre>
   )
@@ -212,19 +212,19 @@ export function Home() {
         className="mt-8 grid gap-10 md:grid-cols-[minmax(0,1fr)_320px]"
       >
         <div>
-          <p className="font-mono text-[12px] tracking-[0.08em] text-teal uppercase">
+          <p className="font-mono text-[12px] tracking-[0.08em] text-primary uppercase">
             {index.length} components · {RECENT.length} suites green
           </p>
           <h1 className="mt-4 text-[40px] leading-[1.05] font-semibold tracking-[-0.02em]">
             Pulse
           </h1>
-          <p className="mt-4 max-w-xl text-[15px] leading-[1.65] text-fg/70">
+          <p className="mt-4 max-w-xl text-[15px] leading-[1.65] text-foreground/70">
             React Aria for behaviour, Tailwind for the styling, and one set of
-            tokens in <code className="text-fg">src/styles.css</code> for both
-            themes. Every component is documented beside its source, and this
-            page uses them rather than describing them — and the whole library
-            is published as a registry, so another project installs it instead
-            of copying it.
+            tokens in <code className="text-foreground">src/styles.css</code>{' '}
+            for both themes. Every component is documented beside its source,
+            and this page uses them rather than describing them — and the whole
+            library is published as a registry, so another project installs it
+            instead of copying it.
           </p>
           <Toolbar aria-label="Page actions" className="mt-6">
             <Button
@@ -260,7 +260,7 @@ export function Home() {
           </Toolbar>
         </div>
 
-        <aside className="border border-line-strong bg-panel p-5">
+        <aside className="border border-border-strong bg-card p-5">
           <Meter value={82}>
             <Meter.Header>
               <Meter.Label>Token coverage</Meter.Label>
@@ -284,8 +284,8 @@ export function Home() {
           <div className="flex items-center gap-3">
             <Avatar alt="Ada Lovelace" color="primary" size="lg" />
             <div>
-              <p className="text-[13px] text-fg">Ada Lovelace</p>
-              <p className="font-mono text-[11px] tracking-[0.04em] text-fg/60 uppercase">
+              <p className="text-[13px] text-foreground">Ada Lovelace</p>
+              <p className="font-mono text-[11px] tracking-[0.04em] text-foreground/60 uppercase">
                 maintainer
               </p>
             </div>
@@ -296,8 +296,8 @@ export function Home() {
       <Separator className="my-12" />
 
       <section id="charts" className="grid gap-8 md:grid-cols-2">
-        <div className="border border-line-strong bg-panel p-5">
-          <p className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+        <div className="border border-border-strong bg-card p-5">
+          <p className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
             Stories written
           </p>
           <Sparkline
@@ -307,8 +307,8 @@ export function Home() {
           />
         </div>
 
-        <div className="border border-line-strong bg-panel p-5">
-          <p className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+        <div className="border border-border-strong bg-card p-5">
+          <p className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
             Checks per suite
           </p>
           <BarChart
@@ -322,8 +322,8 @@ export function Home() {
           />
         </div>
 
-        <div className="border border-line-strong bg-panel p-5">
-          <p className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+        <div className="border border-border-strong bg-card p-5">
+          <p className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
             Uptime, no variation
           </p>
           <FlatLine
@@ -334,8 +334,8 @@ export function Home() {
           />
         </div>
 
-        <div className="border border-line-strong bg-panel p-5">
-          <p className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+        <div className="border border-border-strong bg-card p-5">
+          <p className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
             Where the stories are read
           </p>
           <DotMap
@@ -356,7 +356,7 @@ export function Home() {
             <h2 className="text-[24px] font-semibold tracking-[-0.01em]">
               Components
             </h2>
-            <p className="mt-2 text-[14px] text-fg/70">
+            <p className="mt-2 text-[14px] text-foreground/70">
               Read from the directory, so adding one is enough.
             </p>
           </div>
@@ -388,11 +388,11 @@ export function Home() {
             {['Inputs', 'Collections', 'Overlays', 'Charts', 'Display'].map(
               (group) => (
                 <Tabs.Panel key={group} id={group}>
-                  <ul className="grid gap-px border border-line-strong bg-line-soft sm:grid-cols-3">
+                  <ul className="grid gap-px border border-border-strong bg-border-soft sm:grid-cols-3">
                     {shown
                       .filter((entry) => entry.group === group)
                       .map((entry) => (
-                        <li key={entry.name} className="bg-panel">
+                        <li key={entry.name} className="bg-card">
                           <Link
                             // The Storybook build lives beside this page — served by the app at
                             // /storybook/ in dev and preview (see vite.config.ts) and copied in as
@@ -405,7 +405,7 @@ export function Home() {
                             variant="caps"
                             className="block px-4 py-3"
                           >
-                            <span className="font-mono text-[13px] tracking-[0.02em] text-fg">
+                            <span className="font-mono text-[13px] tracking-[0.02em] text-foreground">
                               {entry.name}
                             </span>
                           </Link>
@@ -413,7 +413,7 @@ export function Home() {
                       ))}
                     {shown.filter((entry) => entry.group === group).length ===
                     0 ? (
-                      <li className="bg-panel px-4 py-3 font-mono text-[12px] text-fg/50 uppercase">
+                      <li className="bg-card px-4 py-3 font-mono text-[12px] text-foreground/50 uppercase">
                         nothing here
                       </li>
                     ) : null}
@@ -431,7 +431,7 @@ export function Home() {
         <h2 className="text-[24px] font-semibold tracking-[-0.01em]">
           Registry
         </h2>
-        <p className="mt-2 max-w-2xl text-[14px] text-fg/70">
+        <p className="mt-2 max-w-2xl text-[14px] text-foreground/70">
           The same components are published as a shadcn registry, so another
           project installs them instead of copying them: one theme, one bundle,
           and one item per component, served from this site as static JSON.
@@ -439,7 +439,7 @@ export function Home() {
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
           <div>
-            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
               Install
             </h3>
             <Tabs className="mt-3">
@@ -477,7 +477,7 @@ npx shadcn@latest add @pulse/button`}</Command>
           </div>
 
           <div>
-            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
               What is in it
             </h3>
             <Table aria-label="Registry items" className="mt-3">
@@ -564,7 +564,7 @@ npx shadcn@latest add @pulse/button`}</Command>
           </Accordion.Item>
         </Accordion>
 
-        <p className="mt-6 max-w-2xl text-[13px] leading-[1.6] text-fg/60">
+        <p className="mt-6 max-w-2xl text-[13px] leading-[1.6] text-foreground/60">
           The longer notes — why the items are shaped this way, what the CLI
           writes into a consumer's stylesheet, and how each claim was measured —
           live in{' '}
@@ -776,7 +776,7 @@ npx shadcn@latest add @pulse/button`}</Command>
 
         <div className="flex flex-col gap-6">
           <div>
-            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
               Palette
             </h3>
             <ColorSwatchPicker className="mt-3">
@@ -791,7 +791,7 @@ npx shadcn@latest add @pulse/button`}</Command>
           </div>
 
           <div>
-            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-foreground/60 uppercase">
               Treatments
             </h3>
             <TagGroup aria-label="Tag treatments" className="mt-3">

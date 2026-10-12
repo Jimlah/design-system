@@ -61,7 +61,7 @@ to be far apart.
 The obvious way to write that is an endpoint rule that out-specifies the wash. Both of the
 obvious ways fail, and both fail silently:
 
-- **Stacking two data variants does not compile.** `data-[selected][data-selection-start]:bg-teal`
+- **Stacking two data variants does not compile.** `data-[selected][data-selection-start]:bg-primary`
   emits nothing at all — the selector never appears in the stylesheet, so the ends simply keep
   the wash and the day looks like every other day in the range.
 - **A single `data-[selection-start]` ties with `data-[selected]`** — both are one variant — and
@@ -70,9 +70,9 @@ obvious ways fail, and both fail silently:
 So the three rules are written to be **mutually exclusive** instead, and only ever one applies:
 
 ```
-data-[selection-start]:bg-teal          the ends, whole
-data-[selection-end]:bg-teal
-data-[selected]:not-data-[selection-start]:not-data-[selection-end]:bg-teal/20   the middle, washed
+data-[selection-start]:bg-primary          the ends, whole
+data-[selection-end]:bg-primary
+data-[selected]:not-data-[selection-start]:not-data-[selection-end]:bg-primary/20   the middle, washed
 ```
 
 ### The chrome draws one grid per month

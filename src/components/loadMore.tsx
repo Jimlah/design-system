@@ -11,7 +11,7 @@
  * not an event, and a reader scrolling past should see the list continue rather than a control.
  */
 export const LOAD_MORE =
-  'flex items-center justify-center gap-2 p-4 text-[11px] uppercase tracking-[0.08em] text-fg/45'
+  'flex items-center justify-center gap-2 p-4 text-[11px] uppercase tracking-[0.08em] text-foreground/45'
 
 /**
  * The spinner, in the sentinel's own colour.
@@ -23,7 +23,7 @@ export function LoadMoreSpinner() {
     <span
       data-slot="loader"
       aria-hidden="true"
-      className="size-3 border border-fg/30 border-t-fg motion-safe:animate-spin"
+      className="size-3 border border-foreground/30 border-t-fg motion-safe:animate-spin"
     />
   )
 }

@@ -22,7 +22,7 @@ const meta = {
   <TagGroup.List>
     <TagGroup.Tag variant="teal">fra1</TagGroup.Tag>
     <TagGroup.Tag variant="outline">iad1</TagGroup.Tag>
-    <TagGroup.Tag variant="outline-yellow">sfo1</TagGroup.Tag>
+    <TagGroup.Tag variant="outline-warning">sfo1</TagGroup.Tag>
   </TagGroup.List>
 </TagGroup>`,
       },
@@ -39,7 +39,7 @@ const meta = {
         <TagItem id="iad1" variant="outline">
           iad1
         </TagItem>
-        <TagItem id="sfo1" variant="outline-yellow">
+        <TagItem id="sfo1" variant="outline-warning">
           sfo1
         </TagItem>
       </TagGroup.List>
@@ -56,8 +56,8 @@ const VARIANTS: TagVariant[] = [
   'teal',
   'gray',
   'yellow',
-  'outline-teal',
-  'outline-yellow',
+  'outline-ring',
+  'outline-warning',
 ]
 
 export const Default: Story = {

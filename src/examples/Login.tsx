@@ -79,22 +79,22 @@ export function Login({ onSubmit }: LoginProps) {
   }
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-base px-6 py-16">
+    <main className="flex min-h-dvh items-center justify-center bg-background px-6 py-16">
       <div className="w-full max-w-sm">
-        <p className="font-mono text-[12px] tracking-[0.06em] text-teal uppercase">
+        <p className="font-mono text-[12px] tracking-[0.06em] text-primary uppercase">
           Pulse
         </p>
         <h1 className="mt-4 text-[32px] leading-[1.05] font-semibold tracking-[-0.02em]">
           Sign in
         </h1>
-        <p className="mt-3 text-[13px] text-fg/60">
+        <p className="mt-3 text-[13px] text-foreground/60">
           Every region from one console. Use the account your team already gave
           you.
         </p>
 
         <Form
           onSubmit={handleSubmit}
-          className="mt-8 border border-line-strong bg-panel p-6"
+          className="mt-8 border border-border-strong bg-card p-6"
         >
           <Form.Section>
             <TextField name="email" isRequired>
@@ -143,7 +143,7 @@ export function Login({ onSubmit }: LoginProps) {
 
         <Separator variant="soft" className="my-6" />
 
-        <p className="text-[12px] text-fg/60">
+        <p className="text-[12px] text-foreground/60">
           Here for the components rather than the console?{' '}
           <Link
             variant="viewmore"

@@ -42,7 +42,7 @@ import type { MapDot } from './worldDots'
  *
  * **Two colours, both derived.** The replica writes `#5be4dc` for an accented dot and
  * `rgba(255,255,255,.85)` for the rest. The first is the accent about 12% toward ink — a small dot at full
- * accent is a glare. The second is `--color-fg` at 85%: white on the dark theme, near-black on the light
+ * accent is a glare. The second is `--foreground` at 85%: white on the dark theme, near-black on the light
  * one, which is the behaviour a map on a white page needs and the replica never had to consider.
  *
  * **The readout is opt-in through the data.** The replica's `GEO_DOTS` is bare geometry with no values, so

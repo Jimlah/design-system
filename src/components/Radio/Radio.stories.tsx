@@ -237,7 +237,7 @@ export const Required: Story = {
     const label = canvas.getByText(/protocol/i)
     const marker = getComputedStyle(label, '::after')
     await expect(marker.content).toContain('*')
-    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --color-red
+    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --destructive
   },
 }
 
@@ -284,7 +284,7 @@ export const Hover: Story = {
       expect(http.closest('label')).toHaveAttribute('data-hovered', 'true'),
     )
     await expect(getComputedStyle(indicator).borderTopColor).toBe(
-      'oklch(1 0 none)', // --color-fg
+      'oklch(1 0 none)', // --foreground
     )
   },
 }

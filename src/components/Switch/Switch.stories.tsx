@@ -185,7 +185,7 @@ export const States: Story = {
     const invalidTrack = trackOf(invalid)
     invalidTrack.style.transition = 'none'
     await expect(getComputedStyle(invalidTrack).borderTopColor).toBe(
-      'oklch(0.785 0.1236 29)', // --color-red
+      'oklch(0.785 0.1236 29)', // --destructive
     )
     // ...and it outranks the selected fill, which is the state that matters more.
     await expect(getComputedStyle(invalidTrack).backgroundColor).toBe(
@@ -250,7 +250,7 @@ export const Hover: Story = {
       expect(root(off)).toHaveAttribute('data-hovered', 'true'),
     )
     await expect(getComputedStyle(trackOf(off)).borderTopColor).toBe(
-      'oklch(1 0 none)', // --color-fg
+      'oklch(1 0 none)', // --foreground
     )
 
     // ...and of an on one, which keeps its fill. That is the sheet's own pair: a

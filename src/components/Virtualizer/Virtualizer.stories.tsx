@@ -58,7 +58,7 @@ export const Thousand: Story = {
       >
         {(monitor: (typeof monitors)[number]) => (
           <GridListItem id={monitor.id} textValue={monitor.name}>
-            <span className="font-mono text-[13px] text-fg">
+            <span className="font-mono text-[13px] text-foreground">
               {monitor.name}
             </span>
           </GridListItem>
@@ -125,7 +125,7 @@ function Infinite() {
           <>
             {(monitor: (typeof ALL)[number]) => (
               <GridListItem id={monitor.id} textValue={monitor.name}>
-                <span className="font-mono text-[13px] text-fg">
+                <span className="font-mono text-[13px] text-foreground">
                   {monitor.name}
                 </span>
               </GridListItem>

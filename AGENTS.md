@@ -160,9 +160,9 @@ the source and plain in `dist/client/login/index.html`.
 ## Design tokens
 
 The system is **Pulse** — a dark monitoring design language replicated in
-`../pulse-replica/`. Its tokens are the single source of truth and live in `src/styles.css`
-inside a Tailwind v4 `@theme` block. Each entry becomes both a CSS custom property on
-`:root` and a utility class, so never hardcode a hex value or write raw CSS in a component:
+`../pulse-replica/`. Its tokens are the single source of truth and live in `src/styles.css`,
+in shadcn's shape: the values sit in `:root` and one `@theme inline` block turns them into
+utilities, so never hardcode a hex value or write raw CSS in a component:
 
 Colours are written in `oklch()` and every related value is derived with
 `color-mix(in oklch, …)`. Never add a second hex or an `rgba()` for a hover, tint or
@@ -171,30 +171,33 @@ translucent version — one base value must drive its whole family.
 Each token holds **both themes**, as `light-dark(light, dark)`. There is no second variable
 block under a media query or a `.dark` class:
 
-| Token              | Utility               | Light                                 | Dark (the sheet)          |
-| ------------------ | --------------------- | ------------------------------------- | ------------------------- |
-| `--color-base`     | `bg-base`             | `oklch(100% 0 none)`                  | `oklch(0% 0 none)`        |
-| `--color-panel`    | `bg-panel`            | `#F7F7F7`                             | `#0D1015` black-tint1     |
-| `--color-panel-2`  | `bg-panel-2`          | `#EDEDED`                             | `#191C20` black-tint2     |
-| `--color-teal`     | `bg-teal` `text-teal` | `oklch(55% 0.0931 …)`                 | `#71FFF6` action-teal     |
-| `--color-yellow`   | `bg-yellow`           | `oklch(55% 0.1103 …)`                 | `#FAD14F` selected-yellow |
-| `--color-green`    | `bg-green`            | `oklch(55% 0.1236 …)`                 | `#B0FBB1` success         |
-| `--color-red`      | `bg-red`              | `oklch(55% 0.1236 …)`                 | `#FF9A8B` danger          |
-| `--color-neutral`  | `bg-neutral`          | `oklch(52% 0 none)`                   | `#BFBFBF` the sheet grey  |
-| `--color-ink`      | `text-ink`            | `oklch(100% 0 none)`                  | `oklch(0% 0 none)`        |
-| `--color-fg`       | `text-fg`             | `oklch(18% 0 none)`                   | `oklch(100% 0 none)`      |
-| `--color-fg-muted` | `text-fg-muted`       | 70% of `--color-fg`                   | same rule                 |
-| `--color-line*`    | `border-line-strong`  | `--color-fg` at 62% / 45% / 40% / 30% | same rule                 |
-| `--font-mono`      | `font-mono`           | Overpass Mono                         | Overpass Mono             |
-| `--ease-pulse`     | `ease-pulse`          | 160ms cubic-bezier                    | same                      |
+| Token                | Utility                     | Light                 | Dark (the sheet)          |
+| -------------------- | --------------------------- | --------------------- | ------------------------- |
+| `--background`       | `bg-background`             | `oklch(100% 0 none)`  | `oklch(0% 0 none)`        |
+| `--card`             | `bg-card`                   | `#F7F7F7`             | `#0D1015` black-tint1     |
+| `--muted`            | `bg-muted`                  | `#EDEDED`             | `#191C20` black-tint2     |
+| `--primary`          | `bg-primary` `text-primary` | `oklch(55% 0.0931 …)` | `#71FFF6` action-teal     |
+| `--warning`          | `bg-warning`                | `oklch(55% 0.1103 …)` | `#FAD14F` selected-yellow |
+| `--success`          | `bg-success`                | `oklch(55% 0.1236 …)` | `#B0FBB1` success         |
+| `--destructive`      | `bg-destructive`            | `oklch(55% 0.1236 …)` | `#FF9A8B` danger          |
+| `--secondary`        | `bg-secondary`              | `oklch(52% 0 none)`   | `#BFBFBF` the sheet grey  |
+| `--ink`              | `text-ink`                  | `oklch(100% 0 none)`  | `oklch(0% 0 none)`        |
+| `--foreground`       | `text-foreground`           | `oklch(18% 0 none)`   | `oklch(100% 0 none)`      |
+| `--muted-foreground` | `text-muted-foreground`     | 70% of `--foreground` | same rule                 |
+| `--border`           | `border-border`             | `--foreground` at 62% | same rule                 |
+| `--input`            | `border-input`              | `--foreground` at 45% | same rule                 |
+| `--font-mono`        | `font-mono`                 | Overpass Mono         | Overpass Mono             |
+| `--ease-pulse`       | `ease-pulse`                | 160ms cubic-bezier    | same                      |
 
 The alphas need no per-theme tuning: an alpha over a dark page and over a light page both
-land on a mid grey, so they derive from `--color-fg` and follow it.
+land on a mid grey, so they derive from `--foreground` and follow it.
 
-A shadcn-compatible **semantic layer** gives the same colours role-based names (`bg-primary`,
-`border-border`, `ring-ring`) for components copied from shadcn/ui. It is a translation layer, not a
-second theme — every value is a `var()` onto a token above, and there is deliberately no `.dark` block
-of token values. See [theming.md](./docs/theming.md).
+`--border-strong` (40%) and `--border-soft` (30%) are the two other hairline strengths.
+
+**The names are shadcn's**, so a component copied out of shadcn/ui speaks this library's vocabulary.
+Three tokens have no shadcn equivalent and are extensions: `--ink`, because a fill's label colour
+follows a fill chosen at runtime, and the two extra borders. There is deliberately no `.dark` block
+of values. See [theming.md](./docs/theming.md).
 
 ### What the light theme had to solve
 
@@ -221,13 +224,13 @@ resolves per element, so a subtree with its own `color-scheme` flips on its own.
 Dark is the default rather than the OS setting, because the design language has no light mode
 of its own; `data-theme="system"` opts into tracking the OS. In Storybook the **Theme**
 toolbar switches it, and `.storybook/preview.tsx` disables the backgrounds addon so the canvas
-takes `--color-base` from our stylesheet and flips with everything else.
+takes `--background` from our stylesheet and flips with everything else.
 
 **The docs canvas needs its background set too.** `.docs-story` is transparent, so each story
 block on a docs page otherwise lands on Storybook's own light background while our tokens
 resolve to this system's dark theme — white text on near-white, so every label in the docs
 renders invisible while the same story on its own page looks perfectly correct.
-`.storybook/preview-head.html` paints `.docs-story` with `var(--color-base)`, which keeps it
+`.storybook/preview-head.html` paints `.docs-story` with `var(--background)`, which keeps it
 tied to the token so the Theme toolbar still flips it. Do it there rather than by re-enabling
 the backgrounds addon, which would pin a fixed colour again.
 
@@ -316,13 +319,13 @@ colours: a danger button that turns the same white as everything else has stoppe
 danger. It is barely available anyway — these fills sit at L 92%, leaving 8% of headroom
 toward white, so lightening is nearly invisible.
 
-So hover and pressed **deepen the button's own colour**, toward `--color-ink`:
+So hover and pressed **deepen the button's own colour**, toward `--ink`:
 
 ```
 rest → hover 12% toward ink → pressed 22% toward ink
 ```
 
-Mixing with `--color-ink` rather than `black` is what makes these recipes work in both
+Mixing with `--ink` rather than `black` is what makes these recipes work in both
 themes: `ink` inverts with the fills, so the same 12% deepens the luminous dark-theme accents
 and lightens the deep light-theme ones. Use the same principle for any new state: derive from
 the base, never substitute a different colour.

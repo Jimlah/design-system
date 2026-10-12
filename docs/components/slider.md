@@ -44,10 +44,10 @@ selection control; it is a grip. So it is square-cornered and it grows with `siz
 Getting there took three attempts, and the first two are worth recording because a passing suite did
 not notice either:
 
-1. A **bordered `bg-base` square**. On the dark page that is a black box showing nothing but its own
+1. A **bordered `bg-background` square**. On the dark page that is a black box showing nothing but its own
    hairline, sitting on the rail like a rendering artifact. A border also eats a fifth of the width at
    this size.
-2. A **square filled with `bg-fg/70`**. Visible, and still wrong: a square astride a line reads as a
+2. A **square filled with `bg-foreground/70`**. Visible, and still wrong: a square astride a line reads as a
    bullet, not a handle.
 
 What works is a **fader grip** — taller than it is wide, solid, in a token that already exists, with
@@ -95,7 +95,7 @@ still passes.
 The sheet has no slider — this is one of the components invented here — so the handle's shape and colour
 were choices, and it took three readings of the rendered control to get them right.
 
-**Shape.** It began as a `bg-base` square **with a border**, which on the dark page was a black box showing
+**Shape.** It began as a `bg-background` square **with a border**, which on the dark page was a black box showing
 nothing but its own hairline. The verdict was that squareness was at fault, so it became a tall narrow bar —
 7×18px at `md`, then 10×24px. The next reader said it still looked wrong, rightly: a bar a hairline wide and
 several rails tall reads as a **cursor**, not as something a hand closes around. The border and the black fill
@@ -105,10 +105,10 @@ were the original problem; being square never was.
 makes it a grip" — so the wrong shape was not merely accepted, it was _enforced_, and no amount of looking at
 the component would have found that.
 
-**Colour, which was the actual complaint.** `bg-fg/70` is 70% white: measurably lighter than the page, but
+**Colour, which was the actual complaint.** `bg-foreground/70` is 70% white: measurably lighter than the page, but
 _duller than the teal fill it sits on_ — so on the filled half of the rail the handle receded while the fill
 led, and it was hard to see. It is the thing you grab; it should be the loudest mark on the rail. It is now
-`bg-fg` at full strength, which reads against both the teal fill and the dark track with no border and no ring.
+`bg-foreground` at full strength, which reads against both the teal fill and the dark track with no border and no ring.
 Sizes moved up one step at the same time.
 
 **The state signals are scale, not colour.** With the handle already white at rest, hover and drag have nothing

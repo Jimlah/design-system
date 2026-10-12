@@ -91,10 +91,10 @@ export interface TimeFieldErrorProps extends Omit<
 
 const GROUP = [
   'flex w-fit items-center',
-  'border border-(--field-border) bg-panel',
+  'border border-(--field-border) bg-card',
   'transition-colors duration-150 ease-pulse',
-  'data-[focus-within]:border-teal',
-  'data-[invalid]:border-red',
+  'data-[focus-within]:border-primary',
+  'data-[invalid]:border-destructive',
   'data-[disabled]:opacity-40',
 ].join(' ')
 

@@ -57,11 +57,11 @@ const COUNTER = [
 
 const STEPPER = [
   'flex flex-1 items-center justify-center',
-  'cursor-pointer text-fg/70',
+  'cursor-pointer text-foreground/70',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:bg-fg/5 data-[hovered]:text-fg',
+  'data-[hovered]:bg-foreground/5 data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[-3px]',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
 ].join(' ')
 

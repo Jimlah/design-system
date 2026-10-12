@@ -21,7 +21,7 @@ const LAYOUTS = {
 /**
  * One preset. Use it as `ColorSwatchPicker.Item`.
  *
- * **The ring is `--color-fg`, and this is the one place in the system the accent cannot be used.**
+ * **The ring is `--foreground`, and this is the one place in the system the accent cannot be used.**
  * Everywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a
  * `ToggleButton`. Here teal is one of the *choices*: a teal ring around the teal swatch says nothing, and
  * the same is true of yellow, green and red. A marker that shares a colour with an option cannot say
@@ -61,9 +61,9 @@ export function ColorSwatchPickerItem({
         // draw their rings this way, which is why theirs work.
         'cursor-pointer outline-2 outline-offset-2 outline-transparent',
         'transition-[outline-color] duration-[120ms] ease-pulse',
-        'data-[selected]:outline-fg',
-        'data-[focus-visible]:outline-fg',
-        'data-[hovered]:border-fg',
+        'data-[selected]:outline-foreground',
+        'data-[focus-visible]:outline-foreground',
+        'data-[hovered]:border-foreground',
         'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',
         className,
       ]

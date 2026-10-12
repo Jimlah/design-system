@@ -336,7 +336,7 @@ export const Hover: Story = {
       expect(root(off)).toHaveAttribute('data-hovered', 'true'),
     )
     await expect(getComputedStyle(boxOf(off)).borderTopColor).toBe(
-      'oklch(1 0 none)', // --color-fg
+      'oklch(1 0 none)', // --foreground
     )
     // ...and hovering a checked one inverts its fill, as the sheet does.
     await userEvent.hover(boxOf(on))
@@ -403,7 +403,7 @@ export const GroupRequired: Story = {
     const label = canvas.getByText(/alert me when/i)
     const marker = getComputedStyle(label, '::after')
     await expect(marker.content).toContain('*')
-    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --color-red
+    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --destructive
   },
 }
 

@@ -9,7 +9,7 @@
  * because a shadow has to darken in both themes, exactly as the modal's scrim does.
  */
 export const SURFACE = [
-  'border border-line-strong bg-panel',
+  'border border-border-strong bg-card',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
   'outline-none',
 ].join(' ')
@@ -29,12 +29,12 @@ export const LIST = 'max-h-[264px] overflow-auto p-0 outline-none'
  */
 export const ITEM = [
   'relative flex items-center justify-between gap-3',
-  'px-3.5 py-[11px] text-[13px] text-fg/75',
+  'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
-  'data-[focus-visible]:outline-none data-[focus-visible]:bg-fg/7 data-[focus-visible]:text-fg',
-  'data-[selected]:text-teal',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:text-fg/35',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
+  'data-[selected]:text-primary',
+  'data-[disabled]:cursor-not-allowed data-[disabled]:text-foreground/35',
 ].join(' ')
 
 /** One item's text, which truncates rather than wrapping a menu wider than its trigger. */
@@ -46,21 +46,21 @@ export const SECTION = 'flex flex-col'
 /** The sheet's `.ds-select-group-label`. */
 export const SECTION_TITLE = [
   'px-3.5 pt-[9px] pb-1',
-  'text-[11px] uppercase tracking-[0.08em] text-fg/45',
+  'text-[11px] uppercase tracking-[0.08em] text-foreground/45',
 ].join(' ')
 
 /** The sheet's `.ds-div-hair`, inset so it reads as a break in the list rather than a table edge. */
-export const SEPARATOR = 'my-1 h-px shrink-0 bg-line'
+export const SEPARATOR = 'my-1 h-px shrink-0 bg-border'
 
 /** A search box above the list sits behind the menu's own hairline, so it reads as part of the surface. */
-export const SEARCH = 'border-b border-line-strong p-2'
+export const SEARCH = 'border-b border-border-strong p-2'
 
 /**
  * A submenu's caret. A row with a submenu says so — `data-has-submenu` is React Aria's — and an
  * affordance nobody can see is not an affordance.
  */
 export const SUBMENU_CARET = [
-  'shrink-0 text-fg/45',
+  'shrink-0 text-foreground/45',
   'transition-[rotate] duration-[120ms] ease-pulse',
   'data-[open]:rotate-90',
 ].join(' ')

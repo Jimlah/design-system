@@ -32,8 +32,8 @@ const meta = {
         code: `<GridList aria-label="Monitors" selectionMode="multiple" className="grid grid-cols-3 gap-3">
   <GridList.Item id="fra1" textValue="fra1 · Frankfurt">
     <GridList.Body>
-      <span className="font-mono text-[13px] text-fg">fra1 · Frankfurt</span>
-      <span className="text-[12px] text-fg/70">up · 42ms</span>
+      <span className="font-mono text-[13px] text-foreground">fra1 · Frankfurt</span>
+      <span className="text-[12px] text-foreground/70">up · 42ms</span>
     </GridList.Body>
   </GridList.Item>
 </GridList>`,
@@ -45,16 +45,20 @@ const meta = {
     <GridList aria-label="Monitors" className="w-80">
       <GridList.Item id="fra1" textValue="fra1 · Frankfurt">
         <GridList.Body>
-          <span className="font-mono text-[13px] text-fg">
+          <span className="font-mono text-[13px] text-foreground">
             fra1 · Frankfurt
           </span>
-          <span className="text-[12px] text-fg/70">up · 42ms</span>
+          <span className="text-[12px] text-foreground/70">up · 42ms</span>
         </GridList.Body>
       </GridList.Item>
       <GridList.Item id="iad1" textValue="iad1 · Virginia">
         <GridList.Body>
-          <span className="font-mono text-[13px] text-fg">iad1 · Virginia</span>
-          <span className="text-[12px] text-fg/70">degraded · 210ms</span>
+          <span className="font-mono text-[13px] text-foreground">
+            iad1 · Virginia
+          </span>
+          <span className="text-[12px] text-foreground/70">
+            degraded · 210ms
+          </span>
         </GridList.Body>
       </GridList.Item>
     </GridList>
@@ -143,8 +147,8 @@ export const Dashboard: Story = {
       {['fra1', 'iad1', 'syd1', 'gru1', 'sin1', 'lhr1'].map((id) => (
         <GridList.Item key={id} id={id} textValue={id}>
           <GridList.Body>
-            <span className="font-mono text-[13px] text-fg">{id}</span>
-            <span className="text-[12px] text-fg/70">up</span>
+            <span className="font-mono text-[13px] text-foreground">{id}</span>
+            <span className="text-[12px] text-foreground/70">up</span>
           </GridList.Body>
         </GridList.Item>
       ))}
@@ -307,7 +311,9 @@ function ReorderableList() {
       {order.map((id) => (
         <GridList.Item key={id} id={id} textValue={names[id]}>
           <GridList.Body>
-            <span className="font-mono text-[13px] text-fg">{names[id]}</span>
+            <span className="font-mono text-[13px] text-foreground">
+              {names[id]}
+            </span>
           </GridList.Body>
         </GridList.Item>
       ))}
@@ -340,7 +346,9 @@ const Page = ({ loading }: { loading: boolean }) => (
   <GridList aria-label="Monitors" className="w-80">
     <GridList.Item id="fra1" textValue="fra1 · Frankfurt">
       <GridList.Body>
-        <span className="font-mono text-[13px] text-fg">fra1 · Frankfurt</span>
+        <span className="font-mono text-[13px] text-foreground">
+          fra1 · Frankfurt
+        </span>
       </GridList.Body>
     </GridList.Item>
     <GridList.LoadMore isLoading={loading} onLoadMore={() => {}} />

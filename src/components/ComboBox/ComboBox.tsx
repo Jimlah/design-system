@@ -94,7 +94,7 @@ const SPINNER = 'size-[1.25cap] motion-safe:animate-spin'
 /** The sheet's `.ds-select-menu`, shared down to the class list with `Select`. */
 const MENU = [
   'flex w-(--trigger-width) flex-col overflow-hidden',
-  'border border-line-strong bg-panel',
+  'border border-border-strong bg-card',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -105,12 +105,12 @@ const OPTION_LABEL = 'truncate'
  * kept as-is. `aria-hidden`, because `aria-selected` already says this.
  */
 const MARKER =
-  'shrink-0 font-mono text-[11px] text-yellow data-[slot=marker]:select-none'
+  'shrink-0 font-mono text-[11px] text-warning data-[slot=marker]:select-none'
 
 /** The sheet's `.ds-select-group-label`. */
 const GROUP_LABEL = [
   'px-3.5 pt-[9px] pb-1',
-  'text-[11px] uppercase tracking-[0.08em] text-fg/45',
+  'text-[11px] uppercase tracking-[0.08em] text-foreground/45',
 ].join(' ')
 
 const SECTION = 'flex flex-col'
