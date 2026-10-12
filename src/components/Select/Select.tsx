@@ -105,7 +105,9 @@ const ICON_SPINNER = [ICON, '[color:var(--dropdown-caret-ink)]'].join(' ')
  * under a fixed frame rather than dragging the frame's edges with them.
  */
 const MENU = [
-  'flex w-(--trigger-width) flex-col overflow-clip',
+  // At least the trigger's width and as wide as the longest option needs — see `POPOVER` in
+  // `popover.ts`, which states the rule this copy follows.
+  'flex min-w-(--trigger-width) max-w-[calc(100vw-2rem)] flex-col overflow-clip',
   'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')

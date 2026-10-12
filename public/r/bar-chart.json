@@ -126,9 +126,6 @@
         "color-scheme": "dark",
         "overscroll-behavior-y": "none"
       },
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },

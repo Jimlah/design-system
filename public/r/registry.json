@@ -126,9 +126,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -291,9 +288,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -778,9 +772,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -944,9 +935,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1114,9 +1102,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1286,9 +1271,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1464,9 +1446,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -1631,9 +1610,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1809,9 +1785,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -1975,9 +1948,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2148,9 +2118,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -2320,9 +2287,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -2486,9 +2450,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2658,9 +2619,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2847,9 +2805,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3024,9 +2979,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3203,9 +3155,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3377,9 +3326,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3555,9 +3501,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3719,9 +3662,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3887,9 +3827,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4053,9 +3990,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4226,9 +4160,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4397,9 +4328,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4575,9 +4503,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4614,7 +4539,7 @@
           }
         }
       },
-      "docs": "A menu of actions or choices, opened from a control. The surface is the sheet's `.ds-select-menu`,\nnow shared with the select through `popover.ts` — the same split as `field.ts`, and the first time\ntwo families here have genuinely converged on one surface.\n\n```tsx\n<Menu>\n  <Button>Actions</Button>\n  <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n    <Menu.Item id=\"restart\">Restart</Menu.Item>\n    <Menu.Separator />\n    <Menu.Section>\n      <Menu.SectionTitle>Danger</Menu.SectionTitle>\n      <Menu.Item id=\"delete\">Delete</Menu.Item>\n    </Menu.Section>\n  </Menu.Popover>\n</Menu>\n```\n\n| Slot                | React Aria       | Notes                                              |\n| ------------------- | ---------------- | -------------------------------------------------- |\n| `Menu`              | `MenuTrigger`    | The trigger, then a `Menu.Popover`                 |\n| `Menu.Popover`      | `Popover`+`Menu` | The surface and the list. `menuProps` for the list |\n| `Menu.Item`         | `MenuItem`       | One row. A `SubmenuTrigger` inside it opens again  |\n| `Menu.Section`      | `MenuSection`    | A group                                            |\n| `Menu.SectionTitle` | `Header`         | Its heading, in `.ds-select-group-label`           |\n| `Menu.Separator`    | `Separator`      | The sheet's `.ds-div-hair`                         |\n\n### A menu performs; a select keeps\n\n`onAction` is the prop that says which this is. Set it and the rows are commands and the menu closes\nwhen one is chosen; leave it off with a `selectionMode` and they are choices that mark themselves\n`aria-checked`.\n\n**A menu closes on select whatever the mode** — that is what a menu _is_ — so a row that sets a value\nrather than running an action has to say `shouldCloseOnSelect: false`, or the list vanishes the\nmoment it has been used once. The `Selection` story failed on exactly that before it was written\ndown.\n\n### `Menu.Popover` carries the list's props\n\n`selectionMode`, `disabledKeys` and `onAction` are the _menu's_ rather than the surface's, and\nwriting them would otherwise mean two slots for one decision — so the popover takes them as\n`menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a\nsurface with no list in it and a list with nowhere to open are never useful apart.\n\n### The shadow is the second deliberate literal\n\n`popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to\ndarken in **both** themes, and every token that would do it inverts. It is the one literal in that\nfile, and it says so.\n\n### Focus is real, and type-ahead is not asserted\n\nReact Aria's menu puts **real** focus on a row — unlike its tree, which uses `aria-activedescendant`,\nso a story here asks `toHaveAttribute('role', 'menuitem')` rather than reading it off the menu.\n\nType-ahead (`d` reaching Delete) is deliberately **not** asserted. It uses the same kind of pending\ntimer the tooltip's hover does, and a query that cannot see it fails as if the feature were missing.\nThat is the third time this session that a story has been left out rather than written to assert\nsomething else.\n\n## `Menu.LoadMore` — the row that asks for the next page\n\n```tsx\n<Menu.Popover>\n  <Menu.Item id=\"a\">Restart</Menu.Item>\n  <Menu.LoadMore isLoading={isLoading} onLoadMore={loadMore} />\n</Menu.Popover>\n```\n\nA menu that runs long — every region, hundreds of actions — has no scrollbar a reader can consult for how\nmuch is left. This is where the rest arrives. It is the same sentinel as `GridList.LoadMore`, on the same\nshared recipe, and it needs a virtualized collection for the same reason (`gridlist.md` carries the\nmechanism and the scroll proof).\n\n**While it is loading it is a `menuitem`**, announced with the actions above it, because React Aria puts it\nin the menu's own collection. The story asserted the opposite first — that a row asking for the next page\nwould take no part in the menu — and its own failure corrected it. When it is _not_ loading, React Aria\nrenders nothing at all for it.",
+      "docs": "A menu of actions or choices, opened from a control. The surface is the sheet's `.ds-select-menu`,\nnow shared with the select through `popover.ts` — the same split as `field.ts`, and the first time\ntwo families here have genuinely converged on one surface.\n\n```tsx\n<Menu>\n  <Button>Actions</Button>\n  <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n    <Menu.Item id=\"restart\">Restart</Menu.Item>\n    <Menu.Separator />\n    <Menu.Section>\n      <Menu.SectionTitle>Danger</Menu.SectionTitle>\n      <Menu.Item id=\"delete\">Delete</Menu.Item>\n    </Menu.Section>\n  </Menu.Popover>\n</Menu>\n```\n\n| Slot                | React Aria       | Notes                                              |\n| ------------------- | ---------------- | -------------------------------------------------- |\n| `Menu`              | `MenuTrigger`    | The trigger, then a `Menu.Popover`                 |\n| `Menu.Popover`      | `Popover`+`Menu` | The surface and the list. `menuProps` for the list |\n| `Menu.Item`         | `MenuItem`       | One row. A `SubmenuTrigger` inside it opens again  |\n| `Menu.Section`      | `MenuSection`    | A group                                            |\n| `Menu.SectionTitle` | `Header`         | Its heading, in `.ds-select-group-label`           |\n| `Menu.Separator`    | `Separator`      | The sheet's `.ds-div-hair`                         |\n\n### A menu performs; a select keeps\n\n`onAction` is the prop that says which this is. Set it and the rows are commands and the menu closes\nwhen one is chosen; leave it off with a `selectionMode` and they are choices that mark themselves\n`aria-checked`.\n\n**A menu closes on select whatever the mode** — that is what a menu _is_ — so a row that sets a value\nrather than running an action has to say `shouldCloseOnSelect: false`, or the list vanishes the\nmoment it has been used once. The `Selection` story failed on exactly that before it was written\ndown.\n\n### `Menu.Popover` carries the list's props\n\n`selectionMode`, `disabledKeys` and `onAction` are the _menu's_ rather than the surface's, and\nwriting them would otherwise mean two slots for one decision — so the popover takes them as\n`menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a\nsurface with no list in it and a list with nowhere to open are never useful apart.\n\n### The menu is at least as wide as the button that opened it\n\n`popover.ts`'s `POPOVER` sizes the panel from the trigger and lets it grow: a trigger is sized for its\nown label (\"Actions\"), and a menu sized to exactly that cuts off the one item longer than the control —\nusually the item the menu was opened to find. `min-w-(--trigger-width)`, capped at the window minus the\n1rem gutter the modal keeps, so nothing can run off the page. This was also where a whole-library bug\ncame to light: the reset that set `min-width: 0` on `*` was unlayered, and an unlayered rule beats every\nTailwind utility, so `min-w-*` had never applied anywhere. See\n[theming.md](../theming.md#cascade-layers-and-the-one-reset-that-had-to-move).\n\n### The shadow is the second deliberate literal\n\n`popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to\ndarken in **both** themes, and every token that would do it inverts. It is the one literal in that\nfile, and it says so.\n\n### Focus is real, and type-ahead is not asserted\n\nReact Aria's menu puts **real** focus on a row — unlike its tree, which uses `aria-activedescendant`,\nso a story here asks `toHaveAttribute('role', 'menuitem')` rather than reading it off the menu.\n\nType-ahead (`d` reaching Delete) is deliberately **not** asserted. It uses the same kind of pending\ntimer the tooltip's hover does, and a query that cannot see it fails as if the feature were missing.\nThat is the third time this session that a story has been left out rather than written to assert\nsomething else.\n\n## `Menu.LoadMore` — the row that asks for the next page\n\n```tsx\n<Menu.Popover>\n  <Menu.Item id=\"a\">Restart</Menu.Item>\n  <Menu.LoadMore isLoading={isLoading} onLoadMore={loadMore} />\n</Menu.Popover>\n```\n\nA menu that runs long — every region, hundreds of actions — has no scrollbar a reader can consult for how\nmuch is left. This is where the rest arrives. It is the same sentinel as `GridList.LoadMore`, on the same\nshared recipe, and it needs a virtualized collection for the same reason (`gridlist.md` carries the\nmechanism and the scroll proof).\n\n**While it is loading it is a `menuitem`**, announced with the actions above it, because React Aria puts it\nin the menu's own collection. The story asserted the opposite first — that a row asking for the next page\nwould take no part in the menu — and its own failure corrected it. When it is _not_ loading, React Aria\nrenders nothing at all for it.",
       "files": [
         {
           "path": "src/components/Menu/Menu.tsx",
@@ -4751,9 +4676,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4924,9 +4846,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5091,9 +5010,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5130,7 +5046,7 @@
           }
         }
       },
-      "docs": "React Aria's `NavigationTree` — a nested, hierarchical set of links — which is what a sidebar\nactually is. **The sheet has no sidebar**: its two navs, `dash-nav` and `page-nav`, are both\nhorizontal top bars. So the _arrangement_ is an invention, and every visible part is the sheet's own\nvocabulary turned on its side.\n\n```tsx\n<Nav aria-label=\"Primary\" selectedRoute=\"/monitors/fra1\">\n  <Nav.Item href=\"/monitors\" textValue=\"Monitors\">\n    <Nav.Label>\n      Monitors <Nav.Count>12</Nav.Count>\n    </Nav.Label>\n    <Nav.Item href=\"/monitors/fra1\" textValue=\"fra1\">\n      <Nav.Label>fra1 · Frankfurt</Nav.Label>\n    </Nav.Item>\n  </Nav.Item>\n  <Nav.Section>\n    <Nav.Header>Account</Nav.Header>\n    <Nav.Item href=\"/settings\" textValue=\"Settings\">\n      <Nav.Label>Settings</Nav.Label>\n    </Nav.Item>\n  </Nav.Section>\n</Nav>\n```\n\n| Slot          | React Aria                  | Notes                                                |\n| ------------- | --------------------------- | ---------------------------------------------------- |\n| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are        |\n| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests          |\n| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure              |\n| `Nav.Section` | `NavigationTreeSection`     | A group                                              |\n| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                   |\n| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge |\n\n### It is a treegrid, not a nav landmark\n\n`NavigationTree` builds on React Aria's `Tree`, so it renders `role=\"treegrid\"` with `role=\"row\"`\nitems — the same shape as its `Table`. Query it that way: the items are **rows**, and their styling\nlives on the row.\n\n### The rows are virtual, so the anchors are the tab stops\n\nThe grid is `tabindex=\"-1\"` and its rows carry no tabindex at all. A first version put\n`tabIndex={-1}` on the anchors to avoid \"two tab stops per item\", which made **nothing** in the tree\nreachable — the whole sidebar fell out of the keyboard. The links are the only real focus targets\nhere and they must stay in the tab order.\n\nFor the same reason the tree is `aria-activedescendant`-driven, so a row is marked `data-focused`\nrather than `data-focus-visible`, and the focus ring follows that.\n\n**The ring is drawn on whichever element takes the focus, and for a while neither did.** `NAV_ITEM`\ncarried `outline-none` in the same class list as its `data-[focused]:outline-1` ring, which sets\nTailwind's shared `--tw-outline-style` and makes the ring unwritable — the same mistake `Table` and\n`GridList` had made, and the third one in the repo. The anchor, meanwhile, carried\n`focus:outline-none`, and the anchor is the real Tab stop here. So a keyboard user tabbing the sidebar\ngot nothing at all. The row now draws the ring, and the anchor carries a transparent outline at rest —\nnever `outline-none` — so the one visible ring belongs to the one focused thing.\n\n### An expandable item must contain a real button\n\nReact Aria says so at runtime: _\"Expandable tree items must contain a expand button so screen reader\nusers can expand/collapse the item.\"_ The first version drew a caret as an `after:` pseudo-element —\nwhich cannot be pressed and cannot be named. It is now a `<Button slot=\"chevron\">` in `Nav.Label`,\ndrawn only when `hasChildItems`, sitting _beside_ the anchor rather than inside it.\n\nIts rotation comes from the render props, not from a rule reaching down from the row. That is the\narrangement this whole system avoids, and here React Aria hands the state over directly.\n\n### `selectedRoute` is the whole of \"where am I\"\n\nThere is no `isCurrent` per item to keep in sync with a router. One string is matched against every\n`href`, and the tree marks the item that matches **and its ancestors** — `data-current-ancestor` —\nwhich is the thing a top bar never needed and a tree cannot do without: it is what lets the tree show\nyou where you are inside a branch you have not opened.\n\nThe current item takes the accent, as the sheet's own `[aria-current=\"page\"]` rule does. An ancestor\ncomes up to full strength and goes no further — two items in the accent would stop saying which one\nyou are on.\n\n### The text is passed separately, because the label is markup\n\n`textValue` is required, and that is the honest signature: an item's label here often carries a count\nbadge, and keyboard type-ahead needs the string someone would actually type. Deriving it from the\nrendered label would pick up the number.\n\n### The tests that were worth writing, and one that was not\n\n`Nesting` measures `padding-inline-start` on the **row** (18px at level 1, 30px at level 2) rather\nthan the row's left edge: the indent is padding, padding is inside the row, so the row's edges never\nmove however deep it is. Measuring the left edge passed at depth one and failed at depth two.\n\nThe Tab-order assertion was **deleted**. Driving Tab from the runner did not land on the links, and a\ntest that quietly asserts something else is worse than no test. `Keyboard` now says so in its own\ncomment and asserts only what is true: every item is a link with an `href`, and every one can take\nfocus.",
+      "docs": "React Aria's `NavigationTree` — a nested, hierarchical set of links — which is what a sidebar\nactually is. **The sheet has no sidebar**: its two navs, `dash-nav` and `page-nav`, are both\nhorizontal top bars. So the _arrangement_ is an invention, and every visible part is the sheet's own\nvocabulary turned on its side.\n\n```tsx\n<Nav aria-label=\"Primary\" selectedRoute=\"/monitors/fra1\">\n  <Nav.Item href=\"/monitors\" textValue=\"Monitors\">\n    <Nav.Label>\n      Monitors <Nav.Count>12</Nav.Count>\n    </Nav.Label>\n    <Nav.Item href=\"/monitors/fra1\" textValue=\"fra1\">\n      <Nav.Label>fra1 · Frankfurt</Nav.Label>\n    </Nav.Item>\n  </Nav.Item>\n  <Nav.Section>\n    <Nav.Header>Account</Nav.Header>\n    <Nav.Item href=\"/settings\" textValue=\"Settings\">\n      <Nav.Label>Settings</Nav.Label>\n    </Nav.Item>\n  </Nav.Section>\n</Nav>\n```\n\n| Slot          | React Aria                  | Notes                                                                              |\n| ------------- | --------------------------- | ---------------------------------------------------------------------------------- |\n| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are                                      |\n| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests                                        |\n| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure                                            |\n| `Nav.Section` | `NavigationTreeSection`     | A group                                                                            |\n| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                                                 |\n| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge — and quieter here, see below |\n\n### It is a treegrid, not a nav landmark\n\n`NavigationTree` builds on React Aria's `Tree`, so it renders `role=\"treegrid\"` with `role=\"row\"`\nitems — the same shape as its `Table`. Query it that way: the items are **rows**, and their styling\nlives on the row.\n\n### The rows are virtual, so the anchors are the tab stops\n\nThe grid is `tabindex=\"-1\"` and its rows carry no tabindex at all. A first version put\n`tabIndex={-1}` on the anchors to avoid \"two tab stops per item\", which made **nothing** in the tree\nreachable — the whole sidebar fell out of the keyboard. The links are the only real focus targets\nhere and they must stay in the tab order.\n\nFor the same reason the tree is `aria-activedescendant`-driven, so a row is marked `data-focused`\nrather than `data-focus-visible`, and the focus ring follows that.\n\n**A ring on the row alone was not enough, and for a while there was none at all.** `NAV_ITEM` carried\n`outline-none` in the same class list as its `data-[focused]:outline-1` ring, which sets Tailwind's\nshared `--tw-outline-style` and makes the ring unwritable — the same mistake `Table` and `GridList`\nhad made, and the third one in the repo. The anchor, meanwhile, carried `focus:outline-none`, and the\nanchor is the real Tab stop here, so a keyboard user tabbing the sidebar got nothing.\n\nThe row is right for the **arrow keys**: React Aria moves a _virtual_ focus with\n`aria-activedescendant` and marks the row `data-focused`. Tab is a different route, and there the row\ncannot carry it: RAC does not move `focusedKey` when DOM focus travels from one anchor to the next —\nmeasured by tabbing twice and reading `data-focused`, which stayed on the first row. So the anchor\ndraws the ring itself on `focus-visible`, the row keeps its own for the arrow keys, and the row's ring\nis switched off while an anchor inside it has the focus (`data-[focused]:has-[:focus-visible]`). One\nring, whichever way focus arrived.\n\n### An expandable item must contain a real button\n\nReact Aria says so at runtime: _\"Expandable tree items must contain a expand button so screen reader\nusers can expand/collapse the item.\"_ The first version drew a caret as an `after:` pseudo-element —\nwhich cannot be pressed and cannot be named. It is now a `<Button slot=\"chevron\">` in `Nav.Label`,\ndrawn only when `hasChildItems`, sitting _beside_ the anchor rather than inside it.\n\nIts rotation comes from the render props, not from a rule reaching down from the row. That is the\narrangement this whole system avoids, and here React Aria hands the state over directly.\n\n### `selectedRoute` is the whole of \"where am I\"\n\nThere is no `isCurrent` per item to keep in sync with a router. One string is matched against every\n`href`, and the tree marks the item that matches **and its ancestors** — `data-current-ancestor` —\nwhich is the thing a top bar never needed and a tree cannot do without: it is what lets the tree show\nyou where you are inside a branch you have not opened.\n\nThe current item takes the accent, as the sheet's own `[aria-current=\"page\"]` rule does. An ancestor\ncomes up to full strength and goes no further — two items in the accent would stop saying which one\nyou are on.\n\n**The ancestor's chevron takes the accent, though, and that is what makes a collapsed branch legible.**\nFull strength alone says nothing when every other row is 70% white: with your page inside a closed\nbranch, the sidebar showed no cue at all. The cue goes on the one glyph that means \"there is more in\nhere\", so the accent never reaches a second _label_ and \"where you are\" is still said exactly once.\n\n### The text is passed separately, because the label is markup\n\n`textValue` is required, and that is the honest signature: an item's label here often carries a count\nbadge, and keyboard type-ahead needs the string someone would actually type. Deriving it from the\nrendered label would pick up the number.\n\n### The tests that were worth writing, and one that was not\n\n`Nesting` measures `padding-inline-start` on the **row** (18px at level 1, 30px at level 2) rather\nthan the row's left edge: the indent is padding, padding is inside the row, so the row's edges never\nmove however deep it is. Measuring the left edge passed at depth one and failed at depth two.\n\nThe Tab-order assertion was **deleted**. Driving Tab from the runner did not land on the links, and a\ntest that quietly asserts something else is worse than no test. `Keyboard` now says so in its own\ncomment and asserts only what is true: every item is a link with an `href`, and every one can take\nfocus.\n\n### The column of edges, and the count that stopped shouting\n\nFour changes came out of looking at the sidebar as a whole rather than at one row of it.\n\n**Every row reserves the chevron's box, whether or not it has a chevron** (`NAV_GUTTER`, and the same\nbox in `Tree.Label`). Measured before: a row with a disclosure started its label 24px to the right of\none without — 18px against 42px at level 1 — so the labels stepped in and out down the column and the\nindentation said nothing true about the hierarchy. Every label now shares a left edge per level, and\nthe cost is 24px of a 224px sidebar on a row that needed none.\n\n**A section header has room above it and almost none below** (`pt-5`, from `pt-3`). At `pt-3` the legend\nsat as close to the row above as one row sits to the next, so `ACCOUNT` read as one more item. A\ngroup's name belongs to the items under it.\n\n**The count is quiet here** (`text-foreground/45`, from the sheet's selected-yellow). In the sheet the\n`.ds-count` sits in a horizontal top bar beside the one chosen thing; in a vertical sidebar every\ncounted row would carry the yellow, and two of them became the loudest thing on a surface whose labels\nare 70% white. Yellow means _selection_ everywhere else in this system, so spending it on a number\nthat is merely true costs it that meaning. The trailing column stays — alignment is what makes a count\nscannable, not the colour — and `tabular-nums` keeps the digits from jittering. A count that genuinely\nwants attention is a `tone` on `Nav.Count`, the day someone asks for one.\n\n**A row answers a hover with a fill** (`data-[hovered]:bg-foreground/5`), not only with a brighter\nlabel: a sidebar is a column of targets, and the wash is what makes the row under the pointer read as\none. It is the value `Accordion`'s header rows already use.\n\n`Nav` also carries `data-slot=\"nav\"` now — it was the one root in the library without one.",
       "files": [
         {
           "path": "src/components/Nav/Nav.tsx",
@@ -5257,9 +5173,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -5430,9 +5343,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5597,9 +5507,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5636,7 +5543,7 @@
           }
         }
       },
-      "docs": "A panel anchored to the thing that opened it, that does not take the page away.\n\n```tsx\n<Popover>\n  <Button>Filters</Button>\n  <Popover.Content placement=\"bottom start\">\n    <Popover.Title>Filters</Popover.Title>\n    <Popover.Description>Applies to this view only.</Popover.Description>\n  </Popover.Content>\n</Popover>\n```\n\n| Slot                  | React Aria           | Notes                                           |\n| --------------------- | -------------------- | ----------------------------------------------- |\n| `Popover`             | `DialogTrigger`      | The trigger, then a `Popover.Content`           |\n| `Popover.Content`     | `Popover` + `Dialog` | The surface, and the dialog that names it       |\n| `Popover.Title`       | `Heading`            | The modal's own title type, imported not copied |\n| `Popover.Description` | `Text`               | `aria-describedby` wired here, as on Modal      |\n\n**A popover is a modal that is not modal**, and that is the whole decision. It is dismissed by Escape\nand by a click outside, but it traps nothing and hides nothing: the page behind stays readable and\nusable. Reach for `Modal` when the page is irrelevant to the decision and for this when it is the\ncontext.\n\nThe surface is `popover.ts`'s, but **not `POPOVER` itself** — that one is `w-(--trigger-width)`, which\nis right for a select matched to its field and wrong for a panel with its own idea of how wide it\nshould be. It is what `Menu`, `Select` and `ComboBox` are built on; this is the same surface with no\nlist at all.\n\n**Placement is a request, not an instruction.** `placement=\"bottom start\"` opens downwards when there\nis room and flips when there is not, so the story asserts that React Aria reports where the panel\nlanded rather than the value the prop asked for.\n\n### The browser probe reports \"open on load\", and is wrong\n\nWorth writing down because it has now happened twice and cost a component once.\n\nA throwaway Playwright script that navigates straight to an `iframe.html?viewMode=story` URL and then\nlooks for `role=\"dialog\"` **finds one already open**, for both the sheet and the popover — because\nStorybook has restored that story's canvas from a previous visit in the same browser context. The\ntest runner does not: `Default` clicks the trigger and its **first** assertion, made before any click,\nis that no dialog is present — and it passes.\n\n**So the runner is the authority on whether something opens by itself, and the probe is not.** The\n`Sheet` was removed on this evidence in an earlier round; its size defect was independently confirmed\nand stands, but the \"opens before you open it\" half of that verdict may well have been this artifact.\nTrust the suite for state, the screenshot for appearance.",
+      "docs": "A panel anchored to the thing that opened it, that does not take the page away.\n\n```tsx\n<Popover>\n  <Button>Filters</Button>\n  <Popover.Content placement=\"bottom start\">\n    <Popover.Title>Filters</Popover.Title>\n    <Popover.Description>Applies to this view only.</Popover.Description>\n  </Popover.Content>\n</Popover>\n```\n\n| Slot                  | React Aria           | Notes                                           |\n| --------------------- | -------------------- | ----------------------------------------------- |\n| `Popover`             | `DialogTrigger`      | The trigger, then a `Popover.Content`           |\n| `Popover.Content`     | `Popover` + `Dialog` | The surface, and the dialog that names it       |\n| `Popover.Title`       | `Heading`            | The modal's own title type, imported not copied |\n| `Popover.Description` | `Text`               | `aria-describedby` wired here, as on Modal      |\n\n**A popover is a modal that is not modal**, and that is the whole decision. It is dismissed by Escape\nand by a click outside, but it traps nothing and hides nothing: the page behind stays readable and\nusable. Reach for `Modal` when the page is irrelevant to the decision and for this when it is the\ncontext.\n\nThe surface is `popover.ts`'s, but **not `POPOVER` itself** — that one holds a single scrolling list and\nis sized from the control it came from (`min-w-(--trigger-width)`, capped at the window), which is right\nfor a menu over a button and wrong for a panel with its own idea of how wide it should be. It is what\n`Menu`, `Select` and `ComboBox` are built on; this is the same surface with no list at all.\n\n**Placement is a request, not an instruction.** `placement=\"bottom start\"` opens downwards when there\nis room and flips when there is not, so the story asserts that React Aria reports where the panel\nlanded rather than the value the prop asked for.\n\n### The browser probe reports \"open on load\", and is wrong\n\nWorth writing down because it has now happened twice and cost a component once.\n\nA throwaway Playwright script that navigates straight to an `iframe.html?viewMode=story` URL and then\nlooks for `role=\"dialog\"` **finds one already open**, for both the sheet and the popover — because\nStorybook has restored that story's canvas from a previous visit in the same browser context. The\ntest runner does not: `Default` clicks the trigger and its **first** assertion, made before any click,\nis that no dialog is present — and it passes.\n\n**So the runner is the authority on whether something opens by itself, and the probe is not.** The\n`Sheet` was removed on this evidence in an earlier round; its size defect was independently confirmed\nand stands, but the \"opens before you open it\" half of that verdict may well have been this artifact.\nTrust the suite for state, the screenshot for appearance.",
       "files": [
         {
           "path": "src/components/Modal/Modal.tsx",
@@ -5778,9 +5685,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -5951,9 +5855,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6123,9 +6024,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -6301,9 +6199,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6472,9 +6367,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -6650,9 +6542,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6817,9 +6706,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6983,9 +6869,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -7166,9 +7049,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -7205,7 +7085,7 @@
           }
         }
       },
-      "docs": "A value chosen by dragging a handle along a rail. **The sheet has no slider in it**, so this is an\ninvention — and it is the progress bar's drawing made interactive: the same 4px rail, the same accent\nfill, the same `progress.ts`. A slider _is_ a bar with a handle on it, and two drawings of one idea is\nthe drift that file exists to prevent.\n\n```tsx\n<Slider defaultValue={60}>\n  <Slider.Header>\n    <Slider.Label>Alert threshold</Slider.Label>\n    <Slider.Value />\n  </Slider.Header>\n  <Slider.Track>\n    <Slider.Fill />\n    <Slider.Thumb />\n  </Slider.Track>\n</Slider>\n```\n\n| Slot            | React Aria     | Notes                                                      |\n| --------------- | -------------- | ---------------------------------------------------------- |\n| `Slider`        | `Slider`       | The value. `size` is `sm \\| md \\| lg`, and `orientation`   |\n| `Slider.Header` | —              | The label and the reading on one line                      |\n| `Slider.Label`  | `Label`        | Names the rail — React Aria wires it, so there is no prop  |\n| `Slider.Value`  | `SliderOutput` | An `<output>`, which is the element for a control's result |\n| `Slider.Track`  | `SliderTrack`  | The rail. One `Fill` and one or more `Thumb`s              |\n| `Slider.Fill`   | `SliderFill`   | The filled part — the run to the thumb, or between two     |\n| `Slider.Thumb`  | `SliderThumb`  | A handle. `index` and `label` for a range                  |\n\n### A range is the same component, twice\n\n`Slider.Track` holds as many thumbs as you write, and React Aria keeps them from crossing.\n**Each thumb's accessible name is its own label _plus_ the group's** — `\"From Latency window\"`, not\n`\"From\"`. That is the right answer: a screen reader crossing a form hears which window _and_ which\nend of it. A story therefore matches on a prefix rather than on a name invented to make it pass.\n\n### `size` was accepted and ignored — twice\n\nThe same trap as the number field's steppers, one component later, and it survived two rounds because\nthe assertion only ever checked one end of it.\n\nThe first version set `h-1` outright, so `size` changed the legend's type and nothing else; `Sizes`\nfound three identical rails where it expected three. The rail was then wired to `--slider-rail` — and\nthe **handle** kept a fixed size, so three rails of three different thicknesses all carried an\nidentical grip, and `Sizes` still passed, because it was only looking at the rails.\n`size-(--slider-thumb)` silently produced nothing; `h-(--slider-rail)` had worked the whole time.\n\nThe lesson is about the _test_ rather than the class: **check both ends of a two-ended decision.**\n`Sizes` now asserts three distinct rail heights _and_ three distinct grip heights, and that every grip\nis square. (It required the opposite for a while — \"taller than it is wide\" — which is the assertion the\nsection below is about.)\n\n### Disabled dims through a variable, for the fourth time\n\n`data-disabled` is on the slider **root** while the handle is a descendant, so a\n`data-[disabled]:opacity-30` on the handle never matches and the handle stayed at full strength. The\nroot publishes `--slider-dim` and the handle reads it — the same shape as `Checkbox`'s indicator and\n`Select`'s trigger. React Aria also renders an **inner wrapper** inside the thumb, so the input's\nparent is not the styled element; `data-slot=\"thumb\"` is the hook, as it is on the fill.\n\n### The story that matters most measures the handle\n\n`ThumbPosition` compares the handle's centre against the rail's width and expects a quarter. That is\nthe whole claim a slider makes, and the one a broken layout keeps while every behavioural assertion\nstill passes.\n\n## The handle: square, full-strength, and the loudest mark on the rail\n\n| size | rail | handle |\n| ---- | ---- | ------ |\n| `sm` | 3px  | 16px   |\n| `md` | 4px  | 20px   |\n| `lg` | 6px  | 24px   |\n\nThe sheet has no slider — this is one of the components invented here — so the handle's shape and colour\nwere choices, and it took three readings of the rendered control to get them right.\n\n**Shape.** It began as a `bg-background` square **with a border**, which on the dark page was a black box showing\nnothing but its own hairline. The verdict was that squareness was at fault, so it became a tall narrow bar —\n7×18px at `md`, then 10×24px. The next reader said it still looked wrong, rightly: a bar a hairline wide and\nseveral rails tall reads as a **cursor**, not as something a hand closes around. The border and the black fill\nwere the original problem; being square never was.\n\n**What kept it a bar was an assertion.** `Sizes` required `height > width`, annotated \"that proportion is what\nmakes it a grip\" — so the wrong shape was not merely accepted, it was _enforced_, and no amount of looking at\nthe component would have found that.\n\n**Colour, which was the actual complaint.** `bg-foreground/70` is 70% white: measurably lighter than the page, but\n_duller than the teal fill it sits on_ — so on the filled half of the rail the handle receded while the fill\nled, and it was hard to see. It is the thing you grab; it should be the loudest mark on the rail. It is now\n`bg-foreground` at full strength, which reads against both the teal fill and the dark track with no border and no ring.\nSizes moved up one step at the same time.\n\n**The state signals are scale, not colour.** With the handle already white at rest, hover and drag have nothing\nleft to brighten, so they grow. Dragging used to turn the handle **teal** — the exact colour of the fill\nunderneath it, invisible on the filled half. The same mistake as the resting colour, found in the same pass.\n\nAll three sizes carry the same rule, and `Sizes` checks that they are still three different sizes.\n\n## The handle was painted as a sliver, and it hung above the rail\n\nThe grip the section above describes was not what the browser drew, and it took a 3× screenshot of the\nrendered control to see it. Two separate faults, both from `Slider.Track` composing the progress bar's\nrecipe instead of its own:\n\n1. **The rail clips.** `progress.ts` exports `TRACK` as `overflow-hidden`, which the bar can afford —\n   its fill is the whole drawing. A slider's handle is a **20px square on a 4px rail**, so the clip painted\n   it as a 4px white notch at the end of the fill. React Aria's own docs CSS for a slider track has no\n   overflow rule at all. What the two rails share is the **wash**, not the clip; that is now its own\n   export, `TRACK_WASH`.\n2. **The handle had no cross-axis centre.** React Aria positions the thumb along the rail and centres it\n   with `transform: translate(-50%, -50%)` — which assumes the box it translates already _starts_ at the\n   rail's centre, and it does not, because `top` is `auto`. Measured, the grip sat **10px above** a 4px\n   rail, hanging over the fill like a tab. React Aria's docs CSS carries the missing line: `top: 50%`\n   when the rail lies down, `left: 50%` when it stands up. It is read off the **track**, because React Aria\n   publishes `data-orientation` there and not on the thumb.\n\n**Neither was visible to the suite, and the reason is the same for both.** Every assertion measured\n`getBoundingClientRect`, which returns a layout box whether or not an ancestor clips it and whatever the\nbox's transform has done to it on screen: the handle measured 20×20 while painting four pixels tall. The\nstory now asserts the two mechanisms rather than the symptom — the track's computed `overflow` is\n`visible`, the handle is taller than the rail, and its centre is within a pixel of the rail's in **both**\norientations. That is the difference between a component that works and one that only measures as if it\ndid.",
+      "docs": "A value chosen by dragging a handle along a rail. **The sheet has no slider in it**, so this is an\ninvention — and it is the progress bar's drawing made interactive: the same 4px rail, the same accent\nfill, the same `progress.ts`. A slider _is_ a bar with a handle on it, and two drawings of one idea is\nthe drift that file exists to prevent.\n\n```tsx\n<Slider defaultValue={60}>\n  <Slider.Header>\n    <Slider.Label>Alert threshold</Slider.Label>\n    <Slider.Value />\n  </Slider.Header>\n  <Slider.Track>\n    <Slider.Fill />\n    <Slider.Thumb />\n  </Slider.Track>\n</Slider>\n```\n\n| Slot            | React Aria     | Notes                                                      |\n| --------------- | -------------- | ---------------------------------------------------------- |\n| `Slider`        | `Slider`       | The value. `size` is `sm \\| md \\| lg`, and `orientation`   |\n| `Slider.Header` | —              | The label and the reading on one line                      |\n| `Slider.Label`  | `Label`        | Names the rail — React Aria wires it, so there is no prop  |\n| `Slider.Value`  | `SliderOutput` | An `<output>`, which is the element for a control's result |\n| `Slider.Track`  | `SliderTrack`  | The rail. One `Fill` and one or more `Thumb`s              |\n| `Slider.Fill`   | `SliderFill`   | The filled part — the run to the thumb, or between two     |\n| `Slider.Thumb`  | `SliderThumb`  | A handle. `index` and `label` for a range                  |\n\n### A range is the same component, twice\n\n`Slider.Track` holds as many thumbs as you write, and React Aria keeps them from crossing.\n**Each thumb's accessible name is its own label _plus_ the group's** — `\"From Latency window\"`, not\n`\"From\"`. That is the right answer: a screen reader crossing a form hears which window _and_ which\nend of it. A story therefore matches on a prefix rather than on a name invented to make it pass.\n\n### `size` was accepted and ignored — twice\n\nThe same trap as the number field's steppers, one component later, and it survived two rounds because\nthe assertion only ever checked one end of it.\n\nThe first version set `h-1` outright, so `size` changed the legend's type and nothing else; `Sizes`\nfound three identical rails where it expected three. The rail was then wired to `--slider-rail` — and\nthe **handle** kept a fixed size, so three rails of three different thicknesses all carried an\nidentical grip, and `Sizes` still passed, because it was only looking at the rails.\n`size-(--slider-thumb)` silently produced nothing; `h-(--slider-rail)` had worked the whole time.\n\nThe lesson is about the _test_ rather than the class: **check both ends of a two-ended decision.**\n`Sizes` now asserts three distinct rail heights _and_ three distinct grip heights, and that every grip\nis square. (It required the opposite for a while — \"taller than it is wide\" — which is the assertion the\nsection below is about.)\n\n### Disabled dims through a variable, for the fourth time\n\n`data-disabled` is on the slider **root** while the handle is a descendant, so a\n`data-[disabled]:opacity-30` on the handle never matches and the handle stayed at full strength. The\nroot publishes `--slider-dim` and the handle reads it — the same shape as `Checkbox`'s indicator and\n`Select`'s trigger. React Aria also renders an **inner wrapper** inside the thumb, so the input's\nparent is not the styled element; `data-slot=\"thumb\"` is the hook, as it is on the fill.\n\n### The story that matters most measures the handle\n\n`ThumbPosition` compares the handle's centre against the rail's width and expects a quarter. That is\nthe whole claim a slider makes, and the one a broken layout keeps while every behavioural assertion\nstill passes.\n\n## The handle: square, full-strength, and the loudest mark on the rail\n\n| size | rail | handle |\n| ---- | ---- | ------ |\n| `sm` | 3px  | 16px   |\n| `md` | 4px  | 20px   |\n| `lg` | 6px  | 24px   |\n\nThe sheet has no slider — this is one of the components invented here — so the handle's shape and colour\nwere choices, and it took three readings of the rendered control to get them right.\n\n**Shape.** It began as a `bg-background` square **with a border**, which on the dark page was a black box showing\nnothing but its own hairline. The verdict was that squareness was at fault, so it became a tall narrow bar —\n7×18px at `md`, then 10×24px. The next reader said it still looked wrong, rightly: a bar a hairline wide and\nseveral rails tall reads as a **cursor**, not as something a hand closes around. The border and the black fill\nwere the original problem; being square never was.\n\n**What kept it a bar was an assertion.** `Sizes` required `height > width`, annotated \"that proportion is what\nmakes it a grip\" — so the wrong shape was not merely accepted, it was _enforced_, and no amount of looking at\nthe component would have found that.\n\n**Colour, which was the actual complaint.** `bg-foreground/70` is 70% white: measurably lighter than the page, but\n_duller than the teal fill it sits on_ — so on the filled half of the rail the handle receded while the fill\nled, and it was hard to see. It is the thing you grab; it should be the loudest mark on the rail. It is now\n`bg-foreground` at full strength, which reads against both the teal fill and the dark track with no border and no ring.\nSizes moved up one step at the same time.\n\n**The state signals are scale, not colour.** With the handle already white at rest, hover and drag have nothing\nleft to brighten, so they grow. Dragging used to turn the handle **teal** — the exact colour of the fill\nunderneath it, invisible on the filled half. The same mistake as the resting colour, found in the same pass.\n\nAll three sizes carry the same rule, and `Sizes` checks that they are still three different sizes.\n\n## The handle was painted as a sliver, and it hung above the rail\n\nThe grip the section above describes was not what the browser drew, and it took a 3× screenshot of the\nrendered control to see it. Two separate faults, both from `Slider.Track` composing the progress bar's\nrecipe instead of its own:\n\n1. **The rail clips.** `progress.ts` exports `TRACK` as clipping (`overflow-clip` now, `overflow-hidden`\n   when this was found), which the bar can afford —\n   its fill is the whole drawing. A slider's handle is a **20px square on a 4px rail**, so the clip painted\n   it as a 4px white notch at the end of the fill. React Aria's own docs CSS for a slider track has no\n   overflow rule at all. What the two rails share is the **wash**, not the clip; that is now its own\n   export, `TRACK_WASH`.\n2. **The handle had no cross-axis centre.** React Aria positions the thumb along the rail and centres it\n   with `transform: translate(-50%, -50%)` — which assumes the box it translates already _starts_ at the\n   rail's centre, and it does not, because `top` is `auto`. Measured, the grip sat **10px above** a 4px\n   rail, hanging over the fill like a tab. React Aria's docs CSS carries the missing line: `top: 50%`\n   when the rail lies down, `left: 50%` when it stands up. It is read off the **track**, because React Aria\n   publishes `data-orientation` there and not on the thumb.\n\n**Neither was visible to the suite, and the reason is the same for both.** Every assertion measured\n`getBoundingClientRect`, which returns a layout box whether or not an ancestor clips it and whatever the\nbox's transform has done to it on screen: the handle measured 20×20 while painting four pixels tall. The\nstory now asserts the two mechanisms rather than the symptom — the track's computed `overflow` is\n`visible`, the handle is taller than the rail, and its centre is within a pixel of the rail's in **both**\norientations. That is the difference between a component that works and one that only measures as if it\ndid.",
       "files": [
         {
           "path": "src/components/Slider/Slider.tsx",
@@ -7340,9 +7220,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -7508,9 +7385,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -7674,9 +7548,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -7857,9 +7728,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8023,9 +7891,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -8196,9 +8061,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8235,7 +8097,7 @@
           }
         }
       },
-      "docs": "The sheet's `.ds-textarea`: the field anatomy with a control that takes more than one line. The\nthird of the family, and the one `field.ts` was written for.\n\n```tsx\n<TextArea defaultValue=\"\" isRequired>\n  <TextArea.Label>Notes</TextArea.Label>\n  <TextArea.Input rows={4} placeholder=\"What changed?\" />\n  <TextArea.Hint>Markdown is fine.</TextArea.Hint>\n  <TextArea.Error>Keep it under 500 characters.</TextArea.Error>\n</TextArea>\n```\n\n| Slot             | React Aria   | Notes                                      |\n| ---------------- | ------------ | ------------------------------------------ |\n| `TextArea`       | `TextField`  | Owns the value. The root is a text _field_ |\n| `TextArea.Label` | `Label`      | The sheet's `.ds-field-legend`             |\n| `TextArea.Input` | `TextArea`   | The control. Grows with its content        |\n| `TextArea.Hint`  | `Text`       | `slot=\"description\"`                       |\n| `TextArea.Error` | `FieldError` | Renders nothing while valid                |\n\nReact Aria's `TextArea` is the **element**, not the root — so the root here is `TextField`, which is\nwhat owns the label, the value and the validity, exactly as it does for `Input`. That is why this\nshares `field.ts` rather than growing an anatomy of its own: a legend, a hairline and a hint column\ndo not care how many lines the answer runs to.\n\n**There is no `size`.** A field's `size` sets a fixed control height and a textarea does not have\none. The sheet's only variant, `.ds-textarea--compact`, is a `min-height`, and that is what this\ncontrol has: `min-h-[92px]`, the field's own minimum.\n\n**The box grows with what is typed.** `field-sizing: content` sizes the control to its content, so\nthere is no mirror element and no grow script, and `resize-none` follows — a box that already fits\nits content has nothing for a drag handle to do. `max-h-[12lh]` is the ceiling: past twelve lines it\nscrolls rather than pushing the page down. `rows` stays on the element because it is the native\nattribute, and because it is what sizes the box before this CSS is parsed, but it is no longer the\nheight; a consumer who wants a taller _start_ sets a `min-h` on the control.\n\nSupport: `field-sizing` is Chrome 123, Safari 26.2 and Firefox 152, and the rule that comes with it\nis to write no fallback — a browser without it shows the same fixed box with a scrollbar, which is\nwhat this component did before.",
+      "docs": "The sheet's `.ds-textarea`: the field anatomy with a control that takes more than one line. The\nthird of the family, and the one `field.ts` was written for.\n\n```tsx\n<TextArea defaultValue=\"\" isRequired>\n  <TextArea.Label>Notes</TextArea.Label>\n  <TextArea.Input rows={4} placeholder=\"What changed?\" />\n  <TextArea.Hint>Markdown is fine.</TextArea.Hint>\n  <TextArea.Error>Keep it under 500 characters.</TextArea.Error>\n</TextArea>\n```\n\n| Slot             | React Aria   | Notes                                      |\n| ---------------- | ------------ | ------------------------------------------ |\n| `TextArea`       | `TextField`  | Owns the value. The root is a text _field_ |\n| `TextArea.Label` | `Label`      | The sheet's `.ds-field-legend`             |\n| `TextArea.Input` | `TextArea`   | The control. Grows with its content        |\n| `TextArea.Hint`  | `Text`       | `slot=\"description\"`                       |\n| `TextArea.Error` | `FieldError` | Renders nothing while valid                |\n\nReact Aria's `TextArea` is the **element**, not the root — so the root here is `TextField`, which is\nwhat owns the label, the value and the validity, exactly as it does for `Input`. That is why this\nshares `field.ts` rather than growing an anatomy of its own: a legend, a hairline and a hint column\ndo not care how many lines the answer runs to.\n\n**There is no `size`.** A field's `size` sets a fixed control height and a textarea does not have\none. The sheet's only variant, `.ds-textarea--compact`, is a `min-height`, and that is what this\ncontrol has: `min-h-[92px]`, the field's own minimum.\n\n**The box grows with what is typed.** `field-sizing: content` sizes the control to its content, so\nthere is no mirror element and no grow script, and `resize-none` follows — a box that already fits\nits content has nothing for a drag handle to do. `max-h-[12lh]` is the ceiling: past twelve lines it\nscrolls rather than pushing the page down. `rows` stays on the element because it is the native\nattribute, and because it is what sizes the box before this CSS is parsed, but it is no longer the\nheight; a consumer who wants a taller _start_ sets a `min-h` on the control.\n\nSupport: `field-sizing` is Chrome 123, Safari 26.2 and Firefox 152, and the rule that comes with it is\nto write no fallback. A browser without it gets the field's fixed `min-h` box with a scrollbar and no\ngrow — and, because the drag handle went with the growth, no way to resize it by hand either. That is\nthe trade the entry names: a box that sizes itself needs no handle. Worth knowing it is a trade rather\nthan a free upgrade, and the one place this component is weaker on an old engine than it was before.",
       "files": [
         {
           "path": "src/components/TextArea/TextArea.tsx",
@@ -8368,9 +8230,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8407,7 +8266,7 @@
           }
         }
       },
-      "docs": "The second component, and the anatomy the rest of the form controls reuse —\ntextarea, select, checkbox and radio all want the same legend + control + hint\ncolumn.\n\n```tsx\n<TextField defaultValue=\"\" size=\"md\" isRequired isInvalid={taken}>\n  <TextField.Label>Monitor name</TextField.Label>\n  <TextField.Group>\n    <TextField.Input placeholder=\"example.com\" />\n    <TextField.Icon position=\"start\">{magnifier}</TextField.Icon>\n  </TextField.Group>\n  <TextField.Hint>Lowercase alphanumeric and dashes only</TextField.Hint>\n  <TextField.Error>That hostname is taken</TextField.Error>\n</TextField>\n```\n\n| Slot              | React Aria   | Notes                                                  |\n| ----------------- | ------------ | ------------------------------------------------------ |\n| `TextField`       | `TextField`  | Owns `size` and the value. `onChange` gives a string   |\n| `TextField.Label` | `Label`      | The sheet's `.ds-field-legend`                         |\n| `TextField.Group` | `Group`      | Opt-in wrapper; the `relative` anchor for affixes      |\n| `TextField.Input` | `Input`      | Height and type size come from the field               |\n| `TextField.Icon`  | —            | `position=\"start\" \\| \"end\"`; must sit inside a `Group` |\n| `TextField.Hint`  | `Text`       | `slot=\"description\"`, so it is described-by            |\n| `TextField.Error` | `FieldError` | Renders nothing while the field is valid               |\n\n### Size travels as CSS, not context\n\n`size` is `sm | md | lg` and sets two custom properties on the field —\n`--field-control-h` and `--field-control-text` — which the control and any affix\ninherit. No React context, because the affix is an ordinary descendant of the\nfield. A one-off override is a utility on the element rather than a new prop.\n\n### Focus is the border, and only the border\n\nThe sheet's `.ds-input:focus` sets `outline: none` and turns the border teal.\nCopy that. `Button` can carry the shared 3px-offset ring because the edge it\nrepeats is a solid fill; on a 1px border the same ring draws two parallel teal\nhairlines with a gap between them, which reads as a rendering fault.\n\n`outline-none` is doing real work there, not tidying up. **Chrome gives a focused\ntext input its `:focus-visible` ring at `outline-style: auto` regardless of React\nAria's `data-focus-visible`**, so removing our ring without disabling the UA one\njust substitutes a blue browser ring on a teal system.\n\nFocus also wins over invalid, as it does in the sheet (`:focus` out-specifies\n`.ds-input--error`). Typing inside a field you have already been told is wrong is\nwhen you least need the border shouting; the error message stays red throughout.\n\n### Two traps, both silent\n\n- **Always name the control's border colour.** A bare `border` utility falls back to\n  `currentColor`, so a field silently grows a hairline in the text colour — white in the\n  dark theme, black in the light. The sheet's `.ds-input` declares\n  `border: 1px solid transparent` for the same reason; this system uses\n  `border-input` instead.\n- **The error state is `--destructive`, not the sheet's yellow.** The sheet had two\n  accents and used yellow for warnings; here `--warning` _is_ the `secondary`\n  button, so an error and a secondary action would have been the same colour.\n\nThe required marker is drawn by `TextField.Label`'s `::after` from the field's own\n`data-required`, so the `*` cannot drift out of sync with `isRequired`. React Aria\nputs the native `required` on the input rather than `aria-required`.\n\n### Read-only does not dim its value\n\n`isDisabled` dims a field to 40%, and it is tempting to give read-only the same treatment.\nDon't: read-only is the one state where the value is the whole point, and at 40% the text\nmeasures **3.42:1** — under the 4.5:1 body text needs — so the thing the user came to read\nbecomes the thing they cannot. The a11y check catches this; it is easy to ship otherwise,\nbecause a dimmed field _looks_ deliberate.\n\nRead-only keeps full-strength text and signals itself through the hairline instead, which is\nthe affordance it actually loses: the border goes to `--border-soft` and no longer\nbrightens on hover, because nothing there invites a click.\n\nThis is the same cascade problem as `Checkbox`, and it takes the same shape: `data-readonly`\nis on the **field root** while the border is on the input, and a `group-data-[readonly]:`\nutility ties with the input's own and loses on source order. So the field publishes\n`--field-border` and `--field-hover` and the input reads them. Focus and invalid stay literal\non the input, so they outrank the published values and still win — including on a read-only\nfield, which remains focusable and selectable.\n\n**Control boundaries carry a resting hairline.** `--input` is\n`--foreground` at 45% — the smallest alpha that clears the 3:1 a control boundary\nneeds on _both_ pages (4.43:1 on the dark, 3.36:1 on the light). A control's own fill\ncannot do this job: `--muted` is 1.23:1 against the dark page and 1.17:1\nagainst the light one. Alpha compositing is not symmetric, so 40% looks adequate and\nis not — 3.66:1 on black, 2.85:1 on white.\n\nThe `ControlBoundary` story checks this by compositing and measuring in both themes,\nnot by comparing against the token value: a token can be changed to something that\nlooks right and is not.\n\n**Still open:** the `outline` button's border is the accent at 40%, which measures\n2.45:1 on the dark page and 1.76:1 on the light. It needs roughly 49% and 69%\nrespectively, so no single alpha fixes it and raising it would visibly thicken the\nbutton. Left alone because it is the one boundary that is arguably decorative — a\nbutton always carries a label at full accent strength, which identifies it, whereas an\nempty input has only its own edge.",
+      "docs": "The second component, and the anatomy the rest of the form controls reuse —\ntextarea, select, checkbox and radio all want the same legend + control + hint\ncolumn.\n\n```tsx\n<TextField defaultValue=\"\" size=\"md\" isRequired isInvalid={taken}>\n  <TextField.Label>Monitor name</TextField.Label>\n  <TextField.Group>\n    <TextField.Input placeholder=\"example.com\" />\n    <TextField.Icon position=\"start\">{magnifier}</TextField.Icon>\n  </TextField.Group>\n  <TextField.Hint>Lowercase alphanumeric and dashes only</TextField.Hint>\n  <TextField.Error>That hostname is taken</TextField.Error>\n</TextField>\n```\n\n| Slot              | React Aria   | Notes                                                  |\n| ----------------- | ------------ | ------------------------------------------------------ |\n| `TextField`       | `TextField`  | Owns `size` and the value. `onChange` gives a string   |\n| `TextField.Label` | `Label`      | The sheet's `.ds-field-legend`                         |\n| `TextField.Group` | `Group`      | Opt-in wrapper; the `relative` anchor for affixes      |\n| `TextField.Input` | `Input`      | Height and type size come from the field               |\n| `TextField.Icon`  | —            | `position=\"start\" \\| \"end\"`; must sit inside a `Group` |\n| `TextField.Hint`  | `Text`       | `slot=\"description\"`, so it is described-by            |\n| `TextField.Error` | `FieldError` | Renders nothing while the field is valid               |\n\n### Size travels as CSS, not context\n\n`size` is `sm | md | lg` and sets two custom properties on the field —\n`--field-control-h` and `--field-control-text` — which the control and any affix\ninherit. No React context, because the affix is an ordinary descendant of the\nfield. A one-off override is a utility on the element rather than a new prop.\n\n### Focus is the border, and only the border\n\nThe sheet's `.ds-input:focus` sets `outline: none` and turns the border teal.\nCopy that. `Button` can carry the shared 3px-offset ring because the edge it\nrepeats is a solid fill; on a 1px border the same ring draws two parallel teal\nhairlines with a gap between them, which reads as a rendering fault.\n\n`outline-none` is doing real work there, not tidying up. **Chrome gives a focused\ntext input its `:focus-visible` ring at `outline-style: auto` regardless of React\nAria's `data-focus-visible`**, so removing our ring without disabling the UA one\njust substitutes a blue browser ring on a teal system.\n\nFocus also wins over invalid, as it does in the sheet (`:focus` out-specifies\n`.ds-input--error`). Typing inside a field you have already been told is wrong is\nwhen you least need the border shouting; the error message stays red throughout.\n\n**There is a second source of the destructive border: the browser's own `:user-invalid`.** `field.ts`\nand `TextArea` carry `user-invalid:not-data-[focused]:border-destructive`, so a field the user has left\nin a state the browser considers invalid reddens as they leave it, before anything is submitted and\nwithout a \"touched\" class or a blur listener. It is deliberately _only_ the border: React Aria reports\n`isInvalid` on submit, and that is what renders the `FieldError` and sets `aria-invalid`, so there is a\nwindow where the field is red and not yet named. The alternative — waiting for the submit — is worse\nfor the same reason the browser's own validators exist: the moment someone leaves a field is when they\ncan still do something about it.\n\n### Two traps, both silent\n\n- **Always name the control's border colour.** A bare `border` utility falls back to\n  `currentColor`, so a field silently grows a hairline in the text colour — white in the\n  dark theme, black in the light. The sheet's `.ds-input` declares\n  `border: 1px solid transparent` for the same reason; this system uses\n  `border-input` instead.\n- **The error state is `--destructive`, not the sheet's yellow.** The sheet had two\n  accents and used yellow for warnings; here `--warning` _is_ the `secondary`\n  button, so an error and a secondary action would have been the same colour.\n\nThe required marker is drawn by `TextField.Label`'s `::after` from the field's own\n`data-required`, so the `*` cannot drift out of sync with `isRequired`. React Aria\nputs the native `required` on the input rather than `aria-required`.\n\n### Read-only does not dim its value\n\n`isDisabled` dims a field to 40%, and it is tempting to give read-only the same treatment.\nDon't: read-only is the one state where the value is the whole point, and at 40% the text\nmeasures **3.42:1** — under the 4.5:1 body text needs — so the thing the user came to read\nbecomes the thing they cannot. The a11y check catches this; it is easy to ship otherwise,\nbecause a dimmed field _looks_ deliberate.\n\nRead-only keeps full-strength text and signals itself through the hairline instead, which is\nthe affordance it actually loses: the border goes to `--border-soft` and no longer\nbrightens on hover, because nothing there invites a click.\n\nThis is the same cascade problem as `Checkbox`, and it takes the same shape: `data-readonly`\nis on the **field root** while the border is on the input, and a `group-data-[readonly]:`\nutility ties with the input's own and loses on source order. So the field publishes\n`--field-border` and `--field-hover` and the input reads them. Focus and invalid stay literal\non the input, so they outrank the published values and still win — including on a read-only\nfield, which remains focusable and selectable.\n\n**Control boundaries carry a resting hairline.** `--input` is\n`--foreground` at 45% — the smallest alpha that clears the 3:1 a control boundary\nneeds on _both_ pages (4.43:1 on the dark, 3.36:1 on the light). A control's own fill\ncannot do this job: `--muted` is 1.23:1 against the dark page and 1.17:1\nagainst the light one. Alpha compositing is not symmetric, so 40% looks adequate and\nis not — 3.66:1 on black, 2.85:1 on white.\n\nThe `ControlBoundary` story checks this by compositing and measuring in both themes,\nnot by comparing against the token value: a token can be changed to something that\nlooks right and is not.\n\n**Still open:** the `outline` button's border is the accent at 40%, which measures\n2.45:1 on the dark page and 1.76:1 on the light. It needs roughly 49% and 69%\nrespectively, so no single alpha fixes it and raising it would visibly thicken the\nbutton. Left alone because it is the one boundary that is arguably decorative — a\nbutton always carries a label at full accent strength, which identifies it, whereas an\nempty input has only its own edge.",
       "files": [
         {
           "path": "src/components/TextField/TextField.tsx",
@@ -8540,9 +8399,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -8718,9 +8574,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8884,9 +8737,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9056,9 +8906,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9239,9 +9086,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -9416,9 +9260,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -9582,9 +9423,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9754,9 +9592,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9932,9 +9767,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -10098,9 +9930,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"

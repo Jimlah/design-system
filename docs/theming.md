@@ -195,6 +195,24 @@ Note that the CLI writes `cssVars.theme` back **inside `@theme inline`** in the 
 measured against 4.21.4 — see [registry.md](./registry.md). That is the shape this file already
 uses, so a consumer gets the behaviour the components were written against.
 
+## Cascade layers, and the one reset that had to move
+
+**An unlayered rule outranks every layered rule, whatever the specificity.** Tailwind v4 emits its
+utilities into `@layer utilities`, so a single top-level reset in `styles.css` wins against every
+utility that sets the same property — and the one that was there set `min-width: 0` on `*`.
+
+That made **every `min-w-*` utility in the library inert**, and it was invisible in every way this repo
+usually checks: the class was in the source, in the class list, and in the compiled CSS, and the
+element reported `min-width: 0px`. It surfaced the day a dropdown was asked to be at least as wide as
+its trigger: the rule existed, and the panel measured **86px against a 106px trigger**, and the select
+menu **108px under a 320px field** — narrower than the control it belonged to, which is the bug the
+`min-w` was meant to fix.
+
+The reset now lives in `@layer base`, beside Tailwind's own preflight, and utilities win against it as
+they should. That is the rule to carry forward: **house rules go in a layer.** A reset, a base style or
+any other global belongs in `@layer base`; unlayered CSS is reserved for the emergency that would need
+to beat utilities.
+
 ## Using it
 
 ```tsx

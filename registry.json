@@ -126,9 +126,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -291,9 +288,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -778,9 +772,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -944,9 +935,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1114,9 +1102,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1286,9 +1271,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1464,9 +1446,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -1631,9 +1610,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -1809,9 +1785,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -1975,9 +1948,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2148,9 +2118,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -2320,9 +2287,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -2486,9 +2450,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2658,9 +2619,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -2847,9 +2805,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3024,9 +2979,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3203,9 +3155,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3377,9 +3326,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3555,9 +3501,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -3719,9 +3662,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -3887,9 +3827,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4053,9 +3990,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4226,9 +4160,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4397,9 +4328,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4575,9 +4503,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -4614,7 +4539,7 @@
           }
         }
       },
-      "docs": "A menu of actions or choices, opened from a control. The surface is the sheet's `.ds-select-menu`,\nnow shared with the select through `popover.ts` — the same split as `field.ts`, and the first time\ntwo families here have genuinely converged on one surface.\n\n```tsx\n<Menu>\n  <Button>Actions</Button>\n  <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n    <Menu.Item id=\"restart\">Restart</Menu.Item>\n    <Menu.Separator />\n    <Menu.Section>\n      <Menu.SectionTitle>Danger</Menu.SectionTitle>\n      <Menu.Item id=\"delete\">Delete</Menu.Item>\n    </Menu.Section>\n  </Menu.Popover>\n</Menu>\n```\n\n| Slot                | React Aria       | Notes                                              |\n| ------------------- | ---------------- | -------------------------------------------------- |\n| `Menu`              | `MenuTrigger`    | The trigger, then a `Menu.Popover`                 |\n| `Menu.Popover`      | `Popover`+`Menu` | The surface and the list. `menuProps` for the list |\n| `Menu.Item`         | `MenuItem`       | One row. A `SubmenuTrigger` inside it opens again  |\n| `Menu.Section`      | `MenuSection`    | A group                                            |\n| `Menu.SectionTitle` | `Header`         | Its heading, in `.ds-select-group-label`           |\n| `Menu.Separator`    | `Separator`      | The sheet's `.ds-div-hair`                         |\n\n### A menu performs; a select keeps\n\n`onAction` is the prop that says which this is. Set it and the rows are commands and the menu closes\nwhen one is chosen; leave it off with a `selectionMode` and they are choices that mark themselves\n`aria-checked`.\n\n**A menu closes on select whatever the mode** — that is what a menu _is_ — so a row that sets a value\nrather than running an action has to say `shouldCloseOnSelect: false`, or the list vanishes the\nmoment it has been used once. The `Selection` story failed on exactly that before it was written\ndown.\n\n### `Menu.Popover` carries the list's props\n\n`selectionMode`, `disabledKeys` and `onAction` are the _menu's_ rather than the surface's, and\nwriting them would otherwise mean two slots for one decision — so the popover takes them as\n`menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a\nsurface with no list in it and a list with nowhere to open are never useful apart.\n\n### The shadow is the second deliberate literal\n\n`popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to\ndarken in **both** themes, and every token that would do it inverts. It is the one literal in that\nfile, and it says so.\n\n### Focus is real, and type-ahead is not asserted\n\nReact Aria's menu puts **real** focus on a row — unlike its tree, which uses `aria-activedescendant`,\nso a story here asks `toHaveAttribute('role', 'menuitem')` rather than reading it off the menu.\n\nType-ahead (`d` reaching Delete) is deliberately **not** asserted. It uses the same kind of pending\ntimer the tooltip's hover does, and a query that cannot see it fails as if the feature were missing.\nThat is the third time this session that a story has been left out rather than written to assert\nsomething else.\n\n## `Menu.LoadMore` — the row that asks for the next page\n\n```tsx\n<Menu.Popover>\n  <Menu.Item id=\"a\">Restart</Menu.Item>\n  <Menu.LoadMore isLoading={isLoading} onLoadMore={loadMore} />\n</Menu.Popover>\n```\n\nA menu that runs long — every region, hundreds of actions — has no scrollbar a reader can consult for how\nmuch is left. This is where the rest arrives. It is the same sentinel as `GridList.LoadMore`, on the same\nshared recipe, and it needs a virtualized collection for the same reason (`gridlist.md` carries the\nmechanism and the scroll proof).\n\n**While it is loading it is a `menuitem`**, announced with the actions above it, because React Aria puts it\nin the menu's own collection. The story asserted the opposite first — that a row asking for the next page\nwould take no part in the menu — and its own failure corrected it. When it is _not_ loading, React Aria\nrenders nothing at all for it.",
+      "docs": "A menu of actions or choices, opened from a control. The surface is the sheet's `.ds-select-menu`,\nnow shared with the select through `popover.ts` — the same split as `field.ts`, and the first time\ntwo families here have genuinely converged on one surface.\n\n```tsx\n<Menu>\n  <Button>Actions</Button>\n  <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n    <Menu.Item id=\"restart\">Restart</Menu.Item>\n    <Menu.Separator />\n    <Menu.Section>\n      <Menu.SectionTitle>Danger</Menu.SectionTitle>\n      <Menu.Item id=\"delete\">Delete</Menu.Item>\n    </Menu.Section>\n  </Menu.Popover>\n</Menu>\n```\n\n| Slot                | React Aria       | Notes                                              |\n| ------------------- | ---------------- | -------------------------------------------------- |\n| `Menu`              | `MenuTrigger`    | The trigger, then a `Menu.Popover`                 |\n| `Menu.Popover`      | `Popover`+`Menu` | The surface and the list. `menuProps` for the list |\n| `Menu.Item`         | `MenuItem`       | One row. A `SubmenuTrigger` inside it opens again  |\n| `Menu.Section`      | `MenuSection`    | A group                                            |\n| `Menu.SectionTitle` | `Header`         | Its heading, in `.ds-select-group-label`           |\n| `Menu.Separator`    | `Separator`      | The sheet's `.ds-div-hair`                         |\n\n### A menu performs; a select keeps\n\n`onAction` is the prop that says which this is. Set it and the rows are commands and the menu closes\nwhen one is chosen; leave it off with a `selectionMode` and they are choices that mark themselves\n`aria-checked`.\n\n**A menu closes on select whatever the mode** — that is what a menu _is_ — so a row that sets a value\nrather than running an action has to say `shouldCloseOnSelect: false`, or the list vanishes the\nmoment it has been used once. The `Selection` story failed on exactly that before it was written\ndown.\n\n### `Menu.Popover` carries the list's props\n\n`selectionMode`, `disabledKeys` and `onAction` are the _menu's_ rather than the surface's, and\nwriting them would otherwise mean two slots for one decision — so the popover takes them as\n`menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a\nsurface with no list in it and a list with nowhere to open are never useful apart.\n\n### The menu is at least as wide as the button that opened it\n\n`popover.ts`'s `POPOVER` sizes the panel from the trigger and lets it grow: a trigger is sized for its\nown label (\"Actions\"), and a menu sized to exactly that cuts off the one item longer than the control —\nusually the item the menu was opened to find. `min-w-(--trigger-width)`, capped at the window minus the\n1rem gutter the modal keeps, so nothing can run off the page. This was also where a whole-library bug\ncame to light: the reset that set `min-width: 0` on `*` was unlayered, and an unlayered rule beats every\nTailwind utility, so `min-w-*` had never applied anywhere. See\n[theming.md](../theming.md#cascade-layers-and-the-one-reset-that-had-to-move).\n\n### The shadow is the second deliberate literal\n\n`popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to\ndarken in **both** themes, and every token that would do it inverts. It is the one literal in that\nfile, and it says so.\n\n### Focus is real, and type-ahead is not asserted\n\nReact Aria's menu puts **real** focus on a row — unlike its tree, which uses `aria-activedescendant`,\nso a story here asks `toHaveAttribute('role', 'menuitem')` rather than reading it off the menu.\n\nType-ahead (`d` reaching Delete) is deliberately **not** asserted. It uses the same kind of pending\ntimer the tooltip's hover does, and a query that cannot see it fails as if the feature were missing.\nThat is the third time this session that a story has been left out rather than written to assert\nsomething else.\n\n## `Menu.LoadMore` — the row that asks for the next page\n\n```tsx\n<Menu.Popover>\n  <Menu.Item id=\"a\">Restart</Menu.Item>\n  <Menu.LoadMore isLoading={isLoading} onLoadMore={loadMore} />\n</Menu.Popover>\n```\n\nA menu that runs long — every region, hundreds of actions — has no scrollbar a reader can consult for how\nmuch is left. This is where the rest arrives. It is the same sentinel as `GridList.LoadMore`, on the same\nshared recipe, and it needs a virtualized collection for the same reason (`gridlist.md` carries the\nmechanism and the scroll proof).\n\n**While it is loading it is a `menuitem`**, announced with the actions above it, because React Aria puts it\nin the menu's own collection. The story asserted the opposite first — that a row asking for the next page\nwould take no part in the menu — and its own failure corrected it. When it is _not_ loading, React Aria\nrenders nothing at all for it.",
       "files": [
         {
           "path": "src/components/Menu/Menu.tsx",
@@ -4751,9 +4676,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -4924,9 +4846,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5091,9 +5010,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5130,7 +5046,7 @@
           }
         }
       },
-      "docs": "React Aria's `NavigationTree` — a nested, hierarchical set of links — which is what a sidebar\nactually is. **The sheet has no sidebar**: its two navs, `dash-nav` and `page-nav`, are both\nhorizontal top bars. So the _arrangement_ is an invention, and every visible part is the sheet's own\nvocabulary turned on its side.\n\n```tsx\n<Nav aria-label=\"Primary\" selectedRoute=\"/monitors/fra1\">\n  <Nav.Item href=\"/monitors\" textValue=\"Monitors\">\n    <Nav.Label>\n      Monitors <Nav.Count>12</Nav.Count>\n    </Nav.Label>\n    <Nav.Item href=\"/monitors/fra1\" textValue=\"fra1\">\n      <Nav.Label>fra1 · Frankfurt</Nav.Label>\n    </Nav.Item>\n  </Nav.Item>\n  <Nav.Section>\n    <Nav.Header>Account</Nav.Header>\n    <Nav.Item href=\"/settings\" textValue=\"Settings\">\n      <Nav.Label>Settings</Nav.Label>\n    </Nav.Item>\n  </Nav.Section>\n</Nav>\n```\n\n| Slot          | React Aria                  | Notes                                                |\n| ------------- | --------------------------- | ---------------------------------------------------- |\n| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are        |\n| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests          |\n| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure              |\n| `Nav.Section` | `NavigationTreeSection`     | A group                                              |\n| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                   |\n| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge |\n\n### It is a treegrid, not a nav landmark\n\n`NavigationTree` builds on React Aria's `Tree`, so it renders `role=\"treegrid\"` with `role=\"row\"`\nitems — the same shape as its `Table`. Query it that way: the items are **rows**, and their styling\nlives on the row.\n\n### The rows are virtual, so the anchors are the tab stops\n\nThe grid is `tabindex=\"-1\"` and its rows carry no tabindex at all. A first version put\n`tabIndex={-1}` on the anchors to avoid \"two tab stops per item\", which made **nothing** in the tree\nreachable — the whole sidebar fell out of the keyboard. The links are the only real focus targets\nhere and they must stay in the tab order.\n\nFor the same reason the tree is `aria-activedescendant`-driven, so a row is marked `data-focused`\nrather than `data-focus-visible`, and the focus ring follows that.\n\n**A ring on the row alone was not enough, and for a while there was none at all.** `NAV_ITEM` carried\n`outline-none` in the same class list as its `data-[focused]:outline-1` ring, which sets Tailwind's\nshared `--tw-outline-style` and makes the ring unwritable — the same mistake `Table` and `GridList`\nhad made, and the third one in the repo. The anchor, meanwhile, carried `focus:outline-none`, and the\nanchor is the real Tab stop here, so a keyboard user tabbing the sidebar got nothing.\n\nThe row is right for the **arrow keys**: React Aria moves a _virtual_ focus with\n`aria-activedescendant` and marks the row `data-focused`. Tab is a different route, and there the row\ncannot carry it: RAC does not move `focusedKey` when DOM focus travels from one anchor to the next —\nmeasured by tabbing twice and reading `data-focused`, which stayed on the first row. So the anchor\ndraws the ring itself on `focus-visible`, the row keeps its own for the arrow keys, and the row's ring\nis switched off while an anchor inside it has the focus (`data-[focused]:has-[:focus-visible]`). One\nring, whichever way focus arrived.\n\n### An expandable item must contain a real button\n\nReact Aria says so at runtime: _\"Expandable tree items must contain a expand button so screen reader\nusers can expand/collapse the item.\"_ The first version drew a caret as an `after:` pseudo-element —\nwhich cannot be pressed and cannot be named. It is now a `<Button slot=\"chevron\">` in `Nav.Label`,\ndrawn only when `hasChildItems`, sitting _beside_ the anchor rather than inside it.\n\nIts rotation comes from the render props, not from a rule reaching down from the row. That is the\narrangement this whole system avoids, and here React Aria hands the state over directly.\n\n### `selectedRoute` is the whole of \"where am I\"\n\nThere is no `isCurrent` per item to keep in sync with a router. One string is matched against every\n`href`, and the tree marks the item that matches **and its ancestors** — `data-current-ancestor` —\nwhich is the thing a top bar never needed and a tree cannot do without: it is what lets the tree show\nyou where you are inside a branch you have not opened.\n\nThe current item takes the accent, as the sheet's own `[aria-current=\"page\"]` rule does. An ancestor\ncomes up to full strength and goes no further — two items in the accent would stop saying which one\nyou are on.\n\n### The text is passed separately, because the label is markup\n\n`textValue` is required, and that is the honest signature: an item's label here often carries a count\nbadge, and keyboard type-ahead needs the string someone would actually type. Deriving it from the\nrendered label would pick up the number.\n\n### The tests that were worth writing, and one that was not\n\n`Nesting` measures `padding-inline-start` on the **row** (18px at level 1, 30px at level 2) rather\nthan the row's left edge: the indent is padding, padding is inside the row, so the row's edges never\nmove however deep it is. Measuring the left edge passed at depth one and failed at depth two.\n\nThe Tab-order assertion was **deleted**. Driving Tab from the runner did not land on the links, and a\ntest that quietly asserts something else is worse than no test. `Keyboard` now says so in its own\ncomment and asserts only what is true: every item is a link with an `href`, and every one can take\nfocus.",
+      "docs": "React Aria's `NavigationTree` — a nested, hierarchical set of links — which is what a sidebar\nactually is. **The sheet has no sidebar**: its two navs, `dash-nav` and `page-nav`, are both\nhorizontal top bars. So the _arrangement_ is an invention, and every visible part is the sheet's own\nvocabulary turned on its side.\n\n```tsx\n<Nav aria-label=\"Primary\" selectedRoute=\"/monitors/fra1\">\n  <Nav.Item href=\"/monitors\" textValue=\"Monitors\">\n    <Nav.Label>\n      Monitors <Nav.Count>12</Nav.Count>\n    </Nav.Label>\n    <Nav.Item href=\"/monitors/fra1\" textValue=\"fra1\">\n      <Nav.Label>fra1 · Frankfurt</Nav.Label>\n    </Nav.Item>\n  </Nav.Item>\n  <Nav.Section>\n    <Nav.Header>Account</Nav.Header>\n    <Nav.Item href=\"/settings\" textValue=\"Settings\">\n      <Nav.Label>Settings</Nav.Label>\n    </Nav.Item>\n  </Nav.Section>\n</Nav>\n```\n\n| Slot          | React Aria                  | Notes                                                                              |\n| ------------- | --------------------------- | ---------------------------------------------------------------------------------- |\n| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are                                      |\n| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests                                        |\n| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure                                            |\n| `Nav.Section` | `NavigationTreeSection`     | A group                                                                            |\n| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                                                 |\n| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge — and quieter here, see below |\n\n### It is a treegrid, not a nav landmark\n\n`NavigationTree` builds on React Aria's `Tree`, so it renders `role=\"treegrid\"` with `role=\"row\"`\nitems — the same shape as its `Table`. Query it that way: the items are **rows**, and their styling\nlives on the row.\n\n### The rows are virtual, so the anchors are the tab stops\n\nThe grid is `tabindex=\"-1\"` and its rows carry no tabindex at all. A first version put\n`tabIndex={-1}` on the anchors to avoid \"two tab stops per item\", which made **nothing** in the tree\nreachable — the whole sidebar fell out of the keyboard. The links are the only real focus targets\nhere and they must stay in the tab order.\n\nFor the same reason the tree is `aria-activedescendant`-driven, so a row is marked `data-focused`\nrather than `data-focus-visible`, and the focus ring follows that.\n\n**A ring on the row alone was not enough, and for a while there was none at all.** `NAV_ITEM` carried\n`outline-none` in the same class list as its `data-[focused]:outline-1` ring, which sets Tailwind's\nshared `--tw-outline-style` and makes the ring unwritable — the same mistake `Table` and `GridList`\nhad made, and the third one in the repo. The anchor, meanwhile, carried `focus:outline-none`, and the\nanchor is the real Tab stop here, so a keyboard user tabbing the sidebar got nothing.\n\nThe row is right for the **arrow keys**: React Aria moves a _virtual_ focus with\n`aria-activedescendant` and marks the row `data-focused`. Tab is a different route, and there the row\ncannot carry it: RAC does not move `focusedKey` when DOM focus travels from one anchor to the next —\nmeasured by tabbing twice and reading `data-focused`, which stayed on the first row. So the anchor\ndraws the ring itself on `focus-visible`, the row keeps its own for the arrow keys, and the row's ring\nis switched off while an anchor inside it has the focus (`data-[focused]:has-[:focus-visible]`). One\nring, whichever way focus arrived.\n\n### An expandable item must contain a real button\n\nReact Aria says so at runtime: _\"Expandable tree items must contain a expand button so screen reader\nusers can expand/collapse the item.\"_ The first version drew a caret as an `after:` pseudo-element —\nwhich cannot be pressed and cannot be named. It is now a `<Button slot=\"chevron\">` in `Nav.Label`,\ndrawn only when `hasChildItems`, sitting _beside_ the anchor rather than inside it.\n\nIts rotation comes from the render props, not from a rule reaching down from the row. That is the\narrangement this whole system avoids, and here React Aria hands the state over directly.\n\n### `selectedRoute` is the whole of \"where am I\"\n\nThere is no `isCurrent` per item to keep in sync with a router. One string is matched against every\n`href`, and the tree marks the item that matches **and its ancestors** — `data-current-ancestor` —\nwhich is the thing a top bar never needed and a tree cannot do without: it is what lets the tree show\nyou where you are inside a branch you have not opened.\n\nThe current item takes the accent, as the sheet's own `[aria-current=\"page\"]` rule does. An ancestor\ncomes up to full strength and goes no further — two items in the accent would stop saying which one\nyou are on.\n\n**The ancestor's chevron takes the accent, though, and that is what makes a collapsed branch legible.**\nFull strength alone says nothing when every other row is 70% white: with your page inside a closed\nbranch, the sidebar showed no cue at all. The cue goes on the one glyph that means \"there is more in\nhere\", so the accent never reaches a second _label_ and \"where you are\" is still said exactly once.\n\n### The text is passed separately, because the label is markup\n\n`textValue` is required, and that is the honest signature: an item's label here often carries a count\nbadge, and keyboard type-ahead needs the string someone would actually type. Deriving it from the\nrendered label would pick up the number.\n\n### The tests that were worth writing, and one that was not\n\n`Nesting` measures `padding-inline-start` on the **row** (18px at level 1, 30px at level 2) rather\nthan the row's left edge: the indent is padding, padding is inside the row, so the row's edges never\nmove however deep it is. Measuring the left edge passed at depth one and failed at depth two.\n\nThe Tab-order assertion was **deleted**. Driving Tab from the runner did not land on the links, and a\ntest that quietly asserts something else is worse than no test. `Keyboard` now says so in its own\ncomment and asserts only what is true: every item is a link with an `href`, and every one can take\nfocus.\n\n### The column of edges, and the count that stopped shouting\n\nFour changes came out of looking at the sidebar as a whole rather than at one row of it.\n\n**Every row reserves the chevron's box, whether or not it has a chevron** (`NAV_GUTTER`, and the same\nbox in `Tree.Label`). Measured before: a row with a disclosure started its label 24px to the right of\none without — 18px against 42px at level 1 — so the labels stepped in and out down the column and the\nindentation said nothing true about the hierarchy. Every label now shares a left edge per level, and\nthe cost is 24px of a 224px sidebar on a row that needed none.\n\n**A section header has room above it and almost none below** (`pt-5`, from `pt-3`). At `pt-3` the legend\nsat as close to the row above as one row sits to the next, so `ACCOUNT` read as one more item. A\ngroup's name belongs to the items under it.\n\n**The count is quiet here** (`text-foreground/45`, from the sheet's selected-yellow). In the sheet the\n`.ds-count` sits in a horizontal top bar beside the one chosen thing; in a vertical sidebar every\ncounted row would carry the yellow, and two of them became the loudest thing on a surface whose labels\nare 70% white. Yellow means _selection_ everywhere else in this system, so spending it on a number\nthat is merely true costs it that meaning. The trailing column stays — alignment is what makes a count\nscannable, not the colour — and `tabular-nums` keeps the digits from jittering. A count that genuinely\nwants attention is a `tone` on `Nav.Count`, the day someone asks for one.\n\n**A row answers a hover with a fill** (`data-[hovered]:bg-foreground/5`), not only with a brighter\nlabel: a sidebar is a column of targets, and the wash is what makes the row under the pointer read as\none. It is the value `Accordion`'s header rows already use.\n\n`Nav` also carries `data-slot=\"nav\"` now — it was the one root in the library without one.",
       "files": [
         {
           "path": "src/components/Nav/Nav.tsx",
@@ -5257,9 +5173,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -5430,9 +5343,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5597,9 +5507,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -5636,7 +5543,7 @@
           }
         }
       },
-      "docs": "A panel anchored to the thing that opened it, that does not take the page away.\n\n```tsx\n<Popover>\n  <Button>Filters</Button>\n  <Popover.Content placement=\"bottom start\">\n    <Popover.Title>Filters</Popover.Title>\n    <Popover.Description>Applies to this view only.</Popover.Description>\n  </Popover.Content>\n</Popover>\n```\n\n| Slot                  | React Aria           | Notes                                           |\n| --------------------- | -------------------- | ----------------------------------------------- |\n| `Popover`             | `DialogTrigger`      | The trigger, then a `Popover.Content`           |\n| `Popover.Content`     | `Popover` + `Dialog` | The surface, and the dialog that names it       |\n| `Popover.Title`       | `Heading`            | The modal's own title type, imported not copied |\n| `Popover.Description` | `Text`               | `aria-describedby` wired here, as on Modal      |\n\n**A popover is a modal that is not modal**, and that is the whole decision. It is dismissed by Escape\nand by a click outside, but it traps nothing and hides nothing: the page behind stays readable and\nusable. Reach for `Modal` when the page is irrelevant to the decision and for this when it is the\ncontext.\n\nThe surface is `popover.ts`'s, but **not `POPOVER` itself** — that one is `w-(--trigger-width)`, which\nis right for a select matched to its field and wrong for a panel with its own idea of how wide it\nshould be. It is what `Menu`, `Select` and `ComboBox` are built on; this is the same surface with no\nlist at all.\n\n**Placement is a request, not an instruction.** `placement=\"bottom start\"` opens downwards when there\nis room and flips when there is not, so the story asserts that React Aria reports where the panel\nlanded rather than the value the prop asked for.\n\n### The browser probe reports \"open on load\", and is wrong\n\nWorth writing down because it has now happened twice and cost a component once.\n\nA throwaway Playwright script that navigates straight to an `iframe.html?viewMode=story` URL and then\nlooks for `role=\"dialog\"` **finds one already open**, for both the sheet and the popover — because\nStorybook has restored that story's canvas from a previous visit in the same browser context. The\ntest runner does not: `Default` clicks the trigger and its **first** assertion, made before any click,\nis that no dialog is present — and it passes.\n\n**So the runner is the authority on whether something opens by itself, and the probe is not.** The\n`Sheet` was removed on this evidence in an earlier round; its size defect was independently confirmed\nand stands, but the \"opens before you open it\" half of that verdict may well have been this artifact.\nTrust the suite for state, the screenshot for appearance.",
+      "docs": "A panel anchored to the thing that opened it, that does not take the page away.\n\n```tsx\n<Popover>\n  <Button>Filters</Button>\n  <Popover.Content placement=\"bottom start\">\n    <Popover.Title>Filters</Popover.Title>\n    <Popover.Description>Applies to this view only.</Popover.Description>\n  </Popover.Content>\n</Popover>\n```\n\n| Slot                  | React Aria           | Notes                                           |\n| --------------------- | -------------------- | ----------------------------------------------- |\n| `Popover`             | `DialogTrigger`      | The trigger, then a `Popover.Content`           |\n| `Popover.Content`     | `Popover` + `Dialog` | The surface, and the dialog that names it       |\n| `Popover.Title`       | `Heading`            | The modal's own title type, imported not copied |\n| `Popover.Description` | `Text`               | `aria-describedby` wired here, as on Modal      |\n\n**A popover is a modal that is not modal**, and that is the whole decision. It is dismissed by Escape\nand by a click outside, but it traps nothing and hides nothing: the page behind stays readable and\nusable. Reach for `Modal` when the page is irrelevant to the decision and for this when it is the\ncontext.\n\nThe surface is `popover.ts`'s, but **not `POPOVER` itself** — that one holds a single scrolling list and\nis sized from the control it came from (`min-w-(--trigger-width)`, capped at the window), which is right\nfor a menu over a button and wrong for a panel with its own idea of how wide it should be. It is what\n`Menu`, `Select` and `ComboBox` are built on; this is the same surface with no list at all.\n\n**Placement is a request, not an instruction.** `placement=\"bottom start\"` opens downwards when there\nis room and flips when there is not, so the story asserts that React Aria reports where the panel\nlanded rather than the value the prop asked for.\n\n### The browser probe reports \"open on load\", and is wrong\n\nWorth writing down because it has now happened twice and cost a component once.\n\nA throwaway Playwright script that navigates straight to an `iframe.html?viewMode=story` URL and then\nlooks for `role=\"dialog\"` **finds one already open**, for both the sheet and the popover — because\nStorybook has restored that story's canvas from a previous visit in the same browser context. The\ntest runner does not: `Default` clicks the trigger and its **first** assertion, made before any click,\nis that no dialog is present — and it passes.\n\n**So the runner is the authority on whether something opens by itself, and the probe is not.** The\n`Sheet` was removed on this evidence in an earlier round; its size defect was independently confirmed\nand stands, but the \"opens before you open it\" half of that verdict may well have been this artifact.\nTrust the suite for state, the screenshot for appearance.",
       "files": [
         {
           "path": "src/components/Modal/Modal.tsx",
@@ -5778,9 +5685,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -5951,9 +5855,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6123,9 +6024,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -6301,9 +6199,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6472,9 +6367,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -6650,9 +6542,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6817,9 +6706,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -6983,9 +6869,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -7166,9 +7049,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -7341,9 +7221,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -7508,9 +7385,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -7674,9 +7548,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -7857,9 +7728,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8023,9 +7891,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -8196,9 +8061,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8367,9 +8229,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -8540,9 +8399,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -8718,9 +8574,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -8884,9 +8737,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9056,9 +8906,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9239,9 +9086,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -9416,9 +9260,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -9582,9 +9423,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9754,9 +9592,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
@@ -9932,9 +9767,6 @@
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
           },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
-          },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"
           },
@@ -10098,9 +9930,6 @@
             "font-synthesis": "none",
             "color-scheme": "dark",
             "overscroll-behavior-y": "none"
-          },
-          "*,\n*::before,\n*::after": {
-            "min-width": "0"
           },
           "[data-theme='dark'],\n.dark": {
             "color-scheme": "dark"

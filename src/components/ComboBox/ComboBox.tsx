@@ -97,7 +97,9 @@ const SPINNER = 'size-[1.25cap] motion-safe:animate-spin'
 
 /** The sheet's `.ds-select-menu`, shared down to the class list with `Select`. */
 const MENU = [
-  'flex w-(--trigger-width) flex-col overflow-clip',
+  // The same rule as `Select`'s and `POPOVER`'s: never narrower than the field, never wider than the
+  // window. This list is longer than a select's, which is the case the width has to survive.
+  'flex min-w-(--trigger-width) max-w-[calc(100vw-2rem)] flex-col overflow-clip',
   'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')

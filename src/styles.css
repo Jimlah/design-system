@@ -238,13 +238,22 @@
    element rules, `-webkit-tap-highlight-color` and
    `-webkit-text-size-adjust`. These are the parts it does not.
    ============================================================ */
-*,
-*::before,
-*::after {
-  /* Lets a flex or grid item shrink below its content. The default is
-     `min-width: auto`, which is why a long word or a wide child overflows
-     its track. Anything that is sized and must not shrink needs `shrink-0`. */
-  min-width: 0;
+/* **`@layer base`, and that is not tidiness.** An unlayered normal declaration outranks *every*
+   layered one in the cascade, whatever the specificity — and Tailwind's utilities are emitted into
+   `@layer utilities`. Written at the top level, this one rule therefore defeated every `min-w-*`
+   utility in the library: `.min-w-(--trigger-width)` was in the compiled CSS and computed to
+   `0px` on the element. It was found by asking for a dropdown that is at least as wide as its
+   trigger and measuring one that was narrower (86px against a 106px trigger). Tailwind's own
+   preflight is layered for the same reason. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    /* Lets a flex or grid item shrink below its content. The default is
+       `min-width: auto`, which is why a long word or a wide child overflows
+       its track. Anything that is sized and must not shrink needs `shrink-0`. */
+    min-width: 0;
+  }
 }
 
 :root {
