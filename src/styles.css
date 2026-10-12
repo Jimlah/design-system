@@ -89,6 +89,173 @@
 }
 
 /* ============================================================
+   SHADCN-COMPATIBLE SEMANTIC LAYER
+   A second naming for the same colours, so a component copied
+   out of shadcn/ui, or a consumer's own code that was written
+   against shadcn's tokens, speaks in roles rather than in this
+   palette's names. It is a translation layer, not a second
+   theme: every value below is a `var()` onto a token above, so
+   no colour is declared twice and `light-dark()` still resolves
+   per element against `color-scheme`.
+
+   **There is deliberately no `.dark` block of tokens.** shadcn
+   themes by redefining every variable inside `.dark`, which
+   would mean hand-writing a second value per accent, losing the
+   one-value-drives-its-family property this palette is built on,
+   and breaking the `--color-line*` and `--color-fg-muted`
+   derivations, which follow `--color-fg` precisely so they need
+   no per-theme tuning. `.dark` here carries `color-scheme` and
+   nothing else.
+
+   Two steps rather than one, and the middle hop is the point:
+   with `@theme inline` alone, `bg-primary` would compile to
+   `var(--color-teal)`, and a consumer setting `--primary` would
+   change nothing. `inline` makes the utility read this layer's
+   variable, so overriding `--primary` at any scope retints the
+   component - which is shadcn's actual promise.
+
+   Three of the mappings are lossy, and each is a decision rather
+   than an oversight:
+
+   - **Pulse has two surfaces where shadcn wants three.** `card`
+     and `popover` both land on `--color-panel`, because Modal,
+     Popover, Menu, Tooltip, Table and Nav all draw on it. Making
+     them differ needs a new surface token here, not an alias.
+   - **`--border` is one token where this palette has three
+     hairlines.** It takes `--color-line` (62%). Components
+     default to `--color-line-strong` (40%) for a panel boundary
+     and `--color-line` for a row rule, so no single choice
+     matches both; the default border is the one a shadcn
+     component means.
+   - **`--secondary` is `--color-neutral`, not the yellow.**
+     shadcn defines it as the lower-emphasis fill, which is this
+     system's neutral button; yellow is a selected/attention
+     colour and becomes `--warning` instead. shadcn has no
+     `warning` or `success` token, and its own "adding new
+     tokens" example is the `--warning` pair below - so the two
+     extras are its convention extended, not invented here.
+
+   `--destructive-foreground` is likewise an extension: shadcn
+   leaves it out and writes `text-white`, which this system's rule
+   ("a fill carries ink, and ink inverts with the fills") forbids.
+   ============================================================ */
+:root {
+  /* A fill and the ink that sits on it, per shadcn's pair convention. */
+  --background: var(--color-base);
+  --foreground: var(--color-fg);
+  --card: var(--color-panel);
+  --card-foreground: var(--color-fg);
+  --popover: var(--color-panel);
+  --popover-foreground: var(--color-fg);
+  --primary: var(--color-teal);
+  --primary-foreground: var(--color-ink);
+  --secondary: var(--color-neutral);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-panel-2);
+  --muted-foreground: var(--color-fg-muted);
+  /* shadcn's accent is the hover/selected surface, which is what
+     `hover:bg-panel-2` already is on a Table row. */
+  --accent: var(--color-panel-2);
+  --accent-foreground: var(--color-fg);
+  --destructive: var(--color-red);
+  --destructive-foreground: var(--color-ink);
+  --warning: var(--color-yellow);
+  --warning-foreground: var(--color-ink);
+  --success: var(--color-green);
+  --success-foreground: var(--color-ink);
+
+  /* One border for three hairlines, one input boundary, one ring -
+     the boundary of an interactive control is already its own token
+     because it is the measured 3:1 one, so `--input` is exact. */
+  --border: var(--color-line);
+  --input: var(--color-line-control);
+  --ring: var(--color-teal);
+
+  /* The charts: the measured bar first, then the accents. */
+  --chart-1: var(--color-bar);
+  --chart-2: var(--color-teal);
+  --chart-3: var(--color-yellow);
+  --chart-4: var(--color-green);
+  --chart-5: var(--color-red);
+
+  /* Nav is `bg-panel` with `text-teal` on the current node and
+     a `panel-2` row under the pointer, so the sidebar set is that
+     same anatomy under shadcn's names. */
+  --sidebar: var(--color-panel);
+  --sidebar-foreground: var(--color-fg);
+  --sidebar-primary: var(--color-teal);
+  --sidebar-primary-foreground: var(--color-ink);
+  --sidebar-accent: var(--color-panel-2);
+  --sidebar-accent-foreground: var(--color-fg);
+  --sidebar-border: var(--color-line-soft);
+  --sidebar-ring: var(--color-teal);
+
+  /* Zero, because the sheet squares off its buttons and inputs and
+     this system keeps that rule. It collapses shadcn's whole derived
+     scale to zero, which is safe rather than merely convenient: no
+     component here uses `rounded-sm`…`rounded-4xl` - measured, only
+     `rounded-none`, `rounded-full` and `rounded-[2px]` appear - and
+     `rounded-full` is not derived from `--radius`, so the checkbox,
+     the radio, the switch and the avatar keep their radii. */
+  --radius: 0;
+}
+
+/* `inline` is what lets a consumer override a token above and have it
+   take. Under a plain `@theme`, Tailwind writes the value through an
+   intermediate `--color-*` on `:root` and the override still works,
+   but the utility no longer reads the variable directly; `inline` is
+   the form shadcn documents and the form that makes the intent plain.
+   This block is also what publishes the utilities - `bg-background`,
+   `text-foreground`, `border-border`, `ring-ring` and the rest. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* shadcn's radius scale, off this system's single base. */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ============================================================
    RESET
    Tailwind's preflight already handles `box-sizing`, the media
    element rules, `-webkit-tap-highlight-color` and
@@ -121,7 +288,14 @@
 :root {
   color-scheme: dark;
 }
-[data-theme='dark'] {
+/* `.dark` is the same statement under the name a shadcn theme provider
+   toggles. It sets `color-scheme` and nothing else - see the semantic
+   layer above - so a consumer's existing toggle flips this palette without
+   a second set of values existing anywhere. It is grouped before
+   `[data-theme='light']` deliberately: equal specificity, so the later
+   rule wins if an element somehow carries both. */
+[data-theme='dark'],
+.dark {
   color-scheme: dark;
 }
 [data-theme='light'] {

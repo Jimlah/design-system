@@ -191,6 +191,11 @@ block under a media query or a `.dark` class:
 The alphas need no per-theme tuning: an alpha over a dark page and over a light page both
 land on a mid grey, so they derive from `--color-fg` and follow it.
 
+A shadcn-compatible **semantic layer** gives the same colours role-based names (`bg-primary`,
+`border-border`, `ring-ring`) for components copied from shadcn/ui. It is a translation layer, not a
+second theme — every value is a `var()` onto a token above, and there is deliberately no `.dark` block
+of token values. See [theming.md](./docs/theming.md).
+
 ### What the light theme had to solve
 
 The sheet is dark-only, so the light column is an invention, derived from two constraints: a
