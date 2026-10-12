@@ -41,6 +41,39 @@ radio's circle, the switch's pill, the table's collapsed grid, the edge-anchored
 slider's grip — and the page lists them rather than pretending it can reach them. See
 [theming.md](./theming.md#radius).
 
+## The showcase, one card per area
+
+The preview is not one screen. A design system is read one control at a time — that is what its docs
+pages are — and a single dense screen proves only that the parts coexist, so the preview is a card per
+area, each holding the real components doing their own job:
+
+| Card              | What it shows                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------ |
+| Actions           | five button variants, five meanings, a toolbar of toggles, a segmented control                   |
+| Fields            | `TextField`, `TextArea`, `SearchField`, `NumberField`, `TokenField` — one anatomy, five controls |
+| Choices           | a checkbox group, a radio group, a switch, a slider                                              |
+| Colour            | `ColorField`, `ColorSwatchPicker`, and the palette as swatches                                   |
+| Pickers           | `Select` with its filter scope, `ComboBox`, `ListBox`                                            |
+| Dates and times   | `DateField`, `TimeField`, `DatePicker`                                                           |
+| Calendar / Ranges | a month on the page, and two months as one range with the field that feeds it                    |
+| Overlays          | `Popover` with its arrow, `Modal`, `Sheet`, `Menu`, `Tooltip`                                    |
+| Data              | the hairline row stack, with a sparkline inside a cell                                           |
+| Grid / Tree       | selectable cards, and a hierarchy that expands in place                                          |
+| Navigation        | a tab row over its panel, and `Nav` as the sidebar                                               |
+| Feedback          | `ProgressBar`, a toned `Meter`, and a toast wired to a button                                    |
+| Charts            | `Sparkline`, `FlatLine`, `BarChart`                                                              |
+| Map               | `DotMap`, six hundred dots and one accent                                                        |
+| Content           | `Accordion`, the avatars beside it, and all five hairline strengths                              |
+| Form              | a real form: two fields, a legend, actions                                                       |
+| Files             | `DropZone` with the file picker a keyboard needs                                                 |
+| Type / Tokens     | the type scale, and the fills and hairlines as the theme resolves them                           |
+
+That is fifty of the library's fifty-four components rendering at once, which is also the cheapest way
+to see a theme: twenty corners, eight fills and five hairlines in one view.
+
+**The locale is pinned to `en-GB` around the preview**, and that is a hydration fix rather than a
+preference — see the calendar note below. The sheet's own `09:30` is a 24-hour clock anyway.
+
 ## The rules, because a table of hexes would be a different page
 
 The point of asking three questions is that the stylesheet already answers the rest, so this is
@@ -79,7 +112,9 @@ is the property that keeps it from going stale.
 
 ## What building this found
 
-Three things, and the first two are now fixed in the library rather than worked around in the page:
+Six things, and all six are fixed in the library rather than worked around in the page. The last
+three were found by _rendering_ fifty components rather than reading about them, which is the
+argument for a page like this one:
 
 1. **`--font-mono` was inert.** `@theme inline` writes a theme entry's value straight into the utility,
    and for a colour that value is a `var()` that still reads the element — but for the font it was the
@@ -92,7 +127,23 @@ Three things, and the first two are now fixed in the library rather than worked 
    step's `aria-current`, its colour and that it is not a link, and never that it could be seen, which
    is why it passed. Found by putting a breadcrumb on a new page and looking at it. See
    [breadcrumbs.md](./components/breadcrumbs.md).
-3. **A `Tag` chip with no `textValue` warns**, in the library's own stories as well as here
+3. **`Select.Search` did not exist.** Four doc comments in `Select.tsx` named it, and the story's
+   curated snippet — the example a consumer copies — wrote `<Select.Search />`. The search strip belongs
+   to `Select.AutoComplete`, which draws it itself. Nothing checked, because a snippet is text: the first
+   page that rendered one threw on the spot. See [select.md](./components/select.md).
+4. **`BarChart` dropped its `className`.** The `<svg>` carried a hardcoded `block` instead of composing
+   the prop, so a chart asked for `w-full` inside a card rendered at its own 720px and ran off the edge of
+   it — the same "accepted and ignored" defect the `Sparkline` size had. `Sparkline` and `FlatLine` compose
+   theirs, which is what made the odd one visible. A `Stretch` story now says so.
+5. **A two-month calendar would not hydrate.** `Intl#formatRange` puts the range separator's spaces in the
+   hands of the runtime's ICU, and Node's is not Chrome's: measured, `en-GB` came out as
+   `March<U+2009>–<U+2009>April 2024` on the server and `March<U+0020>–<U+0020>April 2024` in the browser.
+   The caption is now composed in `date.tsx` — this component's typography — which removed the text
+   mismatch. React Aria's own accessible name for the grid is still a `formatRange` string, so one
+   **attribute** mismatch remains on an SSR'd two-month calendar: an `aria-label`, invisible, and
+   unpatchable by React. It is recorded in [rangecalendar.md](./components/rangecalendar.md) rather than
+   hidden.
+6. **A `Tag` chip with no `textValue` warns**, in the library's own stories as well as here
    (`A textValue prop is required for <Tag> elements with non-plain text children`). It is not this
    page's doing — the component passes React Aria a render-prop child — and it is still open. Nothing
    renders wrongly; the accessible name is the text, and the warning is noise on every chip that is not

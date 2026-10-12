@@ -301,7 +301,7 @@ export interface SelectPopoverProps extends Omit<
   'className'
 > {
   className?: string
-  /** `Select.Search` and `Select.List`, in that order. */
+  /** A `Select.AutoComplete` — or a bare `Select.OptionList` when the list needs no searching. */
   children?: React.ReactNode
 }
 
@@ -545,10 +545,10 @@ export function SelectPopover({
   offset = 6,
   ...props
 }: SelectPopoverProps) {
-  // The popover owns the autocomplete, not the search field, because React Aria needs
-  // the scope to wrap the list as well as the input. That keeps `Select.Search` and
-  // `Select.List` siblings inside it, which is the shape a consumer would expect, and
-  // leaves the scope inert when no search is present.
+  // The popover owns the autocomplete, not the search field, because React Aria needs the
+  // scope to wrap the list as well as the box that filters it. That is why `Select.AutoComplete`
+  // is a child of the popover and a parent of the list, and why the scope is inert when there is
+  // no search at all.
   return (
     <AriaPopover
       offset={offset}
@@ -563,14 +563,13 @@ export function SelectPopover({
 /**
  * The autocomplete scope. Use it as `Select.AutoComplete`, inside a `Select.Popover`.
  *
- * React Aria filters a collection by wrapping *both* the search box and the list in one
- * scope, so this has to sit above `Select.Search` and `Select.OptionList` together. It
- * renders no element of its own — it exists to be that boundary, which is why the list is
- * a sibling of the search rather than a child of it.
- *
- * It draws the search box itself — there is no separate search slot, because a scope
- * without a box to type in would have nothing to do. Reach for `Select.Menu` instead when
- * the list needs no searching at all.
+ * **It draws the search strip itself, because there is no separate search slot.** React Aria filters a
+ * collection by wrapping the box and the list in one scope, so this sits above `Select.OptionList`; a
+ * scope with no box in it would have nothing to filter with, so the field is this component's and the
+ * children are the list. This file used to document a `Select.Search` that was never built — four
+ * places, including the example below and the story's curated snippet — and every one of them threw
+ * on render. Nothing checked, because a snippet is text. Reach for `Select.Menu` when the list needs
+ * no searching at all.
  *
  * Exported as `SelectAutoComplete` only so tooling can resolve it; consume the compound
  * form `Select.AutoComplete`.
@@ -614,7 +613,7 @@ export function SelectAutoComplete({
 
 /**
  * The options. Use it as `Select.OptionList`, inside a `Select.Popover` — wrapped in a
- * `Select.AutoComplete` when there is a `Select.Search` above it.
+ * `Select.AutoComplete` when the list is to be filtered by a search box.
  *
  * Exported as `SelectOptionList` only so tooling can resolve it; consume the compound form
  * `Select.OptionList`.
@@ -637,7 +636,7 @@ export function SelectOptionList({
 /**
  * The popover and the list together — the common case. Use it as `Select.Menu`. Reach for
  * `Select.Popover` with `Select.AutoComplete` and `Select.OptionList` instead when
- * something has to sit among them, such as `Select.Search`.
+ * something has to sit among them, such as the search strip the scope draws.
  *
  * Exported as `SelectMenu` only so tooling can resolve it; consume the compound form
  * `Select.Menu`.
@@ -846,8 +845,7 @@ function SelectRoot<TMode extends SelectionMode = 'single'>({
  *     <Select.Icon />
  *   </Select.Button>
  *   <Select.Popover>
- *     <Select.AutoComplete>
- *       <Select.Search />
+ *     <Select.AutoComplete placeholder="Search protocols…">
  *       <Select.OptionList>
  *         <Select.Option id="http">HTTP</Select.Option>
  *         <Select.Option id="https">HTTPS</Select.Option>

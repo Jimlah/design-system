@@ -258,6 +258,16 @@ export function Home() {
               Install the registry
             </Button>
             {/*
+              **Create is an action of this page, not a footnote in its registry section.** It is the
+              one thing here a reader can *do* to the system rather than read about it: a base colour, an
+              accent hue, a corner and a typeface, and the token block that falls out. A link, for the
+              same reason the docs link beside it is one — middle-click and "open in a new tab" are most
+              of what a link is for, and `BASE_URL` is what keeps it working under the Pages subpath.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}create/`}>
+              Create a theme
+            </Link>
+            {/*
               **A link that navigates is an anchor, not a button.** This was a `Button` with no
               handler, so it did nothing at all — and a button that opens a new address also gives up
               middle-click and "open in a new tab", which is most of what a link to the docs is for.

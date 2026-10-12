@@ -315,10 +315,36 @@ export function useVisibleRangeLabel(
 ) {
   const { locale } = useLocale()
   if (!range) return null
+
   // `formatRange` takes plain `Date`s, so the date values are converted first.
   const zone = getLocalTimeZone()
-  return new DateFormatter(locale, {
+  const start = range.start.toDate(zone)
+  const end = range.end.toDate(zone)
+  const sameYear = range.start.year === range.end.year
+
+  /**
+   * **The two months are joined here rather than by `formatRange`, and that is a server-render fix.**
+   * `Intl.DateTimeFormat#formatRange` puts the separator's spaces in the hands of the runtime's own
+   * ICU, and the two runtimes are not the same ICU: measured, `en-GB` came out as
+   * `March<U+2009>–<U+2009>April 2024` on this app's dev server and
+   * `March<U+0020>–<U+0020>April 2024` in Chrome — the same words with different whitespace, which is
+   * enough for React to throw the tree away and re-render it on every load of a page with a calendar on
+   * it. Composing the label makes the caption the component's own typography, like everything else the
+   * sheet draws, and leaves the environment with nothing to disagree about.
+   */
+  if (
+    range.start.year === range.end.year &&
+    range.start.month === range.end.month
+  ) {
+    return new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(
+      end,
+    )
+  }
+
+  // The year once when both months are in it, which is what a range format would have said.
+  const startLabel = new DateFormatter(locale, {
     month: 'long',
-    year: 'numeric',
-  }).formatRange(range.start.toDate(zone), range.end.toDate(zone))
+    ...(sameYear ? {} : { year: 'numeric' as const }),
+  }).format(start)
+  return `${startLabel} – ${new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(end)}`
 }

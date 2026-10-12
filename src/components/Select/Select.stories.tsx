@@ -49,8 +49,7 @@ const meta = {
     <Select.Icon />
   </Select.Button>
   <Select.Popover>
-    <Select.AutoComplete>
-      <Select.Search />
+    <Select.AutoComplete placeholder="Search protocols…">
       <Select.OptionList>
         <Select.Option id="http">HTTP</Select.Option>
         <Select.Option id="https">HTTPS</Select.Option>

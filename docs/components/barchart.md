@@ -1,5 +1,12 @@
 # BarChart
 
+> **`className` is composed onto the `svg` now rather than replaced by it.** The element carried a
+> hardcoded `block`, so the `className` this component publishes — and documents as the way to
+> stretch a chart — reached nothing: a chart asked for `w-full` inside a card still rendered at its own
+> 720px and ran past the card's edge. Found on `/create`, where the three drawings share one card;
+> `Sparkline` and `FlatLine` already composed theirs, which is what made the one that did not visible.
+> The `Stretch` story is what says so now.
+
 A histogram — a row of bars over a dot-grid zone, with one of them allowed to be the current one.
 
 ```tsx
