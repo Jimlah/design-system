@@ -24,14 +24,14 @@ vocabulary turned on its side.
 </Nav>
 ```
 
-| Slot          | React Aria                  | Notes                                                |
-| ------------- | --------------------------- | ---------------------------------------------------- |
-| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are        |
-| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests          |
-| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure              |
-| `Nav.Section` | `NavigationTreeSection`     | A group                                              |
-| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                   |
-| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge |
+| Slot          | React Aria                  | Notes                                                                              |
+| ------------- | --------------------------- | ---------------------------------------------------------------------------------- |
+| `Nav`         | `NavigationTree`            | The surface. `selectedRoute` is where you are                                      |
+| `Nav.Item`    | `NavigationTreeItem`        | One destination, or a parent of more. Nests                                        |
+| `Nav.Label`   | `NavigationTreeItemContent` | What the item says, plus the disclosure                                            |
+| `Nav.Section` | `NavigationTreeSection`     | A group                                                                            |
+| `Nav.Header`  | `NavigationTreeHeader`      | The group's legend                                                                 |
+| `Nav.Count`   | —                           | The sheet's `.ds-count`, pushed to the trailing edge — and quieter here, see below |
 
 ### It is a treegrid, not a nav landmark
 
@@ -84,6 +84,11 @@ The current item takes the accent, as the sheet's own `[aria-current="page"]` ru
 comes up to full strength and goes no further — two items in the accent would stop saying which one
 you are on.
 
+**The ancestor's chevron takes the accent, though, and that is what makes a collapsed branch legible.**
+Full strength alone says nothing when every other row is 70% white: with your page inside a closed
+branch, the sidebar showed no cue at all. The cue goes on the one glyph that means "there is more in
+here", so the accent never reaches a second _label_ and "where you are" is still said exactly once.
+
 ### The text is passed separately, because the label is markup
 
 `textValue` is required, and that is the honest signature: an item's label here often carries a count
@@ -100,3 +105,31 @@ The Tab-order assertion was **deleted**. Driving Tab from the runner did not lan
 test that quietly asserts something else is worse than no test. `Keyboard` now says so in its own
 comment and asserts only what is true: every item is a link with an `href`, and every one can take
 focus.
+
+### The column of edges, and the count that stopped shouting
+
+Four changes came out of looking at the sidebar as a whole rather than at one row of it.
+
+**Every row reserves the chevron's box, whether or not it has a chevron** (`NAV_GUTTER`, and the same
+box in `Tree.Label`). Measured before: a row with a disclosure started its label 24px to the right of
+one without — 18px against 42px at level 1 — so the labels stepped in and out down the column and the
+indentation said nothing true about the hierarchy. Every label now shares a left edge per level, and
+the cost is 24px of a 224px sidebar on a row that needed none.
+
+**A section header has room above it and almost none below** (`pt-5`, from `pt-3`). At `pt-3` the legend
+sat as close to the row above as one row sits to the next, so `ACCOUNT` read as one more item. A
+group's name belongs to the items under it.
+
+**The count is quiet here** (`text-foreground/45`, from the sheet's selected-yellow). In the sheet the
+`.ds-count` sits in a horizontal top bar beside the one chosen thing; in a vertical sidebar every
+counted row would carry the yellow, and two of them became the loudest thing on a surface whose labels
+are 70% white. Yellow means _selection_ everywhere else in this system, so spending it on a number
+that is merely true costs it that meaning. The trailing column stays — alignment is what makes a count
+scannable, not the colour — and `tabular-nums` keeps the digits from jittering. A count that genuinely
+wants attention is a `tone` on `Nav.Count`, the day someone asks for one.
+
+**A row answers a hover with a fill** (`data-[hovered]:bg-foreground/5`), not only with a brighter
+label: a sidebar is a column of targets, and the wash is what makes the row under the pointer read as
+one. It is the value `Accordion`'s header rows already use.
+
+`Nav` also carries `data-slot="nav"` now — it was the one root in the library without one.

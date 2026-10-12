@@ -178,10 +178,14 @@ export const Counts: Story = {
     const edges = counts.map((c) => Math.round(c.getBoundingClientRect().right))
     await expect(new Set(edges).size).toBe(1)
 
-    // The sheet's `.ds-count`: 11px in the selected-yellow.
+    // The sheet's `.ds-count` is 11px; its colour is the one place this sidebar departs from the
+    // sheet. There the count sits in a top bar beside the one chosen thing; here every counted row
+    // would carry the selected-yellow, and two yellow numbers become the loudest thing on a surface
+    // whose labels are 70% white. Quiet, and tabular so the column does not jitter.
     await expect(getComputedStyle(counts[0]).fontSize).toBe('11px')
-    await expect(getComputedStyle(counts[0]).color).toBe(
-      'oklch(0.8733 0.1505 91.2)',
+    await expect(getComputedStyle(counts[0]).color).toBe('oklab(1 0 0 / 0.45)')
+    await expect(getComputedStyle(counts[0]).fontVariantNumeric).toBe(
+      'tabular-nums',
     )
 
     // The label still reads as its text, not as its text plus a number.

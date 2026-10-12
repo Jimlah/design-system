@@ -52,12 +52,14 @@ export const NAV_LEVEL: Record<number, string> = {
 }
 
 /**
- * The sheet's `.ds-link-caps`, at the item's own depth, with a disclosure caret drawn only for an
- * item that has children.
+ * The sheet's `.ds-link-caps`, at the item's own depth. **The row is where every state lands** —
+ * hover, current, focus, pressed and disabled are all written here, and the label and the anchor
+ * inside it inherit, so a state and a colour never meet on two different elements.
  *
- * The caret is an `after:` pseudo-element rather than a child, and that is not a shortcut: a
- * `TreeItem`'s children are the item's content and its nested items, so anything else put inside
- * one is collected as a child item. The pseudo-element is the only place left.
+ * The disclosure is not drawn here. It is a real `<button slot="chevron">` in `Nav.Label`, because React
+ * Aria refuses an expandable item without one — a pseudo-element cannot be pressed, named or reached by
+ * a keyboard — and `Nav.Label` reserves its box on every row so that labels share a left edge (see
+ * `NAV_GUTTER`).
  */
 export const NAV_ITEM = [
   'relative flex cursor-pointer items-center gap-2 pe-[18px] py-2.5',
@@ -69,7 +71,10 @@ export const NAV_ITEM = [
   // here: `:has()` carries the specificity of its argument, so a rule like it ties with the hover
   // rule below and the outcome falls to source order.
   'text-foreground/70',
-  'data-[hovered]:text-foreground',
+  // A fill, not only a brighter label: a sidebar is a column of targets, and the wash is what makes
+  // the row under the pointer read as one. The sheet's own row treatment (`.ds-row--hover`) and
+  // `Accordion`'s header both do this, and the value is the header's.
+  'data-[hovered]:bg-foreground/5 data-[hovered]:text-foreground',
   // Where you are takes the accent; the route you are under comes up to full strength and goes no
   // further. The accent is the system's one accent, and two items coloured with it would stop
   // saying which one you are on.
@@ -109,10 +114,27 @@ export const NAV_CHEVRON = [
   'transition-[color,opacity] duration-(--duration-fast) ease-pulse',
   // 16px of caret, 24px of target.
   'relative after:absolute after:content-[""] after:-inset-1',
+  // **The branch you are inside, when the page you are on is hidden.** A collapsed parent cannot show
+  // the accent on its label — nav.md argues that, and rightly: two accented labels stop saying which one
+  // you are on — so the cue goes on the one glyph that means "there is more in here". The `[[…]_&]` form
+  // is the one `Tabs` already uses for its conditional rules, and the accent never reaches a label, so
+  // "where you are" is still said exactly once.
+  '[[data-current-ancestor]_&]:text-primary',
   'data-[hovered]:text-foreground',
   'data-[pressed]:opacity-70',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-ring',
 ].join(' ')
+
+/**
+ * The box the disclosure sits in, drawn even when there is no disclosure in it.
+ *
+ * **A row with a chevron cannot start its label 24px to the right of a row without one.** The caret is
+ * 16px with 8px of gap after it, and a sidebar is a column of edges: a label that steps in and out as
+ * the eye reads down it is the first thing anyone sees, and it says nothing true about the hierarchy.
+ * Reserving the box on every row gives one left edge per level, and costs a leaf 24px of a 224px
+ * sidebar — which is what the alignment is worth.
+ */
+export const NAV_GUTTER = 'size-4 shrink-0'
 
 /**
  * The anchor inside the row's content. The row is pressable and focusable and the anchor is neither
@@ -124,16 +146,25 @@ export const NAV_LABEL =
 const NAV_LABEL_LINK = `${NAV_LABEL} outline-1 outline-offset-[-3px] outline-transparent focus-visible:outline-ring`
 
 export const NAV_HEADER = [
-  'px-[18px] pt-3 pb-1.5',
+  // Room above, almost none below: the legend belongs to the items under it. At `pt-3` it sat as close
+  // to the row above as one row sits to the next, which read as one more item rather than a group's name.
+  'px-[18px] pt-5 pb-1.5',
   'text-[12px] uppercase tracking-[0.04em] text-foreground/55',
 ].join(' ')
 
 /**
  * The sheet's `.ds-count`, pushed to the trailing edge so the numbers form a column down the side
- * rather than trailing each label at whatever length it happens to be — which is the whole reason
- * a sidebar carries counts at all.
+ * rather than trailing each label at whatever length it happens to be — which is the whole reason a
+ * sidebar carries counts at all.
+ *
+ * **It is quiet here; the sheet has it in the selected-yellow.** There the count appears in a horizontal
+ * top bar, beside one or two other words. In a vertical sidebar two of them at `--warning` become the
+ * loudest thing on the surface, while the labels they qualify — 70% white, 14px uppercase — read as the
+ * quieter half of the pair. Yellow means *selection* everywhere else in this system, so spending it on
+ * a number that is merely true costs it that meaning. The column stays: the alignment is what makes a
+ * count scannable, not the colour.
  */
-const NAV_COUNT = 'ms-auto text-[11px] text-warning tabular-nums'
+const NAV_COUNT = 'ms-auto text-[11px] text-foreground/45 tabular-nums'
 
 export interface NavProps<T extends object> extends Omit<
   AriaNavigationTreeProps<T>,
@@ -268,7 +299,11 @@ export function NavLabel({ children, href, ...props }: NavLabelProps) {
             <AriaButton slot="chevron" className={NAV_CHEVRON}>
               <NavCaret expanded={isExpanded} />
             </AriaButton>
-          ) : null}
+          ) : (
+            // An empty box where a chevron would be: a leaf's label has to start on the same left edge
+            // as its siblings', or the column reads as steps that mean nothing.
+            <span aria-hidden="true" className={NAV_GUTTER} />
+          )}
           {target ? (
             // The anchor stays in the tab order, and that is not an oversight. The tree itself is
             // `tabindex="-1"` and its rows carry no tabindex at all — a *navigation* tree keeps a
@@ -360,6 +395,7 @@ function NavRoot<T extends object>({
 }: NavProps<T>) {
   return (
     <AriaNavigationTree
+      data-slot="nav"
       className={(renderProps) => joinClass(NAV_NAV, className, renderProps)}
       {...props}
     >

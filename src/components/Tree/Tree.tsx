@@ -20,6 +20,7 @@ import type { ComponentProps, ReactNode } from 'react'
 
 import {
   NAV_CHEVRON,
+  NAV_GUTTER,
   NAV_HEADER,
   NAV_ITEM,
   NAV_LABEL,
@@ -128,7 +129,12 @@ export function TreeLabel({ children, ...props }: TreeLabelProps) {
             <AriaButton slot="chevron" className={NAV_CHEVRON}>
               <NavCaret expanded={isExpanded} />
             </AriaButton>
-          ) : null}
+          ) : (
+            // An empty box where a chevron would be, so a leaf's label starts on the same left edge as
+            // its siblings'. A tree and a sidebar read as columns of edges, and an indentation that
+            // depends on whether a row happens to have children says nothing true about the hierarchy.
+            <span aria-hidden="true" className={NAV_GUTTER} />
+          )}
           <span className={NAV_LABEL}>{children}</span>
         </>
       )}
