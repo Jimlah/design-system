@@ -66,6 +66,14 @@ export const Current: Story = {
     await expect(current).toHaveAttribute('aria-current', 'page')
     await expect(getComputedStyle(current).color).toBe('oklch(1 0 none)')
 
+    // **...and that it is on the page at all.** The two assertions above passed for a step with
+    // `display: none`: an attribute and a computed colour are both reported for an element nobody can
+    // see. The item carried `data-[disabled]:hidden`, React Aria marks the current crumb
+    // `data-disabled`, and so every trail in this repo was missing the one step it exists to show —
+    // including the landing page's, for as long as it has had a breadcrumb. One line is what it costs
+    // to assert that the page you are on is named on the page.
+    await expect(current).toBeVisible()
+
     // ...and the two above it are real anchors, so middle-click and "open in a new tab" work.
     const links = [...canvasElement.querySelectorAll('a')]
     await expect(links).toHaveLength(2)
@@ -124,9 +132,10 @@ export const Deep: Story = {
       <Breadcrumbs.Item>fra1 · Frankfurt</Breadcrumbs.Item>
     </Breadcrumbs>
   ),
-  // A trail deep enough to be worth having is also long enough to run out of room. **React Aria drops
-  // the middle and keeps the ends**, because a trail that wraps to a second line pushes the page down
-  // every time a window is resized — which is the sort of thing a breadcrumb exists to avoid.
+  // Six steps, all six of them rendered. **Nothing collapses**, whatever React Aria's documentation
+  // says about dropping the middle: `useBreadcrumbs` in this version builds `navProps` and stops
+  // there, so the trail wraps and this story is the proof. (The `Current` story is where the bug that
+  // claimed otherwise was found: the middle was never hidden — the *last* one was.)
   play: async ({ canvasElement }) => {
     const items = [...canvasElement.querySelectorAll('li')]
     await expect(items).toHaveLength(6)

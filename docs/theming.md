@@ -95,6 +95,32 @@ provider's toggle works here unchanged:
 and `rounded-full` is not derived from `--radius`, so the checkbox, radio, switch and avatar keep
 their radii.
 
+## Type
+
+The family lives in `:root` as `--type-mono`, and the theme block maps the utility to it. That
+indirection is a measurement, not tidiness:
+
+```css
+:root {
+  --type-mono: 'Overpass Mono', ui-monospace, …;
+}
+@theme {
+  --font-mono: var(--type-mono);
+}
+```
+
+**`@theme inline` writes a theme entry's value straight into the utility it compiles.** Every colour
+here survives that because its value _is_ a `var()`, which still reads whichever element the utility
+lands on — but for the font the value was the family itself, so `.font-mono` compiled to
+`font-family: 'Overpass Mono', ui-monospace, …`. `--font-mono` therefore could not change the typeface
+anywhere: not on a subtree, and not in a consumer's `:root` either, because no utility ever read it.
+Measured by compiling this sheet with `@tailwindcss/node` — with the family inline, setting
+`--font-mono` on a subtree left `.font-mono` at Overpass Mono; with `--type-mono` in `:root`, the utility
+compiles to `font-family: var(--type-mono)` and follows the element it is used on.
+
+This is what the [`/create`](./create.md) page needed in order to offer a typeface at all, and it is the
+one token a value can move that a variable could not.
+
 ## What this costs in the registry
 
 The generator walks every `@theme` at-rule and every top-level rule, so the values and the theme

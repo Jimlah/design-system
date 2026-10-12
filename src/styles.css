@@ -127,6 +127,19 @@
      `rounded-sm`…`rounded-4xl`, and `rounded-full` is not derived from
      `--radius`, so collapsing shadcn's scale changes no component. */
   --radius: 0;
+
+  /* --- type ---
+     The family is a *value* here rather than a literal in the theme block below, and
+     that is a measurement rather than tidiness. `@theme inline` writes a theme entry's
+     value straight into the utility it compiles: for a colour that value is a
+     `var()`, which still reads the element it is used on, but for a font it is the
+     family itself, so `.font-mono` carried the literal and no token could move it.
+     Measured by compiling this sheet with @tailwindcss/node: with the family inline,
+     setting --font-mono on a subtree left .font-mono at Overpass Mono; with this
+     indirection the utility reads var(--type-mono) on the element, which is what makes
+     the typeface themeable at all. */
+  --type-mono:
+    'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 
 /* The single theme block. Every entry here is a name for a value above, so
@@ -178,8 +191,7 @@
   --color-ink: var(--ink);
 
   /* --- type --- */
-  --font-mono:
-    'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-mono: var(--type-mono);
 
   /* --- motion --- */
   --ease-pulse: cubic-bezier(0.4, 0, 0.2, 1);

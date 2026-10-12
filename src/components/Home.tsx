@@ -437,6 +437,14 @@ export function Home() {
           project installs them instead of copying them: one theme, one bundle,
           and one item per component, served from this site as static JSON.
         </p>
+        <p className="mt-3 max-w-2xl text-[14px] text-foreground/70">
+          The theme is not fixed either.{' '}
+          <Link variant="url" href={`${import.meta.env.BASE_URL}create/`}>
+            Create one
+          </Link>{' '}
+          from a base colour, an accent hue and a typeface, and the block it
+          hands back replaces the values every one of these components reads.
+        </p>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
           <div>

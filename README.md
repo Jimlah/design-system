@@ -18,6 +18,14 @@ itself cannot be mounted under a prefix: it hands its preview iframe a module gr
 root-absolute URLs, which would resolve against this app instead. See `storybookBuild()` in
 `vite.config.ts`.
 
+## Create a theme
+
+`/create` is a theme builder for this system, in the shape of
+[shadcn's](https://ui.shadcn.com/create): pick a base colour, an accent hue, a monospace family and a
+`color-scheme`, watch the library's real components repaint, and copy the token block that results —
+or the link that carries the theme. The rules it derives from, why it has no radius control, and the
+two library defects building it surfaced are in [docs/create.md](./docs/create.md).
+
 ## Hosted: landing page and documentation
 
 <https://jimlah.github.io/design-system/> is the same pair, published to GitHub Pages by

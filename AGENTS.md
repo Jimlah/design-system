@@ -62,8 +62,8 @@ The same applies in the other direction: `npm test` right after
 
 - Components live in `src/components/` with their story colocated as `src/components/Foo.stories.tsx`.
 - **Examples and page bodies are not components, and do not get stories.** `src/examples/` holds pages
-  that exist to show the components being _used_ — `Login` today — and each is tested by a
-  `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
+  that exist to show the components being _used_ — `Login` and the theme builder, `Create` — and each
+  is tested by a `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
   and what puts a component into the manifest this repo's MCP tools serve, so a story for an example
   would publish a page as part of the library's API. `Home` predates the rule and keeps its story,
   because that story is the app's own SSR-and-CSS check.
