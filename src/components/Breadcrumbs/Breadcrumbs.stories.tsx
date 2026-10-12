@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect } from 'storybook/test'
+import { expect, waitFor } from 'storybook/test'
 
 import { Breadcrumbs, BreadcrumbsItem } from './Breadcrumbs'
 
@@ -73,7 +73,18 @@ export const Current: Story = {
     // The caps link's own resting colour — 70% — wins over the trail's 45%, because the link is the
     // thing the reader is deciding whether to follow. The 45% is only what a step that is neither a
     // link nor the current page would be, and there is no such step in a trail.
-    await expect(getComputedStyle(links[0]).color).toBe('oklab(1 0 0 / 0.7)')
+    //
+    // **Read through `waitFor`: this colour is transitioned, and CI caught it mid-flight.** `LINK`
+    // carries `transition-[color] duration-[120ms]`, and CI read `oklab(1 0 0 / 0.716489)` here —
+    // white, but at neither 0.7 nor 1, so a frame of an animation between the two rather than the
+    // resting colour. (0.716489 is exactly `0.7 + 0.055 × 0.3`: 6.6ms into a 0.7 → 1 transition, or
+    // 113ms into the reverse. The trigger was not reproduced on a developer machine, and the same
+    // expectation passes at rest in `Link`'s own story.) Waiting asserts the colour the design
+    // states — 70%, over the trail's 45% — instead of whichever frame the assertion landed on. It
+    // cannot hide a wrong resting colour: that still fails, one second later.
+    await waitFor(() =>
+      expect(getComputedStyle(links[0]).color).toBe('oklab(1 0 0 / 0.7)'),
+    )
   },
 }
 

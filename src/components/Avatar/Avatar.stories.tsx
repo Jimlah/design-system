@@ -77,6 +77,13 @@ export const BrokenImage: Story = {
         await expect(
           avatar.querySelector('[data-slot=avatar-initials]'),
         ).not.toBeNull(),
+      // **Not the 1s default.** This waits on a real request having to fail — there is no
+      // fallback until the image errors — and a broken-image fallback measured 1.29s from page
+      // load in a browser here. Over the default budget the story failed at 1019ms twice in three
+      // full-suite runs, which is the timeout expiring and not the component: the `<img>` is gone
+      // and the initials are there as soon as it does arrive. Only the waiting changes; both
+      // assertions below are the ones that were always there.
+      { timeout: 5000 },
     )
     await expect(avatar).toHaveTextContent('GH')
     await expect(avatar.querySelector('img')).toBeNull()

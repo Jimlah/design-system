@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect } from 'storybook/test'
+import { expect, waitFor } from 'storybook/test'
 
 import { Link } from './Link'
 
@@ -35,7 +35,12 @@ export const Default: Story = {
     await expect(style.fontSize).toBe('14px')
     await expect(style.letterSpacing).toBe('-0.14px')
     await expect(style.textTransform).toBe('uppercase')
-    await expect(style.color).toBe('oklab(1 0 0 / 0.7)')
+    // The colour is transitioned, so read it settled rather than on the frame the animation happens
+    // to be on — CI caught the same assertion mid-flight in `Breadcrumbs`, which asserts this very
+    // value on the same recipe. See that story for the measurement.
+    await waitFor(() =>
+      expect(getComputedStyle(link).color).toBe('oklab(1 0 0 / 0.7)'),
+    )
     await expect(style.textDecorationLine).toBe('none')
   },
 }
