@@ -122,6 +122,7 @@ function useComponentIndex() {
         'Avatar',
         'Breadcrumbs',
         'Calendar',
+        'Card',
         'ColorSwatch',
         'ColorSwatchPicker',
         'DropZone',

@@ -163,7 +163,7 @@
       "name": "pulse",
       "type": "registry:block",
       "title": "Pulse - every component",
-      "description": "The whole Pulse library in one item: all 54 components and the theme they are drawn in.",
+      "description": "The whole Pulse library in one item: all 55 components and the theme they are drawn in.",
       "categories": [
         "library"
       ],
@@ -345,6 +345,11 @@
           "path": "src/components/Calendar/Calendar.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/Calendar/Calendar.tsx"
+        },
+        {
+          "path": "src/components/Card/Card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Card/Card.tsx"
         },
         {
           "path": "src/components/Checkbox/Checkbox.tsx",
@@ -1618,6 +1623,165 @@
           "path": "src/components/field.ts",
           "type": "registry:lib",
           "target": "@ui/pulse/field.ts"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "One thing on the page, in the surface Modal, Tooltip and Toast already share: bg-card, a boundary in --border-strong, square corners, and no shadow.",
+      "categories": [
+        "display"
+      ],
+      "dependencies": [
+        "react-aria-components@^1.22.1"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-destructive-foreground": "var(--destructive-foreground)",
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-success-foreground": "var(--success-foreground)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "color-chart-1": "var(--chart-1)",
+          "color-chart-2": "var(--chart-2)",
+          "color-chart-3": "var(--chart-3)",
+          "color-chart-4": "var(--chart-4)",
+          "color-chart-5": "var(--chart-5)",
+          "color-sidebar": "var(--sidebar)",
+          "color-sidebar-foreground": "var(--sidebar-foreground)",
+          "color-sidebar-primary": "var(--sidebar-primary)",
+          "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+          "color-sidebar-accent": "var(--sidebar-accent)",
+          "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+          "color-sidebar-border": "var(--sidebar-border)",
+          "color-sidebar-ring": "var(--sidebar-ring)",
+          "color-border-strong": "var(--border-strong)",
+          "color-border-soft": "var(--border-soft)",
+          "color-ink": "var(--ink)",
+          "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+          "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "radius-sm": "calc(var(--radius) * 0.6)",
+          "radius-md": "calc(var(--radius) * 0.8)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) * 1.4)",
+          "radius-2xl": "calc(var(--radius) * 1.8)",
+          "radius-3xl": "calc(var(--radius) * 2.2)",
+          "radius-4xl": "calc(var(--radius) * 2.6)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          ":root": {
+            "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+            "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+            "--card-foreground": "var(--foreground)",
+            "--popover": "var(--card)",
+            "--popover-foreground": "var(--foreground)",
+            "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+            "--primary-foreground": "var(--ink)",
+            "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+            "--secondary-foreground": "var(--ink)",
+            "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+            "--destructive-foreground": "var(--ink)",
+            "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+            "--warning-foreground": "var(--ink)",
+            "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+            "--success-foreground": "var(--ink)",
+            "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+            "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+            "--accent": "var(--muted)",
+            "--accent-foreground": "var(--foreground)",
+            "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+            "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+            "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+            "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+            "--ring": "var(--primary)",
+            "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+            "--chart-2": "var(--primary)",
+            "--chart-3": "var(--warning)",
+            "--chart-4": "var(--success)",
+            "--chart-5": "var(--destructive)",
+            "--sidebar": "var(--card)",
+            "--sidebar-foreground": "var(--foreground)",
+            "--sidebar-primary": "var(--primary)",
+            "--sidebar-primary-foreground": "var(--ink)",
+            "--sidebar-accent": "var(--muted)",
+            "--sidebar-accent-foreground": "var(--foreground)",
+            "--sidebar-border": "var(--border-soft)",
+            "--sidebar-ring": "var(--primary)",
+            "--radius": "0",
+            "interpolate-size": "allow-keywords",
+            "scrollbar-gutter": "stable",
+            "text-wrap": "pretty",
+            "overflow-wrap": "break-word",
+            "font-synthesis": "none",
+            "color-scheme": "dark"
+          },
+          "*,\n*::before,\n*::after": {
+            "min-width": "0"
+          },
+          "[data-theme='dark'],\n.dark": {
+            "color-scheme": "dark"
+          },
+          "[data-theme='light']": {
+            "color-scheme": "light"
+          },
+          "[data-theme='system']": {
+            "color-scheme": "light dark"
+          },
+          "h1,\nh2,\nh3,\nh4": {
+            "text-wrap": "balance"
+          },
+          "input,\ntextarea,\nselect": {
+            "font-size": "max(16px, 1rem)"
+          },
+          "body": {
+            "margin": "0",
+            "min-height": "100svh",
+            "background": "var(--background)",
+            "color": "var(--foreground)",
+            "font-family": "var(--font-mono)",
+            "font-size": "14px",
+            "line-height": "1.5",
+            "letter-spacing": "0",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale",
+            "text-rendering": "optimizeLegibility"
+          },
+          "::selection": {
+            "background": "var(--primary)",
+            "color": "var(--ink)"
+          }
+        }
+      },
+      "docs": "One thing on the page, in the surface Modal, Tooltip and Toast already share: `bg-card`, a\nboundary in `--border-strong`, square corners, and no shadow.\n\nThe slots are shadcn/ui's, name for name — so a card copied out of shadcn/ui keeps its shape when\nit moves here:\n\n```tsx\n<Card>\n  <Card.Header>\n    <Card.Title>Frankfurt</Card.Title>\n    <Card.Description>fra1 · 42ms</Card.Description>\n    <Card.Action>\n      <Menu.Trigger>…</Menu.Trigger>\n    </Card.Action>\n  </Card.Header>\n  <Card.Content>\n    <Sparkline points={…} />\n  </Card.Content>\n  <Card.Footer>\n    <Button variant=\"outline\">Open</Button>\n  </Card.Footer>\n</Card>\n```\n\n| Slot               | Renders              | Notes                                                          |\n| ------------------ | -------------------- | -------------------------------------------------------------- |\n| `Card`             | `div`                | The surface. Carries no padding — the slots do                 |\n| `Card.Header`      | `div`                | A grid. Two columns **only** when a `Card.Action` is inside it |\n| `Card.Title`       | React Aria `Heading` | An `<h3>` by default; `level` is a published prop              |\n| `Card.Description` | `p`                  | The line under the title                                       |\n| `Card.Action`      | `div`                | The right-hand corner of the header. One control               |\n| `Card.Content`     | `div`                | The body — the chart, the table, the text                      |\n| `Card.Footer`      | `div`                | A row of actions, over its own hairline                        |\n\nEvery root carries a `data-slot` — `card`, `card-header`, `card-title`, `card-description`,\n`card-action`, `card-content`, `card-footer` — so a test can reach a part of the card without\nknowing what the consumer put in it.\n\n## The hairlines are the right way round\n\nA card's own edge is `--border-strong`, at 40%. The rule under the header and above the footer is\n`--border`, at 62%. The boundary is the quiet one and the rules inside it are the loud one, which\nis the sheet's habit everywhere: Table draws its row separators at 62% inside a panel whose own\nedge is 40%.\n\nThe reverse is what a box drawn around a rule looks like. It is worth stating out loud because\n`strong` is the louder word and 40% the quieter alpha — the names are the ones the sheet's own\ntokens used, and the values are what matter. The story asserts the pair, so a future rename that\nswaps them fails rather than quietly inverting the surface.\n\n## It is not pressable, deliberately\n\nThere is no `onPress`, and no React Aria primitive under the panels. A card is a surface, not a\ncontrol: a card that does something should hold a `Link` or a `Button` that says what the\nsomething is. A pressable surface is a control with no name for a screen reader to announce and\nno target to aim at, and it makes the real control inside it harder to find.\n\nThat is also why the action in a header is a slot rather than a prop — `Card.Action` takes a\n`Button`, and the story presses it and checks what happened, because a control is only proven by\nwhat it does.\n\n## `Card.Title` is a heading\n\nReact Aria's `Heading`, not a styled `div`, so a page of cards has an outline a screen reader can\nwalk. It renders an `<h3>` by default and takes `level`, because a card nested inside a section\nusually wants a different one.\n\n## The action column is conditional\n\n`Card.Header` is a grid, and it becomes two columns only when the header actually contains a\n`Card.Action`:\n\n```css\n.has-data-\\[slot\\=card-action\\]\\:grid-cols-\\[1fr_auto\\]:has(\n  [data-slot='card-action']\n) {\n  grid-template-columns: 1fr auto;\n}\n```\n\nThat is a `has-data-*` variant — the condition read off the DOM rather than handed in as a prop —\nso a header with nothing on the right has nothing on the right: no empty second column and no\n`justify` for a consumer to get wrong. The story asserts both cases, because a condition that\nalways applies looks exactly like a condition that works.\n\n## What it is not\n\n- **Not a link.** A whole card that navigates is a `Link` with a card's clothes, and React Aria's\n  `Link` already reports itself as one. Put the link in the title or the footer, where it has a\n  name.\n- **Not a dialog.** If the card is a task that has to be answered before the page can be used\n  again, that is a `Modal`.\n- **Not padded.** The root carries the surface and nothing else, so a card holding a table can\n  let the rows reach its edges. `Card.Content` is where padding comes from when it is wanted.",
+      "files": [
+        {
+          "path": "src/components/Card/Card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Card/Card.tsx"
         }
       ]
     },
