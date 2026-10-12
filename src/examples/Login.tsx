@@ -1,11 +1,11 @@
 import { useTransition } from 'react'
 
-import { Button } from './Button/Button'
-import { Checkbox } from './Checkbox/Checkbox'
-import { Form } from './Form/Form'
-import { Link } from './Link/Link'
-import { Separator } from './Separator/Separator'
-import { TextField } from './TextField/TextField'
+import { Button } from '../components/Button/Button'
+import { Checkbox } from '../components/Checkbox/Checkbox'
+import { Form } from '../components/Form/Form'
+import { Link } from '../components/Link/Link'
+import { Separator } from '../components/Separator/Separator'
+import { TextField } from '../components/TextField/TextField'
 
 /** What the form hands back once it validates, keyed by each field's `name`. */
 export interface SignInValues {
@@ -36,8 +36,12 @@ const REQUEST_MS = 900
  * <Login onSubmit={async (values) => { await signIn(values) }} />
  * ```
  *
- * It is a page rather than a component, like `Home`, so it lives outside `src/routes` and the route
- * file stays thin enough for TanStack Router to code-split.
+ * **It is an example, not one of the library's components, which is why it is here rather than in
+ * `src/components/`.** Nothing in this file is published: there is no docs page and no entry in the
+ * components manifest the MCP tools serve, because those come from stories and this has none. It is
+ * tested by `Login.browser.test.tsx` instead — the same four claims, in the `components` project.
+ * The route file stays thin because a route file with extra exports cannot be code-split, and
+ * Storybook's manifest cannot resolve a component imported from one either.
  *
  * **What it demonstrates is that the pieces compose without extra glue.** The fields carry their own
  * labels, hints and error slots; `Form` is what makes them all validate at once and moves focus to

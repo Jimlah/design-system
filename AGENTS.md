@@ -61,10 +61,17 @@ The same applies in the other direction: `npm test` right after
 ## Stories
 
 - Components live in `src/components/` with their story colocated as `src/components/Foo.stories.tsx`.
+- **Examples and page bodies are not components, and do not get stories.** `src/examples/` holds pages
+  that exist to show the components being _used_ — `Login` today — and each is tested by a
+  `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
+  and what puts a component into the manifest this repo's MCP tools serve, so a story for an example
+  would publish a page as part of the library's API. `Home` predates the rule and keeps its story,
+  because that story is the app's own SSR-and-CSS check.
 - Do **not** export components from files under `src/routes/`. TanStack Router cannot
   code-split route files with extra exports, and Storybook's components manifest cannot
   resolve a component that is not imported from a non-route module. Keep route files thin
-  and import the page body from `src/components/`.
+  and import the page body from a non-route module — `src/components/` for a library component,
+  `src/examples/` for an example page.
 - The components manifest is enabled in `.storybook/main.ts` (`features.componentsManifest`),
   which is what makes the `docs-*` tools return anything. If `docs-list` loses an entry,
   check `http://localhost:6006/manifests/components.json` for a per-component `error`.
