@@ -352,11 +352,14 @@ export function Home() {
                       .map((entry) => (
                         <li key={entry.name} className="bg-panel">
                           <Link
-                            // The Storybook build is served onto the app at /storybook/ —
-                            // see vite.config.ts. The trailing slash is load-bearing: it is
-                            // what makes Storybook's own relative asset URLs resolve under
-                            // the prefix instead of against the app root.
-                            href={`/storybook/?path=/docs/components-${entry.name.toLowerCase()}--docs`}
+                            // The Storybook build lives beside this page — served by the app at
+                            // /storybook/ in dev and preview (see vite.config.ts) and copied in as
+                            // `storybook/` for the Pages build. Read from `BASE_URL` rather than
+                            // written as `/storybook/`, because on Pages this whole app is mounted
+                            // at /design-system/ and an absolute root path would leave the site.
+                            // The trailing slash is load-bearing: it is what makes Storybook's own
+                            // relative asset URLs resolve under the prefix, not against the root.
+                            href={`${import.meta.env.BASE_URL}storybook/?path=/docs/components-${entry.name.toLowerCase()}--docs`}
                             variant="caps"
                             className="block px-4 py-3"
                           >

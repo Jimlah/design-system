@@ -13,6 +13,18 @@ import { playwright } from 'vite-plus/test/browser-playwright'
 // the `__dirname` fallback it replaced is unsupported by that loader.
 const dirname = import.meta.dirname
 
+/**
+ * **Set only by the Pages workflow**, which serves this at a repository subpath:
+ * `https://jimlah.github.io/design-system/`. Everything absolute in the built app has to know that,
+ * so it arrives as one variable and defaults to nothing at all.
+ *
+ * When it is set the build is also a **static one** (`spa.enabled`), because Pages is a file server
+ * with no Node behind it. Left unset — every developer build, `vite preview`, and the SSR check this
+ * app exists to run — the build is unchanged: TanStack Start still renders the routes on the server.
+ */
+const DEPLOY_BASE = process.env.DEPLOY_BASE
+const isDeployBuild = DEPLOY_BASE !== undefined
+
 const STORYBOOK_BASE = '/storybook'
 const STORYBOOK_STATIC_DIR = path.join(dirname, 'storybook-static')
 
@@ -381,10 +393,24 @@ const config = defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  // `/design-system/` under Pages; `/` everywhere else. Vite rewrites every asset URL and injects the
+  // same value as `import.meta.env.BASE_URL`, which is what the router's basepath and the Home page's
+  // Storybook links read — so the subpath is stated once, here, and nowhere else.
+  base: DEPLOY_BASE ?? '/',
   plugins: lazyPlugins(() => [
     devtools(),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart(
+      // A deploy build is **prerendered**, not left as an empty SPA shell: the landing page then
+      // arrives as real HTML instead of blank-before-JavaScript, which is what a document should do.
+      // Everything else — every developer build, `vite preview`, and the SSR pass this app exists to
+      // run — is untouched.
+      //
+      // `crawlLinks` stays off: the app has one route, and the links out of the component index point
+      // at the Storybook build, which is a directory of files copied in beside this output rather
+      // than a route this build serves — so crawling found them, 404'd, and failed the build.
+      isDeployBuild ? { prerender: { enabled: true, crawlLinks: false } } : {},
+    ),
     viteReact(),
     storybookBuild(),
   ]),

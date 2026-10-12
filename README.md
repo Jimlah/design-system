@@ -18,6 +18,23 @@ itself cannot be mounted under a prefix: it hands its preview iframe a module gr
 root-absolute URLs, which would resolve against this app instead. See `storybookBuild()` in
 `vite.config.ts`.
 
+## Hosted: landing page and documentation
+
+<https://jimlah.github.io/design-system/> is the same pair, published to GitHub Pages by
+`.github/workflows/pages.yml` — the landing page at the root, the documentation at
+`/design-system/storybook/`. No server is involved, so the app is built twice: normally it is
+server-rendered, and with `DEPLOY_BASE` set (as the workflow sets it) the routes are **prerendered**
+to real HTML and every URL is prefixed for the repository subpath. That one variable becomes Vite's
+`base`, the router's `basepath` in `src/router.tsx`, and the prefix on the Home page's Storybook
+links, which is why the subpath is written down once. Assemble and check a deploy locally with:
+
+```bash
+DEPLOY_BASE=/design-system/ npx vp build
+npm run build-storybook
+mkdir -p site && cp -R dist/client/. site/ && cp -R storybook-static site/storybook
+cp dist/client/index.html site/404.html   # one route: unknown paths get this app, not GitHub's 404
+```
+
 Stories are colocated with their component as `*.stories.tsx` and are runnable as tests
 with Vitest 5 + Playwright, through Vite+:
 
