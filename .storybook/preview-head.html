@@ -1,0 +1,19 @@
+<!--
+  Injected into the preview iframe's <head>, which is also where the docs page
+  renders — so this reaches both.
+-->
+<style>
+  /*
+    Storybook's docs canvas is transparent, so each story block lands on the docs
+    theme's own background while our tokens resolve to *this* system's theme. With
+    the default dark theme and a light docs page that is white text on near-white:
+    every label in the docs renders invisible, while the same story on its own page
+    looks correct, because there `body` already carries `--color-base`.
+
+    Setting it here rather than re-enabling the backgrounds addon keeps the canvas
+    tied to the token, so the Theme toolbar still flips it.
+  */
+  .docs-story {
+    background: var(--color-base);
+  }
+</style>

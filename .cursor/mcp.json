@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "design-system-sb-mcp": {
+      "url": "http://localhost:6006/mcp"
+    }
+  }
+}

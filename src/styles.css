@@ -1,0 +1,169 @@
+/* Overpass Mono is the Pulse system's only typeface. Loaded the same way the
+   source design does it, with a monospace stack as fallback. */
+@import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+/* ============================================================
+   PULSE DESIGN TOKENS
+   The reference sheet (../pulse-replica) declares its palette as
+   hex. Here they are written in oklch(), which is perceptual, so
+   lightness is comparable across hues — and every related colour
+   is derived from its base with color-mix(in oklch, …) instead of
+   being a second hardcoded hex or an rgba(). Changing one base
+   value now moves its hover, pressed and translucent versions with
+   it. Neutrals carry `none` as their hue so a later mix cannot
+   drift them toward red.
+
+   Tailwind v4 turns every `@theme` entry into BOTH a CSS custom
+   property on :root (so `var(--color-teal)` works in raw CSS) and
+   a matching utility (`bg-teal`, `text-ink`, `ease-pulse`).
+   ============================================================ */
+@theme {
+  /* Every colour is one token holding both themes, via light-dark(light, dark).
+     There is no second block of variables under a media query or a `.dark`
+     class: switching themes means switching `color-scheme`, never redefining a
+     token. Neutrals carry `none` as their hue so a later mix cannot drift them
+     toward red.
+
+     The sheet is dark-only, so the light column is an invention. It keeps each
+     accent's hue and is derived from the same rule — as saturated as sRGB
+     allows, as light as the 4.5:1 that white label text needs — which is why
+     every accent lands on L 55% there. */
+
+  /* --- surfaces (sheet: pure-black / black-tint1 / black-tint2) --- */
+  --color-base: light-dark(oklch(100% 0 none), oklch(0% 0 none));
+  --color-panel: light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6));
+  --color-panel-2: light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6));
+
+  /* --- accents (sheet: action-teal / selected-yellow) ---
+     In dark the accents are luminous fills carrying black ink. At a red hue
+     sRGB caps chroma at 0.041 when L is 92%, which renders as #FFDBD7 —
+     indistinguishable from off-white — so danger sits at 78.5%, the highest
+     lightness where it can still hold the shared chroma.
+
+     In light the fills must darken instead, because a luminous fill on a white
+     page is invisible and white label text needs 4.5:1. Chroma is then capped
+     by each hue's own gamut ceiling, which inverts: teal is now the limited one
+     (0.093, against red's 0.226), so the four no longer share a chroma. */
+  --color-teal: light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5));
+  --color-yellow: light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2));
+  --color-green: light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145));
+  --color-red: light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29));
+  /* The sheet's #BFBFBF in dark; a mid grey that carries white text in light. */
+  --color-neutral: light-dark(oklch(52% 0 none), oklch(80.47% 0 none));
+  /* The replica's `--c-bar`, a histogram bar. A mid grey in **both** themes, unlike every other
+     colour here: a bar is a measured value rather than a thing that carries text, so it does not
+     invert with the page the way `ink` does. Slightly darker in light, where the page is white. */
+  --color-bar: light-dark(oklch(45% 0 none), oklch(52% 0 none));
+
+  /* --- foreground (sheet: pure-white) ---
+     `ink` is the label colour on an accent fill, so it inverts with the fills:
+     black on the luminous dark-theme accents, white on the deep light-theme
+     ones. Translucent versions derive from the foreground, so they follow it —
+     and they need no per-theme tuning, since an alpha over a dark page and over
+     a light page both land on a mid grey. */
+  --color-ink: light-dark(oklch(100% 0 none), oklch(0% 0 none));
+  --color-fg: light-dark(oklch(18% 0 none), oklch(100% 0 none));
+  --color-fg-muted: color-mix(in oklch, var(--color-fg) 70%, transparent);
+  --color-fg-subtle: color-mix(in oklch, var(--color-fg) 35%, transparent);
+
+  /* --- hairlines --- */
+  --color-line: color-mix(in oklch, var(--color-fg) 62%, transparent);
+  --color-line-strong: color-mix(in oklch, var(--color-fg) 40%, transparent);
+  --color-line-soft: color-mix(in oklch, var(--color-fg) 30%, transparent);
+  /* The resting boundary of an interactive control.
+
+     A control's own fill is not enough to identify it: panel-2 is 1.23:1 against
+     the dark page and 1.17:1 against the light one, and WCAG asks for 3:1. 45% is
+     the smallest alpha that clears it on both — 4.43:1 on the dark page, 3.36:1 on
+     the light. Alpha compositing is not symmetric, so 40% looks adequate and is
+     not: it gives 3.66:1 on black but only 2.85:1 on white. */
+  --color-line-control: color-mix(in oklch, var(--color-fg) 45%, transparent);
+
+  /* --- type --- */
+  --font-mono:
+    'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* --- motion --- */
+  --ease-pulse: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   RESET
+   Tailwind's preflight already handles `box-sizing`, the media
+   element rules, `-webkit-tap-highlight-color` and
+   `-webkit-text-size-adjust`. These are the parts it does not.
+   ============================================================ */
+*,
+*::before,
+*::after {
+  /* Lets a flex or grid item shrink below its content. The default is
+     `min-width: auto`, which is why a long word or a wide child overflows
+     its track. Anything that is sized and must not shrink needs `shrink-0`. */
+  min-width: 0;
+}
+
+:root {
+  /* Lets a transition run to and from `auto`. */
+  interpolate-size: allow-keywords;
+  /* Reserves the scrollbar's space, so the page does not shift sideways. */
+  scrollbar-gutter: stable;
+  /* Spends more effort on line breaks. Inherits, so :root reaches everything. */
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+  /* Never fake a weight or a style the font file lacks. */
+  font-synthesis: none;
+}
+
+/* Pulse is dark-first: its source sheet has no light mode, so dark stays the
+   default rather than following the OS. Light is opt-in, and `data-theme`
+   switches `color-scheme` only — never a token. */
+:root {
+  color-scheme: dark;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  color-scheme: light;
+}
+/* Follow the system, for anyone who wants the page to track their OS setting. */
+[data-theme='system'] {
+  color-scheme: light dark;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* A 16px minimum stops iOS Safari zooming the page on focus, which it does
+   not undo. Applies to the Input primitives that come next. */
+input,
+textarea,
+select {
+  font-size: max(16px, 1rem);
+}
+
+body {
+  margin: 0;
+  /* The viewport height with mobile browser toolbars showing, so the page
+     never sits behind them. */
+  min-height: 100svh;
+  background: var(--color-base);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-teal);
+  color: var(--color-ink);
+}
