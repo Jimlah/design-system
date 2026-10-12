@@ -611,9 +611,11 @@ npx shadcn@latest add @pulse/button`}</Command>
             <Accordion.Item id="tokens">
               <Accordion.Header>Where do the tokens live?</Accordion.Header>
               <Accordion.Panel>
-                One <code>@theme</code> block in <code>src/styles.css</code>.
-                Both themes are <code>light-dark()</code> pairs, so switching
-                only moves <code>color-scheme</code>.
+                One <code>@theme</code> block in <code>src/styles.css</code>,
+                plus a <code>@theme inline</code> that gives the same colours
+                role-based names for shadcn/ui. Both themes are{' '}
+                <code>light-dark()</code> pairs, so switching only moves{' '}
+                <code>color-scheme</code>.
               </Accordion.Panel>
             </Accordion.Item>
             <Accordion.Item id="behaviour">
