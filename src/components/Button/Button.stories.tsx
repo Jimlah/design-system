@@ -46,7 +46,7 @@ export const Default: Story = {
     const button = canvas.getByRole('button', { name: /new monitor/i })
     const styles = getComputedStyle(button)
 
-    await expect(styles.backgroundColor).toBe('oklch(0.9198 0.1236 189.5)') // --color-teal
+    await expect(styles.backgroundColor).toBe('oklch(0.9198 0.1236 189.5)') // --primary
     await expect(styles.color).toBe('oklch(0 0 none)') // --color-ink
     await expect(styles.height).toBe('44px') // md
     await expect(styles.borderRadius).toBe('0px') // the sheet is square throughout
@@ -62,7 +62,7 @@ export const Colors: Story = {
     <div className="flex flex-col items-start gap-4">
       {COLORS.map((color) => (
         <div key={color} className="flex items-center gap-4">
-          <code className="w-20 font-mono text-[11px] text-fg-muted">
+          <code className="w-20 font-mono text-[11px] text-muted-foreground">
             {color}
           </code>
           <Button {...args} color={color}>
@@ -86,7 +86,7 @@ export const Variants: Story = {
     <div className="flex flex-col items-start gap-4">
       {VARIANTS.map((variant) => (
         <div key={variant} className="flex items-center gap-4">
-          <code className="w-20 font-mono text-[11px] text-fg-muted">
+          <code className="w-20 font-mono text-[11px] text-muted-foreground">
             {variant}
           </code>
           <Button {...args} variant={variant}>
@@ -255,7 +255,7 @@ export const Disabled: Story = {
     // danger button still reads as danger.
     await expect(getComputedStyle(button).backgroundColor).toBe(
       'oklch(0.9198 0.1236 189.5)',
-    ) // --color-teal, untouched by the state
+    ) // --primary, untouched by the state
     await expect(getComputedStyle(button).cursor).toBe('not-allowed')
   },
 }

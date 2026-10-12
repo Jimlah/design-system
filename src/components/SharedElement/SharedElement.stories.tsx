@@ -18,9 +18,9 @@ const meta = {
       source: {
         code: `<SharedElementTransition>
   {atTop ? (
-    <header><SharedElement name="marker" className="size-2 bg-teal" /></header>
+    <header><SharedElement name="marker" className="size-2 bg-primary" /></header>
   ) : (
-    <footer><SharedElement name="marker" className="size-2 bg-teal" /></footer>
+    <footer><SharedElement name="marker" className="size-2 bg-primary" /></footer>
   )}
 </SharedElementTransition>`,
       },
@@ -33,7 +33,7 @@ type Story = StoryObj<typeof meta>
 
 function Moving() {
   const [atTop, setAtTop] = useState(true)
-  const marker = <SharedElement name="marker" className="size-2 bg-teal" />
+  const marker = <SharedElement name="marker" className="size-2 bg-primary" />
   return (
     <SharedElementTransition>
       <div className="flex w-56 flex-col items-start gap-3">

@@ -22,7 +22,7 @@ import { ERROR, HINT, LABEL } from '../field'
  * States are published as custom properties here and read by the indicator, rather
  * than applied to it through a group variant. A group variant sorts at the same
  * specificity as a plain utility, so it silently loses to the indicator's own
- * `border-line-control`; a property set on this element wins the ordinary cascade.
+ * `border-input`; a property set on this element wins the ordinary cascade.
  * See the longer note in `Checkbox.tsx`.
  *
  * The names are shared with `Checkbox` deliberately, so the two read the same set
@@ -33,17 +33,17 @@ const CONTROL = [
   'cursor-pointer select-none',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
   // rest
-  '[--selection-border:var(--color-line-control)]',
+  '[--selection-border:var(--color-input)]',
   '[--selection-mark:0]',
   '[--selection-scale:0.4]',
   '[--selection-ring:transparent]',
   // Hover only brightens the ring; there is nothing to invert, because the centre
   // is empty until the radio is selected.
-  'data-[hovered]:[--selection-border:var(--color-fg)]',
-  'data-[selected]:[--selection-border:var(--color-teal)]',
+  'data-[hovered]:[--selection-border:var(--color-foreground)]',
+  'data-[selected]:[--selection-border:var(--color-primary)]',
   'data-[selected]:[--selection-mark:1]',
   'data-[selected]:[--selection-scale:1]',
-  'data-[focus-visible]:[--selection-ring:var(--color-teal)]',
+  'data-[focus-visible]:[--selection-ring:var(--color-primary)]',
   // The centre scales in, which is motion, so under reduced motion it stays at
   // full size and cross-fades instead — a fade is not motion and needs no query.
   'motion-reduce:[--selection-scale:1]',
@@ -58,13 +58,13 @@ const DOT = [
 
 /** The 10px centre, the sheet's `::after` at `inset: 4px`. */
 const CENTRE = [
-  'absolute inset-[3px] rounded-full bg-teal',
+  'absolute inset-[3px] rounded-full bg-primary',
   'opacity-(--selection-mark) scale-(--selection-scale)',
   'transition-[opacity,transform] duration-[120ms] ease-pulse',
 ].join(' ')
 
 /** The sheet shares `.ds-check-label` between the two controls: 13px, 80%. */
-const TEXT = 'text-[13px] text-fg/80'
+const TEXT = 'text-[13px] text-foreground/80'
 
 /** The sheet's `<fieldset class="stack ds-field">`: legend, controls, hint. */
 const GROUP = 'group flex'

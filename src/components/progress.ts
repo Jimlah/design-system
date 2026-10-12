@@ -14,17 +14,18 @@ export const PROGRESS = 'flex flex-col gap-2'
 export const HEADER = 'flex items-baseline justify-between gap-3'
 
 /** The sheet's field legend, quieter than the value it names. */
-export const LABEL = 'text-[12px] uppercase tracking-[0.04em] text-fg/55'
+export const LABEL =
+  'text-[12px] uppercase tracking-[0.04em] text-foreground/55'
 
 /** The reading, in the sheet's tabular figures so it does not jitter as it counts. */
-export const VALUE = 'text-[12px] tabular-nums text-fg/70'
+export const VALUE = 'text-[12px] tabular-nums text-foreground/70'
 
 /**
  * The rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be
  * coloured — the reader cannot tell how full it is. The fill's track is a wash of the text colour
  * rather than a panel, so it reads as the empty part of the same thing.
  */
-export const TRACK = 'relative h-1 w-full overflow-hidden bg-fg/12'
+export const TRACK = 'relative h-1 w-full overflow-hidden bg-foreground/12'
 
 /**
  * The bar. Its width is a **value**, not a style — which is why it arrives as `--fill` and the
@@ -43,11 +44,11 @@ export const FILL = [
  * whether it is good news.
  */
 export const TONE: Record<string, string> = {
-  accent: 'bg-teal',
-  success: 'bg-green',
-  warning: 'bg-yellow',
-  danger: 'bg-red',
-  neutral: 'bg-neutral',
+  accent: 'bg-primary',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  danger: 'bg-destructive',
+  neutral: 'bg-secondary',
 }
 
 /**

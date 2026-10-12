@@ -29,7 +29,7 @@ import { FIELD, HINT, INPUT, LABEL } from '../field'
 export const TOKEN_CHIP = [
   CHIP,
   'cursor-text select-none',
-  'border-line-control bg-panel-2 text-fg',
+  'border-input bg-muted text-foreground',
 ].join(' ')
 
 export interface TokenFieldProps extends Omit<

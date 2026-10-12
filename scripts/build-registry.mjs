@@ -105,6 +105,7 @@ const CATEGORY_OF = {
   VisuallyHidden: 'display',
   SharedElement: 'display',
   Accordion: 'display',
+  Card: 'display',
   BarChart: 'chart',
   Sparkline: 'chart',
   FlatLine: 'chart',
@@ -363,12 +364,22 @@ const THEME_DOCS = [
 
 function componentItem(name, files) {
   const doc = readDoc(name)
+  // Every item is filed under exactly one category. A missing one serialises as `[null]`, and
+  // nothing here notices: the catalogue is written, and the failure only surfaces later, at
+  // `shadcn build`, as "Expected string, received null" against a schema path that does not name
+  // the component. Adding a component means adding it here too.
+  const category = CATEGORY_OF[name]
+  if (!category) {
+    throw new Error(
+      `scripts/build-registry.mjs has no CATEGORY_OF entry for ${name}. Every item is filed under one category — form, date, overlay, navigation, data, display, chart or feedback — and an item without one is rejected by the registry schema.`,
+    )
+  }
   return {
     name: kebab(name),
     type: 'registry:ui',
     title: name,
     description: describe(readDoc(DESCRIPTION_OF[name] ?? name)),
-    categories: [CATEGORY_OF[name]],
+    categories: [category],
     dependencies: npmDependencies(files),
     ...themeFields(),
     docs: doc.replace(/^#[^\n]*\n/, '').trim(),

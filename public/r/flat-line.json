@@ -7,40 +7,106 @@
   "files": [
     {
       "path": "src/components/FlatLine/FlatLine.tsx",
-      "content": "import { useId } from 'react'\n\n/**\n * A series that never varied — a monitor at 100% — as one flat rule near the top of its box.\n *\n * ```tsx\n * <FlatLine label=\"fra1 uptime, 100%\" />\n * <FlatLine height={52} lineY={6} label=\"iad1 uptime, 100%\" />\n * ```\n *\n * **This is `drawFlat` from `pulse-replica/js/system.js`, whose own comment calls it the \"flat 100%\n * line\".** A sparkline is a series scaled to its own range, and a series with no range has nothing to\n * scale into — which is why the replica has a *separate function* for this case rather than a branch\n * inside `drawSpark`. That separation is the whole point: drawing a flat series through the middle of\n * the box, as a naive scale would, says \"average\"; drawing it at the top says \"perfect, and it stayed\n * that way\", which is what an uptime line at 100% means.\n *\n * It draws two things, in this order:\n *\n * 1. a **dot-grid zone** from five units below the rule to the bottom of the box — the same `.32`\n *    weight as the sparkline's, because this is a sparkline's neighbour;\n * 2. the **rule itself**, 2px of accent, full width.\n *\n * **`lineY` is in user units, not a fraction, and that is deliberate.** The replica draws it at `y=1` in\n * an 84-tall box and at `y=6` in a 52-tall one — 1.2% and 11.5%. Those are not the same fraction, so the\n * value is a distance from the top rather than a proportion, and treating it as a proportion would move\n * the line in one of the two places the replica uses it.\n */\nexport interface FlatLineProps {\n  /** Width in user units **and** rendered px. A `className` can stretch it. */\n  width?: number\n  /** Height in user units and rendered px. */\n  height?: number\n  /** Where the rule sits, in user units from the top. The replica's own values are 1 and 6. */\n  lineY?: number\n  /** What this line says, for a screen reader. It is the drawing's only text. */\n  label: string\n  className?: string\n}\n\n/** How far below the rule the texture starts — the replica's `y + 5`. */\nconst ZONE_GAP = 5\n\nexport function FlatLine({\n  width = 300,\n  height = 84,\n  lineY = 1,\n  label,\n  className,\n}: FlatLineProps) {\n  // `<pattern>` ids are document-global, so two of these on a page would otherwise share the first one's\n  // dots. `BarChart` and `Sparkline` both learned this the same way.\n  const patternId = `flat-line-dots-${useId()}`\n  const zoneTop = lineY + ZONE_GAP\n\n  return (\n    <svg\n      data-slot=\"flat-line\"\n      // Rendered as well as declared in the viewBox — a viewBox with no size collapses to nothing, which\n      // is how the Sparkline shipped invisible for a round.\n      width={width}\n      height={height}\n      viewBox={`0 0 ${width} ${height}`}\n      preserveAspectRatio=\"none\"\n      role=\"img\"\n      aria-label={label}\n      className={className}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          width=\"7.7\"\n          height=\"7.7\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <circle cx=\"0.9\" cy=\"0.9\" r=\"0.9\" fill=\"rgba(255,255,255,0.32)\" />\n        </pattern>\n      </defs>\n      <rect\n        data-slot=\"flat-line-zone\"\n        x=\"0\"\n        y={zoneTop}\n        width={width}\n        height={Math.max(0, height - zoneTop)}\n        fill={`url(#${patternId})`}\n      />\n      <rect\n        data-slot=\"flat-line-rule\"\n        x=\"0\"\n        y={lineY - 1}\n        width={width}\n        height=\"2\"\n        fill=\"var(--color-teal)\"\n      />\n    </svg>\n  )\n}\n",
+      "content": "import { useId } from 'react'\n\n/**\n * A series that never varied — a monitor at 100% — as one flat rule near the top of its box.\n *\n * ```tsx\n * <FlatLine label=\"fra1 uptime, 100%\" />\n * <FlatLine height={52} lineY={6} label=\"iad1 uptime, 100%\" />\n * ```\n *\n * **This is `drawFlat` from `pulse-replica/js/system.js`, whose own comment calls it the \"flat 100%\n * line\".** A sparkline is a series scaled to its own range, and a series with no range has nothing to\n * scale into — which is why the replica has a *separate function* for this case rather than a branch\n * inside `drawSpark`. That separation is the whole point: drawing a flat series through the middle of\n * the box, as a naive scale would, says \"average\"; drawing it at the top says \"perfect, and it stayed\n * that way\", which is what an uptime line at 100% means.\n *\n * It draws two things, in this order:\n *\n * 1. a **dot-grid zone** from five units below the rule to the bottom of the box — the same `.32`\n *    weight as the sparkline's, because this is a sparkline's neighbour;\n * 2. the **rule itself**, 2px of accent, full width.\n *\n * **`lineY` is in user units, not a fraction, and that is deliberate.** The replica draws it at `y=1` in\n * an 84-tall box and at `y=6` in a 52-tall one — 1.2% and 11.5%. Those are not the same fraction, so the\n * value is a distance from the top rather than a proportion, and treating it as a proportion would move\n * the line in one of the two places the replica uses it.\n */\nexport interface FlatLineProps {\n  /** Width in user units **and** rendered px. A `className` can stretch it. */\n  width?: number\n  /** Height in user units and rendered px. */\n  height?: number\n  /** Where the rule sits, in user units from the top. The replica's own values are 1 and 6. */\n  lineY?: number\n  /** What this line says, for a screen reader. It is the drawing's only text. */\n  label: string\n  className?: string\n}\n\n/** How far below the rule the texture starts — the replica's `y + 5`. */\nconst ZONE_GAP = 5\n\nexport function FlatLine({\n  width = 300,\n  height = 84,\n  lineY = 1,\n  label,\n  className,\n}: FlatLineProps) {\n  // `<pattern>` ids are document-global, so two of these on a page would otherwise share the first one's\n  // dots. `BarChart` and `Sparkline` both learned this the same way.\n  const patternId = `flat-line-dots-${useId()}`\n  const zoneTop = lineY + ZONE_GAP\n\n  return (\n    <svg\n      data-slot=\"flat-line\"\n      // Rendered as well as declared in the viewBox — a viewBox with no size collapses to nothing, which\n      // is how the Sparkline shipped invisible for a round.\n      width={width}\n      height={height}\n      viewBox={`0 0 ${width} ${height}`}\n      preserveAspectRatio=\"none\"\n      role=\"img\"\n      aria-label={label}\n      className={className}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          width=\"7.7\"\n          height=\"7.7\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <circle cx=\"0.9\" cy=\"0.9\" r=\"0.9\" fill=\"rgba(255,255,255,0.32)\" />\n        </pattern>\n      </defs>\n      <rect\n        data-slot=\"flat-line-zone\"\n        x=\"0\"\n        y={zoneTop}\n        width={width}\n        height={Math.max(0, height - zoneTop)}\n        fill={`url(#${patternId})`}\n      />\n      <rect\n        data-slot=\"flat-line-rule\"\n        x=\"0\"\n        y={lineY - 1}\n        width={width}\n        height=\"2\"\n        fill=\"var(--color-primary)\"\n      />\n    </svg>\n  )\n}\n",
       "type": "registry:ui",
       "target": "@ui/pulse/FlatLine/FlatLine.tsx"
     }
   ],
   "cssVars": {
     "theme": {
-      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
-      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
-      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
-      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
-      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
-      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
-      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
-      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
-      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
-      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
-      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
-      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
-      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
-      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
-      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
       "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
-      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
     }
   },
   "css": {
     "@layer base": {
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
@@ -48,7 +114,10 @@
         "font-synthesis": "none",
         "color-scheme": "dark"
       },
-      "[data-theme='dark']": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },
       "[data-theme='light']": {
@@ -66,8 +135,8 @@
       "body": {
         "margin": "0",
         "min-height": "100svh",
-        "background": "var(--color-base)",
-        "color": "var(--color-fg)",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
         "font-family": "var(--font-mono)",
         "font-size": "14px",
         "line-height": "1.5",
@@ -77,8 +146,8 @@
         "text-rendering": "optimizeLegibility"
       },
       "::selection": {
-        "background": "var(--color-teal)",
-        "color": "var(--color-ink)"
+        "background": "var(--primary)",
+        "color": "var(--ink)"
       }
     }
   },

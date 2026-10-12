@@ -65,7 +65,7 @@ readable, merely not reachable. `Trapped` now walks Tab six times and asserts fo
 
 ### The scrim is the one place the palette deliberately does not reach
 
-A scrim has to _darken_ in both themes, and no token does that: `--color-ink` is black in the dark
+A scrim has to _darken_ in both themes, and no token does that: `--ink` is black in the dark
 theme and white in the light one, so it would haze a white page white and separate nothing. The
 overlay is `bg-black/50`, Tailwind's own, the same in both themes by design, and it says so in the
 file.

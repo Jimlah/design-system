@@ -107,7 +107,7 @@ export const Default: Story = {
     // The field is the field: the same hairline, height and focus a `TextField` beside it has.
     const box = canvasElement.querySelector('[data-slot=input]') as HTMLElement
     await expect(getComputedStyle(box).borderTopColor).toBe(
-      'oklch(1 0 none / 0.45)', // --color-line-control
+      'oklch(1 0 none / 0.45)', // --input
     )
 
     // Closed to begin with — the calendar is a popover, not part of the field.

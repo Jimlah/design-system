@@ -34,28 +34,28 @@ const CONTROL = [
   // hover, which is dropped on it below.
   'data-[readonly]:cursor-not-allowed',
   // rest
-  '[--switch-edge:var(--color-line-control)]',
+  '[--switch-edge:var(--color-input)]',
   '[--switch-fill:transparent]',
-  '[--switch-knob:var(--color-fg-muted)]',
+  '[--switch-knob:var(--color-muted-foreground)]',
   '[--switch-knob-x:0px]',
   '[--switch-ring:transparent]',
-  'data-[selected]:[--switch-fill:var(--color-teal)]',
+  'data-[selected]:[--switch-fill:var(--color-primary)]',
   'data-[selected]:[--switch-knob:var(--color-ink)]',
   'data-[selected]:[--switch-knob-x:20px]',
-  'data-[selected]:[--switch-edge:var(--color-teal)]',
+  'data-[selected]:[--switch-edge:var(--color-primary)]',
   // Invalid is a failure the user has to see, so it outranks the selected fill.
-  'data-[invalid]:not-data-[disabled]:[--switch-edge:var(--color-red)]',
+  'data-[invalid]:not-data-[disabled]:[--switch-edge:var(--color-destructive)]',
   // Hover only brightens the edge — the fill stays put, which is the sheet's own
   // pair: a selected switch keeps its teal and gains a white rim, rather than
   // inverting the way a checked checkbox does.
-  'data-[hovered]:not-data-[invalid]:not-data-[readonly]:[--switch-edge:var(--color-fg)]',
+  'data-[hovered]:not-data-[invalid]:not-data-[readonly]:[--switch-edge:var(--color-foreground)]',
   // The ring is drawn on the track, because the control is a 1x1 hidden input.
-  'data-[focus-visible]:[--switch-ring:var(--color-teal)]',
+  'data-[focus-visible]:[--switch-ring:var(--color-primary)]',
 ].join(' ')
 
 /**
  * The sheet's `.ds-switch-track`: 40x20, fully rounded, a transparent fill and a
- * hairline edge. `--color-line-control` rather than the sheet's 40% white, for the
+ * hairline edge. `--input` rather than the sheet's 40% white, for the
  * same reason the inputs use it — a control boundary needs 3:1 on *both* pages, and
  * 40% measures 2.85:1 on the light one.
  */
@@ -87,7 +87,7 @@ const KNOB = [
  * The sheet shares `.ds-check-label` between the selection controls, so the switch
  * takes the same 13px at 80% rather than inventing a third label style.
  */
-const TEXT = 'text-[13px] text-fg/80'
+const TEXT = 'text-[13px] text-foreground/80'
 
 /**
  * The wrapper `SwitchField` renders. It stretches to its container by default, so it

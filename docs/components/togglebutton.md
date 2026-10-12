@@ -26,7 +26,7 @@ That is the same mechanism `Checkbox` and `Meter` use to move a state without re
 it works because a `data-[selected]:` rule outranks the plain one the variant declares, whatever order
 the two land in.
 
-**The accent, not the sheet's yellow.** `--color-yellow` is literally named `selected-yellow`, which
+**The accent, not the sheet's yellow.** `--warning` is literally named `selected-yellow`, which
 makes it the obvious choice — and it is already the `secondary` button. A colour that means two things
 stops meaning either, which is exactly the correction the error state needed when it moved from yellow
 to red.

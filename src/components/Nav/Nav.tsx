@@ -37,7 +37,7 @@ import type {
  */
 const NAV_NAV = [
   'flex w-56 flex-col min-h-full',
-  'border-e border-line-soft bg-panel',
+  'border-e border-border-soft bg-card',
 ].join(' ')
 
 /**
@@ -68,20 +68,20 @@ export const NAV_ITEM = [
   // this system's colours from meeting on two different elements. Nothing else may set a colour
   // here: `:has()` carries the specificity of its argument, so a rule like it ties with the hover
   // rule below and the outcome falls to source order.
-  'text-fg/70',
-  'data-[hovered]:text-fg',
+  'text-foreground/70',
+  'data-[hovered]:text-foreground',
   // Where you are takes the accent; the route you are under comes up to full strength and goes no
   // further. The accent is the system's one accent, and two items coloured with it would stop
   // saying which one you are on.
-  'data-[current]:text-teal',
-  'data-[current-ancestor]:text-fg',
+  'data-[current]:text-primary',
+  'data-[current-ancestor]:text-foreground',
   // The ring is drawn on the row, because the row is what the tree focuses; the anchor inside is
   // taken out of the tab order so a row is one tab stop rather than two.
   // The tree keeps a *virtual* focus: the grid holds real focus and names the active row with
   // `aria-activedescendant`, so the row is marked `data-focused` rather than `data-focus-visible`
   // and the ring follows that.
   'data-[focused]:outline-1 data-[focused]:outline-offset-[-3px]',
-  'data-[focused]:outline-teal',
+  'data-[focused]:outline-ring',
 ].join(' ')
 
 /** The sheet's field legend: 12px, uppercase, `0.04em`, quieter than the items beneath it. */
@@ -95,10 +95,10 @@ export const NAV_ITEM = [
  */
 export const NAV_CHEVRON = [
   'grid size-4 shrink-0 place-items-center',
-  'cursor-pointer text-fg/45',
+  'cursor-pointer text-foreground/45',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:text-fg',
-  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-teal',
+  'data-[hovered]:text-foreground',
+  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /**
@@ -112,7 +112,7 @@ const NAV_LABEL_LINK = `${NAV_LABEL} focus:outline-none`
 
 export const NAV_HEADER = [
   'px-[18px] pt-3 pb-1.5',
-  'text-[12px] uppercase tracking-[0.04em] text-fg/55',
+  'text-[12px] uppercase tracking-[0.04em] text-foreground/55',
 ].join(' ')
 
 /**
@@ -120,7 +120,7 @@ export const NAV_HEADER = [
  * rather than trailing each label at whatever length it happens to be — which is the whole reason
  * a sidebar carries counts at all.
  */
-const NAV_COUNT = 'ms-auto text-[11px] text-yellow tabular-nums'
+const NAV_COUNT = 'ms-auto text-[11px] text-warning tabular-nums'
 
 export interface NavProps<T extends object> extends Omit<
   AriaNavigationTreeProps<T>,

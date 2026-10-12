@@ -16,7 +16,7 @@ import type { OverlayArrowProps as AriaOverlayArrowProps } from 'react-aria-comp
  * hence the arbitrary ancestor variants rather than plain `data-[…]` ones.
  */
 export const OVERLAY_ARROW = [
-  'block size-2 rotate-45 border-line-strong bg-panel',
+  'block size-2 rotate-45 border-border-strong bg-card',
   '[[data-placement=bottom]_&]:border-t [[data-placement=bottom]_&]:border-l',
   '[[data-placement=top]_&]:border-r [[data-placement=top]_&]:border-b',
   '[[data-placement=left]_&]:border-t [[data-placement=left]_&]:border-r',

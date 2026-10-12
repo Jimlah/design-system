@@ -5,37 +5,42 @@
 
 /* ============================================================
    PULSE DESIGN TOKENS
-   The reference sheet (../pulse-replica) declares its palette as
-   hex. Here they are written in oklch(), which is perceptual, so
-   lightness is comparable across hues — and every related colour
-   is derived from its base with color-mix(in oklch, …) instead of
-   being a second hardcoded hex or an rgba(). Changing one base
-   value now moves its hover, pressed and translucent versions with
-   it. Neutrals carry `none` as their hue so a later mix cannot
-   drift them toward red.
 
-   Tailwind v4 turns every `@theme` entry into BOTH a CSS custom
-   property on :root (so `var(--color-teal)` works in raw CSS) and
-   a matching utility (`bg-teal`, `text-ink`, `ease-pulse`).
+   shadcn's shape: the values live in `:root` and one `@theme inline`
+   below turns them into utilities. Two consequences worth knowing.
+
+   `inline` is not decoration. A utility compiled from a plain `@theme`
+   reads a `--color-*` snapshot taken on `:root`, so redefining a token
+   further down the tree cannot reach it; `inline` makes the utility read
+   the variable on the element itself. And a variable declared only in the
+   theme block is not emitted to `:root` unless something references it.
+
+   The values are this system's, not shadcn's: the reference sheet
+   (../pulse-replica) declares its palette as hex, and here they are written
+   in oklch(), which is perceptual, so lightness is comparable across hues.
+   Every related colour is derived from its base with color-mix(in oklch, …)
+   rather than a second hardcoded hex or an rgba(), so changing one value
+   moves its hover, pressed and translucent versions with it. Neutrals carry
+   `none` as their hue so a later mix cannot drift them toward red.
    ============================================================ */
-@theme {
-  /* Every colour is one token holding both themes, via light-dark(light, dark).
-     There is no second block of variables under a media query or a `.dark`
-     class: switching themes means switching `color-scheme`, never redefining a
-     token. Neutrals carry `none` as their hue so a later mix cannot drift them
-     toward red.
+:root {
+  /* --- surfaces ---
+     Every colour is one token holding both themes, via light-dark(light, dark).
+     There is no second set of values under a media query or a `.dark` class:
+     switching themes means switching `color-scheme`, never redefining a token.
 
      The sheet is dark-only, so the light column is an invention. It keeps each
      accent's hue and is derived from the same rule — as saturated as sRGB
      allows, as light as the 4.5:1 that white label text needs — which is why
      every accent lands on L 55% there. */
+  --background: light-dark(oklch(100% 0 none), oklch(0% 0 none));
+  --foreground: light-dark(oklch(18% 0 none), oklch(100% 0 none));
+  --card: light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6));
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
 
-  /* --- surfaces (sheet: pure-black / black-tint1 / black-tint2) --- */
-  --color-base: light-dark(oklch(100% 0 none), oklch(0% 0 none));
-  --color-panel: light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6));
-  --color-panel-2: light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6));
-
-  /* --- accents (sheet: action-teal / selected-yellow) ---
+  /* --- accents ---
      In dark the accents are luminous fills carrying black ink. At a red hue
      sRGB caps chroma at 0.041 when L is 92%, which renders as #FFDBD7 —
      indistinguishable from off-white — so danger sits at 78.5%, the highest
@@ -45,40 +50,132 @@
      page is invisible and white label text needs 4.5:1. Chroma is then capped
      by each hue's own gamut ceiling, which inverts: teal is now the limited one
      (0.093, against red's 0.226), so the four no longer share a chroma. */
-  --color-teal: light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5));
-  --color-yellow: light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2));
-  --color-green: light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145));
-  --color-red: light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29));
+  --primary: light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5));
+  --primary-foreground: var(--ink);
   /* The sheet's #BFBFBF in dark; a mid grey that carries white text in light. */
-  --color-neutral: light-dark(oklch(52% 0 none), oklch(80.47% 0 none));
-  /* The replica's `--c-bar`, a histogram bar. A mid grey in **both** themes, unlike every other
-     colour here: a bar is a measured value rather than a thing that carries text, so it does not
-     invert with the page the way `ink` does. Slightly darker in light, where the page is white. */
-  --color-bar: light-dark(oklch(45% 0 none), oklch(52% 0 none));
+  --secondary: light-dark(oklch(52% 0 none), oklch(80.47% 0 none));
+  --secondary-foreground: var(--ink);
+  --destructive: light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29));
+  --destructive-foreground: var(--ink);
+  --warning: light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2));
+  --warning-foreground: var(--ink);
+  --success: light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145));
+  --success-foreground: var(--ink);
 
-  /* --- foreground (sheet: pure-white) ---
-     `ink` is the label colour on an accent fill, so it inverts with the fills:
-     black on the luminous dark-theme accents, white on the deep light-theme
-     ones. Translucent versions derive from the foreground, so they follow it —
-     and they need no per-theme tuning, since an alpha over a dark page and over
-     a light page both land on a mid grey. */
-  --color-ink: light-dark(oklch(100% 0 none), oklch(0% 0 none));
-  --color-fg: light-dark(oklch(18% 0 none), oklch(100% 0 none));
-  --color-fg-muted: color-mix(in oklch, var(--color-fg) 70%, transparent);
-  --color-fg-subtle: color-mix(in oklch, var(--color-fg) 35%, transparent);
+  /* --- the quiet fills ---
+     The sheet has one subtle surface, used both as a field fill and as a
+     hover or selected row, which is what shadcn splits into `muted` and
+     `accent`. Both names point at it. */
+  --muted: light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6));
+  --muted-foreground: color-mix(in oklch, var(--foreground) 70%, transparent);
+  --accent: var(--muted);
+  --accent-foreground: var(--foreground);
 
-  /* --- hairlines --- */
-  --color-line: color-mix(in oklch, var(--color-fg) 62%, transparent);
-  --color-line-strong: color-mix(in oklch, var(--color-fg) 40%, transparent);
-  --color-line-soft: color-mix(in oklch, var(--color-fg) 30%, transparent);
+  /* --- ink ---
+     The label colour on an accent fill, so it inverts with the fills: black on
+     the luminous dark-theme accents, white on the deep light-theme ones. It
+     pairs with no single colour, which is why it keeps a name of its own
+     rather than becoming some `-foreground`. */
+  --ink: light-dark(oklch(100% 0 none), oklch(0% 0 none));
+
+  /* --- hairlines ---
+     Three strengths, where shadcn has one. The translucent versions derive from
+     the foreground and follow it, and need no per-theme tuning: an alpha over a
+     dark page and over a light page both land on a mid grey. */
+  --border: color-mix(in oklch, var(--foreground) 62%, transparent);
+  /* shadcn has one border; this system needs three strengths. Its own docs add
+     tokens this way, so these are two entries rather than a second palette. */
+  --border-strong: color-mix(in oklch, var(--foreground) 40%, transparent);
+  --border-soft: color-mix(in oklch, var(--foreground) 30%, transparent);
+
   /* The resting boundary of an interactive control.
 
-     A control's own fill is not enough to identify it: panel-2 is 1.23:1 against
-     the dark page and 1.17:1 against the light one, and WCAG asks for 3:1. 45% is
-     the smallest alpha that clears it on both — 4.43:1 on the dark page, 3.36:1 on
-     the light. Alpha compositing is not symmetric, so 40% looks adequate and is
-     not: it gives 3.66:1 on black but only 2.85:1 on white. */
-  --color-line-control: color-mix(in oklch, var(--color-fg) 45%, transparent);
+     A control's own fill is not enough to identify it: the muted surface is
+     1.23:1 against the dark page and 1.17:1 against the light one, and WCAG
+     asks for 3:1. 45% is the smallest alpha that clears it on both — 4.43:1 on
+     the dark page, 3.36:1 on the light. Alpha compositing is not symmetric, so
+     40% looks adequate and is not: it gives 3.66:1 on black but only 2.85:1 on
+     white. */
+  --input: color-mix(in oklch, var(--foreground) 45%, transparent);
+
+  /* The focus ring, and the one accent that is not a fill. */
+  --ring: var(--primary);
+
+  /* --- charts ---
+     The replica's `--c-bar`, a histogram bar, leads. It is a mid grey in
+     **both** themes, unlike every other colour here: a bar is a measured value
+     rather than a thing that carries text, so it does not invert with the page
+     the way `ink` does. Slightly darker in light, where the page is white. */
+  --chart-1: light-dark(oklch(45% 0 none), oklch(52% 0 none));
+  --chart-2: var(--primary);
+  --chart-3: var(--warning);
+  --chart-4: var(--success);
+  --chart-5: var(--destructive);
+
+  /* --- sidebar ---
+     Nav's own anatomy under shadcn's names. */
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border-soft);
+  --sidebar-ring: var(--primary);
+
+  /* The sheet squares off its buttons and inputs. Nothing here uses
+     `rounded-sm`…`rounded-4xl`, and `rounded-full` is not derived from
+     `--radius`, so collapsing shadcn's scale changes no component. */
+  --radius: 0;
+}
+
+/* The single theme block. Every entry here is a name for a value above, so
+   nothing is declared twice, and each one becomes the matching utility:
+   `bg-background`, `text-foreground`, `border-border`, `ring-ring`, and the
+   rest. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* The three names shadcn has no equivalent for, exposed the way its docs
+     describe adding a token. */
+  --color-border-strong: var(--border-strong);
+  --color-border-soft: var(--border-soft);
+  --color-ink: var(--ink);
 
   /* --- type --- */
   --font-mono:
@@ -86,6 +183,15 @@
 
   /* --- motion --- */
   --ease-pulse: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- shadcn's radius scale, off this system's single base --- */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 /* ============================================================
@@ -121,7 +227,10 @@
 :root {
   color-scheme: dark;
 }
-[data-theme='dark'] {
+/* `.dark` is the same statement under the name a shadcn theme provider
+   toggles; grouped before `[data-theme='light']`, which wins the tie. */
+[data-theme='dark'],
+.dark {
   color-scheme: dark;
 }
 [data-theme='light'] {
@@ -152,8 +261,8 @@ body {
   /* The viewport height with mobile browser toolbars showing, so the page
      never sits behind them. */
   min-height: 100svh;
-  background: var(--color-base);
-  color: var(--color-fg);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.5;
@@ -164,6 +273,6 @@ body {
 }
 
 ::selection {
-  background: var(--color-teal);
-  color: var(--color-ink);
+  background: var(--primary);
+  color: var(--ink);
 }

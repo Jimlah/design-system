@@ -9,40 +9,106 @@
   "files": [
     {
       "path": "src/components/Toolbar/Toolbar.tsx",
-      "content": "import {\n  Separator as AriaSeparator,\n  Toolbar as AriaToolbar,\n} from 'react-aria-components'\nimport type {\n  SeparatorProps as AriaSeparatorProps,\n  ToolbarProps as AriaToolbarProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface ToolbarProps extends Omit<\n  AriaToolbarProps,\n  'className' | 'children' | 'orientation'\n> {\n  /** Which way the arrow keys walk. Defaults to horizontal. */\n  orientation?: AriaToolbarProps['orientation']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** A run of controls that go together. */\nexport interface ToolbarGroupProps {\n  className?: string\n  children?: ReactNode\n}\n\nexport interface ToolbarSeparatorProps extends Omit<\n  AriaSeparatorProps,\n  'className' | 'orientation'\n> {\n  className?: string\n}\n\n/**\n * A bar of controls, walked with the arrow keys.\n *\n * ```tsx\n * <Toolbar aria-label=\"Range\">\n *   <Toolbar.Group>\n *     <ToggleButton defaultSelected>1h</ToggleButton>\n *     <ToggleButton>24h</ToggleButton>\n *     <ToggleButton>7d</ToggleButton>\n *   </Toolbar.Group>\n *   <Toolbar.Separator />\n *   <ToggleButton variant=\"ghost\">Live</ToggleButton>\n * </Toolbar>\n * ```\n *\n * **The sheet has no toolbar class**, so the surface is an invention: the sheet's hairline, its square\n * corners, and its own controls inside it.\n *\n * What React Aria adds is the part a `div` with `display: flex` does not: the toolbar is **one tab\n * stop** and the arrow keys walk it, so a bar of eight controls does not cost a keyboard user eight\n * presses of Tab. Home and End reach the ends, and a disabled control is skipped over rather than\n * trapping them. That is the whole reason to use this rather than a flex row.\n *\n * `orientation` turns it, and the arrow keys turn with it — a vertical toolbar is walked up and down.\n */\nfunction ToolbarRoot({ className, children, ...props }: ToolbarProps) {\n  return (\n    <AriaToolbar\n      data-slot=\"toolbar\"\n      orientation=\"horizontal\"\n      className={[\n        'flex items-center gap-1',\n        'border border-line-strong bg-panel p-1',\n        'data-[orientation=vertical]:w-fit data-[orientation=vertical]:flex-col',\n        'data-[orientation=vertical]:items-stretch',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaToolbar>\n  )\n}\n\n/**\n * A run of controls that belongs together. Use it as `Toolbar.Group` — a segmented control is a group\n * of toggle buttons inside a toolbar, which is exactly what it is.\n *\n * Exported as `ToolbarGroup` only so tooling can resolve it; consume the compound form `Toolbar.Group`.\n */\nexport function ToolbarGroup({ className, children }: ToolbarGroupProps) {\n  return (\n    // No border of its own: the controls inside carry their own edges, and a box around a box reads as\n    // a nesting mistake rather than as grouping.\n    <div\n      role=\"group\"\n      className={['flex items-center', className].filter(Boolean).join(' ')}\n    >\n      {children}\n    </div>\n  )\n}\n\n/**\n * The sheet's hairline, standing up between two runs of controls. Use it as `Toolbar.Separator`.\n *\n * Exported as `ToolbarSeparator` only so tooling can resolve it; consume the compound form\n * `Toolbar.Separator`.\n */\nexport function ToolbarSeparator({\n  className,\n  ...props\n}: ToolbarSeparatorProps) {\n  return (\n    <AriaSeparator\n      orientation=\"vertical\"\n      className={[\n        'mx-1 h-5 w-px shrink-0 self-center bg-line',\n        'data-[orientation=vertical]:h-5',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    />\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Toolbar = Object.assign(ToolbarRoot, {\n  Group: ToolbarGroup,\n  Separator: ToolbarSeparator,\n})\n",
+      "content": "import {\n  Separator as AriaSeparator,\n  Toolbar as AriaToolbar,\n} from 'react-aria-components'\nimport type {\n  SeparatorProps as AriaSeparatorProps,\n  ToolbarProps as AriaToolbarProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface ToolbarProps extends Omit<\n  AriaToolbarProps,\n  'className' | 'children' | 'orientation'\n> {\n  /** Which way the arrow keys walk. Defaults to horizontal. */\n  orientation?: AriaToolbarProps['orientation']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** A run of controls that go together. */\nexport interface ToolbarGroupProps {\n  className?: string\n  children?: ReactNode\n}\n\nexport interface ToolbarSeparatorProps extends Omit<\n  AriaSeparatorProps,\n  'className' | 'orientation'\n> {\n  className?: string\n}\n\n/**\n * A bar of controls, walked with the arrow keys.\n *\n * ```tsx\n * <Toolbar aria-label=\"Range\">\n *   <Toolbar.Group>\n *     <ToggleButton defaultSelected>1h</ToggleButton>\n *     <ToggleButton>24h</ToggleButton>\n *     <ToggleButton>7d</ToggleButton>\n *   </Toolbar.Group>\n *   <Toolbar.Separator />\n *   <ToggleButton variant=\"ghost\">Live</ToggleButton>\n * </Toolbar>\n * ```\n *\n * **The sheet has no toolbar class**, so the surface is an invention: the sheet's hairline, its square\n * corners, and its own controls inside it.\n *\n * What React Aria adds is the part a `div` with `display: flex` does not: the toolbar is **one tab\n * stop** and the arrow keys walk it, so a bar of eight controls does not cost a keyboard user eight\n * presses of Tab. Home and End reach the ends, and a disabled control is skipped over rather than\n * trapping them. That is the whole reason to use this rather than a flex row.\n *\n * `orientation` turns it, and the arrow keys turn with it — a vertical toolbar is walked up and down.\n */\nfunction ToolbarRoot({ className, children, ...props }: ToolbarProps) {\n  return (\n    <AriaToolbar\n      data-slot=\"toolbar\"\n      orientation=\"horizontal\"\n      className={[\n        'flex items-center gap-1',\n        'border border-border-strong bg-card p-1',\n        'data-[orientation=vertical]:w-fit data-[orientation=vertical]:flex-col',\n        'data-[orientation=vertical]:items-stretch',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaToolbar>\n  )\n}\n\n/**\n * A run of controls that belongs together. Use it as `Toolbar.Group` — a segmented control is a group\n * of toggle buttons inside a toolbar, which is exactly what it is.\n *\n * Exported as `ToolbarGroup` only so tooling can resolve it; consume the compound form `Toolbar.Group`.\n */\nexport function ToolbarGroup({ className, children }: ToolbarGroupProps) {\n  return (\n    // No border of its own: the controls inside carry their own edges, and a box around a box reads as\n    // a nesting mistake rather than as grouping.\n    <div\n      role=\"group\"\n      className={['flex items-center', className].filter(Boolean).join(' ')}\n    >\n      {children}\n    </div>\n  )\n}\n\n/**\n * The sheet's hairline, standing up between two runs of controls. Use it as `Toolbar.Separator`.\n *\n * Exported as `ToolbarSeparator` only so tooling can resolve it; consume the compound form\n * `Toolbar.Separator`.\n */\nexport function ToolbarSeparator({\n  className,\n  ...props\n}: ToolbarSeparatorProps) {\n  return (\n    <AriaSeparator\n      orientation=\"vertical\"\n      className={[\n        'mx-1 h-5 w-px shrink-0 self-center bg-border',\n        'data-[orientation=vertical]:h-5',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    />\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Toolbar = Object.assign(ToolbarRoot, {\n  Group: ToolbarGroup,\n  Separator: ToolbarSeparator,\n})\n",
       "type": "registry:ui",
       "target": "@ui/pulse/Toolbar/Toolbar.tsx"
     }
   ],
   "cssVars": {
     "theme": {
-      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
-      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
-      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
-      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
-      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
-      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
-      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
-      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
-      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
-      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
-      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
-      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
-      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
-      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
-      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
       "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
-      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
     }
   },
   "css": {
     "@layer base": {
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
@@ -50,7 +116,10 @@
         "font-synthesis": "none",
         "color-scheme": "dark"
       },
-      "[data-theme='dark']": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },
       "[data-theme='light']": {
@@ -68,8 +137,8 @@
       "body": {
         "margin": "0",
         "min-height": "100svh",
-        "background": "var(--color-base)",
-        "color": "var(--color-fg)",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
         "font-family": "var(--font-mono)",
         "font-size": "14px",
         "line-height": "1.5",
@@ -79,8 +148,8 @@
         "text-rendering": "optimizeLegibility"
       },
       "::selection": {
-        "background": "var(--color-teal)",
-        "color": "var(--color-ink)"
+        "background": "var(--primary)",
+        "color": "var(--ink)"
       }
     }
   },

@@ -38,13 +38,13 @@ export const FIELD_SIZES: Record<FieldSize, string> = {
  */
 export const FIELD = [
   'group flex flex-col gap-2 [font-size:var(--field-control-text)]',
-  '[--field-border:var(--color-line-control)]',
-  '[--field-hover:var(--color-line)]',
+  '[--field-border:var(--color-input)]',
+  '[--field-hover:var(--color-border)]',
   // Read-only is not disabled: the value is the whole point of the field, so it
   // keeps full-strength text. Only the affordances go — a quieter hairline, and no
   // brightening on hover — because there is nothing here to invite a click on.
-  'data-[readonly]:[--field-border:var(--color-line-soft)]',
-  'data-[readonly]:[--field-hover:var(--color-line-soft)]',
+  'data-[readonly]:[--field-border:var(--color-border-soft)]',
+  'data-[readonly]:[--field-hover:var(--color-border-soft)]',
 ].join(' ')
 
 /**
@@ -73,8 +73,8 @@ export const GROUP = [
  * visual half of the same fact.
  */
 export const LABEL = [
-  'text-[12px] uppercase tracking-[0.04em] text-fg-muted',
-  "group-data-[required]:after:ms-1 group-data-[required]:after:text-red group-data-[required]:after:content-['*']",
+  'text-[12px] uppercase tracking-[0.04em] text-muted-foreground',
+  "group-data-[required]:after:ms-1 group-data-[required]:after:text-destructive group-data-[required]:after:content-['*']",
 ].join(' ')
 
 /**
@@ -83,7 +83,7 @@ export const LABEL = [
  * The resting hairline is what identifies the control. The sheet gives
  * `.ds-input` a transparent border and leaves the panel-2 fill to do the job, but
  * that fill is 1.23:1 on the dark page and 1.17:1 on the light one, so the field is
- * nearly invisible as a boundary in both. `--color-line-control` is the smallest
+ * nearly invisible as a boundary in both. `--input` is the smallest
  * hairline that clears the 3:1 a control boundary needs on each.
  *
  * Hover has to *strengthen* it rather than replace it: the sheet's hover is white
@@ -100,14 +100,14 @@ export const LABEL = [
 export const INPUT = [
   'w-full font-mono rounded-none border border-(--field-border)',
   'h-(--field-control-h) px-3.5',
-  'bg-panel-2 text-fg placeholder:text-fg/35',
+  'bg-muted text-foreground placeholder:text-foreground/35',
   'transition-[border-color,background-color] duration-[120ms] ease-pulse',
   // Focus and invalid stay literal, so they outrank the published border and always
   // win — including on a read-only field, which is still focusable and still the
   // field the caret should be able to reach.
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
-  'data-[focused]:outline-none data-[focused]:border-teal',
-  'data-[invalid]:not-data-[focused]:border-red',
+  'data-[focused]:outline-none data-[focused]:border-primary',
+  'data-[invalid]:not-data-[focused]:border-destructive',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   // Read-only gets the cursor and nothing else that dims it. `opacity` here would
   // take the *value* down with it — at 40% the text measures 3.42:1, under the 4.5:1
@@ -117,18 +117,18 @@ export const INPUT = [
 ].join(' ')
 
 /** The sheet's `.ds-hint`: 12px, tighter tracking, white 55%. */
-export const HINT = 'text-[12px] tracking-[-0.5px] text-fg/55'
+export const HINT = 'text-[12px] tracking-[-0.5px] text-foreground/55'
 
 /**
  * The sheet paints its error state yellow, because the original design had only
  * two accents and yellow was the nearest thing to a warning it owned. That does
- * not carry over here: `--color-yellow` is this system's `secondary` button, so
+ * not carry over here: `--warning` is this system's `secondary` button, so
  * errors would be the same colour as a secondary action. The error state uses
- * `--color-red`, the danger hue, and keeps the sheet's flex so an icon can be
+ * `--destructive`, the danger hue, and keeps the sheet's flex so an icon can be
  * dropped in front of the message.
  */
 export const ERROR =
-  'flex items-center gap-1.5 text-[12px] tracking-[-0.5px] text-red'
+  'flex items-center gap-1.5 text-[12px] tracking-[-0.5px] text-destructive'
 
 /**
  * The sheet's `.ds-affix__unit` and `.ds-affix__icon`: pinned to the control's
@@ -138,7 +138,7 @@ export const ERROR =
  */
 export const ICON = [
   'absolute inset-y-0 z-10 grid place-items-center pointer-events-none',
-  'text-fg/70',
+  'text-foreground/70',
   '[&>svg]:block [&>svg]:h-[1.5cap] [&>svg]:w-auto [&>svg]:shrink-0',
 ].join(' ')
 

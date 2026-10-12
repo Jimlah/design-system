@@ -9,40 +9,106 @@
   "files": [
     {
       "path": "src/components/Form/Form.tsx",
-      "content": "import { Form as AriaForm } from 'react-aria-components'\nimport type { FormProps as AriaFormProps } from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface FormProps extends Omit<\n  AriaFormProps,\n  'children' | 'className' | 'validationErrors' | 'validationBehavior'\n> {\n  /** A server's answer, keyed by each field's `name`. A field does not care where the objection came from, which is why the same slot renders both. */\n  validationErrors?: AriaFormProps['validationErrors']\n  /** `native` by default here, because in `aria` mode React Aria 1.22 does not validate on submit at all — see the doc. */\n  validationBehavior?: AriaFormProps['validationBehavior']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** The group's heading — the sheet's `.ds-panel-title`, the same one a modal's title wears. */\nexport interface FormLegendProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** A block of fields that belongs together. */\nexport interface FormSectionProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** The row of buttons that finishes the form, right-aligned as the sheet's panels do. */\nexport interface FormActionsProps {\n  className?: string\n  children?: ReactNode\n}\n\nconst ROOT = 'flex flex-col gap-5'\n\nconst LEGEND = 'text-lg font-semibold text-fg'\n\nconst SECTION = 'flex flex-col gap-4'\n\nconst ACTIONS = 'flex items-center justify-end gap-2'\n\n/**\n * A group of fields with a button that submits them.\n *\n * ```tsx\n * <Form onSubmit={(e) => save(e)}>\n *   <Form.Legend>New monitor</Form.Legend>\n *   <Form.Section>\n *     <TextField name=\"host\" isRequired>\n *       <TextField.Label>Hostname</TextField.Label>\n *       <TextField.Input />\n *       <TextField.Error>Enter a hostname.</TextField.Error>\n *     </TextField>\n *   </Form.Section>\n *   <Form.Actions>\n *     <Button type=\"submit\">Save</Button>\n *   </Form.Actions>\n * </Form>\n * ```\n *\n * **The point of a form component is that the fields already know how to say what is wrong.** Every\n * control here — `TextField`, `Select`, `Checkbox`, `Slider` — was built on React Aria's field\n * anatomy, so each one already renders its own `FieldError` and marks itself `aria-invalid`. `Form`\n * is what makes them all validate at once, on submit, and moves focus to the first thing that failed.\n * A consumer wiring that by hand would reimplement it per form and get it subtly different each time.\n *\n * `validationBehavior` defaults to **`native`**, which is not the library's default and is not a\n * preference: React Aria's `aria` mode does not validate a form on submit in this version. Measured,\n * not assumed — an `aria`-mode form with a required empty field submitted cleanly, while the same form\n * in `native` mode marked the field `aria-invalid`, rendered `TextField.Error`, and moved focus to the\n * thing that was wrong. The cost is the browser's own bubble on top of the styled message; the\n * alternative was no validation at all.\n *\n * Server-side failures come back through `validationErrors`, keyed by each field's `name` — the same\n * mechanism, so a field does not care whether the answer came from the browser or from the server.\n */\nfunction FormRoot({ className, children, ...props }: FormProps) {\n  return (\n    <AriaForm\n      data-slot=\"form\"\n      // **`native`, because `aria` does not validate at all.** React Aria documents `aria` as the\n      // default — validation on submit, errors rendered by the component — and in this version a form\n      // with a required empty field simply submitted: no `FieldError`, no `aria-invalid`, focus left on\n      // the button. `native` puts `required` on the input, and React Aria then marks the field invalid\n      // and renders the same styled `TextField.Error` it always did. A consumer can still pass their own\n      // `validationBehavior` through, since `{...props}` comes last.\n      validationBehavior=\"native\"\n      className={[ROOT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaForm>\n  )\n}\n\n/**\n * The form's title. Use it as `Form.Legend` — the sheet's `.ds-panel-title`, the same type a modal's\n * title wears, because both are the name of a short task.\n *\n * Exported as `FormLegend` only so tooling can resolve it; consume the compound form `Form.Legend`.\n */\nexport function FormLegend({ className, children }: FormLegendProps) {\n  return (\n    <div className={[LEGEND, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * A block of fields that belongs together. Use it as `Form.Section` when a long form has more than one\n * idea in it.\n *\n * Exported as `FormSection` only so tooling can resolve it; consume the compound form `Form.Section`.\n */\nexport function FormSection({ className, children }: FormSectionProps) {\n  return (\n    <div className={[SECTION, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The buttons that finish the form. Use it as `Form.Actions` — right-aligned, because the affirmative\n * action belongs at the end of the reading direction.\n *\n * Exported as `FormActions` only so tooling can resolve it; consume the compound form `Form.Actions`.\n */\nexport function FormActions({ className, children }: FormActionsProps) {\n  return (\n    <div className={[ACTIONS, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Form = Object.assign(FormRoot, {\n  Legend: FormLegend,\n  Section: FormSection,\n  Actions: FormActions,\n})\n",
+      "content": "import { Form as AriaForm } from 'react-aria-components'\nimport type { FormProps as AriaFormProps } from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface FormProps extends Omit<\n  AriaFormProps,\n  'children' | 'className' | 'validationErrors' | 'validationBehavior'\n> {\n  /** A server's answer, keyed by each field's `name`. A field does not care where the objection came from, which is why the same slot renders both. */\n  validationErrors?: AriaFormProps['validationErrors']\n  /** `native` by default here, because in `aria` mode React Aria 1.22 does not validate on submit at all — see the doc. */\n  validationBehavior?: AriaFormProps['validationBehavior']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** The group's heading — the sheet's `.ds-panel-title`, the same one a modal's title wears. */\nexport interface FormLegendProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** A block of fields that belongs together. */\nexport interface FormSectionProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** The row of buttons that finishes the form, right-aligned as the sheet's panels do. */\nexport interface FormActionsProps {\n  className?: string\n  children?: ReactNode\n}\n\nconst ROOT = 'flex flex-col gap-5'\n\nconst LEGEND = 'text-lg font-semibold text-foreground'\n\nconst SECTION = 'flex flex-col gap-4'\n\nconst ACTIONS = 'flex items-center justify-end gap-2'\n\n/**\n * A group of fields with a button that submits them.\n *\n * ```tsx\n * <Form onSubmit={(e) => save(e)}>\n *   <Form.Legend>New monitor</Form.Legend>\n *   <Form.Section>\n *     <TextField name=\"host\" isRequired>\n *       <TextField.Label>Hostname</TextField.Label>\n *       <TextField.Input />\n *       <TextField.Error>Enter a hostname.</TextField.Error>\n *     </TextField>\n *   </Form.Section>\n *   <Form.Actions>\n *     <Button type=\"submit\">Save</Button>\n *   </Form.Actions>\n * </Form>\n * ```\n *\n * **The point of a form component is that the fields already know how to say what is wrong.** Every\n * control here — `TextField`, `Select`, `Checkbox`, `Slider` — was built on React Aria's field\n * anatomy, so each one already renders its own `FieldError` and marks itself `aria-invalid`. `Form`\n * is what makes them all validate at once, on submit, and moves focus to the first thing that failed.\n * A consumer wiring that by hand would reimplement it per form and get it subtly different each time.\n *\n * `validationBehavior` defaults to **`native`**, which is not the library's default and is not a\n * preference: React Aria's `aria` mode does not validate a form on submit in this version. Measured,\n * not assumed — an `aria`-mode form with a required empty field submitted cleanly, while the same form\n * in `native` mode marked the field `aria-invalid`, rendered `TextField.Error`, and moved focus to the\n * thing that was wrong. The cost is the browser's own bubble on top of the styled message; the\n * alternative was no validation at all.\n *\n * Server-side failures come back through `validationErrors`, keyed by each field's `name` — the same\n * mechanism, so a field does not care whether the answer came from the browser or from the server.\n */\nfunction FormRoot({ className, children, ...props }: FormProps) {\n  return (\n    <AriaForm\n      data-slot=\"form\"\n      // **`native`, because `aria` does not validate at all.** React Aria documents `aria` as the\n      // default — validation on submit, errors rendered by the component — and in this version a form\n      // with a required empty field simply submitted: no `FieldError`, no `aria-invalid`, focus left on\n      // the button. `native` puts `required` on the input, and React Aria then marks the field invalid\n      // and renders the same styled `TextField.Error` it always did. A consumer can still pass their own\n      // `validationBehavior` through, since `{...props}` comes last.\n      validationBehavior=\"native\"\n      className={[ROOT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaForm>\n  )\n}\n\n/**\n * The form's title. Use it as `Form.Legend` — the sheet's `.ds-panel-title`, the same type a modal's\n * title wears, because both are the name of a short task.\n *\n * Exported as `FormLegend` only so tooling can resolve it; consume the compound form `Form.Legend`.\n */\nexport function FormLegend({ className, children }: FormLegendProps) {\n  return (\n    <div className={[LEGEND, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * A block of fields that belongs together. Use it as `Form.Section` when a long form has more than one\n * idea in it.\n *\n * Exported as `FormSection` only so tooling can resolve it; consume the compound form `Form.Section`.\n */\nexport function FormSection({ className, children }: FormSectionProps) {\n  return (\n    <div className={[SECTION, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The buttons that finish the form. Use it as `Form.Actions` — right-aligned, because the affirmative\n * action belongs at the end of the reading direction.\n *\n * Exported as `FormActions` only so tooling can resolve it; consume the compound form `Form.Actions`.\n */\nexport function FormActions({ className, children }: FormActionsProps) {\n  return (\n    <div className={[ACTIONS, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Form = Object.assign(FormRoot, {\n  Legend: FormLegend,\n  Section: FormSection,\n  Actions: FormActions,\n})\n",
       "type": "registry:ui",
       "target": "@ui/pulse/Form/Form.tsx"
     }
   ],
   "cssVars": {
     "theme": {
-      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
-      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
-      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
-      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
-      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
-      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
-      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
-      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
-      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
-      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
-      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
-      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
-      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
-      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
-      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
       "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
-      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
     }
   },
   "css": {
     "@layer base": {
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
@@ -50,7 +116,10 @@
         "font-synthesis": "none",
         "color-scheme": "dark"
       },
-      "[data-theme='dark']": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },
       "[data-theme='light']": {
@@ -68,8 +137,8 @@
       "body": {
         "margin": "0",
         "min-height": "100svh",
-        "background": "var(--color-base)",
-        "color": "var(--color-fg)",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
         "font-family": "var(--font-mono)",
         "font-size": "14px",
         "line-height": "1.5",
@@ -79,8 +148,8 @@
         "text-rendering": "optimizeLegibility"
       },
       "::selection": {
-        "background": "var(--color-teal)",
-        "color": "var(--color-ink)"
+        "background": "var(--primary)",
+        "color": "var(--ink)"
       }
     }
   },

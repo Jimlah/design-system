@@ -6,7 +6,7 @@
  * replica has one `.dash-tip--chart` for the same reason — `dashboard.html` keeps a single `#pc-tip` and
  * moves it around rather than giving every chart its own.
  *
- * It is `bg-panel` with a hairline, like every other floating surface here, so a readout over a chart reads
+ * It is `bg-card` with a hairline, like every other floating surface here, so a readout over a chart reads
  * as the same material as a menu over a page.
  *
  * **`pointer-events-none` is part of the recipe, not decoration.** A panel that can be hovered sits between
@@ -15,6 +15,6 @@
  */
 export const CHART_TOOLTIP = [
   'pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full',
-  'border border-line-strong bg-panel px-2 py-1',
-  'font-mono text-[11px] tracking-[0.04em] text-fg uppercase',
+  'border border-border-strong bg-card px-2 py-1',
+  'font-mono text-[11px] tracking-[0.04em] text-foreground uppercase',
 ].join(' ')

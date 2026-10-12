@@ -19,7 +19,7 @@ A row of buttons where one — or several — is on. A segmented control.
 
 A `Tab` swaps the panel below it. A segment changes a value the rest of the page reads. Where the sheet
 has a tab row it puts an **indicator under** the current tab; here the current segment is **filled**,
-because there is no panel for an indicator to point at. The fill is `--color-teal` with `ink` text — the
+because there is no panel for an indicator to point at. The fill is `--primary` with `ink` text — the
 same place the accent goes on `Nav`'s current item and a selected table row.
 
 The segments are `ghost` buttons plus two `data-[selected]:` rules, and the whole trick is that **those

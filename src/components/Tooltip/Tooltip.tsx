@@ -15,14 +15,14 @@ import { OverlayArrow } from '../OverlayArrow/OverlayArrow'
  */
 const CONTENT = [
   'flex w-max max-w-72 flex-col gap-[5px]',
-  'border border-line-strong bg-panel/94 px-3.5 pt-2.5 pb-3',
+  'border border-border-strong bg-card/94 px-3.5 pt-2.5 pb-3',
 ].join(' ')
 
 /** The sheet's `.ds-tip__title`: 12px, letterspaced, in the accent — not uppercase, as the sheet's labels are. */
-const TITLE = 'text-[12px] tracking-[0.1em] text-teal'
+const TITLE = 'text-[12px] tracking-[0.1em] text-primary'
 
 /** The sheet's `.ds-tip__sub`: 14px, with the sheet's negative tracking. */
-const TEXT = 'text-[14px] tracking-[-0.5px] text-fg'
+const TEXT = 'text-[14px] tracking-[-0.5px] text-foreground'
 
 export interface TooltipProps extends Omit<
   AriaTooltipTriggerProps,

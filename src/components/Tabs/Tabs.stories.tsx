@@ -102,7 +102,7 @@ export const Default: Story = {
     await expect(count).toHaveTextContent('3')
     await expect(getComputedStyle(count).color).toBe(
       'oklch(0.8733 0.1505 91.2)',
-    ) // --color-yellow
+    ) // --warning
 
     // The indicator is an `::after` on the tab, inset to the label rather than the cell, and it
     // fades rather than growing — a border going 0 to 2px would shift every tab in the row.

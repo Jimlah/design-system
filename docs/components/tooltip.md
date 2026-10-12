@@ -24,7 +24,7 @@ rather than on a themed bubble.
 wired to different things. Like `Select.AutoComplete`, the root renders no element of its own — so
 it takes **no `className`**, and the class goes on the thing being described.
 
-`Tooltip.Title` is 12px, letterspaced, `--color-teal`, and deliberately **not uppercase** — the one
+`Tooltip.Title` is 12px, letterspaced, `--primary`, and deliberately **not uppercase** — the one
 piece of small text in this system that is not. A tooltip is read at a glance while the pointer
 rests, not scanned down a column.
 

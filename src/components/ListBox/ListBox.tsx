@@ -18,7 +18,7 @@ import type { ReactNode } from 'react'
 import { LOAD_MORE, LoadMoreSpinner } from '../loadMore'
 import { OPTION, OPTION_LIST } from '../optionList'
 
-const PANEL = 'border border-line-strong bg-panel'
+const PANEL = 'border border-border-strong bg-card'
 
 export interface ListBoxProps<T> extends Omit<
   AriaListBoxProps<T>,
@@ -106,7 +106,7 @@ export function ListBoxHeader({ className, ...props }: ListBoxHeaderProps) {
     <AriaHeader
       data-slot="list-box-header"
       className={[
-        'px-3.5 pt-3 pb-1 text-[11px] uppercase tracking-[0.08em] text-fg/45',
+        'px-3.5 pt-3 pb-1 text-[11px] uppercase tracking-[0.08em] text-foreground/45',
         className,
       ]
         .filter(Boolean)

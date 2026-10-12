@@ -436,7 +436,7 @@ export const Error: Story = {
     // is `.ds-field.is-error .ds-select-btn`, the same border it gives an input.
     trigger.style.transition = 'none'
     await expect(getComputedStyle(trigger).borderTopColor).toBe(
-      'oklch(0.785 0.1236 29)', // --color-red
+      'oklch(0.785 0.1236 29)', // --destructive
     )
   },
 }
@@ -457,7 +457,7 @@ export const Required: Story = {
     const label = canvas.getByText(/^protocol$/i)
     const marker = getComputedStyle(label, '::after')
     await expect(marker.content).toContain('*')
-    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --color-red
+    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --destructive
   },
 }
 

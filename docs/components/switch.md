@@ -43,12 +43,12 @@ exclusive — selected and hovered, invalid and selected. Ordering those by sour
 would be a coin flip, since Tailwind sorts them, so each rule is written to exclude the ones
 it must not fight:
 
-| State                  | Edge                   | Specificity |
-| ---------------------- | ---------------------- | ----------- |
-| rest                   | `--color-line-control` | 1           |
-| selected               | `--color-teal`         | 2           |
-| invalid (not disabled) | `--color-red`          | 3           |
-| hover (not invalid/ro) | `--color-fg`           | 4           |
+| State                  | Edge            | Specificity |
+| ---------------------- | --------------- | ----------- |
+| rest                   | `--input`       | 1           |
+| selected               | `--primary`     | 2           |
+| invalid (not disabled) | `--destructive` | 3           |
+| hover (not invalid/ro) | `--foreground`  | 4           |
 
 Hover excludes invalid and read-only, so it never competes with either; invalid sits one step
 above selected, so a failed switch turns red even while it is on. The fill is left alone by

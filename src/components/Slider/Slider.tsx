@@ -136,7 +136,7 @@ const RAIL = [
  * right, and the reason is proportion: a bar a hairline wide and several rails tall reads as a **cursor**,
  * not as something a hand closes around. Making it taller and narrower to look less like "a bullet sitting
  * on a line" fixed the wrong problem — what made the original square look wrong was its **border** and its
- * `bg-base` fill, a black box showing nothing but its own hairline, not its being square.
+ * `bg-background` fill, a black box showing nothing but its own hairline, not its being square.
  *
  * So it is square again, solid, and larger: `sm`, `md` and `lg` are 14/16/20px against rails of 3/4/6px.
  * Nothing here is taller than it is wide, which is what the `ThumbPosition` story now actually checks.
@@ -162,7 +162,7 @@ const THUMB = [
   // nothing here, which is how the handle first ended up with no height at all. Both sides read the same
   // variable, so they cannot drift out of square.
   'h-(--slider-thumb) w-(--slider-thumb) shrink-0 rounded-none',
-  // No border. The first version was a bordered `bg-base` square, which on the dark page was a black
+  // No border. The first version was a bordered `bg-background` square, which on the dark page was a black
   // box showing nothing but its own hairline — it read as a rendering artifact sitting on the rail
   // rather than as something to grab. A border also muddies a shape this small, where the border is a
   // fifth of the width.
@@ -174,10 +174,10 @@ const THUMB = [
   // **Full strength, not 70%.** At 70% the handle was a pale grey — measurably lighter than the page
   // but *duller than the teal fill it sits on*, so on the filled half of the rail it receded and a
   // reader said it was hard to see. It is the thing you grab; it should be the loudest mark on the
-  // rail, not the quietest. `--color-fg` in this theme is white, and white reads against both the
+  // rail, not the quietest. `--foreground` in this theme is white, and white reads against both the
   // teal fill and the dark track without a border or a ring.
-  'bg-fg',
-  'data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-teal',
+  'bg-foreground',
+  'data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed',
   // Read from the slider, not from the handle: `data-disabled` is on the **root** while the handle is
   // a descendant, and a `data-[disabled]:` rule on the handle therefore never matches. This is the
@@ -205,7 +205,7 @@ const THUMB = [
  * as they arrow along the rail.
  */
 const OUTPUT = [
-  'font-mono text-[13px] tabular-nums text-fg',
+  'font-mono text-[13px] tabular-nums text-foreground',
   'data-[disabled]:opacity-30',
 ].join(' ')
 
@@ -288,7 +288,7 @@ export function SliderLabel({ className, ...props }: SliderLabelProps) {
   return (
     <AriaLabel
       className={[
-        'font-mono text-[11px] uppercase tracking-[0.04em] text-fg/70',
+        'font-mono text-[11px] uppercase tracking-[0.04em] text-foreground/70',
         'data-[disabled]:opacity-30',
         className,
       ]

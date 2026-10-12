@@ -31,7 +31,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   // A horizontal rule is an `<hr>` — a real thematic break, not a painted div — and it takes the
-  // sheet's `.ds-div-hair`, which is `--color-fg` at 40%.
+  // sheet's `.ds-div-hair`, which is `--foreground` at 40%.
   play: async ({ canvas }) => {
     const rule = canvas.getByRole('separator')
     await expect(rule.tagName).toBe('HR')
@@ -50,7 +50,7 @@ export const Variants: Story = {
       {(['hair', 'soft', 'strong', 'dashed', 'dotted'] as const).map(
         (variant) => (
           <div key={variant} className="flex flex-col gap-2">
-            <span className="text-[11px] uppercase tracking-[0.06em] text-fg/45">
+            <span className="text-[11px] uppercase tracking-[0.06em] text-foreground/45">
               {variant}
             </span>
             <Separator variant={variant} />
@@ -82,9 +82,11 @@ export const Variants: Story = {
 export const Vertical: Story = {
   render: () => (
     <div className="flex h-16 items-stretch gap-5">
-      <span className="self-center text-[13px] text-fg/70">Uptime</span>
+      <span className="self-center text-[13px] text-foreground/70">Uptime</span>
       <Separator orientation="vertical" />
-      <span className="self-center text-[13px] text-fg/70">Latency</span>
+      <span className="self-center text-[13px] text-foreground/70">
+        Latency
+      </span>
     </div>
   ),
   // A vertical separator is a `<div role="separator">` rather than an `<hr>`, which is a horizontal
@@ -106,9 +108,9 @@ export const Vertical: Story = {
 export const VerticalDashed: Story = {
   render: () => (
     <div className="flex h-16 items-stretch gap-5">
-      <span className="self-center text-[13px] text-fg/70">Before</span>
+      <span className="self-center text-[13px] text-foreground/70">Before</span>
       <Separator orientation="vertical" variant="dashed" />
-      <span className="self-center text-[13px] text-fg/70">After</span>
+      <span className="self-center text-[13px] text-foreground/70">After</span>
     </div>
   ),
   // The dashed rule turns with the separator. A vertical one drawn with `border-t` would paint a

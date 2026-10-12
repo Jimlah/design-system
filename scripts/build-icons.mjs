@@ -109,13 +109,13 @@ function color(name) {
   return toHex(value)
 }
 
-const base = color('color-base')
-const panel = color('color-panel')
-const teal = color('color-teal')
-const fg = color('color-fg')
+const base = color('background')
+const panel = color('card')
+const teal = color('primary')
+const fg = color('foreground')
 /** What the sheet uses for secondary text, mixed the way the token itself is. */
 const fgMuted = `color-mix(in oklch, ${fg} 70%, transparent)`
-/** `--color-line-strong`, for the one rule under the card's footer. */
+/** `--line-strong`, for the one rule under the card's footer. */
 const line = `color-mix(in oklch, ${fg} 40%, transparent)`
 
 /**

@@ -76,16 +76,16 @@ export const Short: Story = {
 export const BesideASparkline: Story = {
   args: { label: 'fra1 uptime, 100%' },
   render: () => (
-    <div className="flex w-96 flex-col gap-3 border border-line-strong bg-panel p-4">
+    <div className="flex w-96 flex-col gap-3 border border-border-strong bg-card p-4">
       <div className="flex items-center gap-3">
-        <span className="w-12 font-mono text-[12px] text-fg uppercase">
+        <span className="w-12 font-mono text-[12px] text-foreground uppercase">
           fra1
         </span>
         <FlatLine label="fra1 uptime, 100%" className="h-[52px] w-full" />
-        <span className="font-mono text-[12px] text-teal">100%</span>
+        <span className="font-mono text-[12px] text-primary">100%</span>
       </div>
       <div className="flex items-center gap-3">
-        <span className="w-12 font-mono text-[12px] text-fg uppercase">
+        <span className="w-12 font-mono text-[12px] text-foreground uppercase">
           iad1
         </span>
         <FlatLine
@@ -94,7 +94,7 @@ export const BesideASparkline: Story = {
           label="iad1 uptime, 100%"
           className="h-[52px] w-full"
         />
-        <span className="font-mono text-[12px] text-teal">100%</span>
+        <span className="font-mono text-[12px] text-primary">100%</span>
       </div>
     </div>
   ),

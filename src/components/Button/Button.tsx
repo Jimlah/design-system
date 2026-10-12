@@ -98,7 +98,7 @@ export const BUTTON_BASE = [
   'font-mono font-medium uppercase tracking-[0.04em] rounded-none',
   'border cursor-pointer select-none',
   'transition-[background-color,color,border-color,opacity] duration-[120ms] ease-pulse',
-  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px] data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px] data-[focus-visible]:outline-ring',
   /* Hover and pressed derive from `--btn` rather than replacing it, so a state
      can never drift away from the colour it belongs to. Written here, on the
      element that sets `--btn`, and not on `:root`: a custom property is
@@ -161,11 +161,11 @@ export const BUTTON_BASE = [
    an *off* default toggle was black text on the black page — an empty box,
    correct in the source and invisible on screen. */
 export const COLORS: Record<NonNullable<ButtonProps['color']>, string> = {
-  primary: '[--btn:var(--color-teal)]',
-  secondary: '[--btn:var(--color-yellow)]',
-  neutral: '[--btn:var(--color-neutral)]',
-  success: '[--btn:var(--color-green)]',
-  danger: '[--btn:var(--color-red)]',
+  primary: '[--btn:var(--color-primary)]',
+  secondary: '[--btn:var(--color-warning)]',
+  neutral: '[--btn:var(--color-secondary)]',
+  success: '[--btn:var(--color-success)]',
+  danger: '[--btn:var(--color-destructive)]',
 }
 
 /* Each variant owns its border colour: BUTTON_BASE only declares the 1px border

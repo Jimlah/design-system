@@ -104,12 +104,12 @@ const LIST = [
  */
 const ITEM = [
   'flex items-start gap-3 p-4',
-  'border border-line-strong bg-panel',
-  'text-fg outline-2 -outline-offset-2 outline-transparent',
+  'border border-border-strong bg-card',
+  'text-foreground outline-2 -outline-offset-2 outline-transparent',
   'transition-colors duration-150 ease-pulse',
-  'data-[hovered]:bg-panel-2',
-  'data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-teal',
-  'data-[selected]:border-teal',
+  'data-[hovered]:bg-muted',
+  'data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-ring',
+  'data-[selected]:border-primary',
   'data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed',
 ].join(' ')
 
@@ -120,14 +120,14 @@ const SECTION = 'flex flex-col gap-2'
 /** The sheet's `.ds-field-legend`, over a run of rows. */
 const HEADER = [
   'px-0.5 pt-1 pb-0.5',
-  'font-mono text-[11px] uppercase tracking-[0.08em] text-fg/45',
+  'font-mono text-[11px] uppercase tracking-[0.08em] text-foreground/45',
 ].join(' ')
 
 /**
  * The empty state, styled rather than left as a bare string, because an empty list is the state a
  * dashboard is in most mornings.
  */
-const EMPTY = 'px-4 py-10 text-center text-[13px] text-fg/45'
+const EMPTY = 'px-4 py-10 text-center text-[13px] text-foreground/45'
 
 /**
  * A selectable list or grid of rows. Use it for anything the page is a collection of — a dashboard's
@@ -137,8 +137,8 @@ const EMPTY = 'px-4 py-10 text-center text-[13px] text-fg/45'
  * <GridList aria-label="Monitors" selectionMode="multiple" className="grid grid-cols-3 gap-3">
  *   <GridList.Item id="fra1" textValue="fra1 · Frankfurt">
  *     <GridList.Body>
- *       <span className="font-mono text-[13px] text-fg">fra1 · Frankfurt</span>
- *       <span className="text-[12px] text-fg/70">up · 42ms</span>
+ *       <span className="font-mono text-[13px] text-foreground">fra1 · Frankfurt</span>
+ *       <span className="text-[12px] text-foreground/70">up · 42ms</span>
  *     </GridList.Body>
  *   </GridList.Item>
  * </GridList>

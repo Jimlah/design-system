@@ -33,7 +33,7 @@ export const Route = createRootRoute({
         // The colour of the browser's own chrome on mobile, which is painted before any stylesheet
         // is parsed — so it is one of the two values in this repo written out rather than read from a
         // token (the other being what `npm run icons` generates, which reads them). It mirrors the
-        // dark `--color-base`: `#000000` rather than the panel tint, because that is the canvas the
+        // dark `--background`: `#000000` rather than the panel tint, because that is the canvas the
         // page sits on rather than the surface on top of it.
         name: 'theme-color',
         content: '#000000',

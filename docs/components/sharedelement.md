@@ -6,11 +6,11 @@ One element that moves between parents, animating from where it was to where it 
 <SharedElementTransition>
   {atTop ? (
     <header>
-      <SharedElement name="marker" className="size-2 bg-teal" />
+      <SharedElement name="marker" className="size-2 bg-primary" />
     </header>
   ) : (
     <footer>
-      <SharedElement name="marker" className="size-2 bg-teal" />
+      <SharedElement name="marker" className="size-2 bg-primary" />
     </footer>
   )}
 </SharedElementTransition>

@@ -127,7 +127,7 @@ export const Default: Story = {
     await expect(styles.height).toBe('44px') // md
     await expect(styles.borderRadius).toBe('0px') // the sheet is square throughout
     await expect(styles.fontFamily).toContain('Overpass Mono')
-    await expect(styles.backgroundColor).toBe('oklch(0.225 0.009 255.6)') // --color-panel-2
+    await expect(styles.backgroundColor).toBe('oklch(0.225 0.009 255.6)') // --muted
 
     // The hint is described-by rather than a separate announcement, which is
     // what `slot="description"` buys.
@@ -164,7 +164,7 @@ export const Focus: Story = {
     // the attribute by the time the next line runs.
     await userEvent.click(input)
     await expect(input).toHaveAttribute('data-focused')
-    await expect(styles().borderTopColor).toBe('oklch(0.9198 0.1236 189.5)') // --color-teal
+    await expect(styles().borderTopColor).toBe('oklch(0.9198 0.1236 189.5)') // --primary
     // Focus is the border and nothing else: a ring here would draw a second teal
     // hairline 3px outside the first.
     await expect(styles().outlineStyle).toBe('none')
@@ -267,7 +267,7 @@ export const WithIcon: Story = {
         <TextField.Label>Verified endpoint</TextField.Label>
         <TextField.Group>
           <TextField.Input />
-          <TextField.Icon position="end" className="text-teal">
+          <TextField.Icon position="end" className="text-primary">
             {Check}
           </TextField.Icon>
         </TextField.Group>
@@ -295,7 +295,7 @@ export const WithIcon: Story = {
   <TextField.Label>Verified endpoint</TextField.Label>
   <TextField.Group>
     <TextField.Input />
-    <TextField.Icon position="end" className="text-teal">{check}</TextField.Icon>
+    <TextField.Icon position="end" className="text-primary">{check}</TextField.Icon>
   </TextField.Group>
 </TextField>`,
       },
@@ -396,7 +396,7 @@ export const ReadOnly: Story = {
     // is the affordance it actually loses: nothing here invites a click.
     await expect(getComputedStyle(input).opacity).toBe('1')
     await expect(getComputedStyle(input).borderTopColor).toBe(
-      'oklch(1 0 none / 0.3)', // --color-line-soft, against the rest state's 0.45
+      'oklch(1 0 none / 0.3)', // --border-soft, against the rest state's 0.45
     )
   },
 }
@@ -425,7 +425,7 @@ export const Required: Story = {
     const label = canvas.getByText(/monitor name/i)
     const marker = getComputedStyle(label, '::after')
     await expect(marker.content).toContain('*')
-    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --color-red
+    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --destructive
     // ...and an optional field must not grow one.
     const optionalLabel = canvas.getByText(/interval/i)
     await expect(

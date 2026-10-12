@@ -61,11 +61,11 @@ export interface AvatarProps {
 
 /** Only `--avatar` is set per colour; the fill and the label both read it, so they cannot disagree. */
 const COLORS: Record<NonNullable<AvatarProps['color']>, string> = {
-  primary: '[--avatar:var(--color-teal)]',
-  secondary: '[--avatar:var(--color-yellow)]',
-  neutral: '[--avatar:var(--color-neutral)]',
-  success: '[--avatar:var(--color-green)]',
-  danger: '[--avatar:var(--color-red)]',
+  primary: '[--avatar:var(--color-primary)]',
+  secondary: '[--avatar:var(--color-warning)]',
+  neutral: '[--avatar:var(--color-secondary)]',
+  success: '[--avatar:var(--color-success)]',
+  danger: '[--avatar:var(--color-destructive)]',
 }
 
 const SIZES: Record<NonNullable<AvatarProps['size']>, string> = {

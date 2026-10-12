@@ -32,15 +32,15 @@ const AREA = [
   // `textarea`, so the control inherits instead. The same reason the line-height is declared on the
   // root: it is inherited, and the sheet's `1.5 × 14px` is 21px, not the 24px a 16px base gives.
   'min-h-[92px] px-3.5 py-3',
-  'bg-panel-2 text-fg placeholder:text-fg/35',
+  'bg-muted text-foreground placeholder:text-foreground/35',
   'resize-y',
   'transition-[border-color,background-color] duration-[120ms] ease-pulse',
   // Focus and invalid stay literal on the control, exactly as they do on a field, so they outrank
   // the border the root publishes and always win — including on a read-only textarea, which is
   // still focusable and still worth being able to read.
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
-  'data-[focused]:outline-none data-[focused]:border-teal',
-  'data-[invalid]:not-data-[focused]:border-red',
+  'data-[focused]:outline-none data-[focused]:border-primary',
+  'data-[invalid]:not-data-[focused]:border-destructive',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   'group-data-[readonly]:cursor-not-allowed',
 ].join(' ')

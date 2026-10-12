@@ -265,7 +265,7 @@ export const Empty: Story = {
           renderEmptyState={() => (
             <span
               data-slot="empty"
-              className="block px-3.5 py-[11px] text-[13px] text-fg/55"
+              className="block px-3.5 py-[11px] text-[13px] text-foreground/55"
             >
               No monitors match that
             </span>
@@ -389,7 +389,7 @@ export const Error: Story = {
     const box = inputOf(canvasElement)
     box.style.transition = 'none'
     await expect(getComputedStyle(box).borderTopColor).toBe(
-      'oklch(0.785 0.1236 29)', // --color-red
+      'oklch(0.785 0.1236 29)', // --destructive
     )
   },
 }
@@ -403,7 +403,7 @@ export const Required: Story = {
     const label = canvas.getByText(/^monitor$/i)
     const marker = getComputedStyle(label, '::after')
     await expect(marker.content).toContain('*')
-    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --color-red
+    await expect(marker.color).toBe('oklch(0.785 0.1236 29)') // --destructive
   },
 }
 

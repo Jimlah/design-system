@@ -45,7 +45,7 @@ import { SearchField } from '../SearchField/SearchField'
 const TRIGGER = [
   'flex w-full items-center gap-3',
   'h-(--field-control-h) ps-3.5 pe-3.5 text-left',
-  'border border-(--field-border) bg-panel-2 text-fg',
+  'border border-(--field-border) bg-muted text-foreground',
   'cursor-pointer rounded-none',
   'transition-[border-color,background-color] duration-[120ms] ease-pulse',
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
@@ -59,7 +59,7 @@ const TRIGGER = [
  * The sheet's `.placeholder` — 35%, the same weight as an input's placeholder. The
  * state is on the value itself, so this needs no group.
  */
-const VALUE = 'min-w-0 flex-1 truncate data-[placeholder]:text-fg/35'
+const VALUE = 'min-w-0 flex-1 truncate data-[placeholder]:text-foreground/35'
 
 /**
  * The rest of a multiple selection, counted rather than listed.
@@ -71,7 +71,7 @@ const VALUE = 'min-w-0 flex-1 truncate data-[placeholder]:text-fg/35'
  */
 const COUNT = [
   'ms-2 shrink-0 align-middle',
-  'bg-fg/8 px-1.5 py-0.5 font-mono text-[11px] text-fg/70',
+  'bg-foreground/8 px-1.5 py-0.5 font-mono text-[11px] text-foreground/70',
 ].join(' ')
 
 /**
@@ -106,7 +106,7 @@ const ICON_SPINNER = [ICON, '[color:var(--dropdown-caret-ink)]'].join(' ')
  */
 const MENU = [
   'flex w-(--trigger-width) flex-col overflow-hidden',
-  'border border-line-strong bg-panel',
+  'border border-border-strong bg-card',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -115,11 +115,11 @@ const LIST = 'max-h-[264px] overflow-auto p-0 outline-none'
 /** The sheet's `.ds-select-option`: 13px, 75%, with the accent reserved for the choice. */
 const OPTION = [
   'flex items-center justify-between gap-3',
-  'px-3.5 py-[11px] text-[13px] text-fg/75',
+  'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
-  'data-[focus-visible]:outline-none data-[focus-visible]:bg-fg/7 data-[focus-visible]:text-fg',
-  'data-[selected]:text-teal',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
+  'data-[selected]:text-primary',
 ].join(' ')
 
 const OPTION_LABEL = 'truncate'
@@ -130,12 +130,12 @@ const OPTION_LABEL = 'truncate'
  * a screen reader announcing "set" on top of "selected" would be noise.
  */
 const MARKER =
-  'shrink-0 font-mono text-[11px] text-yellow data-[slot=marker]:select-none'
+  'shrink-0 font-mono text-[11px] text-warning data-[slot=marker]:select-none'
 
 /** The sheet's `.ds-select-group-label`. */
 const GROUP_LABEL = [
   'px-3.5 pt-[9px] pb-1',
-  'text-[11px] uppercase tracking-[0.08em] text-fg/45',
+  'text-[11px] uppercase tracking-[0.08em] text-foreground/45',
 ].join(' ')
 
 const SECTION = 'flex flex-col'
@@ -144,7 +144,7 @@ const SECTION = 'flex flex-col'
  * The search sits above the options behind the same hairline the menu is drawn with, so
  * it reads as part of the surface rather than as a field dropped into it.
  */
-const SEARCH = 'border-b border-line-strong p-2'
+const SEARCH = 'border-b border-border-strong p-2'
 
 /**
  * A select does **not** mark itself invalid with `aria-invalid`, and that is correct
@@ -802,24 +802,24 @@ function SelectRoot<TMode extends SelectionMode = 'single'>({
         // While the menu is open the trigger keeps the focus border, as the sheet's
         // `.is-open` does. Both this and the focus rule resolve to the same colour, so
         // it does not matter that either can match first.
-        'data-[open]:not-data-[invalid]:[--field-border:var(--color-teal)]',
-        'data-[focused]:not-data-[disabled]:[--field-border:var(--color-teal)]',
+        'data-[open]:not-data-[invalid]:[--field-border:var(--color-primary)]',
+        'data-[focused]:not-data-[disabled]:[--field-border:var(--color-primary)]',
         // Invalid outranks the resting border, and excludes focus so the two can never
         // both match and leave the colour to source order.
-        'data-[invalid]:not-data-[focused]:[--field-border:var(--color-red)]',
+        'data-[invalid]:not-data-[focused]:[--field-border:var(--color-destructive)]',
         // The trigger's hover rule is one specificity step above its resting border, so
         // an open trigger that is also hovered would take the hover colour and lose the
         // teal. Retargeting what hover resolves to is what keeps open winning, without
         // the trigger needing to know it is open at all.
-        'data-[open]:[--field-hover:var(--color-teal)]',
+        'data-[open]:[--field-hover:var(--color-primary)]',
         // The caret's rotation and colour live here because `data-open` is on this
         // element, not on the trigger — and a group variant would tie on specificity
         // with the caret's own resting rule. See the note in `Checkbox.tsx`. The names are
         // shared with `ComboBox`, which has the same caret with the same problem.
         '[--dropdown-caret-rotate:0deg]',
-        '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+        '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
         'data-[open]:[--dropdown-caret-rotate:180deg]',
-        'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+        'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
         className,
       ]
         .filter(Boolean)

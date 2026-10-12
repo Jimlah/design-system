@@ -9,46 +9,112 @@
   "files": [
     {
       "path": "src/components/ColorSwatch/ColorSwatch.tsx",
-      "content": "import { ColorSwatch as AriaColorSwatch } from 'react-aria-components'\nimport type { ColorSwatchProps as AriaColorSwatchProps } from 'react-aria-components'\n\nexport interface ColorSwatchProps extends Omit<\n  AriaColorSwatchProps,\n  'className' | 'style' | 'children'\n> {\n  /** The colour to show. */\n  color: AriaColorSwatchProps['color']\n  className?: string\n}\n\n/**\n * The square a colour is shown in.\n *\n * **Shared, because a swatch is a swatch wherever it appears** — as a field's preview, as one entry in\n * a `ColorSwatchPicker`, or on its own beside a monitor's name. The picker imports this constant rather\n * than repeating it, the same call `field.ts` and `popover.ts` make.\n *\n * The colour is painted from React Aria's render prop, not from a token, because it *is* a colour —\n * arbitrary by definition. Everything around it still comes from the system: square corners, and a\n * control boundary on the edge so a near-black swatch on the dark page is still a swatch.\n */\nexport const SWATCH = [\n  'size-6 shrink-0 rounded-none',\n  'border border-line-control',\n].join(' ')\n\n/**\n * A colour, shown as a square.\n *\n * ```tsx\n * <ColorSwatch color={parseColor('#71FFF6')} />\n * ```\n *\n * **It is a picture of a colour, not a control.** For choosing one, `ColorSwatchPicker` is a row of\n * these that can be picked; for typing one, `ColorField` is a field. This is what you reach for when a\n * value already exists and simply needs to be *seen* — a monitor's label colour in a table row, a\n * legend beside a chart.\n *\n * **The wrapper is `aria-hidden`, and it has to be a wrapper.** React Aria renders its swatch as\n * `role=\"img\"` and drops an `aria-hidden` written on it, so a purely decorative square announced itself\n * as an unnamed image — noise before the text that actually says which colour it is. Putting the\n * attribute on an element *around* it hides the whole subtree, which is what a picture of a colour\n * should be.\n */\nexport function ColorSwatch({ color, className }: ColorSwatchProps) {\n  return (\n    <span aria-hidden=\"true\">\n      <AriaColorSwatch\n        data-slot=\"swatch\"\n        className={[SWATCH, className].filter(Boolean).join(' ')}\n        style={({ color: c }) => ({ background: c.toString('css') })}\n        color={color}\n      />\n    </span>\n  )\n}\n",
+      "content": "import { ColorSwatch as AriaColorSwatch } from 'react-aria-components'\nimport type { ColorSwatchProps as AriaColorSwatchProps } from 'react-aria-components'\n\nexport interface ColorSwatchProps extends Omit<\n  AriaColorSwatchProps,\n  'className' | 'style' | 'children'\n> {\n  /** The colour to show. */\n  color: AriaColorSwatchProps['color']\n  className?: string\n}\n\n/**\n * The square a colour is shown in.\n *\n * **Shared, because a swatch is a swatch wherever it appears** — as a field's preview, as one entry in\n * a `ColorSwatchPicker`, or on its own beside a monitor's name. The picker imports this constant rather\n * than repeating it, the same call `field.ts` and `popover.ts` make.\n *\n * The colour is painted from React Aria's render prop, not from a token, because it *is* a colour —\n * arbitrary by definition. Everything around it still comes from the system: square corners, and a\n * control boundary on the edge so a near-black swatch on the dark page is still a swatch.\n */\nexport const SWATCH = [\n  'size-6 shrink-0 rounded-none',\n  'border border-input',\n].join(' ')\n\n/**\n * A colour, shown as a square.\n *\n * ```tsx\n * <ColorSwatch color={parseColor('#71FFF6')} />\n * ```\n *\n * **It is a picture of a colour, not a control.** For choosing one, `ColorSwatchPicker` is a row of\n * these that can be picked; for typing one, `ColorField` is a field. This is what you reach for when a\n * value already exists and simply needs to be *seen* — a monitor's label colour in a table row, a\n * legend beside a chart.\n *\n * **The wrapper is `aria-hidden`, and it has to be a wrapper.** React Aria renders its swatch as\n * `role=\"img\"` and drops an `aria-hidden` written on it, so a purely decorative square announced itself\n * as an unnamed image — noise before the text that actually says which colour it is. Putting the\n * attribute on an element *around* it hides the whole subtree, which is what a picture of a colour\n * should be.\n */\nexport function ColorSwatch({ color, className }: ColorSwatchProps) {\n  return (\n    <span aria-hidden=\"true\">\n      <AriaColorSwatch\n        data-slot=\"swatch\"\n        className={[SWATCH, className].filter(Boolean).join(' ')}\n        style={({ color: c }) => ({ background: c.toString('css') })}\n        color={color}\n      />\n    </span>\n  )\n}\n",
       "type": "registry:ui",
       "target": "@ui/pulse/ColorSwatch/ColorSwatch.tsx"
     },
     {
       "path": "src/components/ColorSwatchPicker/ColorSwatchPicker.tsx",
-      "content": "import {\n  ColorSwatch as AriaColorSwatch,\n  ColorSwatchPicker as AriaColorSwatchPicker,\n  ColorSwatchPickerItem as AriaColorSwatchPickerItem,\n} from 'react-aria-components'\nimport type {\n  ColorSwatchPickerItemProps as AriaColorSwatchPickerItemProps,\n  ColorSwatchPickerProps as AriaColorSwatchPickerProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nimport { SWATCH } from '../ColorSwatch/ColorSwatch'\n\n/** How the swatches sit: in a row, or stacked. Chosen in JS, because the layout is a class list. */\nconst LAYOUTS = {\n  grid: 'flex flex-row flex-wrap items-center gap-2',\n  stack: 'flex flex-col items-start gap-2',\n} as const\n\n/**\n * One preset. Use it as `ColorSwatchPicker.Item`.\n *\n * **The ring is `--color-fg`, and this is the one place in the system the accent cannot be used.**\n * Everywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a\n * `ToggleButton`. Here teal is one of the *choices*: a teal ring around the teal swatch says nothing, and\n * the same is true of yellow, green and red. A marker that shares a colour with an option cannot say\n * \"this one\", so the ring is the text colour, which inverts with the theme and contrasts with all five.\n *\n * The ring is drawn with `outline` at a 2px offset, so it sits *outside* the square and the colour keeps\n * its full 24px; an inset border would eat a fifth of a swatch and change the colour it exists to show.\n *\n * **The ring needs a transparent outline at rest, not `outline-none`.** `outline-none` sets Tailwind's\n * shared `--tw-outline-style` custom property, and every `outline-<width>` utility reads that same\n * property back — so once it is `none`, no ring on this element can draw again, not even from a\n * `data-[selected]:` variant. The swatch reported `outline-width: 2px` with `outline-style: none` while\n * looking perfectly styled. `Radio`, `Checkbox` and `Switch` already do it this way, which is why their\n * rings work.\n *\n * Exported as `ColorSwatchPickerItem` only so tooling can resolve it; consume the compound form\n * `ColorSwatchPicker.Item`.\n */\nexport function ColorSwatchPickerItem({\n  className,\n  color,\n  ...props\n}: AriaColorSwatchPickerItemProps) {\n  return (\n    <AriaColorSwatchPickerItem\n      data-slot=\"swatch-option\"\n      color={color}\n      className={[\n        // The square itself is `ColorSwatch`'s, composed rather than repeated — a swatch has to look\n        // the same whether it is being shown or being picked.\n        SWATCH,\n        // **A transparent outline at rest, never `outline-none`.** `outline-none` sets Tailwind's shared\n        // `--tw-outline-style` custom property, and every `outline-<width>` utility reads that same\n        // property back — so once it is `none`, *no* ring on this element can ever draw again, not even\n        // from a `data-[selected]:` variant. The swatch reported `outline-width: 2px` and\n        // `outline-style: none` while looking perfectly styled. `Radio`, `Checkbox` and `Switch` already\n        // draw their rings this way, which is why theirs work.\n        'cursor-pointer outline-2 outline-offset-2 outline-transparent',\n        'transition-[outline-color] duration-[120ms] ease-pulse',\n        'data-[selected]:outline-fg',\n        'data-[focus-visible]:outline-fg',\n        'data-[hovered]:border-fg',\n        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      <AriaColorSwatch\n        className=\"block size-full\"\n        style={({ color: c }) => ({ background: c.toString('css') })}\n      />\n    </AriaColorSwatchPickerItem>\n  )\n}\n\nexport interface ColorSwatchPickerProps extends Omit<\n  AriaColorSwatchPickerProps,\n  'children' | 'className' | 'value' | 'defaultValue' | 'onChange' | 'layout'\n> {\n  /** The chosen colour. Controlled. */\n  value?: AriaColorSwatchPickerProps['value']\n  /** The colour it starts on. */\n  defaultValue?: AriaColorSwatchPickerProps['defaultValue']\n  /** Called with the chosen colour. */\n  onChange?: AriaColorSwatchPickerProps['onChange']\n  /** `grid` puts the swatches in a row, `stack` in a column. */\n  layout?: AriaColorSwatchPickerProps['layout']\n\n  className?: string\n  children?: ReactNode\n}\n\n/**\n * A row of preset colours, one of which is chosen.\n *\n * ```tsx\n * <ColorSwatchPicker aria-label=\"Label colour\" defaultValue=\"#71FFF6\">\n *   <ColorSwatchPicker.Item color=\"#71FFF6\" />\n *   <ColorSwatchPicker.Item color=\"#FAD14F\" />\n *   <ColorSwatchPicker.Item color=\"#FF9A8B\" />\n * </ColorSwatchPicker>\n * ```\n *\n * **This is the other half of the colour set**, and the half that fits this design language: a palette\n * of colours the system already has, not a spectrum. `ColorArea`, `ColorWheel` and `ColorSlider` are for\n * picking *any* colour and would need a gradient Pulse does not contain; a picker over five semantic\n * accents is a decision someone can actually make.\n *\n * **The palette is the consumer's**, deliberately. A swatch needs a concrete colour value, and this\n * system's colours are `light-dark()` pairs resolved by CSS — there is no token a swatch can be handed.\n * So the picker arranges presets; which presets is the application's business, exactly as `TagGroup`\n * arranges chips it is given.\n *\n * Use `ColorField` instead when the colour is already known and needs typing or pasting — this is for\n * choosing from a set the application offers.\n */\nfunction ColorSwatchPickerRoot({\n  className,\n  children,\n  layout = 'grid',\n  ...props\n}: ColorSwatchPickerProps) {\n  return (\n    <AriaColorSwatchPicker\n      data-slot=\"swatch-picker\"\n      className={[LAYOUTS[layout], className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaColorSwatchPicker>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const ColorSwatchPicker = Object.assign(ColorSwatchPickerRoot, {\n  Item: ColorSwatchPickerItem,\n})\n",
+      "content": "import {\n  ColorSwatch as AriaColorSwatch,\n  ColorSwatchPicker as AriaColorSwatchPicker,\n  ColorSwatchPickerItem as AriaColorSwatchPickerItem,\n} from 'react-aria-components'\nimport type {\n  ColorSwatchPickerItemProps as AriaColorSwatchPickerItemProps,\n  ColorSwatchPickerProps as AriaColorSwatchPickerProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nimport { SWATCH } from '../ColorSwatch/ColorSwatch'\n\n/** How the swatches sit: in a row, or stacked. Chosen in JS, because the layout is a class list. */\nconst LAYOUTS = {\n  grid: 'flex flex-row flex-wrap items-center gap-2',\n  stack: 'flex flex-col items-start gap-2',\n} as const\n\n/**\n * One preset. Use it as `ColorSwatchPicker.Item`.\n *\n * **The ring is `--foreground`, and this is the one place in the system the accent cannot be used.**\n * Everywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a\n * `ToggleButton`. Here teal is one of the *choices*: a teal ring around the teal swatch says nothing, and\n * the same is true of yellow, green and red. A marker that shares a colour with an option cannot say\n * \"this one\", so the ring is the text colour, which inverts with the theme and contrasts with all five.\n *\n * The ring is drawn with `outline` at a 2px offset, so it sits *outside* the square and the colour keeps\n * its full 24px; an inset border would eat a fifth of a swatch and change the colour it exists to show.\n *\n * **The ring needs a transparent outline at rest, not `outline-none`.** `outline-none` sets Tailwind's\n * shared `--tw-outline-style` custom property, and every `outline-<width>` utility reads that same\n * property back — so once it is `none`, no ring on this element can draw again, not even from a\n * `data-[selected]:` variant. The swatch reported `outline-width: 2px` with `outline-style: none` while\n * looking perfectly styled. `Radio`, `Checkbox` and `Switch` already do it this way, which is why their\n * rings work.\n *\n * Exported as `ColorSwatchPickerItem` only so tooling can resolve it; consume the compound form\n * `ColorSwatchPicker.Item`.\n */\nexport function ColorSwatchPickerItem({\n  className,\n  color,\n  ...props\n}: AriaColorSwatchPickerItemProps) {\n  return (\n    <AriaColorSwatchPickerItem\n      data-slot=\"swatch-option\"\n      color={color}\n      className={[\n        // The square itself is `ColorSwatch`'s, composed rather than repeated — a swatch has to look\n        // the same whether it is being shown or being picked.\n        SWATCH,\n        // **A transparent outline at rest, never `outline-none`.** `outline-none` sets Tailwind's shared\n        // `--tw-outline-style` custom property, and every `outline-<width>` utility reads that same\n        // property back — so once it is `none`, *no* ring on this element can ever draw again, not even\n        // from a `data-[selected]:` variant. The swatch reported `outline-width: 2px` and\n        // `outline-style: none` while looking perfectly styled. `Radio`, `Checkbox` and `Switch` already\n        // draw their rings this way, which is why theirs work.\n        'cursor-pointer outline-2 outline-offset-2 outline-transparent',\n        'transition-[outline-color] duration-[120ms] ease-pulse',\n        'data-[selected]:outline-foreground',\n        'data-[focus-visible]:outline-foreground',\n        'data-[hovered]:border-foreground',\n        'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      <AriaColorSwatch\n        className=\"block size-full\"\n        style={({ color: c }) => ({ background: c.toString('css') })}\n      />\n    </AriaColorSwatchPickerItem>\n  )\n}\n\nexport interface ColorSwatchPickerProps extends Omit<\n  AriaColorSwatchPickerProps,\n  'children' | 'className' | 'value' | 'defaultValue' | 'onChange' | 'layout'\n> {\n  /** The chosen colour. Controlled. */\n  value?: AriaColorSwatchPickerProps['value']\n  /** The colour it starts on. */\n  defaultValue?: AriaColorSwatchPickerProps['defaultValue']\n  /** Called with the chosen colour. */\n  onChange?: AriaColorSwatchPickerProps['onChange']\n  /** `grid` puts the swatches in a row, `stack` in a column. */\n  layout?: AriaColorSwatchPickerProps['layout']\n\n  className?: string\n  children?: ReactNode\n}\n\n/**\n * A row of preset colours, one of which is chosen.\n *\n * ```tsx\n * <ColorSwatchPicker aria-label=\"Label colour\" defaultValue=\"#71FFF6\">\n *   <ColorSwatchPicker.Item color=\"#71FFF6\" />\n *   <ColorSwatchPicker.Item color=\"#FAD14F\" />\n *   <ColorSwatchPicker.Item color=\"#FF9A8B\" />\n * </ColorSwatchPicker>\n * ```\n *\n * **This is the other half of the colour set**, and the half that fits this design language: a palette\n * of colours the system already has, not a spectrum. `ColorArea`, `ColorWheel` and `ColorSlider` are for\n * picking *any* colour and would need a gradient Pulse does not contain; a picker over five semantic\n * accents is a decision someone can actually make.\n *\n * **The palette is the consumer's**, deliberately. A swatch needs a concrete colour value, and this\n * system's colours are `light-dark()` pairs resolved by CSS — there is no token a swatch can be handed.\n * So the picker arranges presets; which presets is the application's business, exactly as `TagGroup`\n * arranges chips it is given.\n *\n * Use `ColorField` instead when the colour is already known and needs typing or pasting — this is for\n * choosing from a set the application offers.\n */\nfunction ColorSwatchPickerRoot({\n  className,\n  children,\n  layout = 'grid',\n  ...props\n}: ColorSwatchPickerProps) {\n  return (\n    <AriaColorSwatchPicker\n      data-slot=\"swatch-picker\"\n      className={[LAYOUTS[layout], className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaColorSwatchPicker>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const ColorSwatchPicker = Object.assign(ColorSwatchPickerRoot, {\n  Item: ColorSwatchPickerItem,\n})\n",
       "type": "registry:ui",
       "target": "@ui/pulse/ColorSwatchPicker/ColorSwatchPicker.tsx"
     }
   ],
   "cssVars": {
     "theme": {
-      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
-      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
-      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
-      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
-      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
-      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
-      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
-      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
-      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
-      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
-      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
-      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
-      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
-      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
-      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
       "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
-      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
     }
   },
   "css": {
     "@layer base": {
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
@@ -56,7 +122,10 @@
         "font-synthesis": "none",
         "color-scheme": "dark"
       },
-      "[data-theme='dark']": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },
       "[data-theme='light']": {
@@ -74,8 +143,8 @@
       "body": {
         "margin": "0",
         "min-height": "100svh",
-        "background": "var(--color-base)",
-        "color": "var(--color-fg)",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
         "font-family": "var(--font-mono)",
         "font-size": "14px",
         "line-height": "1.5",
@@ -85,12 +154,12 @@
         "text-rendering": "optimizeLegibility"
       },
       "::selection": {
-        "background": "var(--color-teal)",
-        "color": "var(--color-ink)"
+        "background": "var(--primary)",
+        "color": "var(--ink)"
       }
     }
   },
-  "docs": "A row of preset colours, one of which is chosen.\n\n```tsx\n<ColorSwatchPicker aria-label=\"Label colour\" defaultValue=\"#71FFF6\">\n  <ColorSwatchPicker.Item color=\"#71FFF6\" />\n  <ColorSwatchPicker.Item color=\"#FAD14F\" />\n  <ColorSwatchPicker.Item color=\"#FF9A8B\" />\n</ColorSwatchPicker>\n```\n\n| Slot                     | React Aria              | Notes                                  |\n| ------------------------ | ----------------------- | -------------------------------------- |\n| `ColorSwatchPicker`      | `ColorSwatchPicker`     | The set. `layout`, `value`, `onChange` |\n| `ColorSwatchPicker.Item` | `ColorSwatchPickerItem` | One preset. `color` is required        |\n\nIt is a `listbox` named by its `aria-label`, and each square inside is an `option` — so a story queries\nthose roles rather than reaching for the component's own hooks.\n\n## This is the half of the colour set that fits this design language\n\nA palette of colours the system already has, not a spectrum. `ColorArea`, `ColorWheel` and\n`ColorSlider` are for picking _any_ colour and would need a gradient Pulse does not contain; a picker\nover five semantic accents is a decision someone can actually make.\n\n**The palette is the consumer's**, deliberately. A swatch needs a concrete colour value, and this\nsystem's colours are `light-dark()` pairs resolved by CSS — there is no token a swatch can be handed. So\nthe picker arranges presets; which presets is the application's business, exactly as `TagGroup` arranges\nchips it is given. `ColorField` is the other half: for a colour already known, that needs typing.\n\n## The ring is `--color-fg`, and this is the one place the accent cannot be used\n\nEverywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a `ToggleButton`.\n**Here teal is one of the _choices_.** A teal ring around the teal swatch says nothing, and the same is\ntrue of yellow, green and red. A marker that shares a colour with an option cannot say \"this one\", so the\nring is the text colour, which inverts with the theme (white on the dark page, near-black on the light)\nand contrasts with all five swatches.\n\nIt is an `outline` at a **2px offset**, so it sits outside the square and the colour keeps its full 24px;\nan inset border would eat a fifth of a swatch and change the colour it exists to show.\n\n## The ring must be a transparent outline at rest — never `outline-none`\n\n`outline-none` sets Tailwind's shared `--tw-outline-style` custom property, and every `outline-<width>`\nutility reads that **same property back**. So once it is `none`, no ring on that element can ever draw\nagain — not even from a `data-[selected]:` variant, because the variant changes the width while the style\nis still read from the variable.\n\nThe symptom is precise and quiet: the element reports `outline-width: 2px` with `outline-style: none`,\nand looks perfectly styled. `Radio`, `Checkbox` and `Switch` already draw their rings as a transparent\noutline at rest for exactly this reason, which is why theirs work. This component did not, and its first\ntwo attempts drew nothing.",
+  "docs": "A row of preset colours, one of which is chosen.\n\n```tsx\n<ColorSwatchPicker aria-label=\"Label colour\" defaultValue=\"#71FFF6\">\n  <ColorSwatchPicker.Item color=\"#71FFF6\" />\n  <ColorSwatchPicker.Item color=\"#FAD14F\" />\n  <ColorSwatchPicker.Item color=\"#FF9A8B\" />\n</ColorSwatchPicker>\n```\n\n| Slot                     | React Aria              | Notes                                  |\n| ------------------------ | ----------------------- | -------------------------------------- |\n| `ColorSwatchPicker`      | `ColorSwatchPicker`     | The set. `layout`, `value`, `onChange` |\n| `ColorSwatchPicker.Item` | `ColorSwatchPickerItem` | One preset. `color` is required        |\n\nIt is a `listbox` named by its `aria-label`, and each square inside is an `option` — so a story queries\nthose roles rather than reaching for the component's own hooks.\n\n## This is the half of the colour set that fits this design language\n\nA palette of colours the system already has, not a spectrum. `ColorArea`, `ColorWheel` and\n`ColorSlider` are for picking _any_ colour and would need a gradient Pulse does not contain; a picker\nover five semantic accents is a decision someone can actually make.\n\n**The palette is the consumer's**, deliberately. A swatch needs a concrete colour value, and this\nsystem's colours are `light-dark()` pairs resolved by CSS — there is no token a swatch can be handed. So\nthe picker arranges presets; which presets is the application's business, exactly as `TagGroup` arranges\nchips it is given. `ColorField` is the other half: for a colour already known, that needs typing.\n\n## The ring is `--foreground`, and this is the one place the accent cannot be used\n\nEverywhere else a selected or current thing takes teal — a `Nav` item, a `Table` row, a `ToggleButton`.\n**Here teal is one of the _choices_.** A teal ring around the teal swatch says nothing, and the same is\ntrue of yellow, green and red. A marker that shares a colour with an option cannot say \"this one\", so the\nring is the text colour, which inverts with the theme (white on the dark page, near-black on the light)\nand contrasts with all five swatches.\n\nIt is an `outline` at a **2px offset**, so it sits outside the square and the colour keeps its full 24px;\nan inset border would eat a fifth of a swatch and change the colour it exists to show.\n\n## The ring must be a transparent outline at rest — never `outline-none`\n\n`outline-none` sets Tailwind's shared `--tw-outline-style` custom property, and every `outline-<width>`\nutility reads that **same property back**. So once it is `none`, no ring on that element can ever draw\nagain — not even from a `data-[selected]:` variant, because the variant changes the width while the style\nis still read from the variable.\n\nThe symptom is precise and quiet: the element reports `outline-width: 2px` with `outline-style: none`,\nand looks perfectly styled. `Radio`, `Checkbox` and `Switch` already draw their rings as a transparent\noutline at rest for exactly this reason, which is why theirs work. This component did not, and its first\ntwo attempts drew nothing.",
   "categories": [
     "form"
   ],

@@ -51,8 +51,8 @@ Item names are the kebab-case component names (`text-field`, `color-swatch-picke
 
 ### Every item carries the theme
 
-A component installed on its own still has to render, and Pulse's utilities (`bg-teal`,
-`text-fg-muted`, `border-line-strong`) are Tailwind theme variables, so an item without the token
+A component installed on its own still has to render, and Pulse's utilities (`bg-primary`,
+`text-muted-foreground`, `border-border-strong`) are Tailwind theme variables, so an item without the token
 block paints an empty box. The `@theme` token block and the `@layer base` reset therefore travel
 **inside every item**, not only in `theme`.
 
@@ -127,21 +127,21 @@ Two behaviours are worth knowing before reading a generated `public/r` item. Bot
 with 4.21.4 by installing into a scratch project and reading the result.
 
 **`cssVars.theme` lands inside `@theme inline`.** Tailwind still emits every variable on
-`:root` — checked by compiling the consumer's stylesheet — so `var(--color-line-control)` works
+`:root` — checked by compiling the consumer's stylesheet — so `var(--input)` works
 from the component recipes as well as from a utility.
 
 **Six `--color-color-*` variables appear beside the real ones.** The CLI's `update-theme` plugin
 appends `--color-<key>: var(--<key>)` for any `cssVars` value it reads as a colour, and its test
 is `value.includes("--color-")` — which every derived token here matches, because they are
-`color-mix(in oklch, var(--color-fg) …)`. The result is six inert extras, one per derived token:
+`color-mix(in oklch, var(--foreground) …)`. The result is six inert extras, one per derived token:
 
 ```css
---color-color-line-control: var(--color-line-control);
+--color-color-line-control: var(--input);
 ```
 
 They are left in place on purpose. The way to avoid them is to key those tokens without the
-`color-` prefix and let that same heuristic add it back — which would make `text-fg-muted` and
-`border-line-strong` depend on an undocumented internal regex. If that regex changed, the utilities
+`color-` prefix and let that same heuristic add it back — which would make `text-muted-foreground` and
+`border-border-strong` depend on an undocumented internal regex. If that regex changed, the utilities
 would silently stop being generated and components would paint nothing. Six unused custom properties
 are the cheaper failure.
 
@@ -156,8 +156,8 @@ Against shadcn 4.21.4, in a scratch consumer whose `components.json` points `ali
 - `list` and `search` against `/r/registry.json` reported all 56 items.
 - `tsc --noEmit` over the installed tree was clean — which is what proves the relative imports
   survived the move.
-- Compiling the consumer's stylesheet with Tailwind v4 produced `.bg-teal`, `.text-fg-muted`,
-  `.border-line-strong` and `.ease-pulse`, with `--color-teal` on `:root` and the Overpass
+- Compiling the consumer's stylesheet with Tailwind v4 produced `.bg-primary`, `.text-muted-foreground`,
+  `.border-border-strong` and `.ease-pulse`, with `--primary` on `:root` and the Overpass
   Mono `@font-face` rules loaded.
 
 Re-run any of it by building the registry and serving `public/r` on a static server:

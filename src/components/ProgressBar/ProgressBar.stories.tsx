@@ -154,7 +154,7 @@ export const Restyle: Story = {
         <ProgressBar.Fill />
       </ProgressBar.Track>
       {/* ...and a reading that says something else, because the slot renders what it is given. */}
-      <ProgressBar.Value className="text-fg/45">
+      <ProgressBar.Value className="text-foreground/45">
         {args.value} of 100
       </ProgressBar.Value>
     </ProgressBar>

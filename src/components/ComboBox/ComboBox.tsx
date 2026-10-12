@@ -57,17 +57,17 @@ const ROOT = [
   // Open and focus both hold the border teal, as the sheet's `.ds-select-btn.is-open` does.
   // The input's border comes from `--field-border`, published on this root, so the state is
   // expressed here rather than on the input — the same arrangement as `Select`.
-  'data-[open]:[--field-border:var(--color-teal)]',
-  'data-[focused]:[--field-border:var(--color-teal)]',
+  'data-[open]:[--field-border:var(--color-primary)]',
+  'data-[focused]:[--field-border:var(--color-primary)]',
   // The input's hover rule outranks its resting border, so an open control has to retarget what
   // hover resolves to, or hovering it would take the hover colour and lose the teal.
-  'data-[open]:[--field-hover:var(--color-teal)]',
+  'data-[open]:[--field-hover:var(--color-primary)]',
   // The caret's rotation and colour, for the reason above: `data-open` is here, not on the
   // button, and a group variant cannot win that cascade.
   '[--dropdown-caret-rotate:0deg]',
-  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
   'data-[open]:[--dropdown-caret-rotate:180deg]',
-  'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+  'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
 ].join(' ')
 
 const CARET = [
@@ -94,7 +94,7 @@ const SPINNER = 'size-[1.25cap] motion-safe:animate-spin'
 /** The sheet's `.ds-select-menu`, shared down to the class list with `Select`. */
 const MENU = [
   'flex w-(--trigger-width) flex-col overflow-hidden',
-  'border border-line-strong bg-panel',
+  'border border-border-strong bg-card',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -105,12 +105,12 @@ const OPTION_LABEL = 'truncate'
  * kept as-is. `aria-hidden`, because `aria-selected` already says this.
  */
 const MARKER =
-  'shrink-0 font-mono text-[11px] text-yellow data-[slot=marker]:select-none'
+  'shrink-0 font-mono text-[11px] text-warning data-[slot=marker]:select-none'
 
 /** The sheet's `.ds-select-group-label`. */
 const GROUP_LABEL = [
   'px-3.5 pt-[9px] pb-1',
-  'text-[11px] uppercase tracking-[0.08em] text-fg/45',
+  'text-[11px] uppercase tracking-[0.08em] text-foreground/45',
 ].join(' ')
 
 const SECTION = 'flex flex-col'

@@ -144,7 +144,7 @@ export const Empty: Story = {
         renderEmptyState={() => (
           <span
             data-slot="empty"
-            className="block bg-panel px-5 py-6 text-center text-[13px] text-fg/55"
+            className="block bg-card px-5 py-6 text-center text-[13px] text-foreground/55"
           >
             No monitors match that filter
           </span>

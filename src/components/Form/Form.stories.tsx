@@ -110,14 +110,14 @@ export const Validation: Story = {
       `#${CSS.escape(describedBy as string)}`,
     ) as HTMLElement
     await expect(error).toHaveTextContent('Enter a hostname.')
-    await expect(error).toHaveClass(/text-red/)
+    await expect(error).toHaveClass(/text-destructive/)
 
     // The red is **not** asserted on the field's border, and that is the system working. React Aria
     // moves focus to the first field that failed, and focus outranks invalid here — the rule this
     // system settled on two components ago, so that typing inside a field you have already been told is
     // wrong is not also shouted at. A teal border on a focused invalid field is the correct rendering;
     // asserting red on it was asserting the opposite of the design.
-    await expect(error).toHaveClass(/text-red/)
+    await expect(error).toHaveClass(/text-destructive/)
 
     // Typing an answer lets it through.
     await userEvent.type(input, 'example.com')

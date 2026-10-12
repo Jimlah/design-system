@@ -90,7 +90,7 @@ export function FlatLine({
         y={lineY - 1}
         width={width}
         height="2"
-        fill="var(--color-teal)"
+        fill="var(--color-primary)"
       />
     </svg>
   )

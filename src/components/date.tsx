@@ -28,17 +28,17 @@ import { FIELD } from './field'
  */
 export const DATE_ROOT = [
   FIELD,
-  'data-[open]:[--field-border:var(--color-teal)]',
-  'data-[focused]:[--field-border:var(--color-teal)]',
-  'data-[open]:[--field-hover:var(--color-teal)]',
+  'data-[open]:[--field-border:var(--color-primary)]',
+  'data-[focused]:[--field-border:var(--color-primary)]',
+  'data-[open]:[--field-hover:var(--color-primary)]',
   '[--dropdown-caret-rotate:0deg]',
-  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
   'data-[open]:[--dropdown-caret-rotate:180deg]',
-  'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+  'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
   // A range's two date inputs sit inside one control, so the states that land on the root —
   // invalid, disabled — have no element of their own to dim or recolour. They are published here
   // and read by that control, the same arrangement `Select` uses for its trigger's border.
-  'data-[invalid]:not-data-[focused]:[--field-border:var(--color-red)]',
+  'data-[invalid]:not-data-[focused]:[--field-border:var(--color-destructive)]',
   '[--date-control-opacity:1]',
   'data-[disabled]:[--date-control-opacity:0.4]',
 ].join(' ')
@@ -60,7 +60,7 @@ export const DATE_TRIGGER = [
 /** The sheet's `.ds-select-menu`, the same surface a select's list opens on. */
 export const DATE_MENU = [
   'flex w-fit flex-col overflow-hidden',
-  'border border-line-strong bg-panel p-2',
+  'border border-border-strong bg-card p-2',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -73,25 +73,25 @@ export const DATE_MENU = [
  */
 export const DATE_CELL: string = [
   'flex size-8 items-center justify-center rounded-none',
-  'text-[13px] text-fg/75 tabular-nums cursor-pointer select-none',
+  'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
-  'data-[outside-month]:text-fg/30',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[outside-month]:text-foreground/30',
   // A day outside `minValue`/`maxValue` is `data-unavailable`; a day in a wholly disabled
   // calendar is `data-disabled`. Both mean the same thing to the eye, so both are marked.
   // Only days outside `minValue`/`maxValue` are struck through. A day either side of the month is
   // `data-disabled` too — React Aria disables everything outside the visible range — so striking
   // on `data-disabled` alone draws a line through the leading and trailing days of every month,
   // which says "unavailable" about a day that is merely in the wrong month.
-  'data-[unavailable]:not-data-[outside-month]:text-fg/25',
+  'data-[unavailable]:not-data-[outside-month]:text-foreground/25',
   'data-[unavailable]:not-data-[outside-month]:line-through',
-  'data-[disabled]:not-data-[outside-month]:text-fg/25',
+  'data-[disabled]:not-data-[outside-month]:text-foreground/25',
   'data-[disabled]:not-data-[outside-month]:line-through',
   'data-[unavailable]:cursor-not-allowed data-[disabled]:cursor-not-allowed',
-  'data-[today]:outline-1 data-[today]:outline-teal',
-  'data-[selected]:bg-teal data-[selected]:text-ink',
+  'data-[today]:outline-1 data-[today]:outline-ring',
+  'data-[selected]:bg-primary data-[selected]:text-ink',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px]',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /**
@@ -102,28 +102,28 @@ export const DATE_CELL: string = [
  */
 export const DATE_SEGMENT = [
   'rounded-none px-0.5 outline-none',
-  'text-fg data-[placeholder]:text-fg/35',
-  'data-[focused]:bg-fg/12 data-[focused]:text-fg',
+  'text-foreground data-[placeholder]:text-foreground/35',
+  'data-[focused]:bg-foreground/12 data-[focused]:text-foreground',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
 ].join(' ')
 
 /** The month's arrows. */
 export const DATE_NAV = [
   'flex size-7 items-center justify-center rounded-none',
-  'text-fg/70 cursor-pointer',
+  'text-foreground/70 cursor-pointer',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-30',
 ].join(' ')
 
 /** The sheet's `.ds-field-legend` and `.ds-select-group-label` are both this: 11–12px, spaced. */
 export const DATE_HEADING =
-  'text-[12px] uppercase tracking-[0.04em] text-fg-muted tabular-nums'
+  'text-[12px] uppercase tracking-[0.04em] text-muted-foreground tabular-nums'
 
 export const DATE_WEEKDAY =
-  'pb-1 text-[11px] uppercase tracking-[0.08em] text-fg/45 font-normal'
+  'pb-1 text-[11px] uppercase tracking-[0.08em] text-foreground/45 font-normal'
 
 /** The chevron that opens the calendar. */
 export function DateCaret() {
@@ -188,11 +188,11 @@ function Chevron({ className }: { className: string }) {
  */
 const DATE_PICKER = [
   'cursor-pointer appearance-none border-0 bg-transparent p-0',
-  'font-mono text-[12px] font-medium tracking-[0.08em] uppercase text-fg',
+  'font-mono text-[12px] font-medium tracking-[0.08em] uppercase text-foreground',
   'transition-colors duration-[120ms] ease-pulse',
-  'hover:text-teal',
+  'hover:text-primary',
   'outline-2 outline-offset-2 outline-transparent',
-  'data-[focus-visible]:outline-teal focus-visible:outline-teal',
+  'data-[focus-visible]:outline-ring focus-visible:outline-ring',
 ].join(' ')
 
 /**

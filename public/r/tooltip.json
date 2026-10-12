@@ -9,46 +9,112 @@
   "files": [
     {
       "path": "src/components/OverlayArrow/OverlayArrow.tsx",
-      "content": "import { OverlayArrow as AriaOverlayArrow } from 'react-aria-components'\nimport type { OverlayArrowProps as AriaOverlayArrowProps } from 'react-aria-components'\n\n/**\n * The shape of the marker: a rotated square with two hairlines and the panel's own fill, so it continues\n * the panel's edge out to a point. Every other surface here is squared; an SVG arrow would be the one\n * curved thing in the system.\n *\n * **The rotation is on the shape inside React Aria's element, not on the element itself.** That element is\n * positioned with an inline `transform`, and an inline style outranks every class — a `rotate-45` written\n * on it type-checks, looks right in the source, and does nothing at all. The first version of this file did\n * exactly that and rendered an unrotated square sitting on the panel's edge.\n *\n * The two edges facing outward are the ones kept, so the other two disappear under the panel. Which two\n * depends on where React Aria put the overlay, which it reports as `data-placement` on the **parent** —\n * hence the arbitrary ancestor variants rather than plain `data-[…]` ones.\n */\nexport const OVERLAY_ARROW = [\n  'block size-2 rotate-45 border-line-strong bg-panel',\n  '[[data-placement=bottom]_&]:border-t [[data-placement=bottom]_&]:border-l',\n  '[[data-placement=top]_&]:border-r [[data-placement=top]_&]:border-b',\n  '[[data-placement=left]_&]:border-t [[data-placement=left]_&]:border-r',\n  '[[data-placement=right]_&]:border-b [[data-placement=right]_&]:border-l',\n].join(' ')\n\n/** React Aria positions this element; all it needs from us is to stay above the panel. */\nexport const OVERLAY_ARROW_POSITION = 'z-10'\n\n/**\n * The marker that points from a floating panel back at the thing that opened it.\n *\n * ```tsx\n * <Popover>\n *   <Popover.Arrow />\n *   …\n * </Popover>\n * ```\n *\n * **Nothing here uses one by default, and that is a decision rather than an oversight.** A pointer is a\n * shape the design language does not otherwise contain: the sheet's panels are flat rectangles joined to\n * their trigger by proximity and position, and every menu, select and tooltip in this system opens\n * anchored without one. So it is an opt-in slot — `Popover.Arrow`, `Tooltip.Arrow` — for the case where a\n * panel must be tied to a small target and proximity is not enough.\n *\n * React Aria positions this element and reports which way it must point as `data-placement`.\n */\nexport interface OverlayArrowProps extends Omit<\n  AriaOverlayArrowProps,\n  'className'\n> {\n  className?: string\n}\n\nexport function OverlayArrow({ className, ...props }: OverlayArrowProps) {\n  return (\n    <AriaOverlayArrow\n      data-slot=\"overlay-arrow\"\n      className={OVERLAY_ARROW_POSITION}\n      {...props}\n    >\n      <span\n        data-slot=\"overlay-arrow-shape\"\n        className={[OVERLAY_ARROW, className].filter(Boolean).join(' ')}\n      />\n    </AriaOverlayArrow>\n  )\n}\n",
+      "content": "import { OverlayArrow as AriaOverlayArrow } from 'react-aria-components'\nimport type { OverlayArrowProps as AriaOverlayArrowProps } from 'react-aria-components'\n\n/**\n * The shape of the marker: a rotated square with two hairlines and the panel's own fill, so it continues\n * the panel's edge out to a point. Every other surface here is squared; an SVG arrow would be the one\n * curved thing in the system.\n *\n * **The rotation is on the shape inside React Aria's element, not on the element itself.** That element is\n * positioned with an inline `transform`, and an inline style outranks every class — a `rotate-45` written\n * on it type-checks, looks right in the source, and does nothing at all. The first version of this file did\n * exactly that and rendered an unrotated square sitting on the panel's edge.\n *\n * The two edges facing outward are the ones kept, so the other two disappear under the panel. Which two\n * depends on where React Aria put the overlay, which it reports as `data-placement` on the **parent** —\n * hence the arbitrary ancestor variants rather than plain `data-[…]` ones.\n */\nexport const OVERLAY_ARROW = [\n  'block size-2 rotate-45 border-border-strong bg-card',\n  '[[data-placement=bottom]_&]:border-t [[data-placement=bottom]_&]:border-l',\n  '[[data-placement=top]_&]:border-r [[data-placement=top]_&]:border-b',\n  '[[data-placement=left]_&]:border-t [[data-placement=left]_&]:border-r',\n  '[[data-placement=right]_&]:border-b [[data-placement=right]_&]:border-l',\n].join(' ')\n\n/** React Aria positions this element; all it needs from us is to stay above the panel. */\nexport const OVERLAY_ARROW_POSITION = 'z-10'\n\n/**\n * The marker that points from a floating panel back at the thing that opened it.\n *\n * ```tsx\n * <Popover>\n *   <Popover.Arrow />\n *   …\n * </Popover>\n * ```\n *\n * **Nothing here uses one by default, and that is a decision rather than an oversight.** A pointer is a\n * shape the design language does not otherwise contain: the sheet's panels are flat rectangles joined to\n * their trigger by proximity and position, and every menu, select and tooltip in this system opens\n * anchored without one. So it is an opt-in slot — `Popover.Arrow`, `Tooltip.Arrow` — for the case where a\n * panel must be tied to a small target and proximity is not enough.\n *\n * React Aria positions this element and reports which way it must point as `data-placement`.\n */\nexport interface OverlayArrowProps extends Omit<\n  AriaOverlayArrowProps,\n  'className'\n> {\n  className?: string\n}\n\nexport function OverlayArrow({ className, ...props }: OverlayArrowProps) {\n  return (\n    <AriaOverlayArrow\n      data-slot=\"overlay-arrow\"\n      className={OVERLAY_ARROW_POSITION}\n      {...props}\n    >\n      <span\n        data-slot=\"overlay-arrow-shape\"\n        className={[OVERLAY_ARROW, className].filter(Boolean).join(' ')}\n      />\n    </AriaOverlayArrow>\n  )\n}\n",
       "type": "registry:ui",
       "target": "@ui/pulse/OverlayArrow/OverlayArrow.tsx"
     },
     {
       "path": "src/components/Tooltip/Tooltip.tsx",
-      "content": "import {\n  Tooltip as AriaTooltip,\n  TooltipTrigger as AriaTooltipTrigger,\n} from 'react-aria-components'\nimport type {\n  TooltipProps as AriaTooltipProps,\n  TooltipTriggerComponentProps as AriaTooltipTriggerProps,\n} from 'react-aria-components'\nimport { OverlayArrow } from '../OverlayArrow/OverlayArrow'\n\n/**\n * The sheet's `.ds-tip`: its own panel rather than a themed bubble, at 94% so a hairline of\n * whatever is behind it shows through, with a 45% border over the top. `w-max` because a tooltip\n * is as wide as its text and never the width of the thing it describes.\n */\nconst CONTENT = [\n  'flex w-max max-w-72 flex-col gap-[5px]',\n  'border border-line-strong bg-panel/94 px-3.5 pt-2.5 pb-3',\n].join(' ')\n\n/** The sheet's `.ds-tip__title`: 12px, letterspaced, in the accent — not uppercase, as the sheet's labels are. */\nconst TITLE = 'text-[12px] tracking-[0.1em] text-teal'\n\n/** The sheet's `.ds-tip__sub`: 14px, with the sheet's negative tracking. */\nconst TEXT = 'text-[14px] tracking-[-0.5px] text-fg'\n\nexport interface TooltipProps extends Omit<\n  AriaTooltipTriggerProps,\n  'children' | 'className'\n> {\n  /**\n   * How long to wait before showing, on hover only. React Aria's default is a deliberately\n   * unhurried 1500ms, which is the ARIA guidance for a hover — a tooltip that appears the instant\n   * a pointer crosses it flickers over every icon in a toolbar. Set `0` when the tooltip is the\n   * only way to know what something is.\n   */\n  delay?: AriaTooltipTriggerProps['delay']\n  /** Opens on focus as well as hover. On by default, because a keyboard user has no pointer. */\n  isOpen?: AriaTooltipTriggerProps['isOpen']\n  defaultOpen?: AriaTooltipTriggerProps['defaultOpen']\n  onOpenChange?: AriaTooltipTriggerProps['onOpenChange']\n  /**\n   * The thing being described, then a `Tooltip.Content`. There is no `className`: like\n   * `Select.AutoComplete`, this renders no element of its own — it is the wiring between the two\n   * — so there is nothing to style. Put the class on the thing being described.\n   */\n  children?: React.ReactNode\n}\n\nexport interface TooltipContentProps extends Omit<\n  AriaTooltipProps,\n  'children' | 'className'\n> {\n  className?: string\n  /** A `Tooltip.Title` and a `Tooltip.Text`, in that order. */\n  children?: React.ReactNode\n}\n\nexport interface TooltipTitleProps extends React.HTMLAttributes<HTMLSpanElement> {\n  children?: React.ReactNode\n}\n\nexport interface TooltipTextProps extends React.HTMLAttributes<HTMLSpanElement> {\n  children?: React.ReactNode\n}\n\n/**\n * The tooltip's surface. Use it as `Tooltip.Content`, as the second child of a `Tooltip`.\n *\n * Exported as `TooltipContent` only so tooling can resolve it; consume the compound form\n * `Tooltip.Content`.\n */\nexport function TooltipContent({\n  className,\n  children,\n  offset = 10,\n  ...props\n}: TooltipContentProps) {\n  return (\n    <AriaTooltip\n      offset={offset}\n      className={[CONTENT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaTooltip>\n  )\n}\n\n/**\n * What the tooltip is about. Use it as `Tooltip.Title`, above a `Tooltip.Text`.\n *\n * Exported as `TooltipTitle` only so tooling can resolve it; consume the compound form\n * `Tooltip.Title`.\n */\nexport function TooltipTitle({\n  className,\n  children,\n  ...props\n}: TooltipTitleProps) {\n  return (\n    <span\n      data-slot=\"title\"\n      className={[TITLE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </span>\n  )\n}\n\n/**\n * The detail under it. Use it as `Tooltip.Text`.\n *\n * Exported as `TooltipText` only so tooling can resolve it; consume the compound form\n * `Tooltip.Text`.\n */\nexport function TooltipText({\n  className,\n  children,\n  ...props\n}: TooltipTextProps) {\n  return (\n    <span\n      data-slot=\"text\"\n      className={[TEXT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </span>\n  )\n}\n\n/**\n * Styled element. Not exported — `Tooltip` below is the public symbol, and docgen reads the JSDoc\n * from the *exported* declaration, not this one.\n */\nfunction TooltipRoot({ children, ...props }: TooltipProps) {\n  return <AriaTooltipTrigger {...props}>{children}</AriaTooltipTrigger>\n}\n\n/**\n * The sheet's `.ds-tip` — a short description attached to the thing it describes. It carries the\n * thing itself as its first child and the tooltip as its second, so the two cannot be wired to\n * different things:\n *\n * ```tsx\n * <Tooltip delay={0}>\n *   <Button>Restart</Button>\n *   <Tooltip.Content>\n *     <Tooltip.Title>Restart</Tooltip.Title>\n *     <Tooltip.Text>Runs the check again from the top.</Tooltip.Text>\n *   </Tooltip.Content>\n * </Tooltip>\n * ```\n *\n * **A tooltip is not a label and not a place to put anything necessary.** It opens on hover and\n * on focus, cannot be scrolled or selected, and is gone the moment the pointer moves — so anything\n * a user must be able to read twice, copy, or click belongs somewhere else. Its own content is\n * described, not interactive.\n *\n * React Aria gives it the parts a hand-rolled tooltip always gets wrong: it opens on **focus** as\n * well as hover, so a keyboard user can reach it; it waits before opening on hover, so a pointer\n * crossing a toolbar does not flicker through every tooltip in it; it stays open while the pointer\n * moves onto the tooltip itself; and it is wired as `aria-describedby` rather than replacing the\n * element's name.\n *\n * `Tooltip.Title` is the sheet's `.ds-tip__title` — 12px, letterspaced, in the accent — and is\n * deliberately **not** uppercase, unlike the sheet's other small text. A tooltip's heading is\n * read at a glance while the pointer is resting, not scanned in a column.\n */\n\n/**\n * The marker pointing back at the trigger. Use it as `Tooltip.Arrow`.\n *\n * **Opt-in, and nothing here uses it.** The design language's panels are flat and anchored by proximity;\n * see `OverlayArrow` for why the shape exists at all and what it is made of.\n */\nexport function TooltipArrow({ className }: { className?: string }) {\n  return <OverlayArrow className={className} />\n}\n\nexport const Tooltip = Object.assign(TooltipRoot, {\n  Arrow: TooltipArrow,\n  Content: TooltipContent,\n  Title: TooltipTitle,\n  Text: TooltipText,\n})\n",
+      "content": "import {\n  Tooltip as AriaTooltip,\n  TooltipTrigger as AriaTooltipTrigger,\n} from 'react-aria-components'\nimport type {\n  TooltipProps as AriaTooltipProps,\n  TooltipTriggerComponentProps as AriaTooltipTriggerProps,\n} from 'react-aria-components'\nimport { OverlayArrow } from '../OverlayArrow/OverlayArrow'\n\n/**\n * The sheet's `.ds-tip`: its own panel rather than a themed bubble, at 94% so a hairline of\n * whatever is behind it shows through, with a 45% border over the top. `w-max` because a tooltip\n * is as wide as its text and never the width of the thing it describes.\n */\nconst CONTENT = [\n  'flex w-max max-w-72 flex-col gap-[5px]',\n  'border border-border-strong bg-card/94 px-3.5 pt-2.5 pb-3',\n].join(' ')\n\n/** The sheet's `.ds-tip__title`: 12px, letterspaced, in the accent — not uppercase, as the sheet's labels are. */\nconst TITLE = 'text-[12px] tracking-[0.1em] text-primary'\n\n/** The sheet's `.ds-tip__sub`: 14px, with the sheet's negative tracking. */\nconst TEXT = 'text-[14px] tracking-[-0.5px] text-foreground'\n\nexport interface TooltipProps extends Omit<\n  AriaTooltipTriggerProps,\n  'children' | 'className'\n> {\n  /**\n   * How long to wait before showing, on hover only. React Aria's default is a deliberately\n   * unhurried 1500ms, which is the ARIA guidance for a hover — a tooltip that appears the instant\n   * a pointer crosses it flickers over every icon in a toolbar. Set `0` when the tooltip is the\n   * only way to know what something is.\n   */\n  delay?: AriaTooltipTriggerProps['delay']\n  /** Opens on focus as well as hover. On by default, because a keyboard user has no pointer. */\n  isOpen?: AriaTooltipTriggerProps['isOpen']\n  defaultOpen?: AriaTooltipTriggerProps['defaultOpen']\n  onOpenChange?: AriaTooltipTriggerProps['onOpenChange']\n  /**\n   * The thing being described, then a `Tooltip.Content`. There is no `className`: like\n   * `Select.AutoComplete`, this renders no element of its own — it is the wiring between the two\n   * — so there is nothing to style. Put the class on the thing being described.\n   */\n  children?: React.ReactNode\n}\n\nexport interface TooltipContentProps extends Omit<\n  AriaTooltipProps,\n  'children' | 'className'\n> {\n  className?: string\n  /** A `Tooltip.Title` and a `Tooltip.Text`, in that order. */\n  children?: React.ReactNode\n}\n\nexport interface TooltipTitleProps extends React.HTMLAttributes<HTMLSpanElement> {\n  children?: React.ReactNode\n}\n\nexport interface TooltipTextProps extends React.HTMLAttributes<HTMLSpanElement> {\n  children?: React.ReactNode\n}\n\n/**\n * The tooltip's surface. Use it as `Tooltip.Content`, as the second child of a `Tooltip`.\n *\n * Exported as `TooltipContent` only so tooling can resolve it; consume the compound form\n * `Tooltip.Content`.\n */\nexport function TooltipContent({\n  className,\n  children,\n  offset = 10,\n  ...props\n}: TooltipContentProps) {\n  return (\n    <AriaTooltip\n      offset={offset}\n      className={[CONTENT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaTooltip>\n  )\n}\n\n/**\n * What the tooltip is about. Use it as `Tooltip.Title`, above a `Tooltip.Text`.\n *\n * Exported as `TooltipTitle` only so tooling can resolve it; consume the compound form\n * `Tooltip.Title`.\n */\nexport function TooltipTitle({\n  className,\n  children,\n  ...props\n}: TooltipTitleProps) {\n  return (\n    <span\n      data-slot=\"title\"\n      className={[TITLE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </span>\n  )\n}\n\n/**\n * The detail under it. Use it as `Tooltip.Text`.\n *\n * Exported as `TooltipText` only so tooling can resolve it; consume the compound form\n * `Tooltip.Text`.\n */\nexport function TooltipText({\n  className,\n  children,\n  ...props\n}: TooltipTextProps) {\n  return (\n    <span\n      data-slot=\"text\"\n      className={[TEXT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </span>\n  )\n}\n\n/**\n * Styled element. Not exported — `Tooltip` below is the public symbol, and docgen reads the JSDoc\n * from the *exported* declaration, not this one.\n */\nfunction TooltipRoot({ children, ...props }: TooltipProps) {\n  return <AriaTooltipTrigger {...props}>{children}</AriaTooltipTrigger>\n}\n\n/**\n * The sheet's `.ds-tip` — a short description attached to the thing it describes. It carries the\n * thing itself as its first child and the tooltip as its second, so the two cannot be wired to\n * different things:\n *\n * ```tsx\n * <Tooltip delay={0}>\n *   <Button>Restart</Button>\n *   <Tooltip.Content>\n *     <Tooltip.Title>Restart</Tooltip.Title>\n *     <Tooltip.Text>Runs the check again from the top.</Tooltip.Text>\n *   </Tooltip.Content>\n * </Tooltip>\n * ```\n *\n * **A tooltip is not a label and not a place to put anything necessary.** It opens on hover and\n * on focus, cannot be scrolled or selected, and is gone the moment the pointer moves — so anything\n * a user must be able to read twice, copy, or click belongs somewhere else. Its own content is\n * described, not interactive.\n *\n * React Aria gives it the parts a hand-rolled tooltip always gets wrong: it opens on **focus** as\n * well as hover, so a keyboard user can reach it; it waits before opening on hover, so a pointer\n * crossing a toolbar does not flicker through every tooltip in it; it stays open while the pointer\n * moves onto the tooltip itself; and it is wired as `aria-describedby` rather than replacing the\n * element's name.\n *\n * `Tooltip.Title` is the sheet's `.ds-tip__title` — 12px, letterspaced, in the accent — and is\n * deliberately **not** uppercase, unlike the sheet's other small text. A tooltip's heading is\n * read at a glance while the pointer is resting, not scanned in a column.\n */\n\n/**\n * The marker pointing back at the trigger. Use it as `Tooltip.Arrow`.\n *\n * **Opt-in, and nothing here uses it.** The design language's panels are flat and anchored by proximity;\n * see `OverlayArrow` for why the shape exists at all and what it is made of.\n */\nexport function TooltipArrow({ className }: { className?: string }) {\n  return <OverlayArrow className={className} />\n}\n\nexport const Tooltip = Object.assign(TooltipRoot, {\n  Arrow: TooltipArrow,\n  Content: TooltipContent,\n  Title: TooltipTitle,\n  Text: TooltipText,\n})\n",
       "type": "registry:ui",
       "target": "@ui/pulse/Tooltip/Tooltip.tsx"
     }
   ],
   "cssVars": {
     "theme": {
-      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
-      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
-      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
-      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
-      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
-      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
-      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
-      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
-      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
-      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
-      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
-      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
-      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
-      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
-      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
-      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
       "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
-      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
     }
   },
   "css": {
     "@layer base": {
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
-      },
       ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
@@ -56,7 +122,10 @@
         "font-synthesis": "none",
         "color-scheme": "dark"
       },
-      "[data-theme='dark']": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
       },
       "[data-theme='light']": {
@@ -74,8 +143,8 @@
       "body": {
         "margin": "0",
         "min-height": "100svh",
-        "background": "var(--color-base)",
-        "color": "var(--color-fg)",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
         "font-family": "var(--font-mono)",
         "font-size": "14px",
         "line-height": "1.5",
@@ -85,12 +154,12 @@
         "text-rendering": "optimizeLegibility"
       },
       "::selection": {
-        "background": "var(--color-teal)",
-        "color": "var(--color-ink)"
+        "background": "var(--primary)",
+        "color": "var(--ink)"
       }
     }
   },
-  "docs": "The sheet's `.ds-tip` — a short description attached to the thing it describes, on its own panel\nrather than on a themed bubble.\n\n```tsx\n<Tooltip delay={0}>\n  <Button>Restart</Button>\n  <Tooltip.Content>\n    <Tooltip.Title>Restart</Tooltip.Title>\n    <Tooltip.Text>Runs the check again from the top.</Tooltip.Text>\n  </Tooltip.Content>\n</Tooltip>\n```\n\n| Slot              | React Aria       | Notes                                                        |\n| ----------------- | ---------------- | ------------------------------------------------------------ |\n| `Tooltip`         | `TooltipTrigger` | The wiring. Renders **no element** — there is no `className` |\n| `Tooltip.Content` | `Tooltip`        | The surface; `delay` and placement live on the root          |\n| `Tooltip.Title`   | —                | The sheet's `.ds-tip__title`                                 |\n| `Tooltip.Text`    | —                | The sheet's `.ds-tip__sub`                                   |\n\n`Tooltip` carries the thing as its first child and the tooltip as its second, so the two cannot be\nwired to different things. Like `Select.AutoComplete`, the root renders no element of its own — so\nit takes **no `className`**, and the class goes on the thing being described.\n\n`Tooltip.Title` is 12px, letterspaced, `--color-teal`, and deliberately **not uppercase** — the one\npiece of small text in this system that is not. A tooltip is read at a glance while the pointer\nrests, not scanned down a column.\n\n### A tooltip is not a label\n\nIt opens on hover and on focus, cannot be scrolled or selected, and is gone the moment the pointer\nmoves. Anything a user must read twice, copy, or click belongs somewhere else. React Aria supplies\nwhat a hand-rolled tooltip always gets wrong: it opens on **focus**, so a keyboard user can reach\nit; it is `aria-describedby` rather than a replacement for the element's name; Escape closes it\nwithout moving focus; and it waits before opening on hover, so a pointer crossing a toolbar does\nnot flicker through every tooltip in it.\n\n### The hover path cannot be tested here, so there is no story for it\n\nReact Aria opens a tooltip on hover through a **timer**, and the test runner's polling never\nadvances it. That is the trap the Testing section already records — a query that fails with\n`Unable to find an accessible element with the role \"tooltip\"` and reads like a missing component.\n\nTwo stories were written for the hover and the delay, and both failed. The keyboard path opens\n**synchronously**, so that is the one a story can prove, and `Default` and `Keyboard` both drive it\nthat way. The hover path is the same code; its delay is asserted nowhere rather than asserted badly.\nThis is the same conclusion as the table row's hover, for the same reason.",
+  "docs": "The sheet's `.ds-tip` — a short description attached to the thing it describes, on its own panel\nrather than on a themed bubble.\n\n```tsx\n<Tooltip delay={0}>\n  <Button>Restart</Button>\n  <Tooltip.Content>\n    <Tooltip.Title>Restart</Tooltip.Title>\n    <Tooltip.Text>Runs the check again from the top.</Tooltip.Text>\n  </Tooltip.Content>\n</Tooltip>\n```\n\n| Slot              | React Aria       | Notes                                                        |\n| ----------------- | ---------------- | ------------------------------------------------------------ |\n| `Tooltip`         | `TooltipTrigger` | The wiring. Renders **no element** — there is no `className` |\n| `Tooltip.Content` | `Tooltip`        | The surface; `delay` and placement live on the root          |\n| `Tooltip.Title`   | —                | The sheet's `.ds-tip__title`                                 |\n| `Tooltip.Text`    | —                | The sheet's `.ds-tip__sub`                                   |\n\n`Tooltip` carries the thing as its first child and the tooltip as its second, so the two cannot be\nwired to different things. Like `Select.AutoComplete`, the root renders no element of its own — so\nit takes **no `className`**, and the class goes on the thing being described.\n\n`Tooltip.Title` is 12px, letterspaced, `--primary`, and deliberately **not uppercase** — the one\npiece of small text in this system that is not. A tooltip is read at a glance while the pointer\nrests, not scanned down a column.\n\n### A tooltip is not a label\n\nIt opens on hover and on focus, cannot be scrolled or selected, and is gone the moment the pointer\nmoves. Anything a user must read twice, copy, or click belongs somewhere else. React Aria supplies\nwhat a hand-rolled tooltip always gets wrong: it opens on **focus**, so a keyboard user can reach\nit; it is `aria-describedby` rather than a replacement for the element's name; Escape closes it\nwithout moving focus; and it waits before opening on hover, so a pointer crossing a toolbar does\nnot flicker through every tooltip in it.\n\n### The hover path cannot be tested here, so there is no story for it\n\nReact Aria opens a tooltip on hover through a **timer**, and the test runner's polling never\nadvances it. That is the trap the Testing section already records — a query that fails with\n`Unable to find an accessible element with the role \"tooltip\"` and reads like a missing component.\n\nTwo stories were written for the hover and the delay, and both failed. The keyboard path opens\n**synchronously**, so that is the one a story can prove, and `Default` and `Keyboard` both drive it\nthat way. The hover path is the same code; its delay is asserted nowhere rather than asserted badly.\nThis is the same conclusion as the table row's hover, for the same reason.",
   "categories": [
     "overlay"
   ],

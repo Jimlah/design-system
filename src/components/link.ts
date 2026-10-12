@@ -11,7 +11,7 @@ export const LINK = [
   'transition-[color,background-color,text-decoration-color] duration-[120ms]',
   'ease-pulse',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /**
@@ -26,10 +26,10 @@ export const LINK_CAPS: Record<'sm' | 'lg', string> = {
 /** The rest of `.ds-link-caps`, shared by both sizes. */
 export const LINK_CAPS_BASE = [
   'tracking-[-0.01em] uppercase',
-  'text-fg/70',
-  'hover:text-fg data-[hovered]:text-fg',
+  'text-foreground/70',
+  'hover:text-foreground data-[hovered]:text-foreground',
   // The page you are on, from the sheet's own `[aria-current="page"] { color: teal }`.
-  'data-[current]:text-teal',
+  'data-[current]:text-primary',
 ].join(' ')
 
 /**
@@ -38,9 +38,9 @@ export const LINK_CAPS_BASE = [
  * change alone would not mark it.
  */
 export const LINK_URL = [
-  'text-[12px] tracking-[-0.015em] text-fg',
+  'text-[12px] tracking-[-0.015em] text-foreground',
   'underline decoration-1 underline-offset-[3px]',
-  'hover:text-teal hover:decoration-teal',
+  'hover:text-primary hover:decoration-primary',
 ].join(' ')
 
 /**
@@ -49,7 +49,7 @@ export const LINK_URL = [
  * wears the accent at rest and underlines itself when the pointer arrives.
  */
 export const LINK_VIEWMORE = [
-  'text-[16px] tracking-[-0.01em] uppercase text-teal',
+  'text-[16px] tracking-[-0.01em] uppercase text-primary',
   'no-underline',
   'hover:underline hover:underline-offset-4',
 ].join(' ')

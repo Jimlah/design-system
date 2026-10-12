@@ -15,7 +15,7 @@ const meta = {
       source: {
         code: `<Popover>
   <Popover.Arrow />
-  <p className="text-[13px] text-fg/70">Anchored to the button.</p>
+  <p className="text-[13px] text-foreground/70">Anchored to the button.</p>
 </Popover>`,
       },
     },
@@ -31,7 +31,9 @@ export const PopoverArrow: Story = {
       <Button>Details</Button>
       <Popover.Content>
         <Popover.Arrow />
-        <p className="text-[13px] text-fg/70">Anchored to the button.</p>
+        <p className="text-[13px] text-foreground/70">
+          Anchored to the button.
+        </p>
       </Popover.Content>
     </Popover>
   ),

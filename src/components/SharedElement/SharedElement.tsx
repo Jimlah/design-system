@@ -37,8 +37,8 @@ export function SharedElementTransition({
  *
  * ```tsx
  * <SharedElementTransition>
- *   {atTop ? <header><SharedElement name="dot" className="size-2 bg-teal" /></header>
- *           : <footer><SharedElement name="dot" className="size-2 bg-teal" /></footer>}
+ *   {atTop ? <header><SharedElement name="dot" className="size-2 bg-primary" /></header>
+ *           : <footer><SharedElement name="dot" className="size-2 bg-primary" /></footer>}
  * </SharedElementTransition>
  * ```
  *

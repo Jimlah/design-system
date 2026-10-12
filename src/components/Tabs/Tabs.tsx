@@ -15,12 +15,12 @@ import type {
 
 /**
  * The sheet's `.ds-tabs`: a row with one hairline under all of it, which each tab's indicator
- * then sits on top of. The line is at 30% — `--color-line-soft` — which is the one place in the
+ * then sits on top of. The line is at 30% — `--border-soft` — which is the one place in the
  * sheet where a boundary is deliberately this quiet, because the selected tab's 2px of teal is
  * what is meant to be read.
  */
 const LIST = [
-  'flex border-b border-line-soft',
+  'flex border-b border-border-soft',
   // The orientation describes the strip, so the strip is what turns. A vertical list runs down
   // the page, and its hairline moves to the trailing edge — the same treatment as the sheet's
   // horizontal one, which is a line along the strip's long side with the indicator over it.
@@ -35,14 +35,14 @@ const LIST = [
  */
 const TAB = [
   'relative cursor-pointer select-none',
-  'bg-transparent px-[18px] py-3 text-[13px] tracking-[0.02em] text-fg/55',
+  'bg-transparent px-[18px] py-3 text-[13px] tracking-[0.02em] text-foreground/55',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:text-fg',
-  'data-[selected]:text-fg',
+  'data-[hovered]:text-foreground',
+  'data-[selected]:text-foreground',
   // The indicator spans the tab's own text, not its padding, so it reads as belonging to the
   // label rather than to the cell.
   'after:absolute after:inset-x-[18px] after:-bottom-px after:h-0.5',
-  'after:bg-teal after:opacity-0 after:transition-opacity after:duration-[120ms]',
+  'after:bg-primary after:opacity-0 after:transition-opacity after:duration-[120ms]',
   // The same indicator, turned: down the tab's own text rather than across it, over the strip's
   // hairline at its trailing edge. Written against the list's `aria-orientation` rather than a
   // group variant, because a group variant ties on specificity with the rules above and would
@@ -60,12 +60,12 @@ const TAB = [
   'data-[selected]:after:opacity-100',
   // The sheet gives a tab the shared ring, unlike a field, whose border is the edge it repeats.
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px]',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
 ].join(' ')
 
 /** The sheet's `.ds-count`: 11px, in the selected-yellow, beside the label. */
-const COUNT = 'ms-2 text-[11px] text-yellow'
+const COUNT = 'ms-2 text-[11px] text-warning'
 
 /** The sheet's `.ds-tabpanel`: the panel clears the list by 18px and nothing more. */
 const PANEL = 'pt-[18px] outline-none'

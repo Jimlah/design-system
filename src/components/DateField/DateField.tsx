@@ -95,10 +95,10 @@ export interface DateFieldErrorProps extends Omit<
 /** The bordered box the segments sit in. */
 const GROUP = [
   'flex w-fit items-center',
-  'border border-(--field-border) bg-panel',
+  'border border-(--field-border) bg-card',
   'transition-colors duration-150 ease-pulse',
-  'data-[focus-within]:border-teal',
-  'data-[invalid]:border-red',
+  'data-[focus-within]:border-primary',
+  'data-[invalid]:border-destructive',
   'data-[disabled]:opacity-40',
 ].join(' ')
 
@@ -138,8 +138,8 @@ function DateFieldRoot<T extends DateValue>({
     <AriaDateField
       className={[
         FIELD_SIZES[size],
-        '[--field-border:var(--color-line-control)]',
-        '[--field-hover:var(--color-fg)]',
+        '[--field-border:var(--color-input)]',
+        '[--field-hover:var(--color-foreground)]',
         'flex flex-col gap-2',
         'data-[disabled]:cursor-not-allowed',
         className,

@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <p className="text-[13px] text-fg">
+    <p className="text-[13px] text-foreground">
       Uptime
       <VisuallyHidden>— checked every 60 seconds</VisuallyHidden>
     </p>

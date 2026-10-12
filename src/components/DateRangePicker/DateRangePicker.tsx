@@ -56,19 +56,19 @@ import type { FieldSize, IconPosition } from '../field'
 /** A day in a range. */
 const CELL = [
   'flex size-8 items-center justify-center rounded-none',
-  'text-[13px] text-fg/75 tabular-nums cursor-pointer select-none',
+  'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
   'transition-colors duration-[120ms] ease-pulse',
-  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',
-  'data-[outside-month]:text-fg/30',
+  'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[outside-month]:text-foreground/30',
   // A day outside `minValue`/`maxValue` is `data-unavailable`; a day in a wholly disabled calendar
   // is `data-disabled`. Both mean the same thing to the eye, so both are marked.
   // Only days outside `minValue`/`maxValue` are struck through. A day either side of the month is
   // `data-disabled` too — React Aria disables everything outside the visible range — so striking
   // on `data-disabled` alone draws a line through the leading and trailing days of every month,
   // which says "unavailable" about a day that is merely in the wrong month.
-  'data-[unavailable]:not-data-[outside-month]:text-fg/25',
+  'data-[unavailable]:not-data-[outside-month]:text-foreground/25',
   'data-[unavailable]:not-data-[outside-month]:line-through',
-  'data-[disabled]:not-data-[outside-month]:text-fg/25',
+  'data-[disabled]:not-data-[outside-month]:text-foreground/25',
   'data-[disabled]:not-data-[outside-month]:line-through',
   'data-[unavailable]:cursor-not-allowed data-[disabled]:cursor-not-allowed',
   // What a range adds: every day between the two ends is selected, so the ends have to be told
@@ -78,12 +78,12 @@ const CELL = [
   // out-specify a wash: stacking two data variants on one utility (`data-[selected][data-selection-start]:`)
   // does not compile, and a single `data-[selection-start]` ties with `data-[selected]` and loses
   // on source order. Excluding the ends from the wash means only ever one rule applies.
-  'data-[selection-start]:bg-teal data-[selection-start]:text-ink',
-  'data-[selection-end]:bg-teal data-[selection-end]:text-ink',
-  'data-[selected]:not-data-[selection-start]:not-data-[selection-end]:bg-teal/20',
-  'data-[today]:outline-1 data-[today]:outline-teal',
+  'data-[selection-start]:bg-primary data-[selection-start]:text-ink',
+  'data-[selection-end]:bg-primary data-[selection-end]:text-ink',
+  'data-[selected]:not-data-[selection-start]:not-data-[selection-end]:bg-primary/20',
+  'data-[today]:outline-1 data-[today]:outline-ring',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px]',
-  'data-[focus-visible]:outline-teal',
+  'data-[focus-visible]:outline-ring',
 ].join(' ')
 
 /** The two date inputs sit inside one control, so the field is drawn once around both. */
@@ -96,7 +96,7 @@ const RANGE_INPUT = [
   'opacity-(--date-control-opacity)',
 ].join(' ')
 
-const SEPARATOR = 'px-0.5 text-fg/35'
+const SEPARATOR = 'px-0.5 text-foreground/35'
 
 export interface DateRangePickerProps<T extends DateValue> extends Omit<
   AriaDateRangePickerProps<T>,

@@ -19,6 +19,6 @@
  */
 export const SEGMENT_SELECTED = [
   '[&:not(:first-child)]:border-l-line-control',
-  'data-[selected]:bg-(--color-teal) data-[selected]:text-(--color-ink)',
-  'data-[selected]:[--btn:var(--color-teal)] data-[selected]:[--btn-fg:var(--color-ink)]',
+  'data-[selected]:bg-primary data-[selected]:text-ink',
+  'data-[selected]:[--btn:var(--color-primary)] data-[selected]:[--btn-fg:var(--color-ink)]',
 ].join(' ')

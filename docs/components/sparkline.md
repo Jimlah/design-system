@@ -27,7 +27,7 @@ row while the sheet uses `306×52`. So the anatomy is copied rather than invente
 
 Two departures from the replica, both deliberate:
 
-- The stroke is `var(--color-teal)`, not the replica's `#71FFF6`. Same colour in dark, and it follows the
+- The stroke is `var(--primary)`, not the replica's `#71FFF6`. Same colour in dark, and it follows the
   token into the light theme — the replica is dark-only and can afford a literal.
 - `vectorEffect="non-scaling-stroke"` keeps the line 2px when the box is not the viewBox's aspect ratio.
   Without it, stretching a 300×84 drawing into a 300×52 cell squashes the stroke with everything else.
