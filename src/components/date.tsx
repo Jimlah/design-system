@@ -28,17 +28,17 @@ import { FIELD } from './field'
  */
 export const DATE_ROOT = [
   FIELD,
-  'data-[open]:[--field-border:var(--color-teal)]',
-  'data-[focused]:[--field-border:var(--color-teal)]',
-  'data-[open]:[--field-hover:var(--color-teal)]',
+  'data-[open]:[--field-border:var(--color-primary)]',
+  'data-[focused]:[--field-border:var(--color-primary)]',
+  'data-[open]:[--field-hover:var(--color-primary)]',
   '[--dropdown-caret-rotate:0deg]',
-  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
   'data-[open]:[--dropdown-caret-rotate:180deg]',
-  'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+  'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
   // A range's two date inputs sit inside one control, so the states that land on the root —
   // invalid, disabled — have no element of their own to dim or recolour. They are published here
   // and read by that control, the same arrangement `Select` uses for its trigger's border.
-  'data-[invalid]:not-data-[focused]:[--field-border:var(--color-red)]',
+  'data-[invalid]:not-data-[focused]:[--field-border:var(--color-destructive)]',
   '[--date-control-opacity:1]',
   'data-[disabled]:[--date-control-opacity:0.4]',
 ].join(' ')

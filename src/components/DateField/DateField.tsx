@@ -138,8 +138,8 @@ function DateFieldRoot<T extends DateValue>({
     <AriaDateField
       className={[
         FIELD_SIZES[size],
-        '[--field-border:var(--color-line-control)]',
-        '[--field-hover:var(--color-fg)]',
+        '[--field-border:var(--color-input)]',
+        '[--field-hover:var(--color-foreground)]',
         'flex flex-col gap-2',
         'data-[disabled]:cursor-not-allowed',
         className,

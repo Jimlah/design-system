@@ -802,24 +802,24 @@ function SelectRoot<TMode extends SelectionMode = 'single'>({
         // While the menu is open the trigger keeps the focus border, as the sheet's
         // `.is-open` does. Both this and the focus rule resolve to the same colour, so
         // it does not matter that either can match first.
-        'data-[open]:not-data-[invalid]:[--field-border:var(--color-teal)]',
-        'data-[focused]:not-data-[disabled]:[--field-border:var(--color-teal)]',
+        'data-[open]:not-data-[invalid]:[--field-border:var(--color-primary)]',
+        'data-[focused]:not-data-[disabled]:[--field-border:var(--color-primary)]',
         // Invalid outranks the resting border, and excludes focus so the two can never
         // both match and leave the colour to source order.
-        'data-[invalid]:not-data-[focused]:[--field-border:var(--color-red)]',
+        'data-[invalid]:not-data-[focused]:[--field-border:var(--color-destructive)]',
         // The trigger's hover rule is one specificity step above its resting border, so
         // an open trigger that is also hovered would take the hover colour and lose the
         // teal. Retargeting what hover resolves to is what keeps open winning, without
         // the trigger needing to know it is open at all.
-        'data-[open]:[--field-hover:var(--color-teal)]',
+        'data-[open]:[--field-hover:var(--color-primary)]',
         // The caret's rotation and colour live here because `data-open` is on this
         // element, not on the trigger — and a group variant would tie on specificity
         // with the caret's own resting rule. See the note in `Checkbox.tsx`. The names are
         // shared with `ComboBox`, which has the same caret with the same problem.
         '[--dropdown-caret-rotate:0deg]',
-        '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+        '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
         'data-[open]:[--dropdown-caret-rotate:180deg]',
-        'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+        'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
         className,
       ]
         .filter(Boolean)

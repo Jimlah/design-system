@@ -75,8 +75,9 @@ const HIT_RADIUS = 10
 
 /** The two fills, written the way the design system expresses them. Resolved before use — see above. */
 const FILL_ACCENT =
-  'color-mix(in oklch, var(--color-teal) 88%, var(--color-ink))'
-const FILL_PLAIN = 'color-mix(in oklch, var(--color-fg) 85%, transparent)'
+  'color-mix(in oklch, var(--color-primary) 88%, var(--color-ink))'
+const FILL_PLAIN =
+  'color-mix(in oklch, var(--color-foreground) 85%, transparent)'
 
 /**
  * Scale and centre a set of points into a box, keeping each dot's accent flag and label.

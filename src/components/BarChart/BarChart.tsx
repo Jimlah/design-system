@@ -171,8 +171,8 @@ export function BarChart({
               height={barHeight}
               fill={
                 index === highlightIndex
-                  ? 'var(--color-teal)'
-                  : 'var(--color-bar)'
+                  ? 'var(--color-primary)'
+                  : 'var(--color-chart-1)'
               }
             />
           )

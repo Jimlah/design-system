@@ -37,34 +37,34 @@ const CONTROL = [
   'cursor-pointer select-none',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
   // rest
-  '[--selection-border:var(--color-line-control)]',
+  '[--selection-border:var(--color-input)]',
   '[--selection-bg:transparent]',
   '[--selection-mark:0]',
   '[--selection-mark-dash:0]',
   '[--selection-scale:0.4]',
   '[--selection-ring:transparent]',
   // hover strengthens the border...
-  'data-[hovered]:[--selection-border:var(--color-fg)]',
+  'data-[hovered]:[--selection-border:var(--color-foreground)]',
   // ...selected fills it, shows the tick and scales the centre...
-  'data-[selected]:[--selection-border:var(--color-teal)]',
-  'data-[selected]:[--selection-bg:var(--color-teal)]',
+  'data-[selected]:[--selection-border:var(--color-primary)]',
+  'data-[selected]:[--selection-bg:var(--color-primary)]',
   // Written as an exclusion rather than as a plain `data-[selected]`, because an indeterminate
   // checkbox is usually also a selected one and the two rules would tie on specificity: only one
   // of them may match.
   'data-[selected]:not-data-[indeterminate]:[--selection-mark:1]',
   'data-[selected]:[--selection-scale:1]',
   // ...and a checked control inverts on hover, the sheet's own `:hover` pair.
-  'data-[selected]:data-[hovered]:[--selection-border:var(--color-fg)]',
-  'data-[selected]:data-[hovered]:[--selection-bg:var(--color-fg)]',
+  'data-[selected]:data-[hovered]:[--selection-border:var(--color-foreground)]',
+  'data-[selected]:data-[hovered]:[--selection-bg:var(--color-foreground)]',
   // ...and some-of-the-above fills the same way but shows a dash instead of a tick, which is the
   // whole difference between "all of it" and "some of it".
-  'data-[indeterminate]:[--selection-border:var(--color-teal)]',
-  'data-[indeterminate]:[--selection-bg:var(--color-teal)]',
+  'data-[indeterminate]:[--selection-border:var(--color-primary)]',
+  'data-[indeterminate]:[--selection-bg:var(--color-primary)]',
   'data-[indeterminate]:[--selection-mark-dash:1]',
   'data-[indeterminate]:[--selection-scale:1]',
   // The ring is drawn on the indicator, because the control is a 1x1 invisible
   // input.
-  'data-[focus-visible]:[--selection-ring:var(--color-teal)]',
+  'data-[focus-visible]:[--selection-ring:var(--color-primary)]',
 ].join(' ')
 
 const BOX = [

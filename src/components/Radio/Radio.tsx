@@ -33,17 +33,17 @@ const CONTROL = [
   'cursor-pointer select-none',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',
   // rest
-  '[--selection-border:var(--color-line-control)]',
+  '[--selection-border:var(--color-input)]',
   '[--selection-mark:0]',
   '[--selection-scale:0.4]',
   '[--selection-ring:transparent]',
   // Hover only brightens the ring; there is nothing to invert, because the centre
   // is empty until the radio is selected.
-  'data-[hovered]:[--selection-border:var(--color-fg)]',
-  'data-[selected]:[--selection-border:var(--color-teal)]',
+  'data-[hovered]:[--selection-border:var(--color-foreground)]',
+  'data-[selected]:[--selection-border:var(--color-primary)]',
   'data-[selected]:[--selection-mark:1]',
   'data-[selected]:[--selection-scale:1]',
-  'data-[focus-visible]:[--selection-ring:var(--color-teal)]',
+  'data-[focus-visible]:[--selection-ring:var(--color-primary)]',
   // The centre scales in, which is motion, so under reduced motion it stays at
   // full size and cross-fades instead — a fade is not motion and needs no query.
   'motion-reduce:[--selection-scale:1]',

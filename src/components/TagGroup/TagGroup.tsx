@@ -64,14 +64,14 @@ export const TAG_CHIP = [
 const VARIANT: Record<string, string> = {
   default: 'border-transparent text-fg/70 hover:text-fg',
   outline: 'border-line-control text-fg/70 hover:border-teal hover:text-teal',
-  teal: '[--tag:var(--color-teal)] [--tag-hover:color-mix(in_oklch,var(--color-teal)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-teal)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
-  gray: '[--tag:var(--color-neutral)] [--tag-hover:color-mix(in_oklch,var(--color-neutral)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-neutral)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
+  teal: '[--tag:var(--color-primary)] [--tag-hover:color-mix(in_oklch,var(--color-primary)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-primary)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
+  gray: '[--tag:var(--color-secondary)] [--tag-hover:color-mix(in_oklch,var(--color-secondary)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-secondary)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
   yellow:
-    '[--tag:var(--color-yellow)] [--tag-hover:color-mix(in_oklch,var(--color-yellow)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-yellow)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
+    '[--tag:var(--color-warning)] [--tag-hover:color-mix(in_oklch,var(--color-warning)_88%,var(--color-ink))] [--tag-pressed:color-mix(in_oklch,var(--color-warning)_78%,var(--color-ink))] border-transparent bg-(--tag) text-ink',
   'outline-teal':
-    '[--tag-hover:color-mix(in_oklch,var(--color-teal)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-teal)_22%,transparent)] border-teal text-teal',
+    '[--tag-hover:color-mix(in_oklch,var(--color-primary)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-primary)_22%,transparent)] border-teal text-teal',
   'outline-yellow':
-    '[--tag-hover:color-mix(in_oklch,var(--color-yellow)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-yellow)_22%,transparent)] border-yellow text-yellow',
+    '[--tag-hover:color-mix(in_oklch,var(--color-warning)_14%,transparent)] [--tag-pressed:color-mix(in_oklch,var(--color-warning)_22%,transparent)] border-yellow text-yellow',
 }
 
 export type TagVariant =

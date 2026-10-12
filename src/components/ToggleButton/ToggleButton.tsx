@@ -95,7 +95,7 @@ function ToggleButtonRoot({
         // spend it. Not the sheet's yellow — that token is named `selected-yellow`, but it is already
         // the `secondary` button, and a colour that means two things stops meaning either. That
         // correction is the same one the error state needed.
-        'data-[selected]:[--btn:var(--color-teal)] data-[selected]:[--btn-fg:var(--color-ink)]',
+        'data-[selected]:[--btn:var(--color-primary)] data-[selected]:[--btn-fg:var(--color-ink)]',
         className,
       ]
         .filter(Boolean)

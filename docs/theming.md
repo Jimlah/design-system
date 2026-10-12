@@ -145,6 +145,44 @@ The six inert `--color-color-*` extras the CLI leaves beside the derived tokens 
 heuristic fires on any `cssVars` value containing `--color-`, and the values this layer adds are
 `var(--primary)` and its siblings — checked against the payload, the set of matching keys is unchanged.
 
+## What the components use
+
+The recipes inside the components name the role, not the palette:
+
+| was                                 | now                                            |
+| ----------------------------------- | ---------------------------------------------- |
+| `var(--color-fg)`                   | `var(--color-foreground)`                      |
+| `var(--color-teal)`                 | `var(--color-primary)`                         |
+| `var(--color-line-control)`         | `var(--color-input)`                           |
+| `var(--color-neutral)`              | `var(--color-secondary)`                       |
+| `var(--color-fg-muted)`             | `var(--color-muted-foreground)`                |
+| `var(--color-panel)`                | `var(--color-card)`                            |
+| `var(--color-line)`                 | `var(--color-border)`                          |
+| `var(--color-yellow)` `red` `green` | `var(--color-warning)` `destructive` `success` |
+| `var(--color-bar)`                  | `var(--color-chart-1)`                         |
+
+**Two are deliberately left on the palette names**, because shadcn has no token that means
+what they mean:
+
+- **`var(--color-ink)`** — the label on whatever fill is beneath it. `ink` inverts with the
+  fills, so there is no single `*-foreground` it could take; calling it `primary-foreground`
+  would be wrong on a danger button that merely shares the value.
+- **`var(--color-line-soft)`** — the read-only field boundary in `field.ts`. `--sidebar-border`
+  maps to the same value, but only because the nav's edge happens to use it.
+
+**The class names were left alone.** `text-fg`, `bg-panel` and `border-line-strong` still read
+as Pulse; what moved is the variables behind the arbitrary-value recipes. Renaming the utilities
+is a larger, separate change, and three families — `--color-line-strong`, `--color-line-soft` and
+`ink` — have no shadcn equivalent to map onto.
+
+### Why `var(--color-foreground)` resolves at all
+
+It is a `@theme inline` entry, and Tailwind **does not emit an inline theme variable to `:root`**
+unless something references it. `text-foreground` on its own leaves `--color-foreground` undefined;
+a recipe containing `var(--color-foreground)` causes it to be emitted. Both were measured on this
+stylesheet. The components are what keep these variables alive, so the migration had to be
+all-or-nothing per token rather than a recipe at a time.
+
 ## Using it
 
 ```tsx

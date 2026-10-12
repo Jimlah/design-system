@@ -34,23 +34,23 @@ const CONTROL = [
   // hover, which is dropped on it below.
   'data-[readonly]:cursor-not-allowed',
   // rest
-  '[--switch-edge:var(--color-line-control)]',
+  '[--switch-edge:var(--color-input)]',
   '[--switch-fill:transparent]',
-  '[--switch-knob:var(--color-fg-muted)]',
+  '[--switch-knob:var(--color-muted-foreground)]',
   '[--switch-knob-x:0px]',
   '[--switch-ring:transparent]',
-  'data-[selected]:[--switch-fill:var(--color-teal)]',
+  'data-[selected]:[--switch-fill:var(--color-primary)]',
   'data-[selected]:[--switch-knob:var(--color-ink)]',
   'data-[selected]:[--switch-knob-x:20px]',
-  'data-[selected]:[--switch-edge:var(--color-teal)]',
+  'data-[selected]:[--switch-edge:var(--color-primary)]',
   // Invalid is a failure the user has to see, so it outranks the selected fill.
-  'data-[invalid]:not-data-[disabled]:[--switch-edge:var(--color-red)]',
+  'data-[invalid]:not-data-[disabled]:[--switch-edge:var(--color-destructive)]',
   // Hover only brightens the edge — the fill stays put, which is the sheet's own
   // pair: a selected switch keeps its teal and gains a white rim, rather than
   // inverting the way a checked checkbox does.
-  'data-[hovered]:not-data-[invalid]:not-data-[readonly]:[--switch-edge:var(--color-fg)]',
+  'data-[hovered]:not-data-[invalid]:not-data-[readonly]:[--switch-edge:var(--color-foreground)]',
   // The ring is drawn on the track, because the control is a 1x1 hidden input.
-  'data-[focus-visible]:[--switch-ring:var(--color-teal)]',
+  'data-[focus-visible]:[--switch-ring:var(--color-primary)]',
 ].join(' ')
 
 /**

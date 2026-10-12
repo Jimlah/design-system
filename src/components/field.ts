@@ -38,8 +38,8 @@ export const FIELD_SIZES: Record<FieldSize, string> = {
  */
 export const FIELD = [
   'group flex flex-col gap-2 [font-size:var(--field-control-text)]',
-  '[--field-border:var(--color-line-control)]',
-  '[--field-hover:var(--color-line)]',
+  '[--field-border:var(--color-input)]',
+  '[--field-hover:var(--color-border)]',
   // Read-only is not disabled: the value is the whole point of the field, so it
   // keeps full-strength text. Only the affordances go — a quieter hairline, and no
   // brightening on hover — because there is nothing here to invite a click on.

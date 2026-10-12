@@ -57,17 +57,17 @@ const ROOT = [
   // Open and focus both hold the border teal, as the sheet's `.ds-select-btn.is-open` does.
   // The input's border comes from `--field-border`, published on this root, so the state is
   // expressed here rather than on the input — the same arrangement as `Select`.
-  'data-[open]:[--field-border:var(--color-teal)]',
-  'data-[focused]:[--field-border:var(--color-teal)]',
+  'data-[open]:[--field-border:var(--color-primary)]',
+  'data-[focused]:[--field-border:var(--color-primary)]',
   // The input's hover rule outranks its resting border, so an open control has to retarget what
   // hover resolves to, or hovering it would take the hover colour and lose the teal.
-  'data-[open]:[--field-hover:var(--color-teal)]',
+  'data-[open]:[--field-hover:var(--color-primary)]',
   // The caret's rotation and colour, for the reason above: `data-open` is here, not on the
   // button, and a group variant cannot win that cascade.
   '[--dropdown-caret-rotate:0deg]',
-  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-fg)_50%,transparent)]',
+  '[--dropdown-caret-ink:color-mix(in_oklch,var(--color-foreground)_50%,transparent)]',
   'data-[open]:[--dropdown-caret-rotate:180deg]',
-  'data-[open]:[--dropdown-caret-ink:var(--color-teal)]',
+  'data-[open]:[--dropdown-caret-ink:var(--color-primary)]',
 ].join(' ')
 
 const CARET = [

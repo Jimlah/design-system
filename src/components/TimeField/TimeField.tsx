@@ -136,8 +136,8 @@ function TimeFieldRoot<T extends TimeValue>({
     <AriaTimeField
       className={[
         FIELD_SIZES[size],
-        '[--field-border:var(--color-line-control)]',
-        '[--field-hover:var(--color-fg)]',
+        '[--field-border:var(--color-input)]',
+        '[--field-hover:var(--color-foreground)]',
         'flex w-fit flex-col gap-2',
         'data-[disabled]:cursor-not-allowed',
         className,

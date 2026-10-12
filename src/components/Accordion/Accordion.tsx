@@ -37,15 +37,15 @@ const ITEM = [
   'relative flex flex-col',
   'border-b border-line',
   '[--accordion-caret-rotate:0deg]',
-  '[--accordion-ink:color-mix(in_oklch,var(--color-fg)_55%,transparent)]',
-  '[--accordion-caret-ink:color-mix(in_oklch,var(--color-fg)_45%,transparent)]',
+  '[--accordion-ink:color-mix(in_oklch,var(--color-foreground)_55%,transparent)]',
+  '[--accordion-caret-ink:color-mix(in_oklch,var(--color-foreground)_45%,transparent)]',
   '[--accordion-row-bg:transparent]',
   'data-[expanded]:[--accordion-caret-rotate:180deg]',
-  'data-[expanded]:[--accordion-caret-ink:var(--color-teal)]',
-  'data-[expanded]:[--accordion-ink:var(--color-fg)]',
+  'data-[expanded]:[--accordion-caret-ink:var(--color-primary)]',
+  'data-[expanded]:[--accordion-ink:var(--color-foreground)]',
   // The sheet's `.ds-panel`, put on the whole item rather than on the body alone: the open row is
   // one block, heading included, not a heading with a tinted paragraph under it.
-  'data-[expanded]:[--accordion-row-bg:var(--color-panel)]',
+  'data-[expanded]:[--accordion-row-bg:var(--color-card)]',
   '[background:var(--accordion-row-bg)]',
   'transition-colors duration-[160ms] ease-pulse',
 ].join(' ')

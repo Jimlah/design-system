@@ -161,11 +161,11 @@ export const BUTTON_BASE = [
    an *off* default toggle was black text on the black page — an empty box,
    correct in the source and invisible on screen. */
 export const COLORS: Record<NonNullable<ButtonProps['color']>, string> = {
-  primary: '[--btn:var(--color-teal)]',
-  secondary: '[--btn:var(--color-yellow)]',
-  neutral: '[--btn:var(--color-neutral)]',
-  success: '[--btn:var(--color-green)]',
-  danger: '[--btn:var(--color-red)]',
+  primary: '[--btn:var(--color-primary)]',
+  secondary: '[--btn:var(--color-warning)]',
+  neutral: '[--btn:var(--color-secondary)]',
+  success: '[--btn:var(--color-success)]',
+  danger: '[--btn:var(--color-destructive)]',
 }
 
 /* Each variant owns its border colour: BUTTON_BASE only declares the 1px border

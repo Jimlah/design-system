@@ -16,7 +16,7 @@ import { useId } from 'react'
  *
  * Three things it inherits from the sheet and one it does not:
  *
- * - The stroke is `var(--color-teal)` rather than the replica's `#71FFF6`. Same colour in the dark theme,
+ * - The stroke is `var(--color-primary)` rather than the replica's `#71FFF6`. Same colour in the dark theme,
  *   and it follows the token into the light one — the replica is dark-only, so it can afford the literal.
  * - The dots are `rgba(255,255,255,.32)` at a 0.9 radius on a 7.7px pitch, which is `.ds-dotgrid`'s texture
  *   at a heavier weight, drawn as an SVG `<pattern>` because a `<rect>` cannot take a CSS background.
@@ -119,7 +119,7 @@ export function Sparkline({
         data-slot="sparkline-line"
         d={toPath(data, width, height)}
         fill="none"
-        stroke="var(--color-teal)"
+        stroke="var(--color-primary)"
         strokeWidth="2"
         strokeLinejoin="round"
         strokeLinecap="round"
