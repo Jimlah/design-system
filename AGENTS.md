@@ -77,7 +77,7 @@ The same applies in the other direction: `npm test` right after
 
 Stories are the tests — each `play` function runs in a real browser through the Storybook
 test-runner. React Aria's own [testing guidance](https://react-aria.adobe.com/testing) applies
-directly, and two of its rules have already caught mistakes here:
+directly, and three of its rules have already caught mistakes here:
 
 - **Query by semantics, not structure.** `getByRole` on the role the ARIA pattern gives, never a
   class or a DOM path. For a portalled surface — a menu, a popover — the query has to come from
@@ -91,6 +91,15 @@ directly, and two of its rules have already caught mistakes here:
   that produces the attribute — the tests passed and the behaviour was untested.
   `await userEvent.hover(el)` reaches the real path, and asserting `data-hovered` afterwards is
   what proves it.
+- **That state lands on the next commit, so wait for it — and establish rest rather than assuming
+  it.** `userEvent.hover` fires the pointer sequence; the `data-hovered` React Aria derives from it,
+  and the colour that follows, arrive with a re-render. Read on the very next line, the assertion
+  races that commit and loses on a slower runner, where the attribute is simply absent. CI failed
+  five times on exactly this, in a different file each time — `Checkbox`, `Nav`, `Radio`, `Select`
+  and `Switch` each asserted `data-hovered` with no `waitFor` anywhere in the file. So wait for the
+  state; and where an earlier story in the same page may have left the pointer on the element, clear
+  it with `userEvent.unhover` first, or the reading you call "rest" is the hovered colour — which is
+  how `Nav`'s hover story and `Breadcrumbs`' current step each failed once.
 
 Two more worth knowing before reaching for them:
 

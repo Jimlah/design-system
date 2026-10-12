@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, waitFor } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 
 import { Breadcrumbs, BreadcrumbsItem } from './Breadcrumbs'
 
@@ -74,14 +74,15 @@ export const Current: Story = {
     // thing the reader is deciding whether to follow. The 45% is only what a step that is neither a
     // link nor the current page would be, and there is no such step in a trail.
     //
-    // **Read through `waitFor`: this colour is transitioned, and CI caught it mid-flight.** `LINK`
-    // carries `transition-[color] duration-[120ms]`, and CI read `oklab(1 0 0 / 0.716489)` here —
-    // white, but at neither 0.7 nor 1, so a frame of an animation between the two rather than the
-    // resting colour. (0.716489 is exactly `0.7 + 0.055 × 0.3`: 6.6ms into a 0.7 → 1 transition, or
-    // 113ms into the reverse. The trigger was not reproduced on a developer machine, and the same
-    // expectation passes at rest in `Link`'s own story.) Waiting asserts the colour the design
-    // states — 70%, over the trail's 45% — instead of whichever frame the assertion landed on. It
-    // cannot hide a wrong resting colour: that still fails, one second later.
+    // **Rest is established here rather than assumed, and then waited for.** Two CI runs failed this
+    // one line, differently. The first read `oklab(1 0 0 / 0.716489)` — white at neither 0.7 nor 1,
+    // a frame of the 120ms colour transition. The second read `oklch(1 0 none)` and stayed there for
+    // the whole second, and that is the *hovered* colour: the pointer from an earlier story was
+    // still on this link, so what the story called rest was never rest at all.
+    //
+    // So: clear the pointer, then wait for the value instead of sampling it. Neither half hides a
+    // wrong colour — a link that is genuinely the wrong shade still fails, a second later.
+    await userEvent.unhover(links[0])
     await waitFor(() =>
       expect(getComputedStyle(links[0]).color).toBe('oklab(1 0 0 / 0.7)'),
     )

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, userEvent } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 
 import {
   Checkbox,
@@ -321,13 +321,21 @@ export const Hover: Story = {
 
     // Hovering an empty box brightens its border...
     await userEvent.hover(boxOf(off))
-    await expect(root(off)).toHaveAttribute('data-hovered', 'true')
+    // **Waited for, because the state is React Aria's and it lands on the next commit.**
+    // `userEvent.hover` fires the pointer sequence; `data-hovered` is derived from it by a
+    // re-render, so a read on the very next line races that commit — and loses on a slower
+    // runner, where the attribute is simply not there yet. See the testing rules in AGENTS.md.
+    await waitFor(() =>
+      expect(root(off)).toHaveAttribute('data-hovered', 'true'),
+    )
     await expect(getComputedStyle(boxOf(off)).borderTopColor).toBe(
       'oklch(1 0 none)', // --color-fg
     )
     // ...and hovering a checked one inverts its fill, as the sheet does.
     await userEvent.hover(boxOf(on))
-    await expect(root(on)).toHaveAttribute('data-hovered', 'true')
+    await waitFor(() =>
+      expect(root(on)).toHaveAttribute('data-hovered', 'true'),
+    )
     await expect(getComputedStyle(boxOf(on)).backgroundColor).toBe(
       'oklch(1 0 none)',
     )

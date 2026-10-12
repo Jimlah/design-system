@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, userEvent } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 
 import { Switch, SwitchIndicator, SwitchText } from './Switch'
 
@@ -242,7 +242,13 @@ export const Hover: Story = {
 
     // Hovering brightens the edge of an off switch...
     await userEvent.hover(trackOf(off))
-    await expect(root(off)).toHaveAttribute('data-hovered', 'true')
+    // **Waited for, because the state is React Aria's and it lands on the next commit.**
+    // `userEvent.hover` fires the pointer sequence; `data-hovered` is derived from it by a
+    // re-render, so a read on the very next line races that commit — and loses on a slower
+    // runner, where the attribute is simply not there yet. See the testing rules in AGENTS.md.
+    await waitFor(() =>
+      expect(root(off)).toHaveAttribute('data-hovered', 'true'),
+    )
     await expect(getComputedStyle(trackOf(off)).borderTopColor).toBe(
       'oklch(1 0 none)', // --color-fg
     )
@@ -250,7 +256,9 @@ export const Hover: Story = {
     // ...and of an on one, which keeps its fill. That is the sheet's own pair: a
     // switch gains a rim rather than inverting, unlike a checked checkbox.
     await userEvent.hover(trackOf(on))
-    await expect(root(on)).toHaveAttribute('data-hovered', 'true')
+    await waitFor(() =>
+      expect(root(on)).toHaveAttribute('data-hovered', 'true'),
+    )
     await expect(getComputedStyle(trackOf(on)).borderTopColor).toBe(
       'oklch(1 0 none)',
     )
