@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent, waitFor } from 'storybook/test'
+import { User } from '@react-aria/test-utils'
 
 import {
   Radio,
@@ -148,13 +149,19 @@ export const Exclusivity: Story = {
   args: { value: 'http' },
   // The difference from a `Checkbox.Group`, stated as a test: picking one turns the
   // previous one off, rather than adding to it.
-  play: async ({ canvas }) => {
-    const http = canvas.getByRole('radio', { name: 'HTTP' })
-    const https = canvas.getByRole('radio', { name: 'HTTPS' })
+  play: async ({ canvas, canvasElement }) => {
+    // The RadioGroup tester drives the pattern — find the radios, pick one, read back which is
+    // selected — so exclusivity is stated in the group's own terms instead of by hand.
+    const ariaUser = new User({ interactionType: 'mouse' })
+    const group = ariaUser.createTester('RadioGroup', { root: canvasElement })
 
-    await expect(http).toBeChecked()
-    await userEvent.click(https)
-    await expect(https).toBeChecked()
+    const http = canvas.getByRole('radio', { name: 'HTTP' })
+    await expect(group.getSelectedRadio()).toBe(http)
+
+    await group.triggerRadio({ radio: 'HTTPS' })
+    await expect(group.getSelectedRadio()).toBe(
+      canvas.getByRole('radio', { name: 'HTTPS' }),
+    )
     await expect(http).not.toBeChecked()
   },
 }

@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "latest",
+    "@react-aria/test-utils": "^1.0.0-rc.1",
     "@storybook/addon-a11y": "^10.6.1",
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/addon-mcp": "^10.6.1",
@@ -38,6 +39,8 @@
     "@tanstack/devtools-vite": "0.8.5",
     "@tanstack/react-query": "latest",
     "@tanstack/router-cli": "^1.132.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/user-event": "^14.6.7",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

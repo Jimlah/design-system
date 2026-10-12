@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent } from 'storybook/test'
+import { User } from '@react-aria/test-utils'
 
 import {
   Tabs,
@@ -142,24 +143,28 @@ export const Keyboard: Story = {
 }
 
 export const Click: Story = {
-  play: async ({ canvas }) => {
-    await userEvent.click(canvas.getByRole('tab', { name: /checks/i }))
-    await expect(canvas.getByRole('tab', { name: /checks/i })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    )
-    await expect(canvas.getByText(/three checks are failing/i)).toBeVisible()
-    await expect(canvas.queryByText(/everything at a glance/i)).toBeNull()
+  play: async ({ canvasElement }) => {
+    // The Tabs tester knows the pattern — which element is a tab, how a press reaches React Aria, and
+    // which panel the selected tab controls — so the story asserts the tab/panel relationship itself
+    // rather than querying its two halves separately.
+    const ariaUser = new User({ interactionType: 'mouse' })
+    const tabs = ariaUser.createTester('Tabs', { root: canvasElement })
+
+    // Targeted by index, because the count badge makes the second tab's text "Checks 3" and the
+    // tester matches text exactly; the assertion below is what confirms which tab that index meant.
+    await tabs.triggerTab({ tab: 1 })
+    const selected = tabs.getSelectedTab() as HTMLElement
+    const panel = tabs.getActiveTabpanel() as HTMLElement
+    await expect(selected).toHaveTextContent('Checks')
+    await expect(panel).toHaveTextContent(/three checks are failing/i)
+    await expect(panel).not.toHaveTextContent(/everything at a glance/i)
 
     // Each tab points at the panel it controls, which is what ties the two halves together for
     // assistive tech rather than for the eye.
-    const checks = canvas.getByRole('tab', { name: /checks/i })
-    const panelId = checks.getAttribute('aria-controls') as string
-    await expect(document.getElementById(panelId)).toBeInTheDocument()
-    await expect(document.getElementById(panelId)).toHaveAttribute(
-      'aria-labelledby',
-      checks.id,
-    )
+    await expect(
+      document.getElementById(selected.getAttribute('aria-controls') as string),
+    ).toBe(panel)
+    await expect(panel).toHaveAttribute('aria-labelledby', selected.id)
   },
 }
 

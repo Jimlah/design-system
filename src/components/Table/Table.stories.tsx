@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent, within } from 'storybook/test'
+import { User } from '@react-aria/test-utils'
 
 import {
   TableFooter,
@@ -193,9 +194,15 @@ export const Selection: Story = {
   // The header checkbox is not told anything: React Aria finds it by its `slot="selection"` and
   // drives it. With one of three rows chosen it reports `mixed` — the indeterminate state — which
   // is the difference between "select all" and "you have selected some of this".
-  play: async ({ canvas }) => {
-    const boxes = canvas.getAllByRole('checkbox')
-    await expect(boxes).toHaveLength(4)
+  play: async ({ canvas, canvasElement }) => {
+    // **The pattern tester, instead of this story re-deriving the mechanics.** `@react-aria/test-utils`
+    // knows a Table: which element is the select-all box, how a press reaches React Aria's selection,
+    // and what the collection now holds as selected. `getSelectedRows()` is the table's own answer,
+    // which is more than a row of `checked` flags read back off the inputs can say. See the testing
+    // rules in AGENTS.md.
+    const ariaUser = new User({ interactionType: 'mouse' })
+    const table = ariaUser.createTester('Table', { root: canvasElement })
+    await expect(table.getRows()).toHaveLength(MONITORS.length)
 
     // The generic form rather than a cast: `getByRole` is generic over the element it returns.
     const header = canvas.getByRole<HTMLInputElement>('checkbox', {
@@ -210,17 +217,22 @@ export const Selection: Story = {
     await expect(header.checked).toBe(false)
     await expect(rowOf(/fra1/i).checked).toBe(true)
     await expect(rowOf(/iad1/i).checked).toBe(false)
+    // ...and the collection agrees with the boxes, which the boxes alone cannot show.
+    await expect(table.getSelectedRows()).toHaveLength(1)
+    await expect(table.getSelectedRows()[0]).toHaveTextContent(/fra1/i)
 
     // Selecting everything leaves it plainly checked, with no trace of the mixed state.
-    await userEvent.click(header)
+    await table.toggleSelectAll()
     await expect(header.indeterminate).toBe(false)
     await expect(header.checked).toBe(true)
     await expect(rowOf(/iad1/i).checked).toBe(true)
+    await expect(table.getSelectedRows()).toHaveLength(MONITORS.length)
 
     // ...and clearing it empties every row.
-    await userEvent.click(header)
+    await table.toggleSelectAll()
     await expect(header.checked).toBe(false)
     await expect(rowOf(/fra1/i).checked).toBe(false)
+    await expect(table.getSelectedRows()).toHaveLength(0)
   },
 }
 

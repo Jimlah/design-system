@@ -106,10 +106,20 @@ Two more worth knowing before reaching for them:
 - **With fake timers, advance them after interactions.** The symptom is a query failing with
   `Unable to find an accessible element with the role "listbox"` — which reads like a missing
   component and is a pending timer.
-- **`@react-aria/test-utils`** exists for pattern-level testing (`createTester('Select', { root })`
-  and its `User` class, with `interactionType: 'mouse' | 'touch' | 'keyboard'`). It is worth
-  adopting if the suite grows enough interactions to justify a shared vocabulary; today the
-  stories query roles directly, which needs no extra dependency.
+- **`@react-aria/test-utils` drives the patterns, and it is adopted here.** `new User({ interactionType })`
+  then `createTester('Table' | 'Tabs' | 'RadioGroup' | 'CheckboxGroup' | 'Select' | 'ComboBox' | 'Menu' |
+  'ListBox' | 'GridList' | 'Tree' | 'Dialog', { root })` returns a tester that knows which element is
+  which and how a press, a key or a long press reaches React Aria, and answers in the pattern's own
+  terms — `getSelectedRows()`, `getSelectedTab()`, `getActiveTabpanel()`, `getSelectedRadio()`,
+  `getSelectedCheckboxes()`. It is used where the *pattern* is the subject rather than one control's
+  state: `Table`'s selection, `Tabs`'s click, `Radio`'s exclusivity and `Checkbox`'s group. Three
+  things to know before reaching for it. `indexOrText` is matched **exactly**, so a tab whose label
+  carries a count badge is targeted by index and the assertion is what confirms which one that index
+  meant. The tester needs the story's **root element** (`canvasElement`), not `canvas`, because it
+  queries the document rather than the root. And the package brings its own requirements —
+  `@testing-library/dom@10` and `@testing-library/user-event@14`, both direct devDependencies here
+  rather than whatever Storybook happens to hoist. A story about one control's own state still asks
+  the DOM directly; the tester is for when the pattern is the point.
 
 ## Design tokens
 

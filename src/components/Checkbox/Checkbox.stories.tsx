@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent, waitFor } from 'storybook/test'
+import { User } from '@react-aria/test-utils'
 
 import {
   Checkbox,
@@ -141,19 +142,25 @@ export const Group: Story = {
       <Checkbox.Hint>Applies to every monitor.</Checkbox.Hint>
     </Checkbox.Group>
   ),
-  play: async ({ canvas }) => {
-    // Queried by the group's label, so this only resolves if `Checkbox.Label` is
-    // associated with `Checkbox.Group`.
-    const group = canvas.getByRole('group', { name: /alert me when/i })
-    const slow = canvas.getByRole('checkbox', { name: /slow/i })
-    const down = canvas.getByRole('checkbox', { name: 'Down' })
+  play: async ({ canvas, canvasElement }) => {
+    // The CheckboxGroup tester reads the *group's* value rather than the inputs' — which is exactly
+    // the claim this story makes, that the group owns it.
+    const ariaUser = new User({ interactionType: 'mouse' })
+    const group = ariaUser.createTester('CheckboxGroup', {
+      root: canvasElement,
+    })
 
-    await expect(group).toBeInTheDocument()
-    // The group owns the value, so each control reflects it without being told.
-    await expect(slow).toBeChecked()
-    await expect(down).not.toBeChecked()
+    await expect(group.getSelectedCheckboxes()).toHaveLength(1)
+    await expect(group.getSelectedCheckboxes()[0]).toBeChecked()
 
-    const describedBy = group.getAttribute('aria-describedby') ?? ''
+    // Adding, not replacing — the difference from a `Radio.Group`, driven the way the pattern says.
+    await group.toggleCheckbox({ checkbox: 'Down' })
+    await expect(group.getSelectedCheckboxes()).toHaveLength(2)
+
+    // Queried by the group's label, so this only resolves if `Checkbox.Label` is associated with
+    // `Checkbox.Group`; and the hint is wired through `aria-describedby`, not merely sitting nearby.
+    const labelled = canvas.getByRole('group', { name: /alert me when/i })
+    const describedBy = labelled.getAttribute('aria-describedby') ?? ''
     const hint = canvas.getByText(/applies to every monitor/i)
     await expect(describedBy.split(' ')).toContain(hint.id)
   },
