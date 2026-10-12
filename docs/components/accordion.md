@@ -1,8 +1,8 @@
 # Accordion
 
 The sheet has no accordion in it — the second component here with nothing to copy, after the date
-picker — so this follows its _language_ rather than its markup: square, mono, and the hairline
-vocabulary of its dividers.
+picker — so this follows its _language_ rather than its markup: the control step of the radius scale,
+mono, and the hairline vocabulary of its dividers.
 
 ```tsx
 <Accordion defaultExpandedKeys={['checks']}>

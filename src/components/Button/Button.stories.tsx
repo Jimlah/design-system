@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 
+import { restCopy } from '../../restCopy'
 import { Button, ButtonIcon, ButtonText } from './Button'
 
 const meta = {
@@ -49,9 +50,26 @@ export const Default: Story = {
     await expect(styles.backgroundColor).toBe('oklch(0.9198 0.1236 189.5)') // --primary
     await expect(styles.color).toBe('oklch(0 0 none)') // --color-ink
     await expect(styles.height).toBe('44px') // md
-    await expect(styles.borderRadius).toBe('0px') // the sheet is square throughout
+    await expect(styles.borderRadius).toBe('0px') // --radius: 0, the sheet's own corner
     await expect(styles.textTransform).toBe('uppercase')
     await expect(styles.fontFamily).toContain('Overpass Mono')
+  },
+}
+
+export const Radius: Story = {
+  // **A button's corner is the theme's, and a subtree can set it.** This is the mechanism
+  // `/create` rests on: `rounded-md` compiles to `border-radius: calc(var(--radius) * 0.8)`, so the
+  // token is read on the element the utility lands on rather than at `:root` — which is why every
+  // corner in the library moves when one value does, and why the components had to stop saying
+  // `rounded-none`.
+  render: () => (
+    <div style={{ '--radius': '10px' } as React.CSSProperties}>
+      <Button>Restart</Button>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'Restart' })
+    await expect(getComputedStyle(button).borderRadius).toBe('8px') // 0.8 × 10
   },
 }
 
@@ -103,15 +121,24 @@ export const Outline: Story = {
   args: { variant: 'outline', color: 'neutral', children: 'Cancel' },
   // The outline's hairline is easy to lose to a `border-transparent` in the base
   // classes, which no amount of type-checking would catch. Assert it.
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     const button = canvas.getByRole('button', { name: /cancel/i })
     const styles = getComputedStyle(button)
 
+    // Structural facts, which no pointer state changes.
     await expect(styles.backgroundColor).toBe('rgba(0, 0, 0, 0)')
     await expect(styles.borderTopWidth).toBe('1px')
+
+    // **The colours are read off a copy the pointer cannot reach.** On CI the real pointer was left
+    // over this button — `matches(':hover')` true — so `data-[hovered]:border-(--btn)` painted the border
+    // opaque and this story read `oklch(0.8047 0 none)` where 40% of it belongs. See `restCopy`, which
+    // records why no `unhover` can fix that.
+    const rest = restCopy(button, canvasElement)
+    const restStyles = getComputedStyle(rest)
     // Derived from the colour, not a hardcoded rgba: 40% of --btn.
-    await expect(styles.borderTopColor).toBe('oklab(0.8047 0 0 / 0.4)')
-    await expect(styles.color).toBe('oklch(0.8047 0 none)')
+    await expect(restStyles.borderTopColor).toBe('oklab(0.8047 0 0 / 0.4)')
+    await expect(restStyles.color).toBe('oklch(0.8047 0 none)')
+    rest.remove()
   },
 }
 

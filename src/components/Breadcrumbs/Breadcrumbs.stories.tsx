@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, userEvent, waitFor } from 'storybook/test'
+import { expect } from 'storybook/test'
 
+import { restCopy } from '../../restCopy'
 import { Breadcrumbs, BreadcrumbsItem } from './Breadcrumbs'
 
 const meta = {
@@ -66,6 +67,14 @@ export const Current: Story = {
     await expect(current).toHaveAttribute('aria-current', 'page')
     await expect(getComputedStyle(current).color).toBe('oklch(1 0 none)')
 
+    // **...and that it is on the page at all.** The two assertions above passed for a step with
+    // `display: none`: an attribute and a computed colour are both reported for an element nobody can
+    // see. The item carried `data-[disabled]:hidden`, React Aria marks the current crumb
+    // `data-disabled`, and so every trail in this repo was missing the one step it exists to show —
+    // including the landing page's, for as long as it has had a breadcrumb. One line is what it costs
+    // to assert that the page you are on is named on the page.
+    await expect(current).toBeVisible()
+
     // ...and the two above it are real anchors, so middle-click and "open in a new tab" work.
     const links = [...canvasElement.querySelectorAll('a')]
     await expect(links).toHaveLength(2)
@@ -74,18 +83,17 @@ export const Current: Story = {
     // thing the reader is deciding whether to follow. The 45% is only what a step that is neither a
     // link nor the current page would be, and there is no such step in a trail.
     //
-    // **Rest is established here rather than assumed, and then waited for.** Two CI runs failed this
-    // one line, differently. The first read `oklab(1 0 0 / 0.716489)` — white at neither 0.7 nor 1,
-    // a frame of the 120ms colour transition. The second read `oklch(1 0 none)` and stayed there for
-    // the whole second, and that is the *hovered* colour: the pointer from an earlier story was
-    // still on this link, so what the story called rest was never rest at all.
-    //
-    // So: clear the pointer, then wait for the value instead of sampling it. Neither half hides a
-    // wrong colour — a link that is genuinely the wrong shade still fails, a second later.
-    await userEvent.unhover(links[0])
-    await waitFor(() =>
-      expect(getComputedStyle(links[0]).color).toBe('oklab(1 0 0 / 0.7)'),
-    )
+    // **The resting colour is read off a copy the pointer cannot reach.** This line has now failed four
+    // times on CI and never locally, and the last failure is what explains the first three: measured on
+    // the runner, the *real pointer* is left sitting on the link — `matches(':hover')` true — so
+    // `hover:text-foreground` paints it opaque and no amount of waiting changes that. The earlier
+    // repair, `userEvent.unhover` plus a one-second `waitFor`, could not work: `unhover` fires synthetic
+    // events, and the browser's `:hover` obeys a real pointer only. `restCopy` carries the same classes
+    // off the page, where nothing can hover it, and asserts the recipe — which is what this was always
+    // about: the caps link rests at 70%, not at the trail's 45%.
+    const rest = restCopy(links[0], canvasElement)
+    await expect(getComputedStyle(rest).color).toBe('oklab(1 0 0 / 0.7)')
+    rest.remove()
   },
 }
 
@@ -124,9 +132,10 @@ export const Deep: Story = {
       <Breadcrumbs.Item>fra1 · Frankfurt</Breadcrumbs.Item>
     </Breadcrumbs>
   ),
-  // A trail deep enough to be worth having is also long enough to run out of room. **React Aria drops
-  // the middle and keeps the ends**, because a trail that wraps to a second line pushes the page down
-  // every time a window is resized — which is the sort of thing a breadcrumb exists to avoid.
+  // Six steps, all six of them rendered. **Nothing collapses**, whatever React Aria's documentation
+  // says about dropping the middle: `useBreadcrumbs` in this version builds `navProps` and stops
+  // there, so the trail wraps and this story is the proof. (The `Current` story is where the bug that
+  // claimed otherwise was found: the middle was never hidden — the *last* one was.)
   play: async ({ canvasElement }) => {
     const items = [...canvasElement.querySelectorAll('li')]
     await expect(items).toHaveLength(6)

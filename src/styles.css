@@ -123,10 +123,27 @@
   --sidebar-border: var(--border-soft);
   --sidebar-ring: var(--primary);
 
-  /* The sheet squares off its buttons and inputs. Nothing here uses
-     `rounded-sm`…`rounded-4xl`, and `rounded-full` is not derived from
-     `--radius`, so collapsing shadcn's scale changes no component. */
+  /* The one number a theme moves to change every corner in the library.
+     The sheet's own value is 0 — it squares off its buttons and inputs — but the components
+     read the scale below rather than squaring themselves off, so a design system with soft
+     corners sets this and nothing else: a control is `rounded-md` (0.8 of the base) and a
+     surface `rounded-xl` (1.4 of it). At 0 both are 0, which is where Pulse is.
+     `rounded-full` is not derived from this, which is why the radio, the switch and the avatar
+     keep their shapes whatever it says. */
   --radius: 0;
+
+  /* --- type ---
+     The family is a *value* here rather than a literal in the theme block below, and
+     that is a measurement rather than tidiness. `@theme inline` writes a theme entry's
+     value straight into the utility it compiles: for a colour that value is a
+     `var()`, which still reads the element it is used on, but for a font it is the
+     family itself, so `.font-mono` carried the literal and no token could move it.
+     Measured by compiling this sheet with @tailwindcss/node: with the family inline,
+     setting --font-mono on a subtree left .font-mono at Overpass Mono; with this
+     indirection the utility reads var(--type-mono) on the element, which is what makes
+     the typeface themeable at all. */
+  --type-mono:
+    'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 
 /* The single theme block. Every entry here is a name for a value above, so
@@ -178,13 +195,15 @@
   --color-ink: var(--ink);
 
   /* --- type --- */
-  --font-mono:
-    'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-mono: var(--type-mono);
 
   /* --- motion --- */
   --ease-pulse: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* --- shadcn's radius scale, off this system's single base --- */
+  /* --- shadcn's radius scale, off this system's single base ---
+     Two of these are in use: `--radius-md` shapes a control and `--radius-xl` a surface. The rest
+     are here because the scale is shadcn's and a component copied out of shadcn/ui may reach for
+     `rounded-sm` or `rounded-4xl`, which would otherwise land on Tailwind's fixed defaults. */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

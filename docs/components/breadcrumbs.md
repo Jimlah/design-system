@@ -33,6 +33,20 @@ It belongs to the item, not to the list, and `last:after:content-none` is what s
 a stray `/`. A pseudo-element is correct for it — a slash carries no text, cannot be pressed and needs
 no accessible name — which is exactly why the caret in `Nav` could **not** be one.
 
+### The page you are on has to be visible, and one class was hiding it
+
+React Aria marks the **current** breadcrumb `data-disabled` as well as `data-current` — deliberately,
+since the page you are on is not pressable — and the item carried `data-[disabled]:hidden`, meant for
+crumbs React Aria never renders. Every trail in this repo was therefore missing its last step: the
+landing page's, and the first page that used one for real. The `Current` story asserted the step's
+`aria-current`, its colour and that it is not a link, and never that it could be _seen_ — an attribute
+and a computed colour are both reported for an element with `display: none`, so it passed for as long
+as the bug existed. It now asserts `toBeVisible()`, which is the assertion whose absence was the bug.
+
+The class is gone rather than narrowed. There is no crumb React Aria hides: `useBreadcrumbs` returns
+`navProps` and nothing else in this version, and a disabled trail is one that cannot be followed,
+not one that disappears.
+
 ### The steps are `shrink-0`
 
 Without it a flex item happily narrows mid-word, so three steps sat on one line in a 176px container

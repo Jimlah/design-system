@@ -130,7 +130,12 @@ export function BarChart({
         preserveAspectRatio="none"
         role="img"
         aria-label={label}
-        className="block"
+        // **The prop is composed, not replaced.** It was `className="block"` outright, so the
+        // `className` this component publishes — and documents as the way to stretch a chart — went
+        // nowhere: a chart asked for `w-full` inside a card rendered at its own 720px and ran past the
+        // edge of it. Found by putting one in a card on `/create`; `Sparkline` and `FlatLine` already
+        // compose theirs, which is what made the difference visible.
+        className={['block', className].filter(Boolean).join(' ')}
       >
         <defs>
           <pattern

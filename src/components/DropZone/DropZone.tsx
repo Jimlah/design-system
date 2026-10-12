@@ -76,7 +76,7 @@ function DropZoneRoot({ className, children, ...props }: DropZoneProps) {
       data-slot="dropzone"
       className={[
         'flex min-h-40 flex-col items-center justify-center gap-3 p-8',
-        'border border-dashed border-border bg-card text-center',
+        'border border-dashed border-border bg-card rounded-md text-center',
         // The target lights up while a file is over it, which is the only feedback a drag gets.
         'transition-colors duration-150 ease-pulse',
         'data-[drop-target]:border-primary data-[drop-target]:bg-primary/8',

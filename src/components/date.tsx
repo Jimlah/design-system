@@ -60,7 +60,7 @@ export const DATE_TRIGGER = [
 /** The sheet's `.ds-select-menu`, the same surface a select's list opens on. */
 export const DATE_MENU = [
   'flex w-fit flex-col overflow-hidden',
-  'border border-border-strong bg-card p-2',
+  'border border-border-strong bg-card rounded-xl p-2',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
 ].join(' ')
 
@@ -72,7 +72,7 @@ export const DATE_MENU = [
  * `DatePicker` until a second component needed it.
  */
 export const DATE_CELL: string = [
-  'flex size-8 items-center justify-center rounded-none',
+  'flex size-8 items-center justify-center rounded-md',
   'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
   'transition-colors duration-[120ms] ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
@@ -101,7 +101,7 @@ export const DATE_CELL: string = [
  * "chosen" about one that is only being typed.
  */
 export const DATE_SEGMENT = [
-  'rounded-none px-0.5 outline-none',
+  'rounded-md px-0.5 outline-none',
   'text-foreground data-[placeholder]:text-foreground/35',
   'data-[focused]:bg-foreground/12 data-[focused]:text-foreground',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
@@ -109,7 +109,7 @@ export const DATE_SEGMENT = [
 
 /** The month's arrows. */
 export const DATE_NAV = [
-  'flex size-7 items-center justify-center rounded-none',
+  'flex size-7 items-center justify-center rounded-md',
   'text-foreground/70 cursor-pointer',
   'transition-colors duration-[120ms] ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
@@ -315,10 +315,36 @@ export function useVisibleRangeLabel(
 ) {
   const { locale } = useLocale()
   if (!range) return null
+
   // `formatRange` takes plain `Date`s, so the date values are converted first.
   const zone = getLocalTimeZone()
-  return new DateFormatter(locale, {
+  const start = range.start.toDate(zone)
+  const end = range.end.toDate(zone)
+  const sameYear = range.start.year === range.end.year
+
+  /**
+   * **The two months are joined here rather than by `formatRange`, and that is a server-render fix.**
+   * `Intl.DateTimeFormat#formatRange` puts the separator's spaces in the hands of the runtime's own
+   * ICU, and the two runtimes are not the same ICU: measured, `en-GB` came out as
+   * `March<U+2009>–<U+2009>April 2024` on this app's dev server and
+   * `March<U+0020>–<U+0020>April 2024` in Chrome — the same words with different whitespace, which is
+   * enough for React to throw the tree away and re-render it on every load of a page with a calendar on
+   * it. Composing the label makes the caption the component's own typography, like everything else the
+   * sheet draws, and leaves the environment with nothing to disagree about.
+   */
+  if (
+    range.start.year === range.end.year &&
+    range.start.month === range.end.month
+  ) {
+    return new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(
+      end,
+    )
+  }
+
+  // The year once when both months are in it, which is what a range format would have said.
+  const startLabel = new DateFormatter(locale, {
     month: 'long',
-    year: 'numeric',
-  }).formatRange(range.start.toDate(zone), range.end.toDate(zone))
+    ...(sameYear ? {} : { year: 'numeric' as const }),
+  }).format(start)
+  return `${startLabel} – ${new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(end)}`
 }

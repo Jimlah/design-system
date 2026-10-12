@@ -32,7 +32,7 @@ import { LABEL } from '../field'
  */
 export const CHIP = [
   'inline-flex items-center',
-  'border px-2.5 py-1',
+  'border rounded-md px-2.5 py-1',
   'text-[12px] tracking-[-0.01em] uppercase',
   'transition-[color,background-color,border-color] duration-[120ms] ease-pulse',
 ].join(' ')

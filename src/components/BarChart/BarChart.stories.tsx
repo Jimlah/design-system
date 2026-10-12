@@ -187,3 +187,29 @@ export const Readout: Story = {
     ).toBeNull()
   },
 }
+
+export const Stretch: Story = {
+  // **The class list is composed, not replaced.** `className` was published, documented as the way to
+  // stretch a chart, and thrown away: the `<svg>` carried a hardcoded `block`, so a chart asked for
+  // `w-full` inside a card still rendered at its own 720px and ran past the card's edge. Found on
+  // `/create`, where the three drawings share one card — `Sparkline` and `FlatLine` compose theirs,
+  // which is what made the one that did not visible.
+  args: { values: VALUES, labels: LABELS, label: 'Requests per four hours' },
+  render: (args) => (
+    <div className="w-96">
+      <BarChart {...args} className="w-full" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector('div') as HTMLElement
+    const svg = canvasElement.querySelector(
+      '[data-slot=bar-chart-svg]',
+    ) as SVGElement
+
+    await expect(Math.round(svg.getBoundingClientRect().width)).toBe(
+      Math.round(wrapper.getBoundingClientRect().width),
+    )
+    // ...and it stretches rather than letterboxing inside the box it was given.
+    await expect(svg.getAttribute('preserveAspectRatio')).toBe('none')
+  },
+}

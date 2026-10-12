@@ -21,11 +21,21 @@ export const LABEL =
 export const VALUE = 'text-[12px] tabular-nums text-foreground/70'
 
 /**
- * The rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be
- * coloured — the reader cannot tell how full it is. The fill's track is a wash of the text colour
- * rather than a panel, so it reads as the empty part of the same thing.
+ * The empty part of a rail: a wash of the text colour rather than a panel, so it reads as the
+ * unfinished part of the same thing. **Shared with `Slider`, which draws the same rail** — and it is
+ * the wash that is shared, not the clip below it.
  */
-export const TRACK = 'relative h-1 w-full overflow-hidden bg-foreground/12'
+export const TRACK_WASH = 'bg-foreground/12'
+
+/**
+ * The bar's rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be
+ * coloured — the reader cannot tell how full it is.
+ *
+ * `overflow-hidden` belongs to the **bar**, where the fill is the whole drawing. It is not part of what
+ * a rail is: a slider's handle is 20px square on a 4px rail, and inheriting this clip painted it as a
+ * 4px sliver. See `Slider`'s `RAIL` for the measurement.
+ */
+export const TRACK = 'relative h-1 w-full overflow-hidden ' + TRACK_WASH
 
 /**
  * The bar. Its width is a **value**, not a style — which is why it arrives as `--fill` and the

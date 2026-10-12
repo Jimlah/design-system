@@ -62,8 +62,8 @@ The same applies in the other direction: `npm test` right after
 
 - Components live in `src/components/` with their story colocated as `src/components/Foo.stories.tsx`.
 - **Examples and page bodies are not components, and do not get stories.** `src/examples/` holds pages
-  that exist to show the components being _used_ — `Login` today — and each is tested by a
-  `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
+  that exist to show the components being _used_ — `Login` and the theme builder, `Create` — and each
+  is tested by a `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
   and what puts a component into the manifest this repo's MCP tools serve, so a story for an example
   would publish a page as part of the library's API. `Home` predates the rule and keeps its story,
   because that story is the app's own SSR-and-CSS check.
@@ -240,9 +240,12 @@ Add `light` to that list the day the app gains a persisted preference.
 
 House rules that the source sheet enforces and components must preserve:
 
-- **Square corners, with two exceptions.** The sheet squares off its buttons and inputs, so
-  `rounded-none` is the default. It gives the selection controls the radius users expect of
-  them — `2px` on the checkbox, a full circle on the radio — and both of those are deliberate.
+- **A corner is a token, and Pulse sets it to `0`.** The sheet squares its buttons and inputs, but the
+  components read the radius scale rather than squaring themselves off: a control is `rounded-md`
+  (0.8 of the base) and a surface `rounded-xl` (1.4 of it). One value moves every corner, `/create`
+  dials it, and at `0` nothing looks different from the sheet. The checkbox's `2px`, the radio's
+  circle, the switch's pill, the table's collapsed grid, the edge-anchored sheet and the slider's grip
+  stay literal. See [theming.md](./docs/theming.md#radius).
 - **Uppercase, letterspaced mono labels** — `uppercase tracking-[0.04em]`.
 - **A fill carries `ink`, and `ink` inverts with the fills** — black on the luminous
   dark-theme accents, white on the deep light-theme ones. Never hardcode either.

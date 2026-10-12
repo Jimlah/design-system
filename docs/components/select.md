@@ -4,6 +4,14 @@ The sheet's `.ds-select`, `.ds-select-btn` and `.ds-select-menu`. Opens a list o
 rather than pushing it down, and keeps the chosen value in the trigger where a form can read
 it back.
 
+> **There is no `Select.Search`, and four places in the component said there was.** The search strip
+> belongs to `Select.AutoComplete`, which draws it itself — a filter scope with no box in it would have
+> nothing to filter with. The component's doc comments named `Select.Search` four times and its story's
+> curated snippet wrote `<Select.Search />`, which is the example a consumer copies. Nothing checked:
+> a snippet is text and a JSDoc is a comment, so the first page that actually rendered one threw on the
+> spot. Found while wiring a `Select` into `/create` — reading a doc and rendering it are two different
+> tests, and only one of them was being run.
+
 ```tsx
 <Select defaultSelectedKey="https" placeholder="Choose a protocol">
   <Select.Label>Protocol</Select.Label>

@@ -55,7 +55,7 @@ import type { FieldSize, IconPosition } from '../field'
 
 /** A day in a range. */
 const CELL = [
-  'flex size-8 items-center justify-center rounded-none',
+  'flex size-8 items-center justify-center rounded-md',
   'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
   'transition-colors duration-[120ms] ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',

@@ -9,7 +9,7 @@
  * because a shadow has to darken in both themes, exactly as the modal's scrim does.
  */
 export const SURFACE = [
-  'border border-border-strong bg-card',
+  'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
   'outline-none',
 ].join(' ')

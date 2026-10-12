@@ -26,7 +26,7 @@ const REGION =
 
 const TOAST = [
   'flex items-start gap-3',
-  'border border-border-strong bg-card p-3.5',
+  'border border-border-strong bg-card rounded-xl p-3.5',
   // React Aria puts `data-animation="entering" | "exiting"` on the toast for the duration of its
   // entry and exit, so an animation can be hung off it rather than off a class that is always on.
   // No keyframes are shipped with it: which way a toast should move is a house decision, not this

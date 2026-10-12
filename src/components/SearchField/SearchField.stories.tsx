@@ -109,7 +109,7 @@ export const Default: Story = {
 
     const styles = getComputedStyle(input)
     await expect(styles.height).toBe('44px') // md
-    await expect(styles.borderRadius).toBe('0px')
+    await expect(styles.borderRadius).toBe('0px') // --radius: 0, the sheet's own corner
     await expect(styles.fontFamily).toContain('Overpass Mono')
     // The resting hairline, so the control is identifiable on either page.
     await expect(styles.borderTopColor).not.toBe('rgba(0, 0, 0, 0)')

@@ -17,7 +17,7 @@ import type {
 
 import { FIELD_SIZES } from '../field'
 import type { FieldSize } from '../field'
-import { FILL, HEADER, TONE, TRACK } from '../progress'
+import { FILL, HEADER, TONE, TRACK_WASH } from '../progress'
 
 export interface SliderProps extends Omit<
   AriaSliderProps,
@@ -113,8 +113,16 @@ export interface SliderThumbProps extends Omit<
  * height paints a 1px line across a vertical slider and looks like a rendering fault.
  */
 const RAIL = [
-  TRACK,
-  'rounded-none',
+  // **Not `TRACK`, and the difference is the whole of a bug.** That rail is `overflow-hidden`, which
+  // the bar can afford — its fill is the whole drawing. A slider's handle is 20px square on a 4px rail,
+  // so the clip painted it as a **4px sliver**: a white notch at the end of the fill instead of a grip.
+  //
+  // Nothing caught it for as long as the component has existed, because every assertion in the story
+  // measures `getBoundingClientRect`, which reports a layout box whether or not an ancestor clips it.
+  // The handle measured 20×20 while painting four pixels tall. It took a 3× screenshot of the rendered
+  // control — the thing the eye reads — to see it, and an `overflow` assertion now to keep it.
+  TRACK_WASH,
+  'relative w-full rounded-none',
   // The thickness is a variable the slider publishes per size, so it stays a literal class Tailwind
   // can see — `h-(--slider-rail)` — rather than a value computed at runtime and invisible to it.
   'data-[orientation=vertical]:h-full data-[orientation=vertical]:w-(--slider-rail)',
@@ -158,6 +166,15 @@ const RAIL_SIZE: Record<FieldSize, string> = {
  * exactly two.
  */
 const THUMB = [
+  // **React Aria positions the handle along the rail and expects the *recipe* to centre it in the
+  // other axis.** Its inline style is `position:absolute; left: X%; transform: translate(-50%,-50%)`,
+  // and that `-50%` assumes the box it translates already starts at the rail's centre — which it does
+  // not, because `top` is `auto`. Measured on a 4px rail, the handle sat **10px above it**, hanging
+  // over the fill like a tab. React Aria's own docs CSS carries the missing line: `top: 50%` when the
+  // rail lies down, `left: 50%` when it stands up. This is that line, taken from the track rather than
+  // from the handle, because the orientation is published on the track and not on the thumb.
+  'group-data-[orientation=horizontal]:top-1/2',
+  'group-data-[orientation=vertical]:left-1/2',
   // **Square, and written as two utilities rather than `size-(--)`** — that form silently produced
   // nothing here, which is how the handle first ended up with no height at all. Both sides read the same
   // variable, so they cannot drift out of square.
@@ -340,7 +357,9 @@ export function SliderTrack({ className, ...props }: SliderTrackProps) {
       data-slot="track"
       className={[
         RAIL,
-        'relative flex touch-none items-center',
+        // `group` so the handle can read the orientation: React Aria publishes it on the track and not
+        // on the thumb, and the thumb needs it to centre itself in the cross axis.
+        'group relative flex touch-none items-center',
         'data-[orientation=vertical]:flex-col',
         className,
       ]

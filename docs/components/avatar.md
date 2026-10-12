@@ -22,9 +22,11 @@ Who something belongs to — a monitor's owner, an alert's assignee — as a pic
 accordion and the toast, this is the fourth component here invented rather than replicated. So every
 decision comes from the system's own language:
 
-- **Square.** The sheet squares off its controls and makes exactly two exceptions, the checkbox's 2px and
-  the radio's circle. A round avatar would be a **third**, so it is `rounded-none`. This is the one place a
-  designer expects a circle, which is why it is stated rather than left to look like an oversight.
+- **Square by default, and a circle never.** The sheet squares off its controls and makes exactly two
+  exceptions, the checkbox's 2px and the radio's circle; a round avatar would be a **third**, so the box
+  wears the control step of the radius scale — `rounded-md`, which is `0` in the sheet and a soft square
+  under a theme. It is the one place a designer expects a circle, which is why it is stated rather than
+  left to look like an oversight.
 - **A fill carrying `ink`**, like every other filled control: black on the luminous dark-theme accents,
   white on the deep light-theme ones. The five colours are literally `Button`'s table, so an avatar cannot
   drift away from the palette it sits beside.

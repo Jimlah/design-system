@@ -66,7 +66,11 @@ const ITEM = [
   'text-foreground/45',
   // The slash between two items, and only between two: `last:` drops it from the page you are on.
   "after:mx-2 after:text-foreground/30 after:content-['/'] last:after:content-none",
-  'data-[disabled]:hidden',
+  /* **Nothing here hides a disabled crumb, and that is the whole of a bug the Create page found.**
+     React Aria marks the *current* breadcrumb `data-disabled` as well as `data-current` — deliberately,
+     because the page you are on is not pressable — so a `data-[disabled]:hidden` here hid the last step
+     of every trail in this repo, the landing page's included. The `Current` story asserted the
+     attribute and the colour and never that the step was *visible*, which is why it passed. */
 ].join(' ')
 
 /** The page you are on: named, at full strength, and not a link. */
@@ -86,9 +90,11 @@ const CURRENT = 'text-foreground'
  * Every item but the last takes an `href` and renders a real `Link`, so middle-click and "open in a
  * new tab" work — which is most of what a breadcrumb is for, and what a `<span onClick>` gives up.
  *
- * **It collapses rather than overflows.** React Aria drops the middle of the trail when the container
- * is too narrow and replaces it with an ellipsis, keeping the first and the last, because a trail that
- * wraps onto two lines pushes the page down every time someone resizes a window.
+ * **It wraps, and nothing collapses.** React Aria's documentation describes dropping the middle of the
+ * trail when the container runs out of room, and this component used to say so; measured, this version
+ * does nothing of the kind — `useBreadcrumbs` builds `navProps` and no more, and the `Deep` story's six
+ * steps all render. So the trail wraps instead, which is why the items are `shrink-0` and the list is
+ * `flex-wrap`.
  */
 function BreadcrumbsRoot<T>({
   label = 'Breadcrumb',

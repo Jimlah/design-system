@@ -18,7 +18,10 @@ import type { ReactNode } from 'react'
 import { LOAD_MORE, LoadMoreSpinner } from '../loadMore'
 import { OPTION, OPTION_LIST } from '../optionList'
 
-const PANEL = 'border border-border-strong bg-card'
+// `overflow-hidden` so the rounded panel actually clips the option rows it holds — a row's hover fill
+// is a rectangle and would otherwise paint over the corner. The panel's own focus ring is drawn on the
+// panel, not inside it, so clipping its children costs nothing.
+const PANEL = 'border border-border-strong bg-card rounded-xl overflow-hidden'
 
 export interface ListBoxProps<T> extends Omit<
   AriaListBoxProps<T>,

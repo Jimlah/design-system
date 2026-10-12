@@ -35,26 +35,6 @@ the drift that file exists to prevent.
 `"From"`. That is the right answer: a screen reader crossing a form hears which window _and_ which
 end of it. A story therefore matches on a prefix rather than on a name invented to make it pass.
 
-### The handle is a grip, and it took three tries to look like one
-
-A round thumb is what years of sliders have trained everyone to expect, and it would be a **third**
-exception to a rule that has exactly two — the checkbox and the radio. A slider handle is not a
-selection control; it is a grip. So it is square-cornered and it grows with `size` along with the rail.
-
-Getting there took three attempts, and the first two are worth recording because a passing suite did
-not notice either:
-
-1. A **bordered `bg-background` square**. On the dark page that is a black box showing nothing but its own
-   hairline, sitting on the rail like a rendering artifact. A border also eats a fifth of the width at
-   this size.
-2. A **square filled with `bg-foreground/70`**. Visible, and still wrong: a square astride a line reads as a
-   bullet, not a handle.
-
-What works is a **fader grip** — taller than it is wide, solid, in a token that already exists, with
-its states moving that colour the way every other control here does: quiet at rest, full strength on
-hover, and the accent only while it is actually being dragged. The accent is already spent on the
-fill, so a second accent block beside it would say nothing new.
-
 ### `size` was accepted and ignored — twice
 
 The same trap as the number field's steppers, one component later, and it survived two rounds because
@@ -68,7 +48,8 @@ identical grip, and `Sizes` still passed, because it was only looking at the rai
 
 The lesson is about the _test_ rather than the class: **check both ends of a two-ended decision.**
 `Sizes` now asserts three distinct rail heights _and_ three distinct grip heights, and that every grip
-is taller than it is wide.
+is square. (It required the opposite for a while — "taller than it is wide" — which is the assertion the
+section below is about.)
 
 ### Disabled dims through a variable, for the fourth time
 
@@ -116,3 +97,29 @@ left to brighten, so they grow. Dragging used to turn the handle **teal** — th
 underneath it, invisible on the filled half. The same mistake as the resting colour, found in the same pass.
 
 All three sizes carry the same rule, and `Sizes` checks that they are still three different sizes.
+
+## The handle was painted as a sliver, and it hung above the rail
+
+The grip the section above describes was not what the browser drew, and it took a 3× screenshot of the
+rendered control to see it. Two separate faults, both from `Slider.Track` composing the progress bar's
+recipe instead of its own:
+
+1. **The rail clips.** `progress.ts` exports `TRACK` as `overflow-hidden`, which the bar can afford —
+   its fill is the whole drawing. A slider's handle is a **20px square on a 4px rail**, so the clip painted
+   it as a 4px white notch at the end of the fill. React Aria's own docs CSS for a slider track has no
+   overflow rule at all. What the two rails share is the **wash**, not the clip; that is now its own
+   export, `TRACK_WASH`.
+2. **The handle had no cross-axis centre.** React Aria positions the thumb along the rail and centres it
+   with `transform: translate(-50%, -50%)` — which assumes the box it translates already _starts_ at the
+   rail's centre, and it does not, because `top` is `auto`. Measured, the grip sat **10px above** a 4px
+   rail, hanging over the fill like a tab. React Aria's docs CSS carries the missing line: `top: 50%`
+   when the rail lies down, `left: 50%` when it stands up. It is read off the **track**, because React Aria
+   publishes `data-orientation` there and not on the thumb.
+
+**Neither was visible to the suite, and the reason is the same for both.** Every assertion measured
+`getBoundingClientRect`, which returns a layout box whether or not an ancestor clips it and whatever the
+box's transform has done to it on screen: the handle measured 20×20 while painting four pixels tall. The
+story now asserts the two mechanisms rather than the symptom — the track's computed `overflow` is
+`visible`, the handle is taller than the rail, and its centre is within a pixel of the rail's in **both**
+orientations. That is the difference between a component that works and one that only measures as if it
+did.

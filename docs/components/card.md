@@ -1,7 +1,8 @@
 # Card
 
 One thing on the page, in the surface Modal, Tooltip and Toast already share: `bg-card`, a
-boundary in `--border-strong`, square corners, and no shadow.
+boundary in `--border-strong`, the surface step of the radius scale — `rounded-xl`, square at the
+sheet's `0` — and no shadow.
 
 The slots are shadcn/ui's, name for name — so a card copied out of shadcn/ui keeps its shape when
 it moves here:

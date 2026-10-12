@@ -36,7 +36,7 @@ const OVERLAY = [
  */
 const DIALOG = [
   'relative w-full max-w-md',
-  'border border-border-strong bg-card p-6',
+  'border border-border-strong bg-card rounded-xl p-6',
   'outline-none',
 ].join(' ')
 

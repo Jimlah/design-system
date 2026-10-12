@@ -257,7 +257,28 @@ export function Home() {
             >
               Install the registry
             </Button>
-            <Button variant="ghost">Read the docs</Button>
+            {/*
+              **Create is an action of this page, not a footnote in its registry section.** It is the
+              one thing here a reader can *do* to the system rather than read about it: a base colour, an
+              accent hue, a corner and a typeface, and the token block that falls out. A link, for the
+              same reason the docs link beside it is one — middle-click and "open in a new tab" are most
+              of what a link is for, and `BASE_URL` is what keeps it working under the Pages subpath.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}create/`}>
+              Create a theme
+            </Link>
+            {/*
+              **A link that navigates is an anchor, not a button.** This was a `Button` with no
+              handler, so it did nothing at all — and a button that opens a new address also gives up
+              middle-click and "open in a new tab", which is most of what a link to the docs is for.
+              The destination is the Storybook build the app serves at `/storybook/` in dev, in
+              `vite preview` and on Pages alike; see `storybookBuild()` in vite.config.ts. Read from
+              `BASE_URL` rather than written as `/storybook/`, because on Pages this whole app is
+              mounted under a repository subpath.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}storybook/`}>
+              Read the docs
+            </Link>
           </Toolbar>
         </div>
 
@@ -436,6 +457,14 @@ export function Home() {
           The same components are published as a shadcn registry, so another
           project installs them instead of copying them: one theme, one bundle,
           and one item per component, served from this site as static JSON.
+        </p>
+        <p className="mt-3 max-w-2xl text-[14px] text-foreground/70">
+          The theme is not fixed either.{' '}
+          <Link variant="url" href={`${import.meta.env.BASE_URL}create/`}>
+            Create one
+          </Link>{' '}
+          from a base colour, an accent hue and a typeface, and the block it
+          hands back replaces the values every one of these components reads.
         </p>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
