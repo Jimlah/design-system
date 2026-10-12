@@ -1,0 +1,90 @@
+# Everything this repo actually gates on.
+#
+# Stories are the tests here (see AGENTS.md), so the story suite runs in CI instead of
+# being left to whoever remembers. It needs no Storybook server: `@storybook/addon-vitest`
+# boots its own — measured by running it with nothing on :6006 — but it does need a real
+# Chromium, because every story's `play` function runs in a browser.
+#
+# Node 24 is what this app is developed on; Vite 8 requires ^20.19 || >=22.12.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push makes the older run's verdict irrelevant, so stop paying for it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Format, lint, types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # `npm run check` is `prettier --check .`, which reads this file too.
+      - run: npm run check
+
+      - run: npm run lint
+
+      # tsc is the correctness check for the curated prop surfaces: a re-declared React
+      # Aria prop that does not exist is a compile error, so they cannot be guessed.
+      - run: npx tsc --noEmit
+
+  build:
+    name: Build app and Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # The app serves this build at /storybook/, so a Storybook that fails to build
+      # takes a route down with it. See storybookBuild() in vite.config.ts.
+      - run: npm run build-storybook
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  stories:
+    name: Story tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Keyed on the lockfile, which is what pins the Playwright version.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - run: npx playwright install --with-deps chromium
+
+      - run: npx vitest --project storybook run
