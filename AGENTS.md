@@ -111,7 +111,7 @@ Two more worth knowing before reaching for them:
   'ListBox' | 'GridList' | 'Tree' | 'Dialog', { root })` returns a tester that knows which element is
   which and how a press, a key or a long press reaches React Aria, and answers in the pattern's own
   terms — `getSelectedRows()`, `getSelectedTab()`, `getActiveTabpanel()`, `getSelectedRadio()`,
-  `getSelectedCheckboxes()`. It is used where the *pattern* is the subject rather than one control's
+  `getSelectedCheckboxes()`. It is used where the _pattern_ is the subject rather than one control's
   state: `Table`'s selection, `Tabs`'s click, `Radio`'s exclusivity and `Checkbox`'s group. Three
   things to know before reaching for it. `indexOrText` is matched **exactly**, so a tab whose label
   carries a count badge is targeted by index and the assertion is what confirms which one that index
