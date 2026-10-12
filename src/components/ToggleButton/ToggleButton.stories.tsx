@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
-import { expect, userEvent } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 
 import { ToggleButton } from './ToggleButton'
 
@@ -82,13 +82,24 @@ export const Selected: Story = {
   play: async ({ canvas }) => {
     const toggle = canvas.getByRole('button', { name: '24h' })
     await expect(toggle).toHaveAttribute('aria-pressed', 'true')
-    await expect(getComputedStyle(toggle).backgroundColor).toBe(
-      'oklch(0.9198 0.1236 189.5)',
+    // **Read through `waitFor`, because both of these properties are transitioned.** `Button`'s base
+    // carries `transition-[background-color,color,border-color,opacity] duration-[120ms]`, and a read
+    // taken while that is still running catches a frame of the animation rather than the colour: CI
+    // got the selected fill back as `oklab(0.9198 -0.121905 -0.0203999)` — the same colour as the
+    // token, but serialised in the space the animation interpolates in instead of the `oklch` it is
+    // authored in. Waiting reads the colour the sheet states, and a genuinely wrong fill still fails
+    // one second later.
+    await waitFor(() =>
+      expect(getComputedStyle(toggle).backgroundColor).toBe(
+        'oklch(0.9198 0.1236 189.5)',
+      ),
     )
 
     // `ink` on the fill, because the fill inverts with the theme. Hardcoding black here is the mistake
     // the whole `ink` token exists to prevent.
-    await expect(getComputedStyle(toggle).color).toBe('oklch(0 0 none)')
+    await waitFor(() =>
+      expect(getComputedStyle(toggle).color).toBe('oklch(0 0 none)'),
+    )
   },
 }
 
