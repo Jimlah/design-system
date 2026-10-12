@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect } from 'storybook/test'
 
+import { restCopy } from '../../restCopy'
 import { Button, ButtonIcon, ButtonText } from './Button'
 
 const meta = {
@@ -120,15 +121,24 @@ export const Outline: Story = {
   args: { variant: 'outline', color: 'neutral', children: 'Cancel' },
   // The outline's hairline is easy to lose to a `border-transparent` in the base
   // classes, which no amount of type-checking would catch. Assert it.
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     const button = canvas.getByRole('button', { name: /cancel/i })
     const styles = getComputedStyle(button)
 
+    // Structural facts, which no pointer state changes.
     await expect(styles.backgroundColor).toBe('rgba(0, 0, 0, 0)')
     await expect(styles.borderTopWidth).toBe('1px')
+
+    // **The colours are read off a copy the pointer cannot reach.** On CI the real pointer was left
+    // over this button — `matches(':hover')` true — so `data-[hovered]:border-(--btn)` painted the border
+    // opaque and this story read `oklch(0.8047 0 none)` where 40% of it belongs. See `restCopy`, which
+    // records why no `unhover` can fix that.
+    const rest = restCopy(button, canvasElement)
+    const restStyles = getComputedStyle(rest)
     // Derived from the colour, not a hardcoded rgba: 40% of --btn.
-    await expect(styles.borderTopColor).toBe('oklab(0.8047 0 0 / 0.4)')
-    await expect(styles.color).toBe('oklch(0.8047 0 none)')
+    await expect(restStyles.borderTopColor).toBe('oklab(0.8047 0 0 / 0.4)')
+    await expect(restStyles.color).toBe('oklch(0.8047 0 none)')
+    rest.remove()
   },
 }
 
