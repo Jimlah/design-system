@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "virtualizer",
+  "title": "Virtualizer",
+  "description": "Renders only the rows in view.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Virtualizer/Virtualizer.tsx",
+      "content": "import { Virtualizer as AriaVirtualizer } from 'react-aria-components'\nimport type { VirtualizerProps as AriaVirtualizerProps } from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface VirtualizerProps<T> extends Omit<\n  AriaVirtualizerProps<T>,\n  'children'\n> {\n  /**\n   * The collection to virtualize — a `GridList`, `Table` or `Tree`. Optional in the type so that a docs\n   * page can show the component without one; React Aria's own prop is required, and this always passes a\n   * child through.\n   */\n  children?: ReactNode\n}\n\n/**\n * Renders only the rows in view.\n *\n * ```tsx\n * import { ListLayout } from 'react-aria-components'\n *\n * <Virtualizer layout={ListLayout} layoutOptions={{ rowHeight: 44, estimatedRowHeight: 44 }}>\n *   <GridList aria-label=\"Monitors\" items={monitors} className=\"h-80 overflow-auto\">\n *     {(m) => <GridList.Item id={m.id} textValue={m.name}>…</GridList.Item>}\n *   </GridList>\n * </Virtualizer>\n * ```\n *\n * **It is a thin wrapper, and it is documented as one.** React Aria's `Virtualizer` takes exactly three\n * props — `layout`, `layoutOptions`, `shouldObserveItemSize` — and no `className`, because it renders no\n * chrome of its own: the *collection inside it* becomes the scroll container, so the height and the\n * overflow go on the `GridList`, not here. There is nothing to restyle, which is why this file has no\n * class list and why that is the honest thing to say rather than inventing one.\n *\n * **The collection must be given `items` and a render function, not mapped children.** Virtualization\n * works by React Aria building a collection and rendering only the visible slice; a `.map()` in the\n * consumer's JSX has already built every row by the time React sees it, which is the cost being avoided.\n * `items` comes from `CollectionProps`, so `GridList` has always accepted it.\n *\n * The layout object decides the geometry: `ListLayout` for a list, `GridLayout` for a grid,\n * `TableLayout` for a table. `estimatedRowHeight` is what the scrollbar is measured against before a row\n * has ever rendered, so a wrong number shows as a jumpy scrollbar rather than as a bug.\n */\nexport function Virtualizer<T>({ children, ...props }: VirtualizerProps<T>) {\n  return <AriaVirtualizer {...props}>{children}</AriaVirtualizer>\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Virtualizer/Virtualizer.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "Renders only the rows in view.\n\n```tsx\nimport { ListLayout } from 'react-aria-components'\n\n;<Virtualizer\n  layout={ListLayout}\n  layoutOptions={{ rowHeight: 44, estimatedRowHeight: 44 }}\n>\n  <GridList\n    aria-label=\"Monitors\"\n    items={monitors}\n    className=\"h-80 overflow-auto\"\n  >\n    {(monitor) => (\n      <GridList.Item id={monitor.id} textValue={monitor.name}>\n        {monitor.name}\n      </GridList.Item>\n    )}\n  </GridList>\n</Virtualizer>\n```\n\n**A thin wrapper, and documented as one.** React Aria's `Virtualizer` takes three props — `layout`,\n`layoutOptions`, `shouldObserveItemSize` — and no `className`, because it renders no chrome: the\n_collection inside it_ becomes the scroll container, so the height and the overflow go on the\n`GridList`. That is why this file has no class list.\n\n## The collection must be given `items`, not mapped children\n\nVirtualization works by React Aria building a collection and rendering only the visible slice. A `.map()`\nin the consumer's JSX has already built every row by the time React sees it, which is the cost being\navoided. `items` comes from `CollectionProps`, so `GridList` has always accepted it even though nothing\nhere used it before.\n\n`ListLayout` for a list, `GridLayout` for a grid, `TableLayout` for a table. `estimatedRowHeight` is what\nthe scrollbar is measured against before a row has ever rendered, so a wrong number shows as a jumpy\nscrollbar rather than as a bug.\n\n## Verified in a browser, not by the test runner\n\nWith **1000 monitors** the page holds **the same 11 rows** a 320px container can show — `scrollHeight`\n484px rather than 44000 — measured with Playwright directly.\n\n**The story does not assert that**, and the reason is worth recording. The Storybook test runner reports\nall 1000 rows for the same story: React Aria renders the collection in full and prunes it once the scroll\ncontainer has been measured, and that pass does not happen the same way inside the runner's frame. An\nassertion that passes in one environment and fails in the other is worse than none, and one loosened until\nit passes in both asserts nothing.\n\nSo the story asserts what is true in either: the rows are the first monitors in order, and the list is a\n**scroll container** (`overflow-y: auto`) — which is the Virtualizer's own contribution and is observable\nin both. The pruning itself is recorded here as a browser measurement, and anyone changing this component\nshould re-measure it there.\n\n## It is what makes `GridList.LoadMore` work\n\nFor a round the load-more sentinel was documented as a row and a spinner with no proven trigger: without a\nscroll container React Aria renders **nothing** for it when idle, so there was no sentinel to observe. Put\nthe `GridList` inside a `Virtualizer` and it renders, watches the scroll, and calls `onLoadMore` at the end\nof the list. That is the whole prerequisite, and it is asserted end to end in `Load More`.",
+  "categories": [
+    "data"
+  ],
+  "type": "registry:ui"
+}

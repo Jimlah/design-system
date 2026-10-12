@@ -1,0 +1,88 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme",
+  "title": "Pulse",
+  "description": "The Pulse design tokens - surfaces, accents, foreground and hairlines - as a Tailwind v4 theme, plus the reset the components are drawn against and the Overpass Mono typeface.",
+  "dependencies": [
+    "@fontsource/overpass-mono"
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@import \"@fontsource/overpass-mono/400.css\"": {},
+    "@import \"@fontsource/overpass-mono/500.css\"": {},
+    "@import \"@fontsource/overpass-mono/600.css\"": {},
+    "@import \"@fontsource/overpass-mono/700.css\"": {},
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "The tokens are light-dark() pairs resolved by color-scheme, never a second block of variables\nunder a media query or a .dark class. Pulse is dark-first: :root sets color-scheme: dark, and\ndata-theme=\"light\" opts into the light column. Switch themes by setting color-scheme, never by\nredefining a token - light-dark() resolves per element, so a subtree with its own color-scheme\nflips on its own.\n\nThis item also carries Overpass Mono, the only typeface the system uses, at the four weights the\ncomponents use. A component item leaves the font out on purpose, so that adding a Button does not\nalso add a font package; the family falls back to the monospace stack until this item is installed.",
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:theme"
+}

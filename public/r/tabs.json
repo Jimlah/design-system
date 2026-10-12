@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "The sheet's .ds-tabs and .ds-tabpanel: a row with one hairline under all of it, which the selected tab's indicator then sits on top of.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Tabs/Tabs.tsx",
+      "content": "import {\n  Tab as AriaTab,\n  TabList as AriaTabList,\n  TabPanel as AriaTabPanel,\n  TabPanels as AriaTabPanels,\n  Tabs as AriaTabs,\n} from 'react-aria-components'\nimport type {\n  TabListProps as AriaTabListProps,\n  TabPanelProps as AriaTabPanelProps,\n  TabPanelsProps as AriaTabPanelsProps,\n  TabProps as AriaTabProps,\n  TabsProps as AriaTabsProps,\n} from 'react-aria-components'\n\n/**\n * The sheet's `.ds-tabs`: a row with one hairline under all of it, which each tab's indicator\n * then sits on top of. The line is at 30% — `--color-line-soft` — which is the one place in the\n * sheet where a boundary is deliberately this quiet, because the selected tab's 2px of teal is\n * what is meant to be read.\n */\nconst LIST = [\n  'flex border-b border-line-soft',\n  // The orientation describes the strip, so the strip is what turns. A vertical list runs down\n  // the page, and its hairline moves to the trailing edge — the same treatment as the sheet's\n  // horizontal one, which is a line along the strip's long side with the indicator over it.\n  'aria-[orientation=vertical]:flex-col',\n  'aria-[orientation=vertical]:border-b-0 aria-[orientation=vertical]:border-e',\n].join(' ')\n\n/**\n * The sheet's `.ds-tab`. `relative` because the indicator is drawn against it, and the indicator\n * is an `::after` rather than a border so that fading it in cannot move the one above it — which\n * a border going from 0 to 2px would do to every tab in the row.\n */\nconst TAB = [\n  'relative cursor-pointer select-none',\n  'bg-transparent px-[18px] py-3 text-[13px] tracking-[0.02em] text-fg/55',\n  'transition-colors duration-[120ms] ease-pulse',\n  'data-[hovered]:text-fg',\n  'data-[selected]:text-fg',\n  // The indicator spans the tab's own text, not its padding, so it reads as belonging to the\n  // label rather than to the cell.\n  'after:absolute after:inset-x-[18px] after:-bottom-px after:h-0.5',\n  'after:bg-teal after:opacity-0 after:transition-opacity after:duration-[120ms]',\n  // The same indicator, turned: down the tab's own text rather than across it, over the strip's\n  // hairline at its trailing edge. Written against the list's `aria-orientation` rather than a\n  // group variant, because a group variant ties on specificity with the rules above and would\n  // leave the outcome to source order.\n  // Physical block edges rather than `inset-y-*`: the horizontal rule sets `bottom` physically,\n  // and a logical `inset-block` would leave the two fighting over the same box edge.\n  // `start-auto` rather than `inset-x-auto`, because the latter writes both inline edges and\n  // would clobber the `end-` offset below.\n  '[[aria-orientation=vertical]_&]:after:start-auto',\n  '[[aria-orientation=vertical]_&]:after:end-[-1px]',\n  '[[aria-orientation=vertical]_&]:after:top-3',\n  '[[aria-orientation=vertical]_&]:after:bottom-3',\n  '[[aria-orientation=vertical]_&]:after:h-auto',\n  '[[aria-orientation=vertical]_&]:after:w-0.5',\n  'data-[selected]:after:opacity-100',\n  // The sheet gives a tab the shared ring, unlike a field, whose border is the edge it repeats.\n  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[3px]',\n  'data-[focus-visible]:outline-teal',\n  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-35',\n].join(' ')\n\n/** The sheet's `.ds-count`: 11px, in the selected-yellow, beside the label. */\nconst COUNT = 'ms-2 text-[11px] text-yellow'\n\n/** The sheet's `.ds-tabpanel`: the panel clears the list by 18px and nothing more. */\nconst PANEL = 'pt-[18px] outline-none'\n\nexport interface TabsProps extends Omit<\n  AriaTabsProps,\n  'isDisabled' | 'children' | 'className'\n> {\n  /** React 19 passes `ref` as an ordinary prop, so no `forwardRef` wrapper. */\n  ref?: React.Ref<HTMLDivElement>\n  /** Disables the whole set. This is a React Aria prop — there is no `disabled`. */\n  isDisabled?: AriaTabsProps['isDisabled']\n  /** The set owns the value, as a single key. `onSelectionChange` gives it back. */\n  selectedKey?: AriaTabsProps['selectedKey']\n  defaultSelectedKey?: AriaTabsProps['defaultSelectedKey']\n  onSelectionChange?: AriaTabsProps['onSelectionChange']\n  /**\n   * Which way the tab list runs. It describes the *strip*, not the panels — a vertical list\n   * stacks its tabs and puts its hairline on the trailing edge, and where the panel then sits\n   * is the consumer's layout to decide, not this prop's.\n   */\n  orientation?: AriaTabsProps['orientation']\n  className?: string\n  /** `Tabs.List`, then `Tabs.Panel`s — or a `Tabs.Panels` around them. */\n  children?: React.ReactNode\n}\n\nexport interface TabsListProps extends Omit<\n  AriaTabListProps<object>,\n  'children' | 'className'\n> {\n  className?: string\n  children?: React.ReactNode\n}\n\nexport interface TabsTabProps extends Omit<\n  AriaTabProps,\n  'isDisabled' | 'children' | 'className'\n> {\n  /** The tab's label — usually a `Tabs.Count` alongside it. */\n  children?: React.ReactNode\n  className?: string\n}\n\nexport interface TabsCountProps extends React.HTMLAttributes<HTMLSpanElement> {\n  children?: React.ReactNode\n}\n\nexport interface TabsPanelsProps extends Omit<\n  AriaTabPanelsProps<object>,\n  'children' | 'className'\n> {\n  className?: string\n  children?: React.ReactNode\n}\n\nexport interface TabsPanelProps extends Omit<\n  AriaTabPanelProps,\n  'children' | 'className'\n> {\n  className?: string\n  children?: React.ReactNode\n}\n\n/**\n * The tab strip. Use it as `Tabs.List`. Give it an `aria-label` when there is no visible heading\n * above it, since the list is what a screen reader announces the set by.\n *\n * Exported as `TabsList` only so tooling can resolve it; consume the compound form `Tabs.List`.\n */\nexport function TabsList({ className, children, ...props }: TabsListProps) {\n  return (\n    <AriaTabList\n      className={[LIST, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaTabList>\n  )\n}\n\n/**\n * One tab. Use it as `Tabs.Tab`, inside a `Tabs.List`. Its `id` is what ties it to the matching\n * `Tabs.Panel`, and the arrow keys move between tabs from anywhere in the set.\n *\n * Exported as `TabsTab` only so tooling can resolve it; consume the compound form `Tabs.Tab`.\n */\nexport function TabsTab({ className, children, ...props }: TabsTabProps) {\n  return (\n    <AriaTab className={[TAB, className].filter(Boolean).join(' ')} {...props}>\n      {children}\n    </AriaTab>\n  )\n}\n\n/**\n * A count beside a tab's label, in the sheet's `.ds-count`. Use it as `Tabs.Count`.\n *\n * It is a slot rather than a number passed to `Tabs.Tab`, because a count is frequently the\n * whole reason to look at the tab — how many checks are failing — and the moment it needs a\n * dot, a colour of its own or a title, a prop stops being enough.\n *\n * Exported as `TabsCount` only so tooling can resolve it; consume the compound form\n * `Tabs.Count`.\n */\nexport function TabsCount({ className, children, ...props }: TabsCountProps) {\n  return (\n    <span\n      data-slot=\"count\"\n      className={[COUNT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </span>\n  )\n}\n\n/**\n * The run of panels. Use it as `Tabs.Panels` around the `Tabs.Panel`s. Optional — the panels\n * work without it — but it keeps the set's two halves readable when the contents are long.\n *\n * Exported as `TabsPanels` only so tooling can resolve it; consume the compound form\n * `Tabs.Panels`.\n */\nexport function TabsPanels({ className, children, ...props }: TabsPanelsProps) {\n  return (\n    <AriaTabPanels className={className} {...props}>\n      {children}\n    </AriaTabPanels>\n  )\n}\n\n/**\n * The content behind a tab. Use it as `Tabs.Panel`; its `id` matches the tab's. Only the\n * selected panel is rendered — the rest are unmounted, not hidden — so a panel that needs to\n * hold state across a switch has to say so with `shouldForceMount`.\n *\n * Exported as `TabsPanel` only so tooling can resolve it; consume the compound form\n * `Tabs.Panel`.\n */\nexport function TabsPanel({ className, children, ...props }: TabsPanelProps) {\n  return (\n    <AriaTabPanel\n      className={[PANEL, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaTabPanel>\n  )\n}\n\n/**\n * Styled element. Not exported — `Tabs` below is the public symbol, and docgen reads the JSDoc\n * from the *exported* declaration, not this one.\n */\nfunction TabsRoot({ ref, className, children, ...props }: TabsProps) {\n  return (\n    <AriaTabs ref={ref} className={className} {...props}>\n      {children}\n    </AriaTabs>\n  )\n}\n\n/**\n * A set of tabs — the sheet's `.ds-tabs` and `.ds-tabpanel`. One panel is shown at a time, and\n * the whole set is a single tab stop: the arrow keys move between tabs rather than the Tab key,\n * which is what lets a keyboard user step past the strip instead of through it.\n *\n * ```tsx\n * <Tabs defaultSelectedKey=\"overview\">\n *   <Tabs.List aria-label=\"Monitor detail\">\n *     <Tabs.Tab id=\"overview\">Overview</Tabs.Tab>\n *     <Tabs.Tab id=\"checks\">\n *       Checks <Tabs.Count>3</Tabs.Count>\n *     </Tabs.Tab>\n *   </Tabs.List>\n *   <Tabs.Panel id=\"overview\">Everything at a glance.</Tabs.Panel>\n *   <Tabs.Panel id=\"checks\">Three failing.</Tabs.Panel>\n * </Tabs>\n * ```\n *\n * Use tabs to switch *views of the same thing*, not to step through a form: a tab set hides its\n * unselected panels, so anything a user must fill in belongs in a page flow rather than behind\n * a tab they might not open.\n */\nexport const Tabs = Object.assign(TabsRoot, {\n  List: TabsList,\n  Tab: TabsTab,\n  Count: TabsCount,\n  Panels: TabsPanels,\n  Panel: TabsPanel,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Tabs/Tabs.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "The sheet's `.ds-tabs` and `.ds-tabpanel`: a row with one hairline under all of it, which the\nselected tab's indicator then sits on top of.\n\n```tsx\n<Tabs defaultSelectedKey=\"overview\">\n  <Tabs.List aria-label=\"Monitor detail\">\n    <Tabs.Tab id=\"overview\">Overview</Tabs.Tab>\n    <Tabs.Tab id=\"checks\">\n      Checks <Tabs.Count>3</Tabs.Count>\n    </Tabs.Tab>\n  </Tabs.List>\n  <Tabs.Panel id=\"overview\">Everything at a glance.</Tabs.Panel>\n  <Tabs.Panel id=\"checks\">Three checks are failing.</Tabs.Panel>\n</Tabs>\n```\n\n| Slot          | React Aria  | Notes                                                            |\n| ------------- | ----------- | ---------------------------------------------------------------- |\n| `Tabs`        | `Tabs`      | Owns the selection, as a single key                              |\n| `Tabs.List`   | `TabList`   | The strip. Give it an `aria-label` when nothing visible names it |\n| `Tabs.Tab`    | `Tab`       | Its `id` ties it to the panel                                    |\n| `Tabs.Count`  | —           | The sheet's `.ds-count`, in the selected-yellow                  |\n| `Tabs.Panels` | `TabPanels` | Optional wrapper around the panels                               |\n| `Tabs.Panel`  | `TabPanel`  | The content behind a tab                                         |\n\nThe whole set is **one tab stop** and the arrow keys move between tabs — that is what lets a\nkeyboard user step past the strip rather than through it, and it wraps at both ends so the strip\nis never a dead end. `Tabs.Count` is a slot rather than a number passed to `Tabs.Tab`, because a\ncount is often the whole reason to look at the tab and the moment it needs a dot or a colour of\nits own, a prop stops being enough.\n\n### `orientation` describes the strip\n\nNot the panels, and not the set's overall shape. A vertical list **stacks its tabs** and moves its\nhairline from the bottom edge to the trailing one, and the indicator turns with it — down the\ntab's own text, 2px wide, rather than across it. Where the panel then sits is the consumer's\nlayout to decide; the prop has nothing to say about it.\n\nThis is easy to get half-right, and the half that is easy to miss is the strip itself: laying the\npanel _beside_ the list is the obvious part and the list keeps reading as a row, announcing\nitself as vertical while looking horizontal. The `Orientation` story asserts the column, the\nmoved hairline and the turned indicator rather than just the `aria-orientation`.\n\nThose rules are written against the list's `aria-orientation` — `aria-[orientation=vertical]:` on\nthe strip, and `[[aria-orientation=vertical]_&]:` from the tab — rather than as group variants on\nthe tab, because a group variant ties on specificity with the tab's own rules and would leave the\noutcome to source order.\n\n### Only the selected panel is rendered\n\nReact Aria **unmounts** the unselected panels rather than hiding them, so their contents are not\nin the document at all and `getByText` on an unselected panel finds nothing. A panel that needs\nto hold state across a switch has to say so with `shouldForceMount`. Worth knowing before\nwriting an assertion about \"the panel that is hidden\" — there may be no such element.\n\n### Two traps this caught\n\n- **`transition-colors` covers `outline-color`.** The focus ring is painted through a colour\n  transition, so reading it straight after focusing returns the previous colour — the same trap\n  as the indicator and the knob, in a place where it is much less obvious.\n- **A tab is not a field.** It gets the shared 3px ring rather than a teal border, because its\n  edge is a 2px indicator that is only there when selected — there is nothing for a ring to\n  repeat, which is the whole test for which of the two a control takes.",
+  "categories": [
+    "navigation"
+  ],
+  "type": "registry:ui"
+}

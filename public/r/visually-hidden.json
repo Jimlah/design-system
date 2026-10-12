@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "visually-hidden",
+  "title": "VisuallyHidden",
+  "description": "Text for screen readers and nobody else.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/VisuallyHidden/VisuallyHidden.tsx",
+      "content": "import { VisuallyHidden as AriaVisuallyHidden } from 'react-aria-components'\nimport type { VisuallyHiddenProps as AriaVisuallyHiddenProps } from 'react-aria-components'\n\n/**\n * Text for screen readers and nobody else.\n *\n * ```tsx\n * <VisuallyHidden>Checked every 60 seconds</VisuallyHidden>\n * ```\n *\n * **It is not `display: none` and it is not `visibility: hidden`.** Both of those take the text out of the\n * accessibility tree as well as off the screen. This keeps the text in the tree at one pixel with the\n * clip-path technique — which is what `sr-only` is — so a screen reader still reads it and the page does\n * not move.\n *\n * It is here because several components in this repo had written the same `sr-only` span by hand, and a\n * visually hidden thing is easy to get subtly wrong: `width: 1px` without `white-space: nowrap` wraps the\n * text into a column, and a missing `clip-path` leaves it over the content it was hiding behind.\n */\nexport function VisuallyHidden({\n  // **`span`, not React Aria's default `div`.** This component's whole job is to sit inside a sentence —\n  // \"Uptime <VisuallyHidden>checked every 60 seconds</VisuallyHidden>\" — and a `<div>` there is invalid\n  // HTML: the browser reports \"a `<p>` cannot contain a nested `<div>`\", and it forces a block box into\n  // the middle of inline text. React Aria defaults to `div` and uses `elementType=\"span\"` itself for its\n  // own hidden inputs; the useful default for a design system is the inline one, and a consumer who needs\n  // a block can still pass `elementType`.\n  elementType = 'span',\n  className,\n  ...props\n}: AriaVisuallyHiddenProps) {\n  return (\n    <AriaVisuallyHidden\n      data-slot=\"visually-hidden\"\n      elementType={elementType}\n      className={className}\n      {...props}\n    />\n  )\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/VisuallyHidden/VisuallyHidden.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "Text for screen readers and nobody else.\n\n```tsx\n<Uptime>\n  Uptime\n  <VisuallyHidden>— checked every 60 seconds</VisuallyHidden>\n</Uptime>\n```\n\n**It is not `display: none`, and it is not `visibility: hidden`.** Both of those take the text out of the\naccessibility tree as well as off the screen, which is the opposite of the point. This keeps the text in the\ntree at a clipped one-pixel box — the `sr-only` technique — so a screen reader reads it and the page does not\nmove.\n\nThe story asserts both halves, because either one alone is trivially satisfiable: the element is **visible**\nto the accessibility tree (`display` is not `none`, `visibility` is not `hidden`), and its box is at most one\npixel in each direction with a `clip-path`.\n\nIt is a component here because several others had hand-written the same `sr-only` span, and a visually hidden\nthing is easy to get subtly wrong: `width: 1px` without `white-space: nowrap` wraps the text into a column,\nand a missing `clip-path` leaves it sitting over the content it was meant to hide behind.\n\n## It renders a `span`, not a `div`\n\nReact Aria's `VisuallyHidden` defaults to a `<div>`. This component's whole job is to sit inside a\nsentence — `Uptime <VisuallyHidden>checked every 60 seconds</VisuallyHidden>` — and a block box there is\nboth invalid HTML and a layout bug: the browser reports _\"a `<p>` cannot contain a nested `<div>`\"_ while\nthe text reflows around an invisible block.\n\nThe default is now `span`, which is what an inline helper should be. A consumer who genuinely needs a\nblock can pass `elementType`.\n\n**The only evidence was a console line.** Every assertion in the story passed with the `<div>`, because\nthey all measured the clip — the box, the `clip-path`, the visibility — and none of them asked what\nelement it was. The story now asserts `tagName === 'SPAN'`. This is the fourth time in this repo that a\npassing suite was silent about a real defect, and the first time the defect announced itself in stderr\nrather than in a screenshot.",
+  "categories": [
+    "display"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drop-zone",
+  "title": "DropZone",
+  "description": "A target that accepts files dragged onto it.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/DropZone/DropZone.tsx",
+      "content": "import { DropZone as AriaDropZone } from 'react-aria-components'\nimport type { DropZoneProps as AriaDropZoneProps } from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface DropZoneProps extends Omit<\n  AriaDropZoneProps,\n  | 'className'\n  | 'children'\n  | 'onDrop'\n  | 'isDisabled'\n  | 'onDropEnter'\n  | 'onDropExit'\n> {\n  /** Called with the dropped files. This is the whole point of the component — and it was missing from the published manifest, so it looked like a component that took nothing. */\n  onDrop?: AriaDropZoneProps['onDrop']\n  /** Stops the zone accepting drops. */\n  isDisabled?: AriaDropZoneProps['isDisabled']\n  /** Called when a drag enters the zone. */\n  onDropEnter?: AriaDropZoneProps['onDropEnter']\n  /** Called when a drag leaves the zone. */\n  onDropExit?: AriaDropZoneProps['onDropExit']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** What the zone is for. */\nexport interface DropZoneTitleProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** The line under it — the \"or\", the accepted types, the size limit. */\nexport interface DropZoneHintProps {\n  className?: string\n  children?: ReactNode\n}\n\n/**\n * A target that accepts files dragged onto it.\n *\n * **The sheet has no drop zone**, so this is an invention built from what it does have: a dashed\n * rule where `Separator` draws its dashed one, the panel's own surface, and the capped mono legend.\n *\n * The **dashed edge is the whole affordance**, and it is the only place in this system a dashed\n * border means \"put something here\" rather than \"these two things are apart\". A solid edge would read\n * as a panel with nothing in it; a dashed one reads as a space waiting to be filled.\n *\n * ```tsx\n * <DropZone onDrop={async (e) => importFiles(await collect(e.items))}>\n *   <DropZone.Title>Drop a log file here</DropZone.Title>\n *   <DropZone.Hint>JSON or CSV, up to 10 MB</DropZone.Hint>\n *   <FileTrigger acceptedFileTypes={['.json', '.csv']} onSelect={(files) => upload(files)}>\n *     <Button variant=\"outline\">Browse…</Button>\n *   </FileTrigger>\n * </DropZone>\n * ```\n *\n * **A drop zone on its own is not accessible.** Dragging is a pointer gesture, so it is invisible to\n * a keyboard and to a screen reader — which is why the `FileTrigger` and its button are not optional\n * decoration but the other half of the component. A page that offers only the drop is a page some\n * people cannot use at all. `FileTrigger` needs no styling of its own: it renders a hidden file input\n * and hands the chosen files to whatever child you give it, so the visible control is your `Button`.\n *\n * React Aria handles the parts that are genuinely hard: it knows when a drag is over the zone and\n * reports it as `data-drop-target`, it can tell a file drag from a text drag, and `getDropOperation`\n * decides whether the drop is a copy or a move.\n */\nfunction DropZoneRoot({ className, children, ...props }: DropZoneProps) {\n  return (\n    <AriaDropZone\n      // **`[data-rac]` is on every element React Aria renders**, so querying the first one from the\n      // story root finds the browse *button* — the documented trap, and one this suite has now walked\n      // into twice. `data-slot` names the box itself, as it does for the fill and the slider's grip.\n      data-slot=\"dropzone\"\n      className={[\n        'flex min-h-40 flex-col items-center justify-center gap-3 p-8',\n        'border border-dashed border-line bg-panel text-center',\n        // The target lights up while a file is over it, which is the only feedback a drag gets.\n        'transition-colors duration-150 ease-pulse',\n        'data-[drop-target]:border-teal data-[drop-target]:bg-teal/8',\n        'data-[focus-visible]:outline-2 data-[focus-visible]:-outline-offset-2 data-[focus-visible]:outline-teal',\n        'data-[disabled]:opacity-30',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaDropZone>\n  )\n}\n\n/**\n * What the zone is for. Use it as `DropZone.Title`.\n *\n * Exported as `DropZoneTitle` only so tooling can resolve it; consume the compound form\n * `DropZone.Title`.\n */\nexport function DropZoneTitle({ className, children }: DropZoneTitleProps) {\n  return (\n    <p className={['text-[14px] text-fg', className].filter(Boolean).join(' ')}>\n      {children}\n    </p>\n  )\n}\n\n/**\n * The line under the title — accepted types, a size limit, or the word \"or\". Use it as\n * `DropZone.Hint`.\n *\n * Exported as `DropZoneHint` only so tooling can resolve it; consume the compound form\n * `DropZone.Hint`.\n */\nexport function DropZoneHint({ className, children }: DropZoneHintProps) {\n  return (\n    <p\n      className={[\n        'font-mono text-[11px] uppercase tracking-[0.04em] text-fg/45',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n    >\n      {children}\n    </p>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const DropZone = Object.assign(DropZoneRoot, {\n  Title: DropZoneTitle,\n  Hint: DropZoneHint,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/DropZone/DropZone.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A target that accepts files dragged onto it.\n\n```tsx\n<DropZone onDrop={async (e) => importFiles(await collect(e.items))}>\n  <DropZone.Title>Drop a log file here</DropZone.Title>\n  <DropZone.Hint>JSON or CSV, up to 10 MB</DropZone.Hint>\n  <FileTrigger acceptedFileTypes={['.json', '.csv']} onSelect={upload}>\n    <Button variant=\"outline\">Browse…</Button>\n  </FileTrigger>\n</DropZone>\n```\n\n| Slot             | React Aria | Notes                                    |\n| ---------------- | ---------- | ---------------------------------------- |\n| `DropZone`       | `DropZone` | The target. `onDrop`, `isDisabled`       |\n| `DropZone.Title` | —          | What it is for                           |\n| `DropZone.Hint`  | —          | Accepted types, a size limit, or an \"or\" |\n\n**The sheet has no drop zone**, so this is an invention from what it does have: the panel's surface\nand the dashed edge `Separator` already draws.\n\nThe **dashed edge is the whole affordance**, and it is the only place here where a dashed border means\n\"put something here\" rather than \"these two things are apart\". A solid edge reads as a panel that\nmerely happens to be empty.\n\n### A drop zone on its own is not accessible\n\nDragging is a pointer gesture — invisible to a keyboard and to a screen reader. The `FileTrigger` and\nits button are **not optional decoration**; they are the other half of the component, and a page that\noffers only the drop is a page some people cannot use at all. That is why `Default` asserts the file\ninput's `accept` against the `Hint`'s promise: two places saying which files are welcome, and nothing\nkeeping them in sync but the test.\n\n**`FileTrigger` needs no styling of its own.** It renders a hidden file input and hands the chosen\nfiles to whatever child you give it, so the visible control is your `Button` — which is why there is no\n`FileTrigger` component in this system. It is a behaviour, not a surface.\n\n### `[data-rac]` is on every element React Aria renders — twice now\n\nThe story queried the zone with `canvasElement.querySelector('[data-rac]')` and got the browse\n**button** inside it. This is the same trap the number field's affix walked into, and the fix is the\nsame: `data-slot=\"dropzone\"` names the box itself, as it does for the fill and the slider's grip.\n\n### The drag target is not asserted, after five attempts\n\n`data-drop-target` and the styling it drives are **not** tested. The attribute appeared in one probe\nand not the next — because in the first, the mouse happened to be over the zone — and neither `onDrop`,\nnor a `FileTrigger` inside, nor `userEvent.hover`, nor synthetic `dragenter`/`dragover` with a real\n`DataTransfer` reproduced it reliably from the runner. The story was **deleted** rather than written to\nassert something adjacent.\n\nThat is the sixth story left out here, and the pattern is consistent: the tooltip's hover, the nav's\ntab order, the tag's hover, the menu's type-ahead, the toolbar's `Home`/`End`, and now this. What a\nstory can prove is that the zone, its title, its hint and its browse button are all present and styled;\nwhat it cannot is that a drag lands on it.",
+  "categories": [
+    "form"
+  ],
+  "type": "registry:ui"
+}

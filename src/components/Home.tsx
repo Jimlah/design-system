@@ -162,6 +162,36 @@ const RECENT = [
   { name: 'DotMap', state: 'Passing', checks: 3 },
 ]
 
+/**
+ * The registry's public address — the string a consumer copies, and the same one in
+ * `registry.json`'s `homepage` and in the README's commands.
+ *
+ * **Written out, not derived from `import.meta.env.BASE_URL`.** The base is the right shape on
+ * Pages and the wrong one in dev, where it is `/`: deriving it would document
+ * `https://…/r/button.json`, an address that has never existed. A reader in dev is reading about
+ * the deployed registry, so the deployed address is the honest one to print.
+ */
+const REGISTRY_URL = 'https://jimlah.github.io/design-system/r'
+
+/** Prose that explains a command, at the page's hint weight. */
+const NOTE = 'mt-3 text-[13px] leading-[1.6] text-fg/60'
+
+/**
+ * A command a reader is meant to copy. One component rather than the same `<pre>` three times, so
+ * the three addresses cannot drift apart in style.
+ *
+ * `whitespace-pre-wrap` rather than a horizontal scrollbar: the namespace command is wider than a
+ * half-width column, and a scrollbar would hide the end of the one line a reader has to check. A
+ * soft wrap copies as a single line, so the command still pastes intact.
+ */
+function Command({ children }: { children: string }) {
+  return (
+    <pre className="mt-3 border border-line-strong bg-panel p-4 font-mono text-[12px] leading-[1.9] whitespace-pre-wrap">
+      <code>{children}</code>
+    </pre>
+  )
+}
+
 export function Home() {
   const index = useComponentIndex()
   const [query, setQuery] = useState('')
@@ -192,7 +222,9 @@ export function Home() {
             React Aria for behaviour, Tailwind for the styling, and one set of
             tokens in <code className="text-fg">src/styles.css</code> for both
             themes. Every component is documented beside its source, and this
-            page uses them rather than describing them.
+            page uses them rather than describing them — and the whole library
+            is published as a registry, so another project installs it instead
+            of copying it.
           </p>
           <Toolbar aria-label="Page actions" className="mt-6">
             <Button
@@ -213,6 +245,16 @@ export function Home() {
               }
             >
               See the charts
+            </Button>
+            <Button
+              variant="outline"
+              onPress={() =>
+                document
+                  .getElementById('registry')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }
+            >
+              Install the registry
             </Button>
             <Button variant="ghost">Read the docs</Button>
           </Toolbar>
@@ -381,6 +423,159 @@ export function Home() {
             )}
           </Tabs.Panels>
         </Tabs>
+      </section>
+
+      <Separator className="my-12" />
+
+      <section id="registry">
+        <h2 className="text-[24px] font-semibold tracking-[-0.01em]">
+          Registry
+        </h2>
+        <p className="mt-2 max-w-2xl text-[14px] text-fg/70">
+          The same components are published as a shadcn registry, so another
+          project installs them instead of copying them: one theme, one bundle,
+          and one item per component, served from this site as static JSON.
+        </p>
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-2">
+          <div>
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+              Install
+            </h3>
+            <Tabs className="mt-3">
+              <Tabs.List aria-label="Registry addresses">
+                <Tabs.Tab id="namespace">Namespace</Tabs.Tab>
+                <Tabs.Tab id="url">URL</Tabs.Tab>
+                <Tabs.Tab id="github">GitHub</Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panels>
+                <Tabs.Panel id="namespace">
+                  <Command>{`npx shadcn@latest registry add @pulse=${REGISTRY_URL}/{name}.json
+npx shadcn@latest add @pulse/button`}</Command>
+                  <p className={NOTE}>
+                    Register the catalogue once; after that every item is an
+                    address of its own. The whole library is{' '}
+                    <code>@pulse/pulse</code>.
+                  </p>
+                </Tabs.Panel>
+                <Tabs.Panel id="url">
+                  <Command>{`npx shadcn@latest add ${REGISTRY_URL}/button.json`}</Command>
+                  <p className={NOTE}>
+                    No namespace needed. An item carries everything it needs, so
+                    it installs from any address.
+                  </p>
+                </Tabs.Panel>
+                <Tabs.Panel id="github">
+                  <Command>{`npx shadcn@latest add Jimlah/design-system/button`}</Command>
+                  <p className={NOTE}>
+                    Reads <code>registry.json</code> straight out of the
+                    repository — no deployment involved.
+                  </p>
+                </Tabs.Panel>
+              </Tabs.Panels>
+            </Tabs>
+          </div>
+
+          <div>
+            <h3 className="font-mono text-[12px] tracking-[0.06em] text-fg/60 uppercase">
+              What is in it
+            </h3>
+            <Table aria-label="Registry items" className="mt-3">
+              <Table.Header>
+                <Table.Column isRowHeader>Item</Table.Column>
+                <Table.Column>Type</Table.Column>
+                <Table.Column>Installs</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row id="theme">
+                  <Table.Cell>@pulse/theme</Table.Cell>
+                  <Table.Cell>theme</Table.Cell>
+                  <Table.Cell>
+                    The tokens, the base layer, and Overpass Mono
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row id="bundle">
+                  <Table.Cell>@pulse/pulse</Table.Cell>
+                  <Table.Cell>block</Table.Cell>
+                  <Table.Cell>All {index.length} components at once</Table.Cell>
+                </Table.Row>
+                <Table.Row id="component">
+                  <Table.Cell>{'@pulse/<component>'}</Table.Cell>
+                  <Table.Cell>ui</Table.Cell>
+                  <Table.Cell>
+                    One component, and every file it imports
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </div>
+        </div>
+
+        <Accordion className="mt-8" defaultExpandedKeys={['arrives']}>
+          <Accordion.Item id="arrives">
+            <Accordion.Header>
+              What arrives with one component?
+            </Accordion.Header>
+            <Accordion.Panel>
+              The tokens and the base layer travel inside every item, so a
+              component installed on its own still has the colours it paints. So
+              does every file it imports: <code>@pulse/select</code> brings{' '}
+              <code>SearchField</code> and <code>field.ts</code> with it, and
+              there is nothing to add by hand.
+            </Accordion.Panel>
+          </Accordion.Item>
+          <Accordion.Item id="dependency">
+            <Accordion.Header>
+              Why is the theme in every item, and not a dependency?
+            </Accordion.Header>
+            <Accordion.Panel>
+              Because a <code>registryDependencies</code> entry does not survive
+              the trip. <code>./theme.json</code> resolves against the
+              consumer's working directory, a bare name resolves against the
+              shadcn/ui registry, and <code>@pulse/theme</code> needs the
+              namespace registered first. An item that carries its own tokens
+              installs from any of the three addresses above.
+            </Accordion.Panel>
+          </Accordion.Item>
+          <Accordion.Item id="layout">
+            <Accordion.Header>
+              Where do the files land, and where is the typeface?
+            </Accordion.Header>
+            <Accordion.Panel>
+              Under your <code>aliases.ui</code>, as{' '}
+              <code>pulse/&lt;Name&gt;/&lt;Name&gt;.tsx</code> — the layout of{' '}
+              <code>src/components</code>, which is what keeps the relative
+              imports resolving, so with the usual <code>@/components/ui</code>{' '}
+              alias a Button arrives as{' '}
+              <code>@/components/ui/pulse/Button/Button</code>. Overpass Mono
+              rides on <code>@pulse/theme</code> rather than on every item:
+              adding a Button should not also install a font package.
+            </Accordion.Panel>
+          </Accordion.Item>
+          <Accordion.Item id="current">
+            <Accordion.Header>How is it kept current?</Accordion.Header>
+            <Accordion.Panel>
+              <code>registry.json</code> is generated from the components,{' '}
+              <code>src/styles.css</code> and the docs beside them;{' '}
+              <code>npm run registry:build</code> rebuilds it and the JSON this
+              site serves. CI fails when the committed copy is stale, so a
+              component added without regenerating it cannot ship quietly.
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+
+        <p className="mt-6 max-w-2xl text-[13px] leading-[1.6] text-fg/60">
+          The longer notes — why the items are shaped this way, what the CLI
+          writes into a consumer's stylesheet, and how each claim was measured —
+          live in{' '}
+          <Link
+            variant="url"
+            href="https://github.com/Jimlah/design-system/blob/main/docs/registry.md"
+          >
+            docs/registry.md
+          </Link>
+          .
+        </p>
       </section>
 
       <Separator className="my-12" />

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "color-swatch",
+  "title": "ColorSwatch",
+  "description": "A colour, shown as a square.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/ColorSwatch/ColorSwatch.tsx",
+      "content": "import { ColorSwatch as AriaColorSwatch } from 'react-aria-components'\nimport type { ColorSwatchProps as AriaColorSwatchProps } from 'react-aria-components'\n\nexport interface ColorSwatchProps extends Omit<\n  AriaColorSwatchProps,\n  'className' | 'style' | 'children'\n> {\n  /** The colour to show. */\n  color: AriaColorSwatchProps['color']\n  className?: string\n}\n\n/**\n * The square a colour is shown in.\n *\n * **Shared, because a swatch is a swatch wherever it appears** — as a field's preview, as one entry in\n * a `ColorSwatchPicker`, or on its own beside a monitor's name. The picker imports this constant rather\n * than repeating it, the same call `field.ts` and `popover.ts` make.\n *\n * The colour is painted from React Aria's render prop, not from a token, because it *is* a colour —\n * arbitrary by definition. Everything around it still comes from the system: square corners, and a\n * control boundary on the edge so a near-black swatch on the dark page is still a swatch.\n */\nexport const SWATCH = [\n  'size-6 shrink-0 rounded-none',\n  'border border-line-control',\n].join(' ')\n\n/**\n * A colour, shown as a square.\n *\n * ```tsx\n * <ColorSwatch color={parseColor('#71FFF6')} />\n * ```\n *\n * **It is a picture of a colour, not a control.** For choosing one, `ColorSwatchPicker` is a row of\n * these that can be picked; for typing one, `ColorField` is a field. This is what you reach for when a\n * value already exists and simply needs to be *seen* — a monitor's label colour in a table row, a\n * legend beside a chart.\n *\n * **The wrapper is `aria-hidden`, and it has to be a wrapper.** React Aria renders its swatch as\n * `role=\"img\"` and drops an `aria-hidden` written on it, so a purely decorative square announced itself\n * as an unnamed image — noise before the text that actually says which colour it is. Putting the\n * attribute on an element *around* it hides the whole subtree, which is what a picture of a colour\n * should be.\n */\nexport function ColorSwatch({ color, className }: ColorSwatchProps) {\n  return (\n    <span aria-hidden=\"true\">\n      <AriaColorSwatch\n        data-slot=\"swatch\"\n        className={[SWATCH, className].filter(Boolean).join(' ')}\n        style={({ color: c }) => ({ background: c.toString('css') })}\n        color={color}\n      />\n    </span>\n  )\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/ColorSwatch/ColorSwatch.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A colour, shown as a square.\n\n```tsx\n<ColorSwatch color={parseColor('#71FFF6')} />\n```\n\n**It is a picture of a colour, not a control.** For choosing one, `ColorSwatchPicker` is a row of these\nthat can be picked; for typing one, `ColorField` is a field. This is what you reach for when a value\nalready exists and simply needs to be _seen_ — a monitor's label colour in a table row, a legend beside\na chart.\n\n## The wrapper is `aria-hidden`, and it has to be a wrapper\n\nReact Aria renders its own swatch as **`role=\"img\"`** and drops an `aria-hidden` written on it, so a\npurely decorative square announced itself as an unnamed image — noise before the text that actually\nsays which colour it is. Putting the attribute on an element _around_ it hides the whole subtree, which\nis what a picture of a colour should be. That was found by asserting the attribute and getting `null`\nback from a component that looked correct.\n\n## `SWATCH` is shared\n\nThe class list is exported, and `ColorSwatchPicker.Item` composes it rather than repeating it — a\nswatch has to look the same whether it is being shown or being picked, the same rule `field.ts`,\n`date.tsx` and `popover.ts` exist for. The square is 24px, square-cornered, and carries\n`--color-line-control` on its edge so a near-black swatch on the dark page is still a swatch.",
+  "categories": [
+    "display"
+  ],
+  "type": "registry:ui"
+}

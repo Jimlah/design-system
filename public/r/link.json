@@ -1,0 +1,98 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "link",
+  "title": "Link",
+  "description": "The sheet's three links — .ds-link-caps, .ds-link-url and .ds-link-viewmore — as variants of one component, because the sheet varies the treatment rather than the colour.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Link/Link.tsx",
+      "content": "import { Link as AriaLink } from 'react-aria-components'\nimport type { LinkProps as AriaLinkProps } from 'react-aria-components'\n\nimport {\n  LINK,\n  LINK_CAPS,\n  LINK_CAPS_BASE,\n  LINK_URL,\n  LINK_VIEWMORE,\n} from '../link'\n\n/** Which of the sheet's three links this is. */\nexport type LinkVariant = 'caps' | 'url' | 'viewmore'\n\n/** `.ds-link-caps--lg` only changes the type size, so it is a size rather than a second variant. */\nexport type LinkSize = 'sm' | 'lg'\n\nexport interface LinkProps extends Omit<\n  AriaLinkProps,\n  'className' | 'href' | 'isDisabled' | 'onPress' | 'target'\n> {\n  /** Where the link goes. It renders a real anchor, so middle-click and \"open in a new tab\" work. */\n  href?: AriaLinkProps['href']\n  /** Renders it unavailable without removing it from the page. */\n  isDisabled?: AriaLinkProps['isDisabled']\n  /** Press handler. This is a React Aria prop — there is no `onClick`. */\n  onPress?: AriaLinkProps['onPress']\n  /** The anchor's target, e.g. `_blank`. */\n  target?: AriaLinkProps['target']\n\n  /**\n   * `caps` is `.ds-link-caps` — the sheet's nav and legend link. `url` is `.ds-link-url`, for a\n   * destination inside running text. `viewmore` is `.ds-link-viewmore`, the accent call to go and\n   * read the rest.\n   */\n  variant?: LinkVariant\n  /** Only `caps` has two sizes, because only `.ds-link-caps` does. */\n  size?: LinkSize\n  className?: string\n  children?: React.ReactNode\n}\n\n/**\n * The sheet's three links: `.ds-link-caps`, `.ds-link-url` and `.ds-link-viewmore`.\n *\n * ```tsx\n * <Link href=\"/monitors\" isCurrent>Monitors</Link>\n * <Link variant=\"url\" href=\"https://status.example.com\">status.example.com</Link>\n * <Link variant=\"viewmore\" href=\"/monitors\">View more</Link>\n * ```\n *\n * React Aria's `Link` is what makes these links at all: it renders a real `<a>`, so middle-click,\n * the status bar and \"open in a new tab\" work, and `isCurrent` gives the page you are on both\n * `aria-current` for a screen reader and `data-current` for the sheet's own\n * `[aria-current=\"page\"] { color: teal }` rule.\n *\n * **The three variants are three different jobs, which is why they are not one link with a colour\n * option.** Every one of them derives its hover from what it is: a caps link darkens toward full\n * strength because at 70% it is deliberately quiet at rest; a URL link turns teal because its\n * underline already carries the affordance; and a view-more link *gains* an underline, because it\n * wears the accent at rest and needs somewhere to go on hover. Swapping any two of those would say\n * the wrong thing about the link.\n */\nexport function Link({\n  variant = 'caps',\n  size = 'sm',\n  className,\n  children,\n  ...props\n}: LinkProps) {\n  const variantClass =\n    variant === 'url'\n      ? LINK_URL\n      : variant === 'viewmore'\n        ? LINK_VIEWMORE\n        : [LINK_CAPS[size], LINK_CAPS_BASE].join(' ')\n\n  return (\n    <AriaLink\n      data-slot=\"link\"\n      className={[LINK, variantClass, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaLink>\n  )\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Link/Link.tsx"
+    },
+    {
+      "path": "src/components/link.ts",
+      "content": "/**\n * The sheet's links. Three treatments, each with its own hover — the sheet varies the *treatment*\n * rather than the colour, which is why these are variants and not one link with a size on it.\n *\n * All three are written against a real `<a>`: React Aria's `Link` renders one, so the middle-click,\n * the status bar, \"open in a new tab\" and the browser's own visited styling all work. A `div` with\n * an `onClick` is the thing this avoids.\n */\nexport const LINK = [\n  'cursor-pointer bg-transparent',\n  'transition-[color,background-color,text-decoration-color] duration-[120ms]',\n  'ease-pulse',\n  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',\n  'data-[focus-visible]:outline-teal',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-caps`: 14px, `-0.01em`, uppercase, white at 70% going to white on hover.\n * `lg` is its `.ds-link-caps--lg`, which changes the type size and nothing else.\n */\nexport const LINK_CAPS: Record<'sm' | 'lg', string> = {\n  sm: 'text-[14px]',\n  lg: 'text-[16px]',\n}\n\n/** The rest of `.ds-link-caps`, shared by both sizes. */\nexport const LINK_CAPS_BASE = [\n  'tracking-[-0.01em] uppercase',\n  'text-fg/70',\n  'hover:text-fg data-[hovered]:text-fg',\n  // The page you are on, from the sheet's own `[aria-current=\"page\"] { color: teal }`.\n  'data-[current]:text-teal',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-url`: 12px, `-0.015em`, underlined, going teal on hover. The underline is\n * the whole affordance — it is the one link here that sits inside running text, where a colour\n * change alone would not mark it.\n */\nexport const LINK_URL = [\n  'text-[12px] tracking-[-0.015em] text-fg',\n  'underline decoration-1 underline-offset-[3px]',\n  'hover:text-teal hover:decoration-teal',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-viewmore`: 16px, uppercase, in the accent — and the one link that *gains*\n * its underline on hover rather than losing it. It is a call to go and look at the rest, so it\n * wears the accent at rest and underlines itself when the pointer arrives.\n */\nexport const LINK_VIEWMORE = [\n  'text-[16px] tracking-[-0.01em] uppercase text-teal',\n  'no-underline',\n  'hover:underline hover:underline-offset-4',\n].join(' ')\n",
+      "type": "registry:lib",
+      "target": "@ui/pulse/link.ts"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "The sheet's three links — `.ds-link-caps`, `.ds-link-url` and `.ds-link-viewmore` — as variants of one\ncomponent, because the sheet varies the _treatment_ rather than the colour.\n\n```tsx\n<Link href=\"/monitors\" aria-current=\"page\">Monitors</Link>\n<Link variant=\"url\" href=\"https://status.example.com\">status.example.com</Link>\n<Link variant=\"viewmore\" href=\"/monitors\">View more</Link>\n```\n\n| Variant    | Sheet               | Size(s)   | Hover                  |\n| ---------- | ------------------- | --------- | ---------------------- |\n| `caps`     | `.ds-link-caps`     | `sm` `lg` | 70% → full strength    |\n| `url`      | `.ds-link-url`      | 12px      | turns teal             |\n| `viewmore` | `.ds-link-viewmore` | 16px      | **gains** an underline |\n\n### Three links, three jobs\n\nEach hover derives from what the link _is_. A caps link is deliberately quiet at rest, so hover is\nwhere it comes up to strength. A URL link is inside running text, where its underline already\ncarries the affordance, so hover is where it takes the accent. A view-more link wears the accent at\nrest and has nowhere to go but an underline. Swapping any two would say the wrong thing about the\nlink — which is why `lg` is a _size_ (it changes the type and nothing else) and the other two are\nnot.\n\n`caps` is the only one with two sizes, because `.ds-link-caps--lg` is the only `--lg` the sheet has.\n\n### It is a real anchor, and `aria-current` is the current-page prop\n\nReact Aria's `Link` renders an `<a>`, so middle-click, the status bar and \"open in a new tab\" work —\nwhich is the whole reason not to use a `div` with an `onClick`. The page you are on is marked with\n`aria-current=\"page\"`, the attribute the sheet's own `[aria-current=\"page\"] { color: teal }` rule\nreads; React Aria hands it over as `data-current` as well.\n\nA plain `Link` has **no `isCurrent` prop** — `NavigationTree` does, and `Nav.Item` uses it. Inventing\none here would only be a second name for the attribute the browser and the stylesheet already\nunderstand.",
+  "categories": [
+    "navigation"
+  ],
+  "type": "registry:ui"
+}

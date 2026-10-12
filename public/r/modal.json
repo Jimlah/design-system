@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal",
+  "title": "Modal",
+  "description": "A dialog over the page: a short task that needs an answer before the page can be used again. The surface is the tooltip's and the toast's — its own panel with a hairline — and the title is the sheet's own .ds-panel-title, 18px/600.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Modal/Modal.tsx",
+      "content": "import { createContext, useContext, useId } from 'react'\nimport {\n  Button as AriaButton,\n  Dialog as AriaDialog,\n  DialogTrigger as AriaDialogTrigger,\n  Heading as AriaHeading,\n  Modal as AriaModal,\n  ModalOverlay as AriaModalOverlay,\n  Text as AriaText,\n} from 'react-aria-components'\nimport type {\n  ButtonProps as AriaButtonProps,\n  DialogProps as AriaDialogProps,\n  DialogTriggerProps as AriaDialogTriggerProps,\n  HeadingProps as AriaHeadingProps,\n  TextProps as AriaTextProps,\n} from 'react-aria-components'\n\n/**\n * The scrim. **The one place in this system where the palette deliberately does not reach.**\n *\n * A scrim's job is to push the page back, which means it has to *darken* — and there is no token\n * that darkens in both themes. `--color-ink` is black in the dark theme and white in the light one,\n * so it would haze a white page white and separate nothing; `--color-base` is black in one and white\n * in the other for the same reason. `black/50` is Tailwind's own, is the same in both themes by\n * design, and says exactly what it is.\n */\nconst OVERLAY = [\n  'fixed inset-0 z-50 grid place-items-center overflow-y-auto p-4',\n  'bg-black/50',\n].join(' ')\n\n/**\n * The sheet's `.ds-panel`, with an edge: a dialog floats over a page, so it needs the same separation\n * the tooltip and the toast do — its own panel, and a hairline to say where it ends.\n */\nconst DIALOG = [\n  'relative w-full max-w-md',\n  'border border-line-strong bg-panel p-6',\n  'outline-none',\n].join(' ')\n\n/** The sheet's `.ds-panel-title`: 18px/600, measured off its Page Check reference. */\nexport const DIALOG_TITLE =\n  'm-0 text-[18px] font-semibold tracking-[0.01em] text-fg'\n\nexport const DIALOG_DESCRIPTION = 'mt-2 text-[13px] leading-[1.5] text-fg/70'\n\nexport const DIALOG_FOOTER = 'mt-6 flex items-center justify-end gap-3'\n\n/** The same dismiss control the toast draws, for the same reason: it is the one that is often missed. */\nexport const DIALOG_CLOSE = [\n  'absolute end-4 top-4 grid size-5 cursor-pointer place-items-center',\n  'text-fg/45',\n  'transition-colors duration-[120ms] ease-pulse',\n  'data-[hovered]:text-fg',\n  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',\n  'data-[focus-visible]:outline-teal',\n].join(' ')\n\nexport interface ModalProps extends Omit<\n  AriaDialogTriggerProps,\n  'children' | 'className' | 'isOpen' | 'defaultOpen' | 'onOpenChange'\n> {\n  /**\n   * Whether the dialog is open. This is a React Aria prop on the trigger — controlled state, so pass\n   * `onOpenChange` with it.\n   */\n  isOpen?: AriaDialogTriggerProps['isOpen']\n  /** Whether the dialog starts open, for uncontrolled use. */\n  defaultOpen?: AriaDialogTriggerProps['defaultOpen']\n  /** Called when the dialog asks to open or close. */\n  onOpenChange?: AriaDialogTriggerProps['onOpenChange']\n\n  /** The trigger, then a `Modal.Content`. */\n  children?: React.ReactNode\n}\n\nexport interface ModalContentProps extends Omit<\n  AriaDialogProps,\n  'children' | 'className'\n> {\n  className?: string\n  /** A `Modal.Title`, the body, and a `Modal.Footer`. */\n  children?: React.ReactNode\n}\n\nexport interface ModalTitleProps extends AriaHeadingProps {\n  children?: React.ReactNode\n}\n\nexport interface ModalDescriptionProps extends AriaTextProps {\n  children?: React.ReactNode\n}\n\nexport interface ModalFooterProps {\n  className?: string\n  children?: React.ReactNode\n}\n\nexport interface ModalCloseProps extends Omit<\n  AriaButtonProps,\n  'children' | 'className' | 'slot'\n> {\n  className?: string\n  children?: React.ReactNode\n}\n\n/**\n * The description's id, shared between the dialog and the `Text` inside it. React Aria wires the\n * **title** to the dialog for you — `aria-labelledby` appears on its own — but it does not wire the\n * description, and a description nobody is pointed at is decoration. The id is generated here and\n * passed down rather than written by the consumer, who would have to keep two things in step.\n */\nconst DescriptionId = createContext<string | undefined>(undefined)\n\n/**\n * The dialog's surface, its scrim and its placement, in one slot. Use it as `Modal.Content`, as the\n * second child of a `Modal`.\n *\n * Exported as `ModalContent` only so tooling can resolve it; consume the compound form\n * `Modal.Content`.\n */\nexport function ModalContent({\n  className,\n  children,\n  ...props\n}: ModalContentProps) {\n  const descriptionId = useId()\n  return (\n    <AriaModalOverlay data-slot=\"modal\" className={OVERLAY} isDismissable>\n      <AriaModal className=\"w-full max-w-md\">\n        <DescriptionId.Provider value={descriptionId}>\n          <AriaDialog\n            // Points at the description whether or not one was passed. A dialog with a dangling\n            // `aria-describedby` is a smaller thing than a description nobody reads.\n            aria-describedby={descriptionId}\n            className={[DIALOG, className].filter(Boolean).join(' ')}\n            {...props}\n          >\n            {children}\n          </AriaDialog>\n        </DescriptionId.Provider>\n      </AriaModal>\n    </AriaModalOverlay>\n  )\n}\n\n/**\n * What the dialog is about. Use it as `Modal.Title`. It is the sheet's `.ds-panel-title`, and it is\n * what names the dialog — React Aria wires it to the dialog's `aria-labelledby`, so the title is not\n * decoration.\n *\n * Exported as `ModalTitle` only so tooling can resolve it; consume the compound form `Modal.Title`.\n */\nexport function ModalTitle({ className, children, ...props }: ModalTitleProps) {\n  return (\n    <AriaHeading\n      slot=\"title\"\n      className={[DIALOG_TITLE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaHeading>\n  )\n}\n\n/**\n * A sentence under the title. Use it as `Modal.Description` — it becomes the dialog's\n * `aria-describedby`, so a screen reader hears what the dialog is for before it hears the controls.\n *\n * Exported as `ModalDescription` only so tooling can resolve it; consume the compound form\n * `Modal.Description`.\n */\nexport function ModalDescription({\n  className,\n  children,\n  ...props\n}: ModalDescriptionProps) {\n  const id = useContext(DescriptionId)\n  return (\n    <AriaText\n      id={id}\n      slot=\"description\"\n      className={[DIALOG_DESCRIPTION, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaText>\n  )\n}\n\n/**\n * The actions, right-aligned. Use it as `Modal.Footer`.\n *\n * Exported as `ModalFooter` only so tooling can resolve it; consume the compound form\n * `Modal.Footer`.\n */\nexport function ModalFooter({ className, children }: ModalFooterProps) {\n  return (\n    <div className={[DIALOG_FOOTER, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The **×** in the corner. Use it as `Modal.Close` — it is absolutely positioned, so it belongs to\n * the dialog rather than to a footer.\n *\n * Its `slot=\"close\"` is what tells React Aria it is a dismiss control, and that attribute is the\n * whole mechanism: putting it on **any** button closes the dialog. A footer that says \"Cancel\"\n * rather than \"×\" therefore wants a plain `Button` with the same `slot`, not this — a first version of\n * the story used `Modal.Close` in its footer and the word flew to the top-right corner, because\n * `position: absolute` goes where it is told.\n *\n * Exported as `ModalClose` only so tooling can resolve it; consume the compound form\n * `Modal.Close`.\n */\nexport function ModalClose({ className, children, ...props }: ModalCloseProps) {\n  return (\n    <AriaButton\n      slot=\"close\"\n      aria-label=\"Close\"\n      className={[DIALOG_CLOSE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children ?? (\n        <svg\n          viewBox=\"0 0 10 10\"\n          fill=\"none\"\n          aria-hidden=\"true\"\n          className=\"size-2.5\"\n        >\n          <path\n            d=\"M1 1L9 9M9 1L1 9\"\n            stroke=\"currentColor\"\n            strokeWidth=\"1.5\"\n            strokeLinecap=\"round\"\n          />\n        </svg>\n      )}\n    </AriaButton>\n  )\n}\n\n/**\n * Styled element. Not exported — `Modal` below is the public symbol, and docgen reads the JSDoc from\n * the *exported* declaration, not this one.\n */\nfunction ModalRoot({ children, ...props }: ModalProps) {\n  return <AriaDialogTrigger {...props}>{children}</AriaDialogTrigger>\n}\n\n/**\n * A dialog over the page: a short task that needs an answer before the page can be used again.\n *\n * ```tsx\n * <Modal>\n *   <Button>New monitor</Button>\n *   <Modal.Content>\n *     <Modal.Title>New monitor</Modal.Title>\n *     <Modal.Description>It starts checking as soon as you save.</Modal.Description>\n *     <Modal.Footer>\n *       <Modal.Close>Cancel</Modal.Close>\n *       <Button variant=\"primary\">Save</Button>\n *     </Modal.Footer>\n *   </Modal.Content>\n * </Modal>\n * ```\n *\n * **A modal is a demand, so it should be rare.** It takes the page away, traps focus, and stops\n * anyone reading behind it — which is the right trade for a decision that has to be made now, and\n * the wrong one for a form someone might want to consult the page while filling in. A `Popover` is\n * the same dialog without that cost, and the sheet's own menus are popovers.\n *\n * React Aria does the parts a hand-rolled dialog gets wrong: the scrim, focus trapped inside and\n * restored to the trigger on close, Escape to dismiss, a click outside to dismiss, the page behind\n * made inert to a screen reader, and the scroll locked without the page jumping as the bar\n * disappears. `Modal.Close` writes its own `slot=\"close\"` for the same reason `Toast.Close` does.\n *\n * The scrim is the one place in this system where the palette deliberately does not reach, and it\n * says so above.\n */\nexport const Modal = Object.assign(ModalRoot, {\n  Content: ModalContent,\n  Title: ModalTitle,\n  Description: ModalDescription,\n  Footer: ModalFooter,\n  Close: ModalClose,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Modal/Modal.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A dialog over the page: a short task that needs an answer before the page can be used again. The\nsurface is the tooltip's and the toast's — its own panel with a hairline — and the title is the\nsheet's own `.ds-panel-title`, 18px/600.\n\n```tsx\n<Modal>\n  <Button>New monitor</Button>\n  <Modal.Content>\n    <Modal.Title>New monitor</Modal.Title>\n    <Modal.Description>\n      It starts checking as soon as you save.\n    </Modal.Description>\n    <Modal.Footer>\n      <Modal.Close>Cancel</Modal.Close>\n      <Button variant=\"default\">Save</Button>\n    </Modal.Footer>\n  </Modal.Content>\n</Modal>\n```\n\n| Slot                | React Aria                | Notes                                           |\n| ------------------- | ------------------------- | ----------------------------------------------- |\n| `Modal`             | `DialogTrigger`           | The trigger, then a `Modal.Content`             |\n| `Modal.Content`     | `ModalOverlay` + `Dialog` | The scrim, the placement and the surface        |\n| `Modal.Title`       | `Heading`                 | Names the dialog — React Aria wires it          |\n| `Modal.Description` | `Text`                    | Explains it — **wired here, not by React Aria** |\n| `Modal.Footer`      | —                         | The actions, right-aligned                      |\n| `Modal.Close`       | `Button`                  | `slot=\"close\"`                                  |\n\n`Modal.Content` draws the overlay and the dialog together, as `Select.Menu` draws its popover and\nits list: two elements that are never useful apart, and the placement is not a decision anyone is\nmaking.\n\n### A modal is a demand, so it should be rare\n\nIt takes the page away, traps focus and stops anyone reading behind it — the right trade for a\ndecision that has to be made now, and the wrong one for a form someone might want to consult the\npage while filling in. A `Popover` is the same dialog without that cost, and the sheet's own menus\nare popovers.\n\n### React Aria wires the title and not the description\n\nThe dialog gets `aria-labelledby` on its own from `Modal.Title`. It does **not** wire a description,\nso `Modal.Content` generates the id with `useId` and hands it to `Modal.Description` through a\ncontext — a description nobody is pointed at is decoration. The `aria-describedby` is set whether or\nnot a description was passed, because a dangling id is a smaller thing than an unreadable\nexplanation.\n\n### `slot=\"close\"` is the mechanism, and `Modal.Close` is only the ×\n\nPutting `slot=\"close\"` on **any** button closes the dialog — that attribute is the whole mechanism.\n`Modal.Close` is the corner ×, and it is absolutely positioned because a corner control belongs to\nthe dialog rather than to a footer. A footer that says \"Cancel\" wants a plain `Button` with the same\n`slot` instead: the first version of the story put `Modal.Close` in the footer and the word flew to\nthe top-right corner, because `position: absolute` goes exactly where it is told.\n\n### The trigger is not `aria-hidden`, and should not be\n\nA first version of the `Trapped` story asserted `aria-hidden=\"true\"` on the trigger while the dialog\nwas open, and it is not there. React Aria makes a dialog modal by **trapping focus** and taking the\npage out of the tab order, not by hiding it from the accessibility tree — where it should stay\nreadable, merely not reachable. `Trapped` now walks Tab six times and asserts focus never leaves.\n\n### The scrim is the one place the palette deliberately does not reach\n\nA scrim has to _darken_ in both themes, and no token does that: `--color-ink` is black in the dark\ntheme and white in the light one, so it would haze a white page white and separate nothing. The\noverlay is `bg-black/50`, Tailwind's own, the same in both themes by design, and it says so in the\nfile.",
+  "categories": [
+    "overlay"
+  ],
+  "type": "registry:ui"
+}

@@ -41,6 +41,16 @@ jobs:
       # errors `tsc --noEmit` was there for.
       - run: vp check
 
+      # `registry.json` is generated from src/components, src/styles.css and docs/components, so a
+      # component can be added without it — and the registry would then be one component short with
+      # nothing to say so. The generator is offline and cheap; regenerate and fail on a diff.
+      #
+      # This checks the registry's *sources*. The served JSON under public/r, which is what consumers
+      # actually fetch, is committed as well and rebuilt from those same sources on deploy; see
+      # docs/registry.md for why both exist.
+      - run: npm run registry
+      - run: git diff --exit-code -- registry.json
+
   build:
     name: Build app and Storybook
     runs-on: ubuntu-latest

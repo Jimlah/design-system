@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form",
+  "title": "Form",
+  "description": "A group of fields with a button that submits them.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Form/Form.tsx",
+      "content": "import { Form as AriaForm } from 'react-aria-components'\nimport type { FormProps as AriaFormProps } from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface FormProps extends Omit<\n  AriaFormProps,\n  'children' | 'className' | 'validationErrors' | 'validationBehavior'\n> {\n  /** A server's answer, keyed by each field's `name`. A field does not care where the objection came from, which is why the same slot renders both. */\n  validationErrors?: AriaFormProps['validationErrors']\n  /** `native` by default here, because in `aria` mode React Aria 1.22 does not validate on submit at all — see the doc. */\n  validationBehavior?: AriaFormProps['validationBehavior']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** The group's heading — the sheet's `.ds-panel-title`, the same one a modal's title wears. */\nexport interface FormLegendProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** A block of fields that belongs together. */\nexport interface FormSectionProps {\n  className?: string\n  children?: ReactNode\n}\n\n/** The row of buttons that finishes the form, right-aligned as the sheet's panels do. */\nexport interface FormActionsProps {\n  className?: string\n  children?: ReactNode\n}\n\nconst ROOT = 'flex flex-col gap-5'\n\nconst LEGEND = 'text-lg font-semibold text-fg'\n\nconst SECTION = 'flex flex-col gap-4'\n\nconst ACTIONS = 'flex items-center justify-end gap-2'\n\n/**\n * A group of fields with a button that submits them.\n *\n * ```tsx\n * <Form onSubmit={(e) => save(e)}>\n *   <Form.Legend>New monitor</Form.Legend>\n *   <Form.Section>\n *     <TextField name=\"host\" isRequired>\n *       <TextField.Label>Hostname</TextField.Label>\n *       <TextField.Input />\n *       <TextField.Error>Enter a hostname.</TextField.Error>\n *     </TextField>\n *   </Form.Section>\n *   <Form.Actions>\n *     <Button type=\"submit\">Save</Button>\n *   </Form.Actions>\n * </Form>\n * ```\n *\n * **The point of a form component is that the fields already know how to say what is wrong.** Every\n * control here — `TextField`, `Select`, `Checkbox`, `Slider` — was built on React Aria's field\n * anatomy, so each one already renders its own `FieldError` and marks itself `aria-invalid`. `Form`\n * is what makes them all validate at once, on submit, and moves focus to the first thing that failed.\n * A consumer wiring that by hand would reimplement it per form and get it subtly different each time.\n *\n * `validationBehavior` defaults to **`native`**, which is not the library's default and is not a\n * preference: React Aria's `aria` mode does not validate a form on submit in this version. Measured,\n * not assumed — an `aria`-mode form with a required empty field submitted cleanly, while the same form\n * in `native` mode marked the field `aria-invalid`, rendered `TextField.Error`, and moved focus to the\n * thing that was wrong. The cost is the browser's own bubble on top of the styled message; the\n * alternative was no validation at all.\n *\n * Server-side failures come back through `validationErrors`, keyed by each field's `name` — the same\n * mechanism, so a field does not care whether the answer came from the browser or from the server.\n */\nfunction FormRoot({ className, children, ...props }: FormProps) {\n  return (\n    <AriaForm\n      data-slot=\"form\"\n      // **`native`, because `aria` does not validate at all.** React Aria documents `aria` as the\n      // default — validation on submit, errors rendered by the component — and in this version a form\n      // with a required empty field simply submitted: no `FieldError`, no `aria-invalid`, focus left on\n      // the button. `native` puts `required` on the input, and React Aria then marks the field invalid\n      // and renders the same styled `TextField.Error` it always did. A consumer can still pass their own\n      // `validationBehavior` through, since `{...props}` comes last.\n      validationBehavior=\"native\"\n      className={[ROOT, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaForm>\n  )\n}\n\n/**\n * The form's title. Use it as `Form.Legend` — the sheet's `.ds-panel-title`, the same type a modal's\n * title wears, because both are the name of a short task.\n *\n * Exported as `FormLegend` only so tooling can resolve it; consume the compound form `Form.Legend`.\n */\nexport function FormLegend({ className, children }: FormLegendProps) {\n  return (\n    <div className={[LEGEND, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * A block of fields that belongs together. Use it as `Form.Section` when a long form has more than one\n * idea in it.\n *\n * Exported as `FormSection` only so tooling can resolve it; consume the compound form `Form.Section`.\n */\nexport function FormSection({ className, children }: FormSectionProps) {\n  return (\n    <div className={[SECTION, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The buttons that finish the form. Use it as `Form.Actions` — right-aligned, because the affirmative\n * action belongs at the end of the reading direction.\n *\n * Exported as `FormActions` only so tooling can resolve it; consume the compound form `Form.Actions`.\n */\nexport function FormActions({ className, children }: FormActionsProps) {\n  return (\n    <div className={[ACTIONS, className].filter(Boolean).join(' ')}>\n      {children}\n    </div>\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Form = Object.assign(FormRoot, {\n  Legend: FormLegend,\n  Section: FormSection,\n  Actions: FormActions,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Form/Form.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A group of fields with a button that submits them.\n\n```tsx\n<Form onSubmit={(e) => save(e)}>\n  <Form.Legend>New monitor</Form.Legend>\n  <Form.Section>\n    <TextField name=\"host\" isRequired>\n      <TextField.Label>Hostname</TextField.Label>\n      <TextField.Input />\n      <TextField.Error>Enter a hostname.</TextField.Error>\n    </TextField>\n  </Form.Section>\n  <Form.Actions>\n    <Button type=\"submit\">Save</Button>\n  </Form.Actions>\n</Form>\n```\n\n| Slot           | React Aria | Notes                                        |\n| -------------- | ---------- | -------------------------------------------- |\n| `Form`         | `Form`     | The `<form>`. `onSubmit`, `validationErrors` |\n| `Form.Legend`  | —          | The title, in the sheet's `.ds-panel-title`  |\n| `Form.Section` | —          | A block of fields that belongs together      |\n| `Form.Actions` | —          | The buttons, right-aligned                   |\n\n**The point of a form component is that the fields already know how to say what is wrong.** Every\ncontrol here was built on React Aria's field anatomy, so each already renders its own `FieldError`\nand marks itself `aria-invalid`. `Form` is what makes them all validate at once, on submit, and moves\nfocus to the first thing that failed.\n\n### `validationBehavior=\"native\"`, because `aria` does not validate at all\n\nThis is a **measured** finding, not a preference, and it is the only place in this system where a\nReact Aria default is overridden.\n\nReact Aria documents `aria` as the default: validation on submit, errors rendered by the component,\nno browser chrome. In `react-aria-components` 1.22 a form in `aria` mode with a required empty field\nsubmitted **cleanly** — no `FieldError`, no `aria-invalid`, focus left sitting on the submit button.\n`requestSubmit()` on the form itself behaved the same way, so it was not the click. The same form with\n`validationBehavior=\"native\"` puts `required` on the input, and then React Aria marks the field\n`aria-invalid`, renders the same styled `TextField.Error`, wires it as the field's `aria-describedby`\nand moves focus to it. That is the whole behaviour, and it only exists in one of the two modes.\n\nA consumer can still pass their own `validationBehavior`, because `{...props}` comes last.\n\n### A server's answer arrives through the same door as the browser's\n\n`validationErrors` is keyed by each field's `name`, so a field does not care where the objection came\nfrom — which is why the same `TextField.Error` slot renders both. The `ServerErrors` story pins it.\n\n### Two assertions this round got wrong, both instructive\n\n- **`getByText` found the wrong node** for the error message and reported a colour that was never the\n  error's. The element is now reached through the **input's own `aria-describedby`**, which is also\n  the thing a screen reader reads — a query that cannot land on the wrong node because it follows the\n  relationship rather than the text.\n- **The field's border is teal, not red, while it is focused** — and that is correct. Focus outranks\n  invalid here by design, so that typing inside a field you have already been told is wrong is not also\n  shouted at. Asserting red on a focused invalid field was asserting the opposite of the design; the\n  rule was already written down two components earlier and the test contradicted it.\n\nA `<form>` also has **no `role=\"form\"` unless it is named**, so querying the role finds nothing and the\nstory passes while asserting nothing at all.",
+  "categories": [
+    "form"
+  ],
+  "type": "registry:ui"
+}

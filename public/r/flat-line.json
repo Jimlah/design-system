@@ -1,0 +1,90 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "flat-line",
+  "title": "FlatLine",
+  "description": "A series that never varied — a monitor at 100% — as one flat rule near the top of its box.",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "src/components/FlatLine/FlatLine.tsx",
+      "content": "import { useId } from 'react'\n\n/**\n * A series that never varied — a monitor at 100% — as one flat rule near the top of its box.\n *\n * ```tsx\n * <FlatLine label=\"fra1 uptime, 100%\" />\n * <FlatLine height={52} lineY={6} label=\"iad1 uptime, 100%\" />\n * ```\n *\n * **This is `drawFlat` from `pulse-replica/js/system.js`, whose own comment calls it the \"flat 100%\n * line\".** A sparkline is a series scaled to its own range, and a series with no range has nothing to\n * scale into — which is why the replica has a *separate function* for this case rather than a branch\n * inside `drawSpark`. That separation is the whole point: drawing a flat series through the middle of\n * the box, as a naive scale would, says \"average\"; drawing it at the top says \"perfect, and it stayed\n * that way\", which is what an uptime line at 100% means.\n *\n * It draws two things, in this order:\n *\n * 1. a **dot-grid zone** from five units below the rule to the bottom of the box — the same `.32`\n *    weight as the sparkline's, because this is a sparkline's neighbour;\n * 2. the **rule itself**, 2px of accent, full width.\n *\n * **`lineY` is in user units, not a fraction, and that is deliberate.** The replica draws it at `y=1` in\n * an 84-tall box and at `y=6` in a 52-tall one — 1.2% and 11.5%. Those are not the same fraction, so the\n * value is a distance from the top rather than a proportion, and treating it as a proportion would move\n * the line in one of the two places the replica uses it.\n */\nexport interface FlatLineProps {\n  /** Width in user units **and** rendered px. A `className` can stretch it. */\n  width?: number\n  /** Height in user units and rendered px. */\n  height?: number\n  /** Where the rule sits, in user units from the top. The replica's own values are 1 and 6. */\n  lineY?: number\n  /** What this line says, for a screen reader. It is the drawing's only text. */\n  label: string\n  className?: string\n}\n\n/** How far below the rule the texture starts — the replica's `y + 5`. */\nconst ZONE_GAP = 5\n\nexport function FlatLine({\n  width = 300,\n  height = 84,\n  lineY = 1,\n  label,\n  className,\n}: FlatLineProps) {\n  // `<pattern>` ids are document-global, so two of these on a page would otherwise share the first one's\n  // dots. `BarChart` and `Sparkline` both learned this the same way.\n  const patternId = `flat-line-dots-${useId()}`\n  const zoneTop = lineY + ZONE_GAP\n\n  return (\n    <svg\n      data-slot=\"flat-line\"\n      // Rendered as well as declared in the viewBox — a viewBox with no size collapses to nothing, which\n      // is how the Sparkline shipped invisible for a round.\n      width={width}\n      height={height}\n      viewBox={`0 0 ${width} ${height}`}\n      preserveAspectRatio=\"none\"\n      role=\"img\"\n      aria-label={label}\n      className={className}\n    >\n      <defs>\n        <pattern\n          id={patternId}\n          width=\"7.7\"\n          height=\"7.7\"\n          patternUnits=\"userSpaceOnUse\"\n        >\n          <circle cx=\"0.9\" cy=\"0.9\" r=\"0.9\" fill=\"rgba(255,255,255,0.32)\" />\n        </pattern>\n      </defs>\n      <rect\n        data-slot=\"flat-line-zone\"\n        x=\"0\"\n        y={zoneTop}\n        width={width}\n        height={Math.max(0, height - zoneTop)}\n        fill={`url(#${patternId})`}\n      />\n      <rect\n        data-slot=\"flat-line-rule\"\n        x=\"0\"\n        y={lineY - 1}\n        width={width}\n        height=\"2\"\n        fill=\"var(--color-teal)\"\n      />\n    </svg>\n  )\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/FlatLine/FlatLine.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A series that never varied — a monitor at 100% — as one flat rule near the top of its box.\n\n```tsx\n<FlatLine label=\"fra1 uptime, 100%\" />\n<FlatLine height={52} lineY={6} label=\"iad1 uptime, 100%\" />\n```\n\n| prop     | default | notes                                |\n| -------- | ------- | ------------------------------------ |\n| `width`  | `300`   | user units **and** rendered px       |\n| `height` | `84`    | same                                 |\n| `lineY`  | `1`     | distance from the top, in user units |\n| `label`  | —       | required; the drawing's only text    |\n\n## It is a separate component because a flat series has no range\n\n`drawFlat` in `pulse-replica/js/system.js` carries the comment **\"flat 100% line\"**, and it exists as its\nown function rather than as a branch inside `drawSpark` — which is the interesting part.\n\nA sparkline scales its data into its box. A series where every value is identical has **no range to scale\ninto**, so a naive implementation divides by zero, and the well-meaning fallback — draw it through the\nmiddle — says _average_. For an uptime monitor that is exactly wrong: a line that never moved is at 100%,\nand 100% is the **top** of the box. The replica's answer is a separate function with an explicit `y`, and\nthis is that function.\n\nThe two call sites are `y=1` in an 84-tall box and `y=6` in a 52-tall one — **1.2% and 11.5%**. Those are\nnot the same fraction, which is why `lineY` here is a _distance_ and not a proportion: treating it as a\nproportion would move the line in one of the two places the replica uses it. `Short` is the story with the\nsecond of those values.\n\n## What it draws\n\n1. a **dot-grid zone** from five units below the rule to the bottom — the `.32` weight, the same as the\n   sparkline's, because this sits beside one;\n2. the **rule**: 2px of accent, full width, at `lineY - 1` so its own height is centred on `lineY`.\n\nThe gap is what keeps the rule reading as a line _over_ a texture rather than as the top edge of a filled\narea — the same distinction `Sparkline` makes by starting its zone 26/84 down.\n\nTwo lessons carried in from the components either side: the `width`/`height` are **rendered** as well as\ndeclared in the viewBox (the Sparkline shipped invisible for a round by declaring only the viewBox), and\nthe `<pattern>` id is `useId`-derived (`BarChart` had it hardcoded, and two charts on a page would have\nshared the first one's dots).",
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:ui"
+}

@@ -34,6 +34,12 @@ jobs:
           node-version: '24'
           cache: true
 
+      # The component registry, served as static JSON under /r/ — rebuilt from registry.json before
+      # the app, so that Vite copies a registry that matches this commit into dist/client with
+      # everything else. See docs/registry.md.
+      - name: Build the component registry
+        run: npm run registry:build
+
       # The landing page, prerendered, so it arrives as real HTML rather than blank-before-JavaScript.
       - name: Build the app
         run: vp build

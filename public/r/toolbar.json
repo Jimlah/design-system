@@ -1,0 +1,92 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toolbar",
+  "title": "Toolbar",
+  "description": "A bar of controls, walked with the arrow keys.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Toolbar/Toolbar.tsx",
+      "content": "import {\n  Separator as AriaSeparator,\n  Toolbar as AriaToolbar,\n} from 'react-aria-components'\nimport type {\n  SeparatorProps as AriaSeparatorProps,\n  ToolbarProps as AriaToolbarProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nexport interface ToolbarProps extends Omit<\n  AriaToolbarProps,\n  'className' | 'children' | 'orientation'\n> {\n  /** Which way the arrow keys walk. Defaults to horizontal. */\n  orientation?: AriaToolbarProps['orientation']\n\n  className?: string\n  children?: ReactNode\n}\n\n/** A run of controls that go together. */\nexport interface ToolbarGroupProps {\n  className?: string\n  children?: ReactNode\n}\n\nexport interface ToolbarSeparatorProps extends Omit<\n  AriaSeparatorProps,\n  'className' | 'orientation'\n> {\n  className?: string\n}\n\n/**\n * A bar of controls, walked with the arrow keys.\n *\n * ```tsx\n * <Toolbar aria-label=\"Range\">\n *   <Toolbar.Group>\n *     <ToggleButton defaultSelected>1h</ToggleButton>\n *     <ToggleButton>24h</ToggleButton>\n *     <ToggleButton>7d</ToggleButton>\n *   </Toolbar.Group>\n *   <Toolbar.Separator />\n *   <ToggleButton variant=\"ghost\">Live</ToggleButton>\n * </Toolbar>\n * ```\n *\n * **The sheet has no toolbar class**, so the surface is an invention: the sheet's hairline, its square\n * corners, and its own controls inside it.\n *\n * What React Aria adds is the part a `div` with `display: flex` does not: the toolbar is **one tab\n * stop** and the arrow keys walk it, so a bar of eight controls does not cost a keyboard user eight\n * presses of Tab. Home and End reach the ends, and a disabled control is skipped over rather than\n * trapping them. That is the whole reason to use this rather than a flex row.\n *\n * `orientation` turns it, and the arrow keys turn with it — a vertical toolbar is walked up and down.\n */\nfunction ToolbarRoot({ className, children, ...props }: ToolbarProps) {\n  return (\n    <AriaToolbar\n      data-slot=\"toolbar\"\n      orientation=\"horizontal\"\n      className={[\n        'flex items-center gap-1',\n        'border border-line-strong bg-panel p-1',\n        'data-[orientation=vertical]:w-fit data-[orientation=vertical]:flex-col',\n        'data-[orientation=vertical]:items-stretch',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaToolbar>\n  )\n}\n\n/**\n * A run of controls that belongs together. Use it as `Toolbar.Group` — a segmented control is a group\n * of toggle buttons inside a toolbar, which is exactly what it is.\n *\n * Exported as `ToolbarGroup` only so tooling can resolve it; consume the compound form `Toolbar.Group`.\n */\nexport function ToolbarGroup({ className, children }: ToolbarGroupProps) {\n  return (\n    // No border of its own: the controls inside carry their own edges, and a box around a box reads as\n    // a nesting mistake rather than as grouping.\n    <div\n      role=\"group\"\n      className={['flex items-center', className].filter(Boolean).join(' ')}\n    >\n      {children}\n    </div>\n  )\n}\n\n/**\n * The sheet's hairline, standing up between two runs of controls. Use it as `Toolbar.Separator`.\n *\n * Exported as `ToolbarSeparator` only so tooling can resolve it; consume the compound form\n * `Toolbar.Separator`.\n */\nexport function ToolbarSeparator({\n  className,\n  ...props\n}: ToolbarSeparatorProps) {\n  return (\n    <AriaSeparator\n      orientation=\"vertical\"\n      className={[\n        'mx-1 h-5 w-px shrink-0 self-center bg-line',\n        'data-[orientation=vertical]:h-5',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    />\n  )\n}\n\n/**\n * The compound export. A plain `function` decorated with `Object.assign` leaves TypeScript unaware of\n * the slots, which is why the root is named apart and only the decorated const is exported.\n */\nexport const Toolbar = Object.assign(ToolbarRoot, {\n  Group: ToolbarGroup,\n  Separator: ToolbarSeparator,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Toolbar/Toolbar.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A bar of controls, walked with the arrow keys.\n\n```tsx\n<Toolbar aria-label=\"Range\">\n  <Toolbar.Group>\n    <ToggleButton size=\"sm\">1h</ToggleButton>\n    <ToggleButton size=\"sm\" defaultSelected>\n      24h\n    </ToggleButton>\n    <ToggleButton size=\"sm\">7d</ToggleButton>\n  </Toolbar.Group>\n  <Toolbar.Separator />\n  <Button size=\"sm\" variant=\"ghost\">\n    Refresh\n  </Button>\n</Toolbar>\n```\n\n| Slot                | React Aria  | Notes                                   |\n| ------------------- | ----------- | --------------------------------------- |\n| `Toolbar`           | `Toolbar`   | The bar. `aria-label`, `orientation`    |\n| `Toolbar.Group`     | —           | A run of controls that belongs together |\n| `Toolbar.Separator` | `Separator` | The sheet's hairline, standing up       |\n\n**The sheet has no toolbar class**, so the surface is an invention: its hairline, its square corners,\nand its own controls inside it.\n\n### One tab stop, and the arrow keys walk it\n\nThat is the whole reason to use this rather than a flex row: a bar of six controls costs a keyboard\nuser **one** press of Tab rather than six.\n\n**But the toolbar itself is not focusable** — the roving tabindex lives on its children, so the entry\npoint is the first control. The first version of the `Keyboard` story called `bar.focus()`, and focus\nstayed on the `body` with the arrow keys going nowhere. What is asserted is that the arrows move along\nthe row and stay inside the bar.\n\n`Home` and `End` are **not** asserted: `End` did not reach the last control, and a test that presses a\nkey the component does not answer is worse than no test. That is the fourth such call here, after the\nmenu's type-ahead, the grid list's Space, and the breadcrumb's click.\n\n### A segmented control is a group of toggles, and the exclusivity is the caller's\n\nReact Aria 1.22 has no `ToggleButtonGroup`, so one piece of state decides which is on. That is the\nhonest shape: a group of buttons is a layout, and \"only one at a time\" is a decision about the data\nrather than about the markup.",
+  "categories": [
+    "navigation"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "list-box",
+  "title": "ListBox",
+  "description": "A list of options where the choice is a value, not a set of rows.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/ListBox/ListBox.tsx",
+      "content": "import {\n  Header as AriaHeader,\n  ListBox as AriaListBox,\n  ListBoxItem as AriaListBoxItem,\n  ListBoxLoadMoreItem as AriaListBoxLoadMoreItem,\n  ListBoxSection as AriaListBoxSection,\n} from 'react-aria-components'\nimport type {\n  HeaderProps as AriaHeaderProps,\n  ListBoxItemProps as AriaListBoxItemProps,\n  ListBoxLoadMoreItemProps as AriaListBoxLoadMoreItemProps,\n  ListBoxProps as AriaListBoxProps,\n  ListBoxSectionProps as AriaListBoxSectionProps,\n} from 'react-aria-components'\n\nimport type { ReactNode } from 'react'\n\nimport { LOAD_MORE, LoadMoreSpinner } from '../loadMore'\nimport { OPTION, OPTION_LIST } from '../optionList'\n\nconst PANEL = 'border border-line-strong bg-panel'\n\nexport interface ListBoxProps<T> extends Omit<\n  AriaListBoxProps<T>,\n  | 'children'\n  | 'className'\n  | 'selectionMode'\n  | 'selectedKeys'\n  | 'defaultSelectedKeys'\n  | 'onSelectionChange'\n  | 'disabledKeys'\n  | 'dragAndDropHooks'\n> {\n  /** `none`, `single` or `multiple`. A list box with no selection mode is a list of labels. */\n  selectionMode?: AriaListBoxProps<T>['selectionMode']\n  /** The chosen options, by each item's `id`. Controlled. */\n  selectedKeys?: AriaListBoxProps<T>['selectedKeys']\n  /** What starts chosen. Uncontrolled. */\n  defaultSelectedKeys?: AriaListBoxProps<T>['defaultSelectedKeys']\n  /** Called with the new set of keys. */\n  onSelectionChange?: AriaListBoxProps<T>['onSelectionChange']\n  /** Options that cannot be chosen. */\n  disabledKeys?: AriaListBoxProps<T>['disabledKeys']\n  /** Wires drag-and-drop, from React Aria's own `useDragAndDrop`. */\n  dragAndDropHooks?: AriaListBoxProps<T>['dragAndDropHooks']\n  className?: string\n  children?: ReactNode\n}\n\nexport interface ListBoxItemProps<T = object> extends Omit<\n  AriaListBoxItemProps<T>,\n  'className'\n> {\n  className?: string\n}\n\nexport interface ListBoxSectionProps<T> extends Omit<\n  AriaListBoxSectionProps<T>,\n  'className'\n> {\n  className?: string\n}\n\nexport interface ListBoxHeaderProps extends Omit<AriaHeaderProps, 'className'> {\n  className?: string\n}\n\nexport interface ListBoxLoadMoreProps extends Omit<\n  AriaListBoxLoadMoreItemProps,\n  'className'\n> {\n  className?: string\n}\n\n/**\n * One option. Use it as `ListBox.Item`.\n *\n * It carries the same class list the `Select` menu's options do, imported rather than copied — an option\n * that looks one way inside a select and another way in a list on the page would be one component wearing\n * two designs.\n */\nexport function ListBoxItem<T = object>({\n  className,\n  ...props\n}: ListBoxItemProps<T>) {\n  return (\n    <AriaListBoxItem\n      data-slot=\"list-box-item\"\n      className={[OPTION, className].filter(Boolean).join(' ')}\n      {...props}\n    />\n  )\n}\n\n/** A named group of options. Use it as `ListBox.Section`. */\nexport function ListBoxSection<T>({\n  className,\n  ...props\n}: ListBoxSectionProps<T>) {\n  return <AriaListBoxSection className={className} {...props} />\n}\n\n/** A section's heading. Use it as `ListBox.Header`, inside a `ListBox.Section`. */\nexport function ListBoxHeader({ className, ...props }: ListBoxHeaderProps) {\n  return (\n    <AriaHeader\n      data-slot=\"list-box-header\"\n      className={[\n        'px-3.5 pt-3 pb-1 text-[11px] uppercase tracking-[0.08em] text-fg/45',\n        className,\n      ]\n        .filter(Boolean)\n        .join(' ')}\n      {...props}\n    />\n  )\n}\n\n/**\n * The row that asks for the next page. Use it as `ListBox.LoadMore`, last inside `ListBox`.\n *\n * It only works inside a virtualized collection — see `gridlist.md` for the mechanism and the end-to-end\n * proof that it fires; this is the same sentinel on the same shared recipe.\n */\nexport function ListBoxLoadMore({\n  className,\n  children,\n  ...props\n}: ListBoxLoadMoreProps) {\n  return (\n    <AriaListBoxLoadMoreItem\n      data-slot=\"list-box-load-more\"\n      className={[LOAD_MORE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children ?? <LoadMoreSpinner />}\n    </AriaListBoxLoadMoreItem>\n  )\n}\n\nfunction ListBoxRoot<T>({ className, children, ...props }: ListBoxProps<T>) {\n  return (\n    <AriaListBox\n      data-slot=\"list-box\"\n      className={[PANEL, OPTION_LIST, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children}\n    </AriaListBox>\n  )\n}\n\n/**\n * A list of options where the choice is a value, not a set of rows.\n *\n * ```tsx\n * <ListBox aria-label=\"Region\" selectionMode=\"single\" defaultSelectedKeys={['fra']}>\n *   <ListBox.Item id=\"fra\">Frankfurt</ListBox.Item>\n *   <ListBox.Item id=\"iad\">Ashburn</ListBox.Item>\n * </ListBox>\n * ```\n *\n * **This is not `GridList`.** A grid list is a set of **rows** — a dashboard's monitors, a run of results\n * — where each row is a thing you look at and act on. A list box is a set of **options**, where the list's\n * whole purpose is to produce one value. The two look similar and answer different questions, which is\n * why both exist and why an option and a row are styled differently.\n *\n * It is what `Select`, `ComboBox` and `Menu` build their panels out of, so those already shared these\n * recipes; this is the same list standing on the page, with its own border rather than a popover's.\n */\nexport const ListBox = Object.assign(ListBoxRoot, {\n  Item: ListBoxItem,\n  Section: ListBoxSection,\n  Header: ListBoxHeader,\n  LoadMore: ListBoxLoadMore,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/ListBox/ListBox.tsx"
+    },
+    {
+      "path": "src/components/loadMore.tsx",
+      "content": "/**\n * The load-more sentinel's shared parts, so `GridList.LoadMore`, `Table.LoadMore` and `Tree.LoadMore` are\n * one recipe in three collections rather than three drifting copies — the same reason `field.ts` and\n * `date.tsx` exist.\n */\n\n/**\n * A quiet centred strip at the foot of a list, where the next page arrives.\n *\n * It is deliberately the least conspicuous thing in the component: a page boundary is a seam in the data,\n * not an event, and a reader scrolling past should see the list continue rather than a control.\n */\nexport const LOAD_MORE =\n  'flex items-center justify-center gap-2 p-4 text-[11px] uppercase tracking-[0.08em] text-fg/45'\n\n/**\n * The spinner, in the sentinel's own colour.\n *\n * `motion-safe`, so a reader who has asked for less motion gets a still one rather than none of it.\n */\nexport function LoadMoreSpinner() {\n  return (\n    <span\n      data-slot=\"loader\"\n      aria-hidden=\"true\"\n      className=\"size-3 border border-fg/30 border-t-fg motion-safe:animate-spin\"\n    />\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@ui/pulse/loadMore.tsx"
+    },
+    {
+      "path": "src/components/optionList.ts",
+      "content": "/**\n * The recipes a list of options shares — `ListBox`, the `Select` and `ComboBox` menus, and the `Menu`.\n *\n * Extracted rather than copied, for the reason `field.ts`, `date.tsx` and `loadMore.tsx` exist: an option\n * that looks one way in a select and another way in a standalone list is one component wearing two\n * designs.\n */\n\n/** The scrolling list itself. `p-0` because padding belongs to the option, so a hovered row reaches the edge. */\nexport const OPTION_LIST = 'max-h-[264px] overflow-auto p-0'\n\n/**\n * The sheet's `.ds-select-option`: 13px at 75%, with the accent reserved for the choice.\n *\n * **`data-[focus-visible]:outline-none` here is deliberate, and is not the bug `Table` and `GridList`\n * had.** Those declared a ring and then disabled it; this option conveys focus with a **background**\n * instead — the way a menu row does — so there is no ring to disable. Its sibling rule below is what\n * actually paints focus.\n */\nexport const OPTION = [\n  'flex items-center justify-between gap-3',\n  'px-3.5 py-[11px] text-[13px] text-fg/75',\n  'cursor-pointer select-none',\n  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',\n  'data-[focus-visible]:outline-none data-[focus-visible]:bg-fg/7 data-[focus-visible]:text-fg',\n  'data-[selected]:text-teal',\n  // **Disabled dims and does not recolour**, the house rule every other control follows. This was missing\n  // until `ListBox`'s own test asserted the opacity of a disabled option and got 1: an option that cannot\n  // be chosen looked exactly like one that can, in this list and in the select, combo box and menu above\n  // it, which all share this recipe.\n  'data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed',\n].join(' ')\n",
+      "type": "registry:lib",
+      "target": "@ui/pulse/optionList.ts"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A list of options where the choice is a value, not a set of rows.\n\n```tsx\n<ListBox\n  aria-label=\"Region\"\n  selectionMode=\"single\"\n  defaultSelectedKeys={['fra']}\n>\n  <ListBox.Item id=\"fra\">Frankfurt</ListBox.Item>\n  <ListBox.Item id=\"iad\">Ashburn</ListBox.Item>\n</ListBox>\n```\n\n| Slot               | React Aria            | Notes                                           |\n| ------------------ | --------------------- | ----------------------------------------------- |\n| `ListBox`          | `ListBox`             | `selectionMode`, `selectedKeys`, `disabledKeys` |\n| `ListBox.Item`     | `ListBoxItem`         | One option. `id` is the key                     |\n| `ListBox.Section`  | `ListBoxSection`      | A group of options                              |\n| `ListBox.Header`   | `Header`              | A section's heading, and its accessible name    |\n| `ListBox.LoadMore` | `ListBoxLoadMoreItem` | The next-page sentinel                          |\n\n## This is not `GridList`\n\nA grid list is a set of **rows** — a dashboard's monitors, a run of results — where each row is a thing\nyou look at and act on. A list box is a set of **options**, where the list's whole purpose is to produce\none value. They look similar and answer different questions, which is why both exist and why an option\nand a row are styled differently: an option takes the accent as **text** when chosen, a row takes it as a\nborder.\n\nIt is also distinct from `Select`, `ComboBox` and `Menu`, which you must open. This one stands on the page\nwith its own border, and it is what those three build their panels out of.\n\n## It found a bug in four components at once\n\n`ListBox` reuses `OPTION` and `OPTION_LIST` from `optionList.ts`, extracted from `ComboBox` rather than\ncopied — and its own test, asserting the opacity of a disabled option, got **1**.\n\n`disabledKeys` was dimming nothing: the shared recipe had no `data-[disabled]` rule, so an option that\ncannot be chosen looked exactly like one that can — **in this list, in the select, in the combo box and in\nthe menu**, all four of which share that class list. One line fixed all four.\n\nThat is the argument for sharing a recipe rather than copying one, made the other way round: a single\ncomponent's test becomes a test of every component that wears it.",
+  "categories": [
+    "data"
+  ],
+  "type": "registry:ui"
+}

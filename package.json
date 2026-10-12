@@ -15,7 +15,9 @@
     "check": "vp check",
     "test": "vp test",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "registry": "node scripts/build-registry.mjs",
+    "registry:build": "npm run registry && npx --yes shadcn@4 build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -48,6 +50,7 @@
     "@vitest/browser-playwright": "5.0.3",
     "@vitest/coverage-v8": "5.0.3",
     "playwright": "latest",
+    "postcss": "^8.5.29",
     "storybook": "^10.6.1",
     "typescript": "^6.0.2",
     "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menu",
+  "title": "Menu",
+  "description": "A menu of actions or choices, opened from a control. The surface is the sheet's .ds-select-menu, now shared with the select through popover.ts — the same split as field.ts, and the first time two families here have genuinely converged on one surface.",
+  "dependencies": [
+    "react-aria-components@^1.22.1"
+  ],
+  "files": [
+    {
+      "path": "src/components/Menu/Menu.tsx",
+      "content": "import {\n  Header as AriaHeader,\n  Menu as AriaMenu,\n  MenuItem as AriaMenuItem,\n  MenuSection as AriaMenuSection,\n  MenuTrigger as AriaMenuTrigger,\n  Popover as AriaPopover,\n  Separator as AriaSeparator,\n  MenuLoadMoreItem as AriaMenuLoadMoreItem,\n} from 'react-aria-components'\nimport type {\n  HeaderProps as AriaHeaderProps,\n  MenuItemProps as AriaMenuItemProps,\n  MenuProps as AriaMenuProps,\n  MenuSectionProps as AriaMenuSectionProps,\n  MenuTriggerProps as AriaMenuTriggerProps,\n  PopoverProps as AriaPopoverProps,\n  SeparatorProps as AriaSeparatorProps,\n  MenuLoadMoreItemProps as AriaMenuLoadMoreItemProps,\n} from 'react-aria-components'\nimport { LOAD_MORE, LoadMoreSpinner } from '../loadMore'\n\nimport {\n  ITEM,\n  ITEM_LABEL,\n  LIST,\n  POPOVER,\n  SECTION,\n  SECTION_TITLE,\n  SEPARATOR,\n  SUBMENU_CARET,\n} from '../popover'\n\nexport interface MenuProps extends Omit<\n  AriaMenuTriggerProps,\n  'children' | 'className' | 'isOpen' | 'defaultOpen' | 'onOpenChange'\n> {\n  /** Whether the menu is open. Controlled, so pass `onOpenChange` with it. */\n  isOpen?: AriaMenuTriggerProps['isOpen']\n  /** Whether it starts open, for uncontrolled use. */\n  defaultOpen?: AriaMenuTriggerProps['defaultOpen']\n  /** Called when the menu asks to open or close. */\n  onOpenChange?: AriaMenuTriggerProps['onOpenChange']\n\n  /** The trigger, then a `Menu.Popover`. */\n  children?: React.ReactNode\n}\n\nexport interface MenuPopoverProps<T> extends Omit<\n  AriaPopoverProps,\n  'children' | 'className'\n> {\n  className?: string\n  /**\n   * Props for the list itself — `selectionMode`, `disabledKeys`, `onAction` — which are the menu's\n   * rather than the surface's, and which nobody should have to write two slots to reach.\n   */\n  menuProps?: Omit<AriaMenuProps<T>, 'children' | 'className'>\n  /** The items. */\n  children?: AriaMenuProps<T>['children']\n}\n\nexport interface MenuItemProps<T = object> extends Omit<\n  AriaMenuItemProps<T>,\n  'className' | 'children'\n> {\n  className?: string\n  children?: React.ReactNode\n}\n\nexport interface MenuSectionProps<T> extends AriaMenuSectionProps<T> {\n  children?: React.ReactNode\n}\n\nexport interface MenuSectionTitleProps extends AriaHeaderProps {\n  children?: React.ReactNode\n}\n\nexport interface MenuSeparatorProps extends Omit<\n  AriaSeparatorProps,\n  'className'\n> {\n  className?: string\n}\n\n/**\n * The surface the items sit on, and the list itself. Use it as `Menu.Popover`, as the second child of\n * a `Menu` — it draws both, because a popover with no list in it and a list with nowhere to open are\n * never useful apart, the same call `Select.Menu` makes.\n *\n * Exported as `MenuPopover` only so tooling can resolve it; consume the compound form\n * `Menu.Popover`.\n */\nexport function MenuPopover<T>({\n  className,\n  menuProps,\n  children,\n  ...props\n}: MenuPopoverProps<T>) {\n  return (\n    <AriaPopover\n      data-slot=\"menu\"\n      className={[POPOVER, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      <AriaMenu className={LIST} {...menuProps}>\n        {children}\n      </AriaMenu>\n    </AriaPopover>\n  )\n}\n\n/**\n * One row. Use it as `Menu.Item` — with an `href` it is a link, with `onAction` on the menu it is an\n * action, and with a `SubmenuTrigger` inside it it opens again.\n *\n * Exported as `MenuItem` only so tooling can resolve it; consume the compound form `Menu.Item`.\n */\nexport function MenuItem<T = object>({\n  className,\n  children,\n  ...props\n}: MenuItemProps<T>) {\n  return (\n    <AriaMenuItem\n      className={[ITEM, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {({ hasSubmenu }) => (\n        <>\n          <span className={ITEM_LABEL}>{children}</span>\n          {hasSubmenu ? (\n            <svg\n              viewBox=\"0 0 10 10\"\n              fill=\"none\"\n              aria-hidden=\"true\"\n              className={`size-2.5 ${SUBMENU_CARET}`}\n            >\n              <path\n                d=\"M3 1L7 5L3 9\"\n                stroke=\"currentColor\"\n                strokeWidth=\"1.5\"\n                strokeLinecap=\"round\"\n                strokeLinejoin=\"round\"\n              />\n            </svg>\n          ) : null}\n        </>\n      )}\n    </AriaMenuItem>\n  )\n}\n\n/**\n * A group of items. Use it as `Menu.Section`, with a `Menu.SectionTitle` at the top of it.\n *\n * Exported as `MenuSection` only so tooling can resolve it; consume the compound form `Menu.Section`.\n */\nexport function MenuSection<T>({ children, ...props }: MenuSectionProps<T>) {\n  return (\n    <AriaMenuSection className={SECTION} {...props}>\n      {children}\n    </AriaMenuSection>\n  )\n}\n\n/**\n * A group's heading. Use it as `Menu.SectionTitle`.\n *\n * Exported as `MenuSectionTitle` only so tooling can resolve it; consume the compound form\n * `Menu.SectionTitle`.\n */\nexport function MenuSectionTitle({\n  children,\n  ...props\n}: MenuSectionTitleProps) {\n  return (\n    <AriaHeader className={SECTION_TITLE} {...props}>\n      {children}\n    </AriaHeader>\n  )\n}\n\n/**\n * The sheet's hairline, between two runs of items. Use it as `Menu.Separator`.\n *\n * Exported as `MenuSeparator` only so tooling can resolve it; consume the compound form\n * `Menu.Separator`.\n */\nexport function MenuSeparator({ className, ...props }: MenuSeparatorProps) {\n  return (\n    <AriaSeparator\n      elementType=\"div\"\n      className={[SEPARATOR, className].filter(Boolean).join(' ')}\n      {...props}\n    />\n  )\n}\n\n/**\n * Styled element. Not exported — `Menu` below is the public symbol, and docgen reads the JSDoc from\n * the *exported* declaration, not this one.\n */\nfunction MenuRoot({ children, ...props }: MenuProps) {\n  return <AriaMenuTrigger {...props}>{children}</AriaMenuTrigger>\n}\n\n/**\n * A menu of actions or choices, opened from a control. The surface is the sheet's\n * `.ds-select-menu`, shared with the select through `popover.ts`.\n *\n * ```tsx\n * <Menu>\n *   <Button>Actions</Button>\n *   <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n *     <Menu.Item id=\"restart\">Restart</Menu.Item>\n *     <Menu.Separator />\n *     <Menu.Item id=\"delete\">Delete</Menu.Item>\n *   </Menu.Popover>\n * </Menu>\n * ```\n *\n * **A menu is a list of things to do, and it closes when you do one.** That is the difference between\n * it and a `Select`: a select keeps a value and says so in its trigger, while a menu performs an\n * action and goes away. `onAction` is the prop that says which this is — set it and the rows are\n * commands, leave it off and `selectionMode` makes them choices.\n *\n * React Aria does the parts a hand-rolled menu gets wrong: the popover is positioned against the\n * trigger and flips when it would run off the page, focus moves into the list and back out to the\n * trigger, the arrow keys walk it, Escape and a click outside dismiss it, and type-ahead jumps to a\n * row by its first letters.\n *\n * `Menu.Popover` carries the menu's own props — `selectionMode`, `disabledKeys`, `onAction` — so they\n * are written once rather than split across two slots. A submenu is a `SubmenuTrigger` inside a\n * `Menu.Item`; this component does not wrap it, because a submenu is a second menu and wrapping it\n * would have to answer questions the consumer has not been asked yet.\n */\n\n/**\n * The row that asks for the next page. Use it as `Menu.LoadMore`, last inside `Menu`.\n *\n * A menu that runs long — a list of regions, a list of hundreds of actions — has no scrollbar a reader\n * can consult for how much is left. This is where the rest arrives.\n *\n * It only works inside a virtualized collection, draws nothing until `isLoading`, and React Aria renders\n * nothing at all for it when idle. `gridlist.md` carries the mechanism and the end-to-end proof that it\n * fires on scroll; this is the same sentinel on the same shared recipe.\n */\nexport function MenuLoadMore({\n  className,\n  children,\n  ...props\n}: AriaMenuLoadMoreItemProps) {\n  return (\n    <AriaMenuLoadMoreItem\n      data-slot=\"menu-load-more\"\n      className={[LOAD_MORE, className].filter(Boolean).join(' ')}\n      {...props}\n    >\n      {children ?? <LoadMoreSpinner />}\n    </AriaMenuLoadMoreItem>\n  )\n}\n\nexport const Menu = Object.assign(MenuRoot, {\n  Popover: MenuPopover,\n  LoadMore: MenuLoadMore,\n  Item: MenuItem,\n  Section: MenuSection,\n  SectionTitle: MenuSectionTitle,\n  Separator: MenuSeparator,\n})\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Menu/Menu.tsx"
+    },
+    {
+      "path": "src/components/loadMore.tsx",
+      "content": "/**\n * The load-more sentinel's shared parts, so `GridList.LoadMore`, `Table.LoadMore` and `Tree.LoadMore` are\n * one recipe in three collections rather than three drifting copies — the same reason `field.ts` and\n * `date.tsx` exist.\n */\n\n/**\n * A quiet centred strip at the foot of a list, where the next page arrives.\n *\n * It is deliberately the least conspicuous thing in the component: a page boundary is a seam in the data,\n * not an event, and a reader scrolling past should see the list continue rather than a control.\n */\nexport const LOAD_MORE =\n  'flex items-center justify-center gap-2 p-4 text-[11px] uppercase tracking-[0.08em] text-fg/45'\n\n/**\n * The spinner, in the sentinel's own colour.\n *\n * `motion-safe`, so a reader who has asked for less motion gets a still one rather than none of it.\n */\nexport function LoadMoreSpinner() {\n  return (\n    <span\n      data-slot=\"loader\"\n      aria-hidden=\"true\"\n      className=\"size-3 border border-fg/30 border-t-fg motion-safe:animate-spin\"\n    />\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@ui/pulse/loadMore.tsx"
+    },
+    {
+      "path": "src/components/popover.ts",
+      "content": "/**\n * The sheet's `.ds-select-menu`, shared by everything that opens over the page: `Menu` now, and\n * `Select` and `ComboBox` when they converge onto it. The same split as `field.ts` — the surface is\n * the thing that must not drift, and the slots are still defined per component so Storybook\n * documents them under the right name.\n *\n * The shadow is the one literal colour in this file: it is a **shadow**, not a surface, and every\n * attempt to derive one from a token produces a haze rather than a shadow. It is `rgba(0,0,0,.7)`\n * because a shadow has to darken in both themes, exactly as the modal's scrim does.\n */\nexport const SURFACE = [\n  'border border-line-strong bg-panel',\n  'shadow-[0_12px_32px_rgba(0,0,0,.7)]',\n  'outline-none',\n].join(' ')\n\n/** A popover that holds a single scrolling list, sized to the control it came from. */\nexport const POPOVER = `flex w-(--trigger-width) flex-col overflow-hidden ${SURFACE}`\n\n/** The list inside it. `max-h` so a long list scrolls rather than running off the page. */\nexport const LIST = 'max-h-[264px] overflow-auto p-0 outline-none'\n\n/**\n * The sheet's `.ds-select-option`: 13px at 75%, with the accent reserved for the choice.\n *\n * Hover and focus land on the same treatment on purpose. A menu is walked with the arrow keys as\n * much as with a pointer, so the row the keyboard has reached and the row the pointer is over\n * should not look like two different kinds of thing.\n */\nexport const ITEM = [\n  'relative flex items-center justify-between gap-3',\n  'px-3.5 py-[11px] text-[13px] text-fg/75',\n  'cursor-pointer select-none',\n  'data-[hovered]:bg-fg/7 data-[hovered]:text-fg',\n  'data-[focus-visible]:outline-none data-[focus-visible]:bg-fg/7 data-[focus-visible]:text-fg',\n  'data-[selected]:text-teal',\n  'data-[disabled]:cursor-not-allowed data-[disabled]:text-fg/35',\n].join(' ')\n\n/** One item's text, which truncates rather than wrapping a menu wider than its trigger. */\nexport const ITEM_LABEL = 'truncate'\n\n/** A run of items, announced as a group. */\nexport const SECTION = 'flex flex-col'\n\n/** The sheet's `.ds-select-group-label`. */\nexport const SECTION_TITLE = [\n  'px-3.5 pt-[9px] pb-1',\n  'text-[11px] uppercase tracking-[0.08em] text-fg/45',\n].join(' ')\n\n/** The sheet's `.ds-div-hair`, inset so it reads as a break in the list rather than a table edge. */\nexport const SEPARATOR = 'my-1 h-px shrink-0 bg-line'\n\n/** A search box above the list sits behind the menu's own hairline, so it reads as part of the surface. */\nexport const SEARCH = 'border-b border-line-strong p-2'\n\n/**\n * A submenu's caret. A row with a submenu says so — `data-has-submenu` is React Aria's — and an\n * affordance nobody can see is not an affordance.\n */\nexport const SUBMENU_CARET = [\n  'shrink-0 text-fg/45',\n  'transition-[rotate] duration-[120ms] ease-pulse',\n  'data-[open]:rotate-90',\n].join(' ')\n",
+      "type": "registry:lib",
+      "target": "@ui/pulse/popover.ts"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-base": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-panel": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+      "color-panel-2": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+      "color-teal": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+      "color-yellow": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+      "color-green": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+      "color-red": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+      "color-neutral": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+      "color-bar": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+      "color-ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+      "color-fg": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+      "color-fg-muted": "color-mix(in oklch, var(--color-fg) 70%, transparent)",
+      "color-fg-subtle": "color-mix(in oklch, var(--color-fg) 35%, transparent)",
+      "color-line": "color-mix(in oklch, var(--color-fg) 62%, transparent)",
+      "color-line-strong": "color-mix(in oklch, var(--color-fg) 40%, transparent)",
+      "color-line-soft": "color-mix(in oklch, var(--color-fg) 30%, transparent)",
+      "color-line-control": "color-mix(in oklch, var(--color-fg) 45%, transparent)",
+      "font-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      "*,\n*::before,\n*::after": {
+        "min-width": "0"
+      },
+      ":root": {
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark"
+      },
+      "[data-theme='dark']": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--color-base)",
+        "color": "var(--color-fg)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        "text-rendering": "optimizeLegibility"
+      },
+      "::selection": {
+        "background": "var(--color-teal)",
+        "color": "var(--color-ink)"
+      }
+    }
+  },
+  "docs": "A menu of actions or choices, opened from a control. The surface is the sheet's `.ds-select-menu`,\nnow shared with the select through `popover.ts` — the same split as `field.ts`, and the first time\ntwo families here have genuinely converged on one surface.\n\n```tsx\n<Menu>\n  <Button>Actions</Button>\n  <Menu.Popover menuProps={{ onAction: (key) => run(key) }}>\n    <Menu.Item id=\"restart\">Restart</Menu.Item>\n    <Menu.Separator />\n    <Menu.Section>\n      <Menu.SectionTitle>Danger</Menu.SectionTitle>\n      <Menu.Item id=\"delete\">Delete</Menu.Item>\n    </Menu.Section>\n  </Menu.Popover>\n</Menu>\n```\n\n| Slot                | React Aria       | Notes                                              |\n| ------------------- | ---------------- | -------------------------------------------------- |\n| `Menu`              | `MenuTrigger`    | The trigger, then a `Menu.Popover`                 |\n| `Menu.Popover`      | `Popover`+`Menu` | The surface and the list. `menuProps` for the list |\n| `Menu.Item`         | `MenuItem`       | One row. A `SubmenuTrigger` inside it opens again  |\n| `Menu.Section`      | `MenuSection`    | A group                                            |\n| `Menu.SectionTitle` | `Header`         | Its heading, in `.ds-select-group-label`           |\n| `Menu.Separator`    | `Separator`      | The sheet's `.ds-div-hair`                         |\n\n### A menu performs; a select keeps\n\n`onAction` is the prop that says which this is. Set it and the rows are commands and the menu closes\nwhen one is chosen; leave it off with a `selectionMode` and they are choices that mark themselves\n`aria-checked`.\n\n**A menu closes on select whatever the mode** — that is what a menu _is_ — so a row that sets a value\nrather than running an action has to say `shouldCloseOnSelect: false`, or the list vanishes the\nmoment it has been used once. The `Selection` story failed on exactly that before it was written\ndown.\n\n### `Menu.Popover` carries the list's props\n\n`selectionMode`, `disabledKeys` and `onAction` are the _menu's_ rather than the surface's, and\nwriting them would otherwise mean two slots for one decision — so the popover takes them as\n`menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a\nsurface with no list in it and a list with nowhere to open are never useful apart.\n\n### The shadow is the second deliberate literal\n\n`popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to\ndarken in **both** themes, and every token that would do it inverts. It is the one literal in that\nfile, and it says so.\n\n### Focus is real, and type-ahead is not asserted\n\nReact Aria's menu puts **real** focus on a row — unlike its tree, which uses `aria-activedescendant`,\nso a story here asks `toHaveAttribute('role', 'menuitem')` rather than reading it off the menu.\n\nType-ahead (`d` reaching Delete) is deliberately **not** asserted. It uses the same kind of pending\ntimer the tooltip's hover does, and a query that cannot see it fails as if the feature were missing.\nThat is the third time this session that a story has been left out rather than written to assert\nsomething else.\n\n## `Menu.LoadMore` — the row that asks for the next page\n\n```tsx\n<Menu.Popover>\n  <Menu.Item id=\"a\">Restart</Menu.Item>\n  <Menu.LoadMore isLoading={isLoading} onLoadMore={loadMore} />\n</Menu.Popover>\n```\n\nA menu that runs long — every region, hundreds of actions — has no scrollbar a reader can consult for how\nmuch is left. This is where the rest arrives. It is the same sentinel as `GridList.LoadMore`, on the same\nshared recipe, and it needs a virtualized collection for the same reason (`gridlist.md` carries the\nmechanism and the scroll proof).\n\n**While it is loading it is a `menuitem`**, announced with the actions above it, because React Aria puts it\nin the menu's own collection. The story asserted the opposite first — that a row asking for the next page\nwould take no part in the menu — and its own failure corrected it. When it is _not_ loading, React Aria\nrenders nothing at all for it.",
+  "categories": [
+    "overlay"
+  ],
+  "type": "registry:ui"
+}

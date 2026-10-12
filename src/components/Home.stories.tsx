@@ -46,9 +46,9 @@ export const ComponentIndex: Story = {
   play: async ({ canvas }) => {
     // Charts is not the default tab, so the panel has to be opened the way a reader would.
     await userEvent.click(canvas.getByRole('tab', { name: 'Charts' }))
-    // `getAllByText`, because every tab panel is in the DOM — React Aria hides inactive panels rather
-    // than unmounting them, so `getByText` finds the same entry more than once. The first version of this
-    // assertion threw on exactly that.
+    // `getAllByText`, because `DotMap` is also a row in the Recent suites table below, so `getByText`
+    // finds more than one. It is **not** the tab panels: React Aria unmounts an unselected panel rather
+    // than hiding it — see docs/components/tabs.md, which measured it.
     await expect(canvas.getAllByText('DotMap').length).toBeGreaterThan(0)
     await expect(canvas.getAllByText('Sparkline').length).toBeGreaterThan(0)
 
@@ -65,5 +65,42 @@ export const ComponentIndex: Story = {
     // Clearing brings it back, so the empty state is the filter's doing and not a mount failure.
     await userEvent.clear(filter)
     await expect(canvas.getAllByText('DotMap').length).toBeGreaterThan(0)
+  },
+}
+
+export const Registry: Story = {
+  // **The count in the table is read from the same index as the hero's**, which is the part worth
+  // checking: a typed-out "54" is exactly the staleness this page already argued against, so the
+  // assertion is that the two readings agree rather than that either is any particular value. Add a
+  // component and this story still passes; hard-code the number and it fails.
+  play: async ({ canvas }) => {
+    await expect(
+      canvas.getByRole('heading', { name: 'Registry', level: 2 }),
+    ).toBeInTheDocument()
+
+    // The hero kicker is the only place that reads "N components · …", so the number it prints is
+    // the index's count.
+    const declared = canvas
+      .getByText(/components ·/)
+      .textContent.match(/\d+/)?.[0]
+    await expect(declared).toBeDefined()
+    await expect(
+      canvas.getByText(`All ${declared} components at once`),
+    ).toBeInTheDocument()
+
+    // The namespace panel is the selected one, so its address is already in the document. **The other
+    // two are not**: React Aria unmounts an unselected panel rather than hiding it (see
+    // docs/components/tabs.md), so each address has to be opened the way a reader would open it.
+    await expect(canvas.getByText(/registry add @pulse=/)).toBeInTheDocument()
+
+    await userEvent.click(canvas.getByRole('tab', { name: 'URL' }))
+    await expect(
+      canvas.getByText(/shadcn@latest add .*\/r\/button\.json/),
+    ).toBeInTheDocument()
+
+    await userEvent.click(canvas.getByRole('tab', { name: 'GitHub' }))
+    await expect(
+      canvas.getByText(/shadcn@latest add Jimlah\/design-system\/button/),
+    ).toBeInTheDocument()
   },
 }

@@ -388,6 +388,10 @@ const config = defineConfig({
       'storybook-static',
       'dist',
       '.tanstack',
+      // Both are generated — `registry.json` by scripts/build-registry.mjs and `public/r` by the
+      // shadcn CLI — so formatting either one would be undone by the next build. See docs/registry.md.
+      'registry.json',
+      'public/r',
     ],
   },
   resolve: {

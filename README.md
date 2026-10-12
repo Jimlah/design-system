@@ -62,6 +62,37 @@ agent instructions. To register another client:
 npx mcp-add --name "design-system-sb-mcp" --type http --url "http://localhost:6006/mcp" --scope project
 ```
 
+## Component registry
+
+Every component is published as a [shadcn registry](https://ui.shadcn.com/docs/registry), so another
+project installs it instead of copying it out of this one.
+
+```bash
+npx shadcn@latest registry add @pulse=https://jimlah.github.io/design-system/r/{name}.json
+npx shadcn@latest add @pulse/button     # one component, and everything it imports
+npx shadcn@latest add @pulse/text-field
+npx shadcn@latest add @pulse/pulse      # the whole library: 54 components and the theme
+npx shadcn@latest add @pulse/theme      # the tokens and Overpass Mono on their own
+```
+
+The same items install by address — the JSON the deployment serves, or the repository itself:
+
+```bash
+npx shadcn@latest add https://jimlah.github.io/design-system/r/button.json
+npx shadcn@latest add Jimlah/design-system/button
+```
+
+`npm run dev` serves the catalogue at <http://localhost:3000/r/registry.json>, and every item beside
+it. `registry.json` is generated — from the components, `src/styles.css` and `docs/components` —
+and `public/r` is built from it. Rebuild both after changing a component:
+
+```bash
+npm run registry:build
+```
+
+See [docs/registry.md](./docs/registry.md) for the item design, what is generated, and the CLI
+behaviour it is built around.
+
 # Getting Started
 
 To run this application:
