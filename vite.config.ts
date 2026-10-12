@@ -389,6 +389,15 @@ const config = defineConfig({
     storybookBuild(),
   ]),
   test: {
+    // **Two entries, one run.** Both projects are Vitest browser mode on the same Chromium through
+    // the same provider, and `vp test` reports them together — the split is not two test setups a
+    // reader has to keep in their head, it is the only shape the tools allow.
+    //
+    // They cannot be merged into one project, and that was measured rather than assumed: merging
+    // them leaves `include` to the Storybook addon, which builds its file list from the Storybook
+    // index and offers no file-level `include` (its options are `configDir`, `tags`, `storybookUrl`,
+    // `storybookScript`, `disableAddonDocs` and `initialGlobals`). Merged, the component test is
+    // dropped *silently* — 55 files and 311 tests instead of 56 and 315, with nothing failing.
     projects: [
       {
         extends: true,
@@ -401,6 +410,30 @@ const config = defineConfig({
         ],
         test: {
           name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+      {
+        // **Component tests, in Vitest's own browser mode** — https://vitest.dev/guide/browser/ —
+        // where the file is an ordinary test rather than a story: a contract stated directly, with
+        // no docs page or curated snippet in the way. Same browser, same provider, same command.
+        extends: true,
+        test: {
+          name: 'components',
+          include: ['src/**/*.browser.test.tsx'],
+          // The app's real stylesheet, so a computed style means what it means in the app. Stories
+          // get it from `.storybook/preview.tsx`; a test file has nowhere else to put it, and
+          // without it every colour and size assertion would read the UA defaults instead.
+          setupFiles: ['./src/browserTestSetup.ts'],
           browser: {
             enabled: true,
             headless: true,
