@@ -1,0 +1,7 @@
+# The deployed site. Hand-kept, like sitemap.xml beside it — a crawler fetches this before it has
+# fetched anything that could generate it, so it cannot be built from the route tree the way
+# registry.json is built from src/components.
+User-agent: *
+Allow: /
+
+Sitemap: https://jimlah.github.io/design-system/sitemap.xml

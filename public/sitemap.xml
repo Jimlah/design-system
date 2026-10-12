@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-kept, like robots.txt beside it, and for the same reason: this is fetched by a crawler rather
+  than rendered by the app, so it cannot be derived from the route tree. Add a route, add it here.
+
+  Three addresses. The landing page is the entry point; the docs are where the reference material
+  lives and the reason a component search should land on this site at all; the sign-in page is the
+  worked example the landing page links to.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://jimlah.github.io/design-system/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jimlah.github.io/design-system/storybook/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jimlah.github.io/design-system/login/</loc>
+    <priority>0.6</priority>
+  </url>
+</urlset>

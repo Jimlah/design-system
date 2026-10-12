@@ -46,6 +46,15 @@ jobs:
         env:
           DEPLOY_BASE: /${{ github.event.repository.name }}/
 
+      # Checked here as well as in CI, because this is the build that actually goes out: the tags are
+      # assembled from every matched route's `head`, and the output is the only place a mistake in that
+      # assembly is visible. Failing here fails the deploy, so the previous site stays live rather than
+      # being replaced by one with a broken canonical.
+      - name: Check the SEO of the prerendered pages
+        run: npm run seo
+        env:
+          DEPLOY_BASE: /${{ github.event.repository.name }}/
+
       # The documentation — the build the app serves at /storybook/ in dev and preview.
       - run: npm run build-storybook
 

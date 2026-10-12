@@ -74,6 +74,17 @@ jobs:
           path: dist
           retention-days: 7
 
+      # **The SEO check gets the deploy's shape, deliberately.** The app build above is this repo's SSR
+      # check: no base path, no prerender, so it has no per-route HTML to read. What a crawler is served
+      # only exists in the deploy's shape, so this builds that — after the artefact is uploaded, so the
+      # artefact stays the SSR-shaped build the rest of CI uses.
+      - run: vp build
+        env:
+          DEPLOY_BASE: /${{ github.event.repository.name }}/
+      - run: npm run seo
+        env:
+          DEPLOY_BASE: /${{ github.event.repository.name }}/
+
   stories:
     name: Story tests
     # **Advisory, until these assertions are runner-proof.** Five CI runs failed this job five times

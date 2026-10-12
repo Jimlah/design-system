@@ -1,0 +1,43 @@
+<!--
+  The docs page's own head.
+
+  Storybook builds a single-page manager, so this is the only static HTML a crawler gets at
+  `/storybook/` — everything the manager sets while it boots arrives after a crawler has given up.
+
+  **No `<title>` here, deliberately.** Storybook renders its own from the config directory's name
+  (`storybook - Storybook`) and its template is rendered *before* this is injected, so a title here is
+  a second title element that a browser and a crawler both ignore — measured in the built
+  `storybook-static/index.html`, which came out with two. Storybook 10 exposes no `title` in the
+  main config to change it with (checked the config type, then the builder's `renderHTML`).
+
+  The rest mirrors the tags `src/seo.ts` gives the app's own routes, because these pages are the same
+  site: the reference material rather than the pitch. The address is written out rather than derived,
+  because Storybook's HTML is built outside the app and has no `BASE_URL` to read.
+-->
+<meta
+  name="description"
+  content="Every Pulse component, with its props and the states it can be in: React Aria components on this design system's own tokens."
+/>
+<link
+  rel="canonical"
+  href="https://jimlah.github.io/design-system/storybook/"
+/>
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Pulse" />
+<meta property="og:title" content="Pulse component docs" />
+<meta
+  property="og:description"
+  content="Every Pulse component, with its props and the states it can be in."
+/>
+<meta
+  property="og:url"
+  content="https://jimlah.github.io/design-system/storybook/"
+/>
+<meta
+  property="og:image"
+  content="https://jimlah.github.io/design-system/og.png"
+/>
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#000000" />

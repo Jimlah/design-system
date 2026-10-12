@@ -17,7 +17,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "registry": "node scripts/build-registry.mjs",
-    "registry:build": "npm run registry && npx --yes shadcn@4 build"
+    "registry:build": "npm run registry && npx --yes shadcn@4 build",
+    "icons": "node scripts/build-icons.mjs",
+    "seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",

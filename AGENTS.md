@@ -128,6 +128,35 @@ Two more worth knowing before reaching for them:
   rather than whatever Storybook happens to hoist. A story about one control's own state still asks
   the DOM directly; the tester is for when the pattern is the point.
 
+## SEO
+
+The site describes itself in one place, `src/seo.ts`. **Every route returns `pageHead()`, and the root
+route deliberately does not** — it carries only what is identical on every page (charset, viewport,
+`theme-color`, the stylesheet, the icons). That is not tidiness; it is the one thing here that measured
+wrong. TanStack Router dedupes `meta` across the matched routes but **appends** `links`, so a canonical
+on the root renders _beside_ a page's own: the sign-in page shipped with two, pointing at different
+addresses, which tells a search engine that the page is a copy of the landing page. It was invisible in
+the source and plain in `dist/client/login/index.html`.
+
+- `npm run icons` regenerates `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og.png`
+  from the tokens in `src/styles.css` — no colour is hand-written for them. A favicon is read by
+  unfurlers, feed readers and older engines as well as browsers, so the generator converts oklch to hex
+  rather than shipping `fill="oklch(…)"` to something entitled not to understand it. The conversion is
+  checked against the values this file's own token table records: `#0D1015` and `#71FFF6`.
+- `npm run seo` checks a **built** site in the deploy's shape (`DEPLOY_BASE`): one title, description,
+  canonical and `og:url` per page; canonicals absolute, unique, and pointing at the address the page is
+  actually served at; the sitemap and the prerendered pages agreeing in _both_ directions; and `og.png`
+  being the size its tags claim. CI runs it in a second, deploy-shaped build (after the artefact is
+  uploaded, so the artefact stays the SSR-shaped one); Pages runs it on the build that goes out, so a
+  broken head fails the deploy rather than replacing a working site with a worse one.
+- `public/robots.txt` and `public/sitemap.xml` are **hand-kept**, and say so in the file: a crawler
+  fetches them before it has anything that could generate them. Adding a route means adding it to both
+  — `npm run seo` fails if they disagree with what is actually served.
+- `.storybook/manager-head.html` is the same treatment for the docs, which are a real page of this site:
+  static description, canonical, card and `theme-color`. **No `<title>` there** — Storybook renders its
+  own from the config directory's name before that file is injected, so a second title is one that a
+  browser and a crawler both ignore.
+
 ## Design tokens
 
 The system is **Pulse** — a dark monitoring design language replicated in
