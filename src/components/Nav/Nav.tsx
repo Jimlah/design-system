@@ -59,8 +59,10 @@ import { Tooltip } from '../Tooltip/Tooltip'
  *   would simply never open.
  * - **The disclosure goes quiet rather than away.** React Aria refuses an expandable item with no
  *   expand button, and it is right to: a rail whose branches cannot be opened is a rail that lies.
- *   So the button keeps its place in the focus order and appears in the row's corner when the row is
- *   pointed at or focused — the one thing on this surface that is invisible until you need it.
+ *   So the button stays, and appears in the row's corner when the row is pointed at or has the focus
+ *   inside it — the one thing on this surface that is invisible until you need it. It is not a Tab
+ *   stop in the rail, and it is not one in the wide panel either: React Aria prevents focus on it, and
+ *   the tree opens a branch from the link inside the row with an arrow key.
  */
 /** As tall as the page it sits beside, not as tall as its links: a sidebar that stops short reads as
  * a floating panel, which is the one thing it is not. */
@@ -93,10 +95,14 @@ export const NAV_LEVEL: Record<number, string> = {
  * drawn per row rather than per group because React Aria renders the rows of a tree flat — a nested
  * item is a sibling row, not a child of a container — so a row is the only element with a height to
  * hang it from.
+ *
+ * **It is switched off in the rail**, where every row is the same icon in the same column: a line
+ * down the middle of a 40px icon box says nothing about a hierarchy that has been flattened anyway,
+ * and it cuts the glyph in half. The indent goes for the same reason, in `NAV_ITEM`.
  */
 export const NAV_GUIDE: Record<number, string> = {
-  2: 'before:absolute before:inset-y-0 before:start-[25px] before:w-px before:bg-border-soft before:content-[""]',
-  3: 'before:absolute before:inset-y-0 before:start-[37px] before:w-px before:bg-border-soft before:content-[""]',
+  2: 'before:absolute before:inset-y-0 before:start-[25px] before:w-px before:bg-border-soft before:content-[""] [[data-collapsed]_&]:before:content-none',
+  3: 'before:absolute before:inset-y-0 before:start-[37px] before:w-px before:bg-border-soft before:content-[""] [[data-collapsed]_&]:before:content-none',
 }
 
 /**
@@ -194,13 +200,6 @@ export const NAV_CHEVRON = [
 export const NAV_GUTTER = 'size-4 shrink-0'
 
 /**
- * The disclosure in the rail. **Quiet, not gone.** It keeps its place in the focus order and its name
- * — React Aria requires it and a rail whose branches cannot be opened is a rail that lies — and it
- * steps out of the way into the row's corner, where it appears the moment the row is pointed at or
- * focused. The caret's rotation still comes from the render props, so an open branch still points the
- * way it points in the wide panel.
- */
-/**
  * The box the disclosure sits in at the **trailing** edge, drawn even when there is no disclosure in
  * it — the mirror of the leading reservation, and it exists for the count.
  *
@@ -213,11 +212,26 @@ export const NAV_GUTTER = 'size-4 shrink-0'
  */
 const NAV_END_GUTTER = `${NAV_GUTTER} [[data-collapsed]_&]:hidden`
 
+/**
+ * The disclosure in the rail. **Quiet, not gone.** React Aria requires a real expand button on an
+ * expandable item, and a rail whose branches cannot be opened is a rail that lies, so the button is
+ * here, named and operable. What it is *not* is a Tab stop: React Aria gives it `tabindex="-1"` and
+ * `data-react-aria-prevent-focus` in the wide panel too — measured in the browser rather than
+ * assumed — and a keyboard opens a branch the tree's way, with ArrowRight on the link inside the row.
+ * So the reveal follows the **row**, which is what a pointer or the focus can be on: hover, or
+ * anything inside it focused.
+ *
+ * Writing that reveal on the button's own `:focus-visible` was the first version, and it was dead
+ * code — a control that cannot take focus cannot be revealed by taking it.
+ *
+ * The caret's rotation still comes from the render props, so an open branch still points the way it
+ * points in the wide panel.
+ */
 const NAV_CHEVRON_RAIL = [
   '[[data-collapsed]_&]:absolute [[data-collapsed]_&]:end-1 [[data-collapsed]_&]:bottom-1',
   '[[data-collapsed]_&]:opacity-0',
   '[[data-collapsed]_&]:[[data-hovered]_&]:opacity-100',
-  '[[data-collapsed]_&]:focus-visible:opacity-100',
+  '[[data-collapsed]_&]:[[role=row]:focus-within_&]:opacity-100',
 ].join(' ')
 
 /**
@@ -240,17 +254,22 @@ export const NAV_ICON = [
 /**
  * What the item says, wrapped so that the rail can fold it away without losing it.
  *
- * `contents` in the wide panel, so the label and the `Nav.Count` are the anchor's own flex children
- * and the count's `ms-auto` still reaches the trailing edge. In the rail it becomes a zero-width
- * clipped box instead: the text is gone from the screen and **still in the accessibility tree**,
- * which is the difference between a rail and a rail nobody can use. The count is not clipped with
- * it — the dot is absolutely positioned against the row, and an ancestor's `overflow` does not reach
- * a descendant whose containing block is outside it.
+ * In the wide panel it is the anchor's own second column — `flex-1`, so the label sits at the icon's
+ * side and the count's `ms-auto` reaches the trailing edge — and it is **a box, not
+ * `display: contents`**. That was the first version and it was wrong twice over: a contents element
+ * generates no box, so every measurement of where a label starts returned zero and a test that
+ * compared two of them compared nothing at all.
+ *
+ * In the rail it becomes a zero-width clipped box instead: the text is gone from the screen and
+ * **still in the accessibility tree**, which is the difference between a rail and a rail nobody can
+ * use. `flex-none` with it, or `flex-1` would grow the zero back into the leftover pixels. The count
+ * is not clipped with it — the dot is positioned against the row, and an ancestor's `overflow` does
+ * not reach a descendant whose containing block is outside it.
  */
 const NAV_TEXT = [
-  'contents',
-  '[[data-collapsed]_&]:block [[data-collapsed]_&]:w-0 [[data-collapsed]_&]:overflow-hidden',
-  '[[data-collapsed]_&]:whitespace-nowrap',
+  'flex min-w-0 flex-1 items-center gap-2',
+  '[[data-collapsed]_&]:block [[data-collapsed]_&]:flex-none [[data-collapsed]_&]:w-0',
+  '[[data-collapsed]_&]:overflow-hidden [[data-collapsed]_&]:whitespace-nowrap',
 ].join(' ')
 
 /**
