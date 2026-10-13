@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { I18nProvider } from 'react-aria-components'
 import type {
   FocusEvent as ReactFocusEvent,
@@ -875,7 +875,24 @@ export function ComponentCanvas() {
   )
 }
 
-function CanvasColumn({
+/**
+ * **A column is memoized because the camera is not its business, and without that a drag is a full
+ * re-render of the library sixty times a second.**
+ *
+ * The camera changes once per animation frame while a gesture is running, and the world element
+ * that carries the transform is above every group. Let that change reach the columns and React
+ * reconciles all of it — 8 columns, 55 groups, 100 rows, 292 previews, ~5,000 elements of React
+ * Aria — for a transform that moves one other element. Measured on this page before the memo, in a
+ * real drag: **450ms a frame**, a 180-frame drag taking 90 seconds, 98% of the main thread in script
+ * and ~0 in layout, with 234MB of garbage; after it, the same drag is **16.7ms a frame** and 0.5s of
+ * script in total.
+ *
+ * So the props here have to stay stable — `category` is a module constant and `left` is a number —
+ * because a prop rebuilt on every render (a spread, an inline object, a mapped array) silently puts
+ * the whole library back inside the gesture. The commit then costs one transform write and nothing
+ * else, which is what a pan should cost.
+ */
+const CanvasColumn = memo(function CanvasColumn({
   category,
   left,
 }: {
@@ -964,7 +981,7 @@ function CanvasColumn({
       </div>
     </section>
   )
-}
+})
 
 /*
   The two camera controls, drawn here rather than taken from a set, for the reason
