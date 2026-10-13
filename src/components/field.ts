@@ -2,10 +2,17 @@
  * The field anatomy, shared by every control that wears it — `TextField`,
  * `SearchField`, and the textarea, select, checkbox and radio still to come.
  *
- * Only the styling lives here. Each component defines its own slot components,
- * thin as they are, so that its docs and manifest describe its own API rather
- * than pointing at another component's.
+ * The styling lives here, and so does the one piece of field *state* React Aria
+ * leaves to us: the validation context `Slider` — the one field it does not treat
+ * as a field — publishes for its own `Error` slot. See
+ * `FieldValidationContext` at the bottom of this file.
+ *
+ * Each component defines its own slot components, thin as they are, so that its
+ * docs and manifest describe its own API rather than pointing at another
+ * component's.
  */
+import { Children, Fragment, createContext, isValidElement } from 'react'
+import type { ReactNode } from 'react'
 
 /**
  * The three control sizes. `size` is set once on the field and travels as two
@@ -155,3 +162,91 @@ export const ICON_POSITIONS = {
 } as const
 
 export type IconPosition = keyof typeof ICON_POSITIONS
+
+/**
+ * The invalid state of a control React Aria does not treat as a field, published by that control
+ * itself.
+ *
+ * **Every other field here reads its invalid state from React Aria.** `TextField`, `Select`,
+ * `Switch` and the rest are handed `isInvalid`, and React Aria publishes the
+ * `FieldErrorContext` their `Error` slot renders from. `Slider` is left out of that anatomy:
+ * `useSlider` takes no `isInvalid` at all, and a slider *thumb*'s is deprecated with no
+ * replacement — which is why this component's docs never showed a `FieldError`. (`TokenField` is
+ * left out for the same reason and stays out: its message can be neither rendered nor reached. See
+ * docs/components/tokenfield.md.)
+ *
+ * So `Slider` publishes the context itself, from an `isInvalid` prop the caller owns. That is
+ * exactly what an integration binding a slider to a form has: a value it validated and a failure it
+ * has to report. What it is *not* is React Aria's form validation — the `validationErrors` a
+ * `Form` carries are keyed by field name and read by React Aria's own fields, and a slider never
+ * sees them.
+ *
+ * **`errorId` is minted by the control, not by the slot**, because the message and the element it
+ * describes are two different slots and only the control can own the name they share.
+ */
+export const FieldValidationContext = createContext<FieldValidation | null>(
+  null,
+)
+
+/**
+ * Splits a field's children into the part that *is* the control's name and the part that describes
+ * it from beside it.
+ *
+ * **A `<label>` element's text is the accessible name of the control inside it, and a hint or an
+ * error is not part of that name.** React Aria's selection controls render their label around both
+ * the control and the children they are handed, so a `Hint` or an `Error` written as an ordinary
+ * child ends up inside the label and is read as the control's name. Measured on this library's own
+ * checkbox, whose name came out as `"ConsentApplies to every monitor.You must consent."` — and on
+ * the switch, whose error was there for the same reason.
+ *
+ * React Aria's own docs put the description and the error *beside* the button, inside the field
+ * wrapper, which is what this returns them for. A bare text child is the label's text and stays; the
+ * named slots stay; anything else — `Hint`, `Error` — comes out. A fragment is looked through,
+ * because a fragment is a way of writing a list rather than a part of one.
+ */
+export function splitFieldSlots(
+  children: ReactNode,
+  inside: readonly unknown[],
+): [ReactNode[], ReactNode[]] {
+  const isInside = (part: ReactNode): boolean => {
+    if (!isValidElement(part)) return true
+    if (part.type === Fragment) {
+      return Children.toArray(
+        (part.props as { children?: ReactNode }).children,
+      ).every(isInside)
+    }
+    return inside.includes(part.type)
+  }
+  const parts = Children.toArray(children)
+  return [parts.filter(isInside), parts.filter((part) => !isInside(part))]
+}
+
+export interface FieldValidation {
+  /** Whether the control's value is invalid. */
+  isInvalid: boolean
+  /** The id the control's error message wears, so the control is described by the message. */
+  errorId: string
+}
+
+/**
+ * The `ValidityState` of a field nothing is wrong with — React Aria's own shape for "there is no
+ * native input to ask", which is the situation for a slider.
+ *
+ * It is never read: `FieldError` looks only at `isInvalid` and `validationErrors`, and the
+ * rest travels to a render-function child that never asks. It is here because React Aria types the
+ * context as a `ValidationResult`, and a field that claims to be valid should carry a valid
+ * object rather than a cast.
+ */
+export const VALID: ValidityState = {
+  badInput: false,
+  customError: false,
+  patternMismatch: false,
+  rangeOverflow: false,
+  rangeUnderflow: false,
+  stepMismatch: false,
+  tooLong: false,
+  tooShort: false,
+  typeMismatch: false,
+  valid: true,
+  valueMissing: false,
+}

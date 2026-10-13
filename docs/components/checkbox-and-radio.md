@@ -16,24 +16,57 @@ a slot — so the compound form covers the whole control, not just its decoratio
 ```
 
 `Checkbox` mirrors it exactly, with `Checkbox.Group`, `.Indicator`, `.Text`, `.Label`,
-`.Hint` and `.FieldError`. The slots are explicit, like `Button.Icon` and `Button.Text`; a
+`.Hint` and `.Error`. The slots are explicit, like `Button.Icon` and `Button.Text`; a
 bare text child still renders, it just misses the label styling, so a missing slot degrades
 rather than disappears.
 
-| Slot                 | React Aria                     | Notes                                                         |
-| -------------------- | ------------------------------ | ------------------------------------------------------------- |
-| `Radio` / `Checkbox` | `Radio` / `Checkbox`           | The control. Owns the selection when outside a group          |
-| `.Group`             | `RadioGroup` / `CheckboxGroup` | Owns it when inside one; `value` identifies the control to it |
-| `.Indicator`         | —                              | The dot or the box, drawn for you                             |
-| `.Text`              | —                              | One control's label                                           |
-| `.Label`             | `Label`                        | The group's legend — the same `.ds-field-legend` as a field   |
-| `.Hint`              | `Text`                         | `slot="description"`, so it is described-by                   |
-| `.FieldError`        | `FieldError`                   | Renders nothing while the group is valid                      |
+| Slot                 | React Aria                                                        | Notes                                                         |
+| -------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------- |
+| `Radio` / `Checkbox` | `RadioField` + `RadioButton` / `CheckboxField` + `CheckboxButton` | The control. Owns the selection when outside a group          |
+| `.Group`             | `RadioGroup` / `CheckboxGroup`                                    | Owns it when inside one; `value` identifies the control to it |
+| `.Indicator`         | —                                                                 | The dot or the box, drawn for you                             |
+| `.Text`              | —                                                                 | One control's label                                           |
+| `.Label`             | `Label`                                                           | The group's legend — the same `.ds-field-legend` as a field   |
+| `.Hint`              | `Text`                                                            | `slot="description"`, so it is described-by                   |
+| `.Error`             | `FieldError`                                                      | Renders nothing while the field is valid                      |
 
 `isRequired` and `isInvalid` live on the **group**, not the control: a `Radio` outside one
 has no group state to read. React Aria splits validity two ways — the group gets
 `data-invalid` as a styling hook, while `aria-invalid` goes on each control, because the
 group is not a focusable thing a screen reader could land on.
+
+### `Checkbox.Error` works on a checkbox, not only on its group
+
+It did not, until this was built on `CheckboxField`. **The deprecated `Checkbox` is a `<label>`
+with no field context at all** — no `FieldErrorContext` for a `FieldError` to render from, and no
+text context for `Checkbox.Hint` to be wired into. Measured in the browser, a lone
+`<Checkbox isInvalid>` announced `aria-invalid="true"`, drew a red box, and rendered **no message
+at all**; its hint was an unlabelled word beside it that the control was not described by.
+
+`CheckboxField` + `CheckboxButton` is what React Aria's own docs build a checkbox on, and what
+`Switch` here already did. `CheckboxField` is the wrapper that owns the value and publishes the
+validation and help-text contexts; `CheckboxButton` is the `<label>`. Both `Checkbox` and
+`Radio` are `@deprecated` in 1.22 in favour of those pairs — as is `Switch` — so this is also the
+last of the three to stop using the deprecated half.
+
+### The label holds the control's name, and nothing else
+
+**A `<label>` element's text is the accessible name of the control inside it**, and React Aria's
+selection controls render that label around the control _and the children they are handed_. So a
+`Hint` or an `Error` written as an ordinary child landed inside the label and was read as part of
+the name. Measured on this library's own checkbox, whose name came out as:
+
+```
+"ConsentApplies to every monitor.You must consent."
+```
+
+— and on the switch, which announced `"Auto-retryYou must decide."` for the same reason.
+
+The control's children are therefore **split**, by `splitFieldSlots` in `field.ts`: the
+`Indicator` and the `Text` are the name and stay inside the label, a bare text child stays with
+them, and everything else sits **beside** the label, inside the field wrapper. That is where React
+Aria's own docs put the description and the error, and it is the only arrangement in which they are
+not also the control's name.
 
 ### State travels as custom properties, not group variants
 

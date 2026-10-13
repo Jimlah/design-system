@@ -147,3 +147,60 @@ export const Form = Object.assign(FormRoot, {
   Section: FormSection,
   Actions: FormActions,
 })
+
+export {
+  FieldCheckbox,
+  FieldCheckboxGroup,
+  FieldColorField,
+  FieldDateField,
+  FieldForm,
+  FieldNumberField,
+  FieldRadio,
+  FieldSearchField,
+  FieldSelect,
+  FieldSlider,
+  FieldSubmit,
+  FieldSwitch,
+  FieldTextArea,
+  FieldTextField,
+  FieldTimeField,
+  extendForm,
+  fieldContext,
+  fieldErrorMessages,
+  formContext,
+  useAppForm,
+  useFieldContext,
+  useFormContext,
+  useTypedAppFormContext,
+  withFieldGroup,
+  withForm,
+} from './tanstack'
+export type {
+  FieldCheckboxGroupProps,
+  FieldCheckboxProps,
+  FieldColorFieldProps,
+  FieldDateFieldProps,
+  FieldFormProps,
+  FieldNumberFieldProps,
+  FieldRadioProps,
+  FieldSearchFieldProps,
+  FieldSelectProps,
+  FieldSliderProps,
+  FieldSubmitProps,
+  FieldSwitchProps,
+  FieldTextAreaProps,
+  FieldTextFieldProps,
+  FieldTimeFieldProps,
+} from './tanstack'
+
+/*
+ * **This re-export closes a cycle, and the cycle is benign for one reason: function declarations are
+ * initialised when the module graph is linked, before any module body runs.** `tanstack.tsx` imports
+ * `Form`, `FormLegend`, `FormSection` and `FormActions` from here, and its module body reads three
+ * of them — all three are `export function` declarations, hoisted exactly for this. The fourth,
+ * `const Form`, is only read when `form.Form` renders, long after both modules have finished.
+ *
+ * It is written down because the reason is not visible from either file: swap `FormLegend` for a
+ * `const FormLegend = …` and the registry item still builds, the types still check, and the module
+ * throws a `ReferenceError` on import.
+ */

@@ -1,19 +1,20 @@
 import {
   FieldError as AriaFieldError,
   Label as AriaLabel,
-  Radio as AriaRadio,
+  RadioButton as AriaRadioButton,
+  RadioField as AriaRadioField,
   RadioGroup as AriaRadioGroup,
   Text as AriaText,
 } from 'react-aria-components'
 import type {
   FieldErrorProps as AriaFieldErrorProps,
   LabelProps as AriaLabelProps,
+  RadioFieldProps as AriaRadioFieldProps,
   RadioGroupProps as AriaRadioGroupProps,
-  RadioProps as AriaRadioProps,
   TextProps as AriaTextProps,
 } from 'react-aria-components'
 
-import { ERROR, HINT, LABEL } from '../field'
+import { ERROR, HINT, LABEL, splitFieldSlots } from '../field'
 
 /**
  * The sheet's `.ds-radio`. The dot is a circle where the checkbox is a 2px-radius
@@ -73,19 +74,20 @@ const TEXT = 'text-[13px] text-foreground/80'
 const GROUP = 'group flex'
 
 export interface RadioProps extends Omit<
-  AriaRadioProps,
+  AriaRadioFieldProps,
   'isDisabled' | 'children' | 'className' | 'ref'
 > {
   /** React 19 passes `ref` as an ordinary prop, so no `forwardRef` wrapper. */
-  ref?: React.Ref<HTMLLabelElement>
+  ref?: React.Ref<HTMLDivElement>
   /** Disables the control. This is a React Aria prop — there is no `disabled`. */
-  isDisabled?: AriaRadioProps['isDisabled']
+  isDisabled?: AriaRadioFieldProps['isDisabled']
   /**
    * Identifies this radio to its `Radio.Group`, which owns the selection. A
    * `Radio` outside a group has no group state to read, so it is always used
    * inside one. `isRequired` and `isInvalid` belong to the group, not here.
    */
-  value: AriaRadioProps['value']
+  value: AriaRadioFieldProps['value']
+  /** Layout for the wrapper. The control's own styling is internal, as a field's is. */
   className?: string
   /** `Radio.Indicator` and `Radio.Text`, in that order. */
   children?: React.ReactNode
@@ -274,18 +276,37 @@ export function RadioGroup({
 }
 
 /**
+ * The wrapper `RadioField` renders: a column, so the radio's own description, if it has one, sits
+ * under it. `w-fit`, like `Switch`'s and `Checkbox`'s, so a radio in a column is the width of
+ * itself rather than of the column.
+ */
+const FIELD = 'flex w-fit flex-col gap-2'
+
+/**
  * Styled element. Not exported — `Radio` below is the public symbol, and docgen
  * reads the JSDoc from the *exported* declaration, not this one.
+ *
+ * Two elements, for the reason `Switch` and `Checkbox` have two: `RadioField` is the wrapper that
+ * carries the radio's own state and description slot, and `RadioButton` is the `<label>` you
+ * click. Every state the recipe reads lands on the label, which is why `CONTROL` is written there.
  */
 function RadioControl({ ref, className, children, ...props }: RadioProps) {
+  // The dot and its label are the control's name; a hint or an error describes it from beside the
+  // label rather than from inside it, where a label's text would make it part of that name. See
+  // `splitFieldSlots`.
+  const [label, beside] = splitFieldSlots(children, [RadioIndicator, RadioText])
   return (
-    <AriaRadio
+    <AriaRadioField
       ref={ref}
-      className={[CONTROL, className].filter(Boolean).join(' ')}
+      data-slot="radio"
+      className={[FIELD, className].filter(Boolean).join(' ')}
       {...props}
     >
-      {children}
-    </AriaRadio>
+      <AriaRadioButton data-slot="control" className={CONTROL}>
+        {label}
+      </AriaRadioButton>
+      {beside}
+    </AriaRadioField>
   )
 }
 
@@ -315,7 +336,15 @@ function RadioControl({ ref, className, children, ...props }: RadioProps) {
  *
  * `Radio.Group` owns the value. A `Radio` outside one has no group state to read,
  * which is why `isRequired` and `isInvalid` live on the group rather than on the
- * control.
+ * control — and why `Radio.Error` belongs to the group too: React Aria's `RadioField`
+ * deliberately carries no error context of its own, because a group's failure is the
+ * group's to report, not each option's.
+ *
+ * Built on `RadioField` + `RadioButton`, which is the pair React Aria points at — the bare
+ * `Radio` carries `@deprecated Use RadioField + RadioButton instead` in 1.22 — and which is
+ * what `Switch` and `Checkbox` already use. The radio gains a description slot with it, so
+ * `Radio.Hint` inside a single radio describes that radio rather than being an unlabelled
+ * element beside it.
  */
 export const Radio = Object.assign(RadioControl, {
   Group: RadioGroup,

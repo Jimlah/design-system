@@ -52,6 +52,12 @@ const NPM = {
   '@internationalized/date': function (v) {
     return '@internationalized/date@^' + v
   },
+  // The TanStack Form integration in `src/components/Form/tanstack.tsx`. Without this line the
+  // item installs and then cannot resolve its imports: `npmDependencies` only publishes packages
+  // it finds here, and an unlisted one is dropped without a word.
+  '@tanstack/react-form': function (v) {
+    return '@tanstack/react-form@^' + v
+  },
 }
 /* react is deliberately absent: every consumer already has it, and shadcn does not install peers. */
 

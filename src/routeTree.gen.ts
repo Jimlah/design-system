@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BoardRouteImport } from './routes/board'
 import { Route as CreateRouteImport } from './routes/create'
+import { Route as DashboardEmailRouteImport } from './routes/dashboard-email'
+import { Route as ExamplesRouteImport } from './routes/examples'
 import { Route as LoginRouteImport } from './routes/login'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +21,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoardRoute = BoardRouteImport.update({
+  id: '/board',
+  path: '/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreateRoute = CreateRouteImport.update({
   id: '/create',
   path: '/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardEmailRoute = DashboardEmailRouteImport.update({
+  id: '/dashboard-email',
+  path: '/dashboard-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamplesRoute = ExamplesRouteImport.update({
+  id: '/examples',
+  path: '/examples',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -31,31 +49,51 @@ const LoginRoute = LoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/board': typeof BoardRoute
   '/create': typeof CreateRoute
+  '/dashboard-email': typeof DashboardEmailRoute
+  '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/board': typeof BoardRoute
   '/create': typeof CreateRoute
+  '/dashboard-email': typeof DashboardEmailRoute
+  '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/board': typeof BoardRoute
   '/create': typeof CreateRoute
+  '/dashboard-email': typeof DashboardEmailRoute
+  '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create' | '/login'
+  fullPaths:
+    '/' | '/board' | '/create' | '/dashboard-email' | '/examples' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create' | '/login'
-  id: '__root__' | '/' | '/create' | '/login'
+  to: '/' | '/board' | '/create' | '/dashboard-email' | '/examples' | '/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/board'
+    | '/create'
+    | '/dashboard-email'
+    | '/examples'
+    | '/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BoardRoute: typeof BoardRoute
   CreateRoute: typeof CreateRoute
+  DashboardEmailRoute: typeof DashboardEmailRoute
+  ExamplesRoute: typeof ExamplesRoute
   LoginRoute: typeof LoginRoute
 }
 
@@ -68,11 +106,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/board': {
+      id: '/board'
+      path: '/board'
+      fullPath: '/board'
+      preLoaderRoute: typeof BoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/create': {
       id: '/create'
       path: '/create'
       fullPath: '/create'
       preLoaderRoute: typeof CreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard-email': {
+      id: '/dashboard-email'
+      path: '/dashboard-email'
+      fullPath: '/dashboard-email'
+      preLoaderRoute: typeof DashboardEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/examples': {
+      id: '/examples'
+      path: '/examples'
+      fullPath: '/examples'
+      preLoaderRoute: typeof ExamplesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -87,7 +146,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BoardRoute: BoardRoute,
   CreateRoute: CreateRoute,
+  DashboardEmailRoute: DashboardEmailRoute,
+  ExamplesRoute: ExamplesRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

@@ -3,10 +3,10 @@
   Hand-kept, like robots.txt beside it, and for the same reason: this is fetched by a crawler rather
   than rendered by the app, so it cannot be derived from the route tree. Add a route, add it here.
 
-  Four addresses. The landing page is the entry point; the docs are where the reference material
-  lives and the reason a component search should land on this site at all; the sign-in page is the
-  worked example the landing page links to, and Create is the theme builder, which is a page of its
-  own rather than a corner of the landing page.
+  Seven addresses. The landing page is the entry point; the docs are where the reference material
+  lives and the reason a component search should land on this site at all; the examples index is
+  where the worked pages are listed, and Create is the theme builder, which is a page of its own
+  rather than a corner of the landing page.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -24,5 +24,17 @@
   <url>
     <loc>https://jimlah.github.io/design-system/create/</loc>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jimlah.github.io/design-system/board/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jimlah.github.io/design-system/dashboard-email/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jimlah.github.io/design-system/examples/</loc>
+    <priority>0.6</priority>
   </url>
 </urlset>

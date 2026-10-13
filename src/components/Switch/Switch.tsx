@@ -1,11 +1,15 @@
 import {
+  FieldError as AriaFieldError,
   SwitchButton as AriaSwitchButton,
   SwitchField as AriaSwitchField,
 } from 'react-aria-components'
 import type {
+  FieldErrorProps as AriaFieldErrorProps,
   SwitchButtonProps as AriaSwitchButtonProps,
   SwitchFieldProps as AriaSwitchFieldProps,
 } from 'react-aria-components'
+
+import { ERROR, splitFieldSlots } from '../field'
 
 /**
  * The sheet's `.ds-switch`.
@@ -141,6 +145,10 @@ export interface SwitchTextProps extends React.HTMLAttributes<HTMLSpanElement> {
   children?: React.ReactNode
 }
 
+export interface SwitchErrorProps extends AriaFieldErrorProps {
+  children?: React.ReactNode
+}
+
 /**
  * The track and its knob. Use it as `Switch.Indicator`, inside a `Switch`.
  *
@@ -176,6 +184,34 @@ export function SwitchText({ className, children, ...props }: SwitchTextProps) {
     >
       {children}
     </span>
+  )
+}
+
+/**
+ * The message shown while the switch is `isInvalid`. Use it as `Switch.Error`.
+ *
+ * The switch already *paints* invalid — `CONTROL` turns its edge red above every other
+ * state — so without this slot a failed switch said something was wrong and could not
+ * say what. That matters most where a switch is required rather than merely on, which is
+ * the one case a switch has something to fail: a consent, a confirmation.
+ *
+ * React Aria renders nothing while the field is valid, so it is always safe to include.
+ *
+ * Exported as `SwitchError` only so tooling can resolve it; consume the compound form
+ * `Switch.Error`.
+ */
+export function SwitchError({
+  className,
+  children,
+  ...props
+}: SwitchErrorProps) {
+  return (
+    <AriaFieldError
+      className={[ERROR, className].filter(Boolean).join(' ')}
+      {...props}
+    >
+      {children}
+    </AriaFieldError>
   )
 }
 
@@ -218,21 +254,35 @@ function SwitchButton({
  * draws the track and slides the knob for you, and `Switch.Text` the label. A bare
  * text child still renders, it just misses the label styling.
  *
+ * `Switch.Error` is the message for an `isInvalid` switch — a required consent, a
+ * confirmation that was not given. The control already turns its edge red when it is
+ * invalid; this is where it says why.
+ *
  * Built on `SwitchField` + `SwitchButton`, which is the pair React Aria now points at —
  * `Switch` itself is deprecated in 1.22. `SwitchField` is the wrapper that owns the
  * value, so the label it renders is the control root and every state lands on it.
  */
 export const Switch = Object.assign(
   function Switch({ ref, className, children, ...props }: SwitchProps) {
+    // **The track and its label are the control's name; the error is not.** A `Switch.Error`
+    // written as an ordinary child lands inside the `<label>`, and a label's text is the name a
+    // screen reader announces — measured, this switch added its error to its own name
+    // ("Auto-retryYou must decide."). It sits beside the button instead, inside the field wrapper,
+    // which is where React Aria's own docs put it. See `splitFieldSlots`.
+    const [label, beside] = splitFieldSlots(children, [
+      SwitchIndicator,
+      SwitchText,
+    ])
     return (
       <AriaSwitchField
         ref={ref}
         className={[FIELD, className].filter(Boolean).join(' ')}
         {...props}
       >
-        <SwitchButton>{children}</SwitchButton>
+        <SwitchButton>{label}</SwitchButton>
+        {beside}
       </AriaSwitchField>
     )
   },
-  { Indicator: SwitchIndicator, Text: SwitchText },
+  { Indicator: SwitchIndicator, Text: SwitchText, Error: SwitchError },
 )

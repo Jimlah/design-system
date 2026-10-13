@@ -16,6 +16,30 @@ once rather than on submit.
 | `Switch`           | `SwitchField` + `SwitchButton` | Owns the state. `onChange(boolean)`, `name`, `value` |
 | `Switch.Indicator` | —                              | The track and its knob, drawn for you                |
 | `Switch.Text`      | —                              | The label                                            |
+| `Switch.Error`     | `FieldError`                   | The message for an `isInvalid` switch                |
+
+### `Switch.Error` is the half the invalid state was missing
+
+The control has always _painted_ invalid — `CONTROL` turns its edge red one step above every
+other state — while having nowhere to say what had failed. So a required switch announced
+`aria-invalid`, drew a red edge, and named no reason. That is the one case a switch actually
+has something to fail: a consent, a confirmation, a setting that must not be left on.
+
+It was added by the TanStack Form integration, which is where the gap became impossible to
+ignore — `field.Switch` is bound to a field that can carry a message, and had no slot to put
+it in. The slot is the same shape as every other control's — `FieldError` underneath, the
+shared `ERROR` recipe from `field.ts` on top — so nothing about it is new except its
+existence. React Aria renders nothing while the field is valid, so it is always safe to
+include.
+
+**It sits beside the label, not inside it, and that was wrong for one round.** `Switch` renders
+its children inside `SwitchButton`, which is the `<label>` — and a label's text is the control's
+accessible name. So the error was announced as part of the switch's own name: measured, this switch
+introduced itself as `"Auto-retryYou must decide."`. A switch does carry the message it renders no
+longer — `splitFieldSlots` in `field.ts` keeps the track and the text inside the label and puts
+everything else in the field wrapper after it, which is where React Aria's own docs put the
+description and the error. The same fix and the same measurement apply to `Checkbox` and
+`Radio`.
 
 ### `Switch` itself is deprecated
 

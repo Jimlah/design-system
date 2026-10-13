@@ -112,7 +112,7 @@ export interface TableSelectionProps extends React.ComponentProps<
   typeof Checkbox
 > {
   /** React 19 passes `ref` as an ordinary prop, so no `forwardRef` wrapper. */
-  ref?: React.Ref<HTMLLabelElement>
+  ref?: React.Ref<HTMLDivElement>
 }
 
 /**

@@ -128,6 +128,34 @@ Two more worth knowing before reaching for them:
   rather than whatever Storybook happens to hoist. A story about one control's own state still asks
   the DOM directly; the tester is for when the pattern is the point.
 
+### A `play` runs when the story is _viewed_, so it is part of the story, not only its test
+
+This is the one that inverted an assumption here, and it is worth reading before adding a `play` to
+anything a person is meant to operate.
+
+Storybook runs a story's `play` when the story is opened — not only in the test runner. Measured four
+ways, because the first measurement looked like an artefact of automation: in the dev server; in
+`storybook-static` served over plain HTTP with no test runner involved; with `@storybook/addon-vitest`,
+`@storybook/addon-mcp` and the Chromatic addon all removed from `main.ts`; and with
+`navigator.webdriver` reporting `false` under an ordinary Chrome user agent. It ran every time.
+
+So a `play` is also the state the next reader arrives in, and a `play` that _operates_ a control is a
+machine and a person fighting over one form. The TanStack Form stories shipped that way and it is
+exactly the bug it sounds like:
+
+- **`Form → TanStack Form` opened filled in and already submitted** — the `play` typed both values and
+  pressed Save, so there was nothing left to try. Patching it to end with a Reset made it worse rather
+  than better: the play's closing click then wiped whatever the reader had typed in the first second.
+- **`Form → TanStack Fields` picked options nobody chose.** Its `play` clicked the Select, so reaching
+  for the Select yourself landed your click on the option the play was already choosing — and the
+  play's own assertion failed underneath you, in the console, while you watched.
+
+**A story whose point is to be operated by hand carries no `play`; its coverage goes to
+`Foo.browser.test.tsx` in the `components` project, where nothing runs unless it is asked to.**
+`Form.browser.test.tsx` is the first component story to do this; `Button.browser.test.tsx` and the
+example pages' tests were already there. A story that only _shows_ something still keeps its `play`,
+and so do all the others — their plays end where they started, which is the next best thing.
+
 ## SEO
 
 The site describes itself in one place, `src/seo.ts`. **Every route returns `pageHead()`, and the root
@@ -621,7 +649,14 @@ rule's own options, next to the requirement it excepts:
     DatePicker: { container: 'Group', members: ['Input', 'Button'] },
     DateRangePicker: { container: 'Group', members: ['Input', 'Button'] },
   },
-  ignore: { Checkbox: ['src/components/Table/Table.tsx'] },
+  ignore: {
+    // `Table.Selection`'s checkbox: the row is its label, so it has an `Indicator` and no `Text`.
+    // The TanStack field components are the other exception — see the note below.
+    Checkbox: ['src/components/Table/Table.tsx', 'src/components/Form/tanstack.tsx'],
+    TextField: ['src/components/Form/tanstack.tsx'],
+    NumberField: ['src/components/Form/tanstack.tsx'],
+    SearchField: ['src/components/Form/tanstack.tsx'],
+  },
 }]
 ```
 
@@ -680,6 +715,14 @@ parent touches one object. Patterns are `*`/`**` globs matched against the repo-
 `ignore` is per **parent**, not per file, which is the whole point here: `Radio` is still required in
 `Table.tsx`. Turning the rule `'off'` for that file would drop both, and nothing about `Table.Selection`
 justifies that.
+
+**The second exception, `Form/tanstack.tsx`, is a different kind of one.** That file binds each control to a
+TanStack Form field — `<field.TextField>…</field.TextField>` — so it renders `<TextField>{children}</TextField>`
+and the `Input` is written by the _consumer_, on the far side of a render prop the rule cannot follow. Unlike
+`Table.Selection`, nothing here legitimately lacks a slot: the requirement is real, it is still enforced in
+the JSX where the field is actually written — `Form.stories.tsx` writes both halves — and only the pass-through
+wrapper is exempt. Four parents are listed because four components are bound; `Slider`, `Radio` and the rest
+carry no rule in this file and need no entry.
 
 **Check an exemption with `--print-config` and with a planted violation — not with a passing lint run.** A
 config that matches nothing looks exactly like one that works; `npm run lint` is green either way, and a file

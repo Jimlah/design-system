@@ -180,9 +180,27 @@ function TokenFieldRoot({ className, children, ...props }: TokenFieldProps) {
  * **There is no `placeholder`.** A text field's placeholder belongs to its input element, and this
  * container has none — see `TokenField.Input` for what stands in for it.
  *
- * **There is no invalid state either**, and so no `TokenField.Error`. React Aria 1.22's token field
- * takes `isDisabled`, `isReadOnly` and `allowsNewlines` and no validation props at all; an error slot
- * here would render and never be wired to anything, which is worse than not having one.
+ * **There is no invalid state, and so no `TokenField.Error` — and the reason is now measured
+ * rather than assumed.** React Aria 1.22's token field takes `isDisabled`, `isReadOnly` and
+ * `allowsNewlines` and no validation props at all. Building the slot anyway was tried, and the
+ * two halves of a field's error both fail on this control:
+ *
+ * - **The message cannot render.** `FieldError` renders through `Text slot="errorMessage"`, and a
+ *   field registers that slot in its own text context. A token field registers only
+ *   `description`, so a `FieldError` inside one throws `Invalid slot "errorMessage". Valid slot
+ *   names are "description".` — measured. (It can be made to render by registering the slot by
+ *   hand, which is fighting the framework for a slot this control was never given.)
+ *   That alone would be a reason to say "not yet" rather than "no".
+ * - **The control cannot be described by it**, which is the part that settles it. `TokenInput`
+ *   runs its props through `filterDOMProps`, which keeps `data-*` attributes but not
+ *   `aria-invalid` or `aria-describedby` — those it keeps only when a component asks for them by
+ *   name, and the token input asks for neither. React Aria then merges its own `tokenFieldProps`
+ *   in last, so a reference to the message is not merely dropped, it is replaced by the hint's.
+ *   A message a screen reader cannot reach, under a control that cannot say it is invalid, is
+ *   exactly the "renders and is wired to nothing" this note used to predict.
+ *
+ * So a token field is not one of the fields this library can make invalid, and the honest thing is
+ * to say so rather than to ship a red message that only sighted users can see.
  */
 export const TokenField = Object.assign(TokenFieldRoot, {
   Label: TokenFieldLabel,

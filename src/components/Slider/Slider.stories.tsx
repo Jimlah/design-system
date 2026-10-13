@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent } from 'storybook/test'
 
-import { Slider } from './Slider'
+import { Slider, SliderError } from './Slider'
 
 const meta = {
   component: Slider,
@@ -14,6 +14,7 @@ const meta = {
     'Slider.Track': Slider.Track,
     'Slider.Fill': Slider.Fill,
     'Slider.Thumb': Slider.Thumb,
+    'Slider.Error': SliderError,
   },
   tags: ['autodocs', 'ai-generated'],
   parameters: {
@@ -264,5 +265,72 @@ export const Disabled: Story = {
       '[data-slot=thumb]',
     ) as HTMLElement
     await expect(getComputedStyle(thumb).opacity).toBe('0.3')
+  },
+}
+
+export const Invalid: Story = {
+  // **`isInvalid` and `Slider.Error` are this library's, and this story is where that is stated.**
+  // React Aria's slider is not a field — `useSlider` takes no `isInvalid` — so there is no
+  // `FieldError` context for a message to render from and no form validation for it to surface.
+  // `Slider` publishes that context itself and the caller writes the message, which is what a form
+  // binding a slider to a value it validated has. See `docs/components/slider.md`.
+  render: () => (
+    <div className="flex flex-col gap-8">
+      <Slider defaultValue={10} minValue={50} isInvalid>
+        <Slider.Header>
+          <Slider.Label>Retention</Slider.Label>
+          <Slider.Value />
+        </Slider.Header>
+        <Slider.Track>
+          <Slider.Fill />
+          <Slider.Thumb label="Days" />
+        </Slider.Track>
+        <Slider.Error>Retention is at least 50 days.</Slider.Error>
+      </Slider>
+      <Slider defaultValue={60} minValue={50}>
+        <Slider.Header>
+          <Slider.Label>Retention, valid</Slider.Label>
+          <Slider.Value />
+        </Slider.Header>
+        <Slider.Track>
+          <Slider.Fill />
+          <Slider.Thumb label="Grace" />
+        </Slider.Track>
+        <Slider.Error>Nothing is wrong with this one.</Slider.Error>
+      </Slider>
+    </div>
+  ),
+  play: async ({ canvas, canvasElement }) => {
+    const days = canvas.getByRole('slider', { name: /^Days/ })
+
+    // **The range input is the element a screen reader reads the value from, so the invalid state has
+    // to land there and not only on the painted grip.** `isInvalid` is *deprecated* on a React Aria
+    // slider thumb with no replacement — and it is still the only thing that reaches that input, so
+    // that input's own attributes are what this asserts rather than a class on a picture.
+    await expect(days).toHaveAttribute('aria-invalid', 'true')
+
+    // The message is found through the input's own `aria-describedby`, which is also what a screen
+    // reader follows — a query that cannot land on the wrong node.
+    const describedBy = days.getAttribute('aria-describedby') ?? ''
+    const message = canvasElement.querySelector(
+      `#${CSS.escape(describedBy)}`,
+    ) as HTMLElement
+    await expect(message).toHaveTextContent('Retention is at least 50 days.')
+    await expect(message).toHaveClass(/text-destructive/)
+
+    // The grip is the loudest mark on the rail, so it is what turns — through a variable, because
+    // `data-invalid` is on the root while the grip is a descendant.
+    const thumb = message.parentElement?.querySelector(
+      '[data-slot=thumb]',
+    ) as HTMLElement
+    await expect(getComputedStyle(thumb).backgroundColor).toBe(
+      'oklch(0.785 0.1236 29)', // --destructive
+    )
+
+    // ...and a slider that is not invalid renders nothing at all, which is the contract every other
+    // `Error` slot keeps: it is always safe to include.
+    await expect(
+      canvas.queryByText('Nothing is wrong with this one.'),
+    ).not.toBeInTheDocument()
   },
 }

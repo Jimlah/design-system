@@ -279,6 +279,16 @@ export function Home() {
             <Link variant="caps" href={`${import.meta.env.BASE_URL}storybook/`}>
               Read the docs
             </Link>
+            {/*
+              **One link to every worked example, rather than one per example.** The board used to be
+              here on its own, and the leads dashboard would have made two — a toolbar that grows a
+              link per page is a toolbar that has become a table of contents. `/examples` is that
+              table of contents, and it lists the board, the dashboard, Create, the sign-in page and
+              this page itself, so nothing is reachable only from the page that happens to link it.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}examples/`}>
+              See the examples
+            </Link>
           </Toolbar>
         </div>
 

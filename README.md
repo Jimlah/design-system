@@ -26,6 +26,20 @@ root-absolute URLs, which would resolve against this app instead. See `storybook
 or the link that carries the theme. The rules it derives from, why it has no radius control, and the
 two library defects building it surfaced are in [docs/create.md](./docs/create.md).
 
+## A task board
+
+`/board` is a worked example of the components doing one job end to end: four columns of cards you can
+drag between them, each card a `GridList` row holding a sheet's worth of detail — priority, tags,
+assignee, due date, subtask progress — with a sheet down the edge to edit it, a menu to move, copy or
+delete it without a pointer, a filter, an undo, and local storage so the board is where you left it.
+
+It is a page rather than a component, so it has no story and is not in the registry; its tests are the
+`components` project's, like the sign-in page's. The board's data is React Aria's `useAsyncList` — a load
+that arrives, a loading state, and list operations for every change — while the board's own decisions
+live as plain functions in `src/examples/board.ts` and only the DOM in `src/examples/TaskBoard.tsx`. What
+that split bought, what React Aria's drag and drop does and does not do in this shape, and the bugs each
+of them cost are written up in [docs/board.md](./docs/board.md).
+
 ## Hosted: landing page and documentation
 
 <https://jimlah.github.io/design-system/> is the same pair, published to GitHub Pages by
