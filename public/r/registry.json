@@ -5145,6 +5145,16 @@
           "path": "src/components/Nav/Nav.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/Nav/Nav.tsx"
+        },
+        {
+          "path": "src/components/OverlayArrow/OverlayArrow.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/OverlayArrow/OverlayArrow.tsx"
+        },
+        {
+          "path": "src/components/Tooltip/Tooltip.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Tooltip/Tooltip.tsx"
         }
       ]
     },
@@ -9733,6 +9743,16 @@
           "path": "src/components/Nav/Nav.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/Nav/Nav.tsx"
+        },
+        {
+          "path": "src/components/OverlayArrow/OverlayArrow.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/OverlayArrow/OverlayArrow.tsx"
+        },
+        {
+          "path": "src/components/Tooltip/Tooltip.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Tooltip/Tooltip.tsx"
         },
         {
           "path": "src/components/Tree/Tree.tsx",
