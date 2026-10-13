@@ -25,6 +25,13 @@ export interface Example {
 
 export const EXAMPLES: Example[] = [
   {
+    path: 'canvas',
+    title: 'Component canvas',
+    summary:
+      'Every component in the library on one plane you can pan and zoom, grouped by kind and laid out as one-prop-at-a-time comparisons.',
+    shows: ['every component in the library'],
+  },
+  {
     path: 'dashboard-email',
     title: 'Leads dashboard',
     summary:

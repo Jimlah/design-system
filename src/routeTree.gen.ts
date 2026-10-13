@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BoardRouteImport } from './routes/board'
+import { Route as CanvasRouteImport } from './routes/canvas'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as DashboardEmailRouteImport } from './routes/dashboard-email'
 import { Route as ExamplesRouteImport } from './routes/examples'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const BoardRoute = BoardRouteImport.update({
   id: '/board',
   path: '/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanvasRoute = CanvasRouteImport.update({
+  id: '/canvas',
+  path: '/canvas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateRoute = CreateRouteImport.update({
@@ -50,6 +56,7 @@ const LoginRoute = LoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/board': typeof BoardRoute
+  '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/board': typeof BoardRoute
+  '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/board': typeof BoardRoute
+  '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
@@ -77,16 +86,25 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/board'
+    | '/canvas'
     | '/create'
     | '/dashboard-email'
     | '/examples'
     | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/board' | '/create' | '/dashboard-email' | '/examples' | '/login'
+  to:
+    | '/'
+    | '/board'
+    | '/canvas'
+    | '/create'
+    | '/dashboard-email'
+    | '/examples'
+    | '/login'
   id:
     | '__root__'
     | '/'
     | '/board'
+    | '/canvas'
     | '/create'
     | '/dashboard-email'
     | '/examples'
@@ -96,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BoardRoute: typeof BoardRoute
+  CanvasRoute: typeof CanvasRoute
   CreateRoute: typeof CreateRoute
   DashboardEmailRoute: typeof DashboardEmailRoute
   ExamplesRoute: typeof ExamplesRoute
@@ -116,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/board'
       fullPath: '/board'
       preLoaderRoute: typeof BoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canvas': {
+      id: '/canvas'
+      path: '/canvas'
+      fullPath: '/canvas'
+      preLoaderRoute: typeof CanvasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create': {
@@ -152,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BoardRoute: BoardRoute,
+  CanvasRoute: CanvasRoute,
   CreateRoute: CreateRoute,
   DashboardEmailRoute: DashboardEmailRoute,
   ExamplesRoute: ExamplesRoute,
