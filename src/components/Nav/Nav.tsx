@@ -186,12 +186,33 @@ export const NAV_CHEVRON = [
 ].join(' ')
 
 /**
+ * The box a chevron sits in, drawn even when there is no chevron in it. `Tree`'s rows lead with their
+ * disclosure and this is the reservation that keeps their labels on one left edge; `Nav`'s rows lead
+ * with an icon and reserve the same idea as `NAV_ICON`. It stays here because the row vocabulary is
+ * this file's — a tree and a sidebar share it — and the constant is the half of it only the tree uses.
+ */
+export const NAV_GUTTER = 'size-4 shrink-0'
+
+/**
  * The disclosure in the rail. **Quiet, not gone.** It keeps its place in the focus order and its name
  * — React Aria requires it and a rail whose branches cannot be opened is a rail that lies — and it
  * steps out of the way into the row's corner, where it appears the moment the row is pointed at or
  * focused. The caret's rotation still comes from the render props, so an open branch still points the
  * way it points in the wide panel.
  */
+/**
+ * The box the disclosure sits in at the **trailing** edge, drawn even when there is no disclosure in
+ * it — the mirror of the leading reservation, and it exists for the count.
+ *
+ * `Nav.Count` is `ms-auto`: it lands on the anchor's trailing edge, which is where the row's numbers
+ * form a column from. With the disclosure moved out to the far end of the row, a row with one would
+ * end its anchor 24px earlier than a row without, and the column of numbers would step in and out
+ * down the side — which is the one thing the column is for. Every row reserves the box, so every
+ * count shares one right edge. In the rail the box goes: the disclosure there is absolutely
+ * positioned, and a row that keeps 16px of nothing beside a 40px icon is not a rail.
+ */
+const NAV_END_GUTTER = `${NAV_GUTTER} [[data-collapsed]_&]:hidden`
+
 const NAV_CHEVRON_RAIL = [
   '[[data-collapsed]_&]:absolute [[data-collapsed]_&]:end-1 [[data-collapsed]_&]:bottom-1',
   '[[data-collapsed]_&]:opacity-0',
@@ -455,10 +476,12 @@ export function NavLabel({ children, href, ...props }: NavLabelProps) {
 
   const body = (
     <>
-      <span aria-hidden="true" className={NAV_ICON}>
+      <span aria-hidden="true" data-slot="icon" className={NAV_ICON}>
         {item.icon}
       </span>
-      <span className={NAV_TEXT}>{children}</span>
+      <span data-slot="text" className={NAV_TEXT}>
+        {children}
+      </span>
     </>
   )
 
@@ -504,7 +527,12 @@ export function NavLabel({ children, href, ...props }: NavLabelProps) {
             >
               <NavCaret expanded={isExpanded} />
             </AriaButton>
-          ) : null}
+          ) : (
+            // An empty box where the disclosure would be — see `NAV_END_GUTTER`: without it the
+            // counts down the side lose their column, because a count rides the anchor's trailing
+            // edge and a row with a chevron ends its anchor 24px sooner than one without.
+            <span aria-hidden="true" className={NAV_END_GUTTER} />
+          )}
         </>
       )}
     </AriaNavigationTreeItemContent>
@@ -542,6 +570,7 @@ export function NavSection<T extends object>({
 }: NavSectionProps<T>) {
   return (
     <AriaNavigationTreeSection
+      data-slot="section"
       className={[NAV_SECTION, className].filter(Boolean).join(' ')}
       {...props}
     >
@@ -558,7 +587,9 @@ export function NavSection<T extends object>({
 export function NavHeader({ children, ...props }: NavHeaderProps) {
   return (
     <AriaNavigationTreeHeader className={NAV_HEADER} {...props}>
-      <span className={NAV_TEXT}>{children}</span>
+      <span data-slot="text" className={NAV_TEXT}>
+        {children}
+      </span>
     </AriaNavigationTreeHeader>
   )
 }
