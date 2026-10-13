@@ -9,7 +9,7 @@ import type {
   SwitchFieldProps as AriaSwitchFieldProps,
 } from 'react-aria-components'
 
-import { ERROR, splitFieldSlots } from '../field'
+import { ERROR } from '../field'
 
 /**
  * The sheet's `.ds-switch`.
@@ -264,23 +264,13 @@ function SwitchButton({
  */
 export const Switch = Object.assign(
   function Switch({ ref, className, children, ...props }: SwitchProps) {
-    // **The track and its label are the control's name; the error is not.** A `Switch.Error`
-    // written as an ordinary child lands inside the `<label>`, and a label's text is the name a
-    // screen reader announces — measured, this switch added its error to its own name
-    // ("Auto-retryYou must decide."). It sits beside the button instead, inside the field wrapper,
-    // which is where React Aria's own docs put it. See `splitFieldSlots`.
-    const [label, beside] = splitFieldSlots(children, [
-      SwitchIndicator,
-      SwitchText,
-    ])
     return (
       <AriaSwitchField
         ref={ref}
         className={[FIELD, className].filter(Boolean).join(' ')}
         {...props}
       >
-        <SwitchButton>{label}</SwitchButton>
-        {beside}
+        <SwitchButton>{children}</SwitchButton>
       </AriaSwitchField>
     )
   },

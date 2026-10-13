@@ -17,13 +17,6 @@ the member ends up with two hidden inputs. The measurement: `getAllByRole('radio
 That was taken while a `Radio` segment variant existed; the variant is gone, but the double input is not —
 it belongs to `RadioButton`, and a plain group reproduces it just as well. The same holds for `CheckboxButton` and `Checkbox`.
 
-**`RadioButton` is therefore not something to consume _inside a `Radio`_.** The control itself is
-built on the `RadioField` + `RadioButton` pair, exactly as `Switch` is built on `SwitchField` +
-`SwitchButton` and `Checkbox` on its own pair — and that is not the mistake above. The root _is_
-the pair, so there is one input. The mistake was nesting a `RadioButton` under a `Radio` that
-renders one of its own; `Radio` and `Checkbox` are `@deprecated` in 1.22 in favour of the pairs,
-and a consumer never writes either button.
-
 **`RadioButton` is therefore not something to consume.** A wrapper around it was written first, could not be
 used as intended, and was deleted — `RadioButtonProps` does not even accept a `value`, which is the first clue.
 It was briefly reached for again as a `variant="segment"` on `Radio`; that variant has been removed, and the

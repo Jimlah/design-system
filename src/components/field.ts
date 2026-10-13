@@ -11,8 +11,7 @@
  * docs and manifest describe its own API rather than pointing at another
  * component's.
  */
-import { Children, Fragment, createContext, isValidElement } from 'react'
-import type { ReactNode } from 'react'
+import { createContext } from 'react'
 
 /**
  * The three control sizes. `size` is set once on the field and travels as two
@@ -187,39 +186,6 @@ export type IconPosition = keyof typeof ICON_POSITIONS
 export const FieldValidationContext = createContext<FieldValidation | null>(
   null,
 )
-
-/**
- * Splits a field's children into the part that *is* the control's name and the part that describes
- * it from beside it.
- *
- * **A `<label>` element's text is the accessible name of the control inside it, and a hint or an
- * error is not part of that name.** React Aria's selection controls render their label around both
- * the control and the children they are handed, so a `Hint` or an `Error` written as an ordinary
- * child ends up inside the label and is read as the control's name. Measured on this library's own
- * checkbox, whose name came out as `"ConsentApplies to every monitor.You must consent."` — and on
- * the switch, whose error was there for the same reason.
- *
- * React Aria's own docs put the description and the error *beside* the button, inside the field
- * wrapper, which is what this returns them for. A bare text child is the label's text and stays; the
- * named slots stay; anything else — `Hint`, `Error` — comes out. A fragment is looked through,
- * because a fragment is a way of writing a list rather than a part of one.
- */
-export function splitFieldSlots(
-  children: ReactNode,
-  inside: readonly unknown[],
-): [ReactNode[], ReactNode[]] {
-  const isInside = (part: ReactNode): boolean => {
-    if (!isValidElement(part)) return true
-    if (part.type === Fragment) {
-      return Children.toArray(
-        (part.props as { children?: ReactNode }).children,
-      ).every(isInside)
-    }
-    return inside.includes(part.type)
-  }
-  const parts = Children.toArray(children)
-  return [parts.filter(isInside), parts.filter((part) => !isInside(part))]
-}
 
 export interface FieldValidation {
   /** Whether the control's value is invalid. */

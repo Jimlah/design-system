@@ -407,49 +407,6 @@ export const GroupRequired: Story = {
   },
 }
 
-export const StandaloneError: Story = {
-  // **A checkbox on its own is a field, and it was not one for as long as it existed.** Built on the
-  // deprecated `Checkbox` there was no field context at all, so this checkbox announced
-  // `aria-invalid`, drew a red box and rendered **no message**, and its hint was an unlabelled word
-  // the control was not described by. `CheckboxField` + `CheckboxButton` is what React Aria's own
-  // docs build a checkbox on.
-  render: () => (
-    <Checkbox isInvalid name="terms">
-      <Checkbox.Indicator />
-      <Checkbox.Text>Accept the terms</Checkbox.Text>
-      <Checkbox.Hint>Applies to every monitor.</Checkbox.Hint>
-      <Checkbox.Error>You have to accept before saving.</Checkbox.Error>
-    </Checkbox>
-  ),
-  play: async ({ canvas, canvasElement }) => {
-    const terms = canvas.getByRole('checkbox', { name: 'Accept the terms' })
-    await expect(terms).toHaveAttribute('aria-invalid', 'true')
-
-    // The other half of that gap: the hint is now wired *and* the error renders.
-    const describedBy = terms.getAttribute('aria-describedby') ?? ''
-    const described = describedBy
-      .split(' ')
-      .map((id) => canvasElement.querySelector(`#${CSS.escape(id)}`))
-    const hint = described.find((n) =>
-      /applies to every monitor/i.test(n?.textContent ?? ''),
-    )
-    const error = described.find((n) =>
-      n?.classList.contains('text-destructive'),
-    )
-    await expect(hint).toBeTruthy()
-    await expect(error).toHaveTextContent('You have to accept before saving.')
-
-    // **The name is the label and nothing else.** A `<label>` element's text is the accessible name
-    // of the control inside it, and a hint or an error written as an ordinary child became part of it
-    // — measured, this checkbox introduced itself as "Accept the termsApplies to every monitor.You
-    // have to accept before saving." The children are split now: the box and the text are the name,
-    // and everything else sits beside the label.
-    const label = terms.closest('label') as HTMLElement
-    await expect(label.textContent).toBe('Accept the terms')
-    await expect(label.contains(hint as HTMLElement)).toBe(false)
-  },
-}
-
 export const GroupDisabled: Story = {
   render: () => (
     <Checkbox.Group isDisabled className="w-64">

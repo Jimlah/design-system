@@ -32,14 +32,13 @@ shared `ERROR` recipe from `field.ts` on top — so nothing about it is new exce
 existence. React Aria renders nothing while the field is valid, so it is always safe to
 include.
 
-**It sits beside the label, not inside it, and that was wrong for one round.** `Switch` renders
-its children inside `SwitchButton`, which is the `<label>` — and a label's text is the control's
-accessible name. So the error was announced as part of the switch's own name: measured, this switch
-introduced itself as `"Auto-retryYou must decide."`. A switch does carry the message it renders no
-longer — `splitFieldSlots` in `field.ts` keeps the track and the text inside the label and puts
-everything else in the field wrapper after it, which is where React Aria's own docs put the
-description and the error. The same fix and the same measurement apply to `Checkbox` and
-`Radio`.
+**It renders inside the label, so it is also part of the switch's accessible name.** `Switch`
+renders its children in `SwitchButton`, which is the `<label>`, and a `<label>` element's text is
+the name of the control inside it: measured, an invalid switch carrying this message introduces
+itself as `"Auto-retryYou must decide."`. React Aria's own docs put the description and the error
+_before_ the button instead — beside it, in the field wrapper. `Checkbox` and `Radio` render their
+children in the label the same way, so this is recorded rather than worked around in one of the
+three.
 
 ### `Switch` itself is deprecated
 

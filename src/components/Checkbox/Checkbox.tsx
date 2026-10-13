@@ -1,20 +1,19 @@
 import {
-  CheckboxButton as AriaCheckboxButton,
-  CheckboxField as AriaCheckboxField,
+  Checkbox as AriaCheckbox,
   CheckboxGroup as AriaCheckboxGroup,
   FieldError as AriaFieldError,
   Label as AriaLabel,
   Text as AriaText,
 } from 'react-aria-components'
 import type {
-  CheckboxFieldProps as AriaCheckboxFieldProps,
   CheckboxGroupProps as AriaCheckboxGroupProps,
+  CheckboxProps as AriaCheckboxProps,
   FieldErrorProps as AriaFieldErrorProps,
   LabelProps as AriaLabelProps,
   TextProps as AriaTextProps,
 } from 'react-aria-components'
 
-import { ERROR, HINT, LABEL, splitFieldSlots } from '../field'
+import { ERROR, HINT, LABEL } from '../field'
 
 /**
  * The sheet's `.ds-check`. Note the radius: the sheet squares off its buttons and
@@ -132,7 +131,7 @@ const Tick = (
 )
 
 export interface CheckboxProps extends Omit<
-  AriaCheckboxFieldProps,
+  AriaCheckboxProps,
   | 'isDisabled'
   | 'isReadOnly'
   | 'isRequired'
@@ -145,13 +144,13 @@ export interface CheckboxProps extends Omit<
   | 'ref'
 > {
   /** React 19 passes `ref` as an ordinary prop, so no `forwardRef` wrapper. */
-  ref?: React.Ref<HTMLDivElement>
+  ref?: React.Ref<HTMLLabelElement>
   /** Disables the control. This is a React Aria prop — there is no `disabled`. */
-  isDisabled?: AriaCheckboxFieldProps['isDisabled']
+  isDisabled?: AriaCheckboxProps['isDisabled']
   /** Makes the value visible but not changeable. */
-  isReadOnly?: AriaCheckboxFieldProps['isReadOnly']
-  isRequired?: AriaCheckboxFieldProps['isRequired']
-  isInvalid?: AriaCheckboxFieldProps['isInvalid']
+  isReadOnly?: AriaCheckboxProps['isReadOnly']
+  isRequired?: AriaCheckboxProps['isRequired']
+  isInvalid?: AriaCheckboxProps['isInvalid']
   /**
    * The control owns its selection, so these live here rather than on a slot.
    * Outside a `Checkbox.Group` that means `defaultSelected` + `onChange(boolean)`;
@@ -162,13 +161,12 @@ export interface CheckboxProps extends Omit<
    * chosen — a table's select-all, usually. It fills like a checked one either way; the mark is
    * what says "some" rather than "all". React Aria renders `data-indeterminate` for it.
    */
-  isIndeterminate?: AriaCheckboxFieldProps['isIndeterminate']
-  isSelected?: AriaCheckboxFieldProps['isSelected']
-  defaultSelected?: AriaCheckboxFieldProps['defaultSelected']
-  onChange?: AriaCheckboxFieldProps['onChange']
+  isIndeterminate?: AriaCheckboxProps['isIndeterminate']
+  isSelected?: AriaCheckboxProps['isSelected']
+  defaultSelected?: AriaCheckboxProps['defaultSelected']
+  onChange?: AriaCheckboxProps['onChange']
   /** Identifies this control to its `Checkbox.Group`. */
-  value?: AriaCheckboxFieldProps['value']
-  /** Layout for the wrapper. The control's own styling is internal, as a field's is. */
+  value?: AriaCheckboxProps['value']
   className?: string
   /** `Checkbox.Indicator` and `Checkbox.Text`, in that order. */
   children?: React.ReactNode
@@ -359,21 +357,8 @@ export function CheckboxGroup({
 }
 
 /**
- * The wrapper `CheckboxField` renders: a column, because the hint and the error belong under the
- * control rather than beside it. `w-fit`, like `Switch`'s, so a checkbox standing in a column is
- * the width of itself instead of the width of the column.
- */
-const FIELD = 'flex w-fit flex-col gap-2'
-
-/**
  * Styled element. Not exported — `Checkbox` below is the public symbol, and docgen
  * reads the JSDoc from the *exported* declaration, not this one.
- *
- * **Two elements, because React Aria splits a checkbox the way it splits a switch.**
- * `CheckboxField` is the wrapper that owns the value and supplies the validation and help-text
- * contexts; `CheckboxButton` is the `<label>` you actually click. The label is therefore the
- * control root and every state lands on it, which is why `CONTROL` is written there and not on
- * the wrapper — the same split, and the same reason, as `Switch`.
  */
 function CheckboxControl({
   ref,
@@ -381,27 +366,14 @@ function CheckboxControl({
   children,
   ...props
 }: CheckboxProps) {
-  // **The box and its label are the control's name; the hint and the error are not.** Written as
-  // ordinary children they would land inside the `<label>`, and a label's text is the name a screen
-  // reader announces — measured, this checkbox introduced itself as "ConsentApplies to every
-  // monitor.You must consent." React Aria's own docs put both *beside* the button, inside the field
-  // wrapper, which is what `splitFieldSlots` is for.
-  const [label, beside] = splitFieldSlots(children, [
-    CheckboxIndicator,
-    CheckboxText,
-  ])
   return (
-    <AriaCheckboxField
+    <AriaCheckbox
       ref={ref}
-      data-slot="checkbox"
-      className={[FIELD, className].filter(Boolean).join(' ')}
+      className={[CONTROL, className].filter(Boolean).join(' ')}
       {...props}
     >
-      <AriaCheckboxButton data-slot="control" className={CONTROL}>
-        {label}
-      </AriaCheckboxButton>
-      {beside}
-    </AriaCheckboxField>
+      {children}
+    </AriaCheckbox>
   )
 }
 
@@ -428,17 +400,6 @@ function CheckboxControl({
  * Alone, a `Checkbox` owns its selection: `defaultSelected` with
  * `onChange(boolean)`. Inside a `Checkbox.Group` the group owns it, as an array,
  * and `value` identifies the control to it.
- *
- * **A checkbox on its own is a field, so `Checkbox.Error` and `Checkbox.Hint` work on one.** They
- * did not before this was built on `CheckboxField`: the deprecated `Checkbox` is a `<label>`
- * and provides neither the error context `FieldError` reads nor the description slot `Hint`
- * writes into, so a lone `<Checkbox isInvalid>` announced `aria-invalid`, drew a red box, and
- * rendered no message — and its hint was an unstyled word beside it rather than something the
- * control was described by. Measured in the browser, in both cases.
- *
- * Building on `CheckboxField` + `CheckboxButton` is what React Aria's own docs do, and what
- * `Switch` here already does; `Checkbox` itself carries
- * `@deprecated Use CheckboxField + CheckboxButton instead` in 1.22.
  */
 export const Checkbox = Object.assign(CheckboxControl, {
   Group: CheckboxGroup,

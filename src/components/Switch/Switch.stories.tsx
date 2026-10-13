@@ -204,14 +204,6 @@ export const States: Story = {
     ) as HTMLElement
     await expect(message).toHaveTextContent('Accept to continue')
     await expect(message).toHaveClass(/text-destructive/)
-
-    // **...and the message is beside the label, not inside it.** A `<label>` element's text is the
-    // accessible name of the control inside it, so the error used to be read as part of this switch's
-    // own name: measured, it announced "Invalid — accept to continueAccept to continue". The children
-    // are split now — the track and the text are the name, everything else follows the label.
-    await expect((invalid.closest('label') as HTMLElement).textContent).toBe(
-      'Invalid — accept to continue',
-    )
   },
 }
 

@@ -31,10 +31,11 @@ control here was built on React Aria's field anatomy, so each already renders it
 and marks itself `aria-invalid`. `Form` is what makes them all validate at once, on submit, and moves
 focus to the first thing that failed.
 
-Two footnotes to that, both of which have now been measured rather than assumed. A standalone
-`Checkbox` could not say what was wrong until it was rebuilt on `CheckboxField` — it announced
-`aria-invalid`, drew a red box and rendered no message — and `Slider` is the one field React Aria
-does not supply an invalid state for at all, so its `Error` is this library's. See
+Two footnotes to that, both measured rather than assumed. **A `Checkbox` on its own reports
+nothing**: it is React Aria's deprecated `Checkbox`, which publishes no field context, so a lone
+`<Checkbox isInvalid>` announces `aria-invalid`, draws a red box and renders no message — the group
+is the field that reports. And **`Slider` is the one field React Aria supplies no invalid state for
+at all**, so its `Error` is this library's. See
 [checkbox-and-radio.md](./checkbox-and-radio.md) and [slider.md](./slider.md).
 
 ### `validationBehavior="native"`, because `aria` does not validate at all
