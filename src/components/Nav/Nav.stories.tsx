@@ -539,6 +539,11 @@ export const Structure: Story = {
       .getAllByRole('row')
       .filter((row) => row !== bugs && row !== tasks)
     for (const row of others) {
+      // **Rested, one row at a time.** A row under the pointer wears the *same* wash the current row
+      // does, so a pointer left where an earlier story put it — which is a different place on CI than
+      // on this machine — makes one of these rows read as current. The pointer is taken off each row
+      // before its colour is read, the idiom this file's hover story and `Breadcrumbs` already use.
+      await userEvent.unhover(row)
       await expect(getComputedStyle(row).backgroundColor).toBe(
         'rgba(0, 0, 0, 0)',
       )
