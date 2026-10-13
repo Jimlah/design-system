@@ -111,7 +111,9 @@ export function Avatar({
   /** The fill, the label and the shape — the same in the row and in the modal, at two different sizes. */
   const box = (dimensions: string, extra?: string) =>
     [
-      'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-md',
+      // `clip`, not `hidden`: the box is not a scroller, and `hidden` would let a script (or a
+      // stray focus) move its contents.
+      'inline-flex shrink-0 items-center justify-center overflow-clip rounded-md',
       dimensions,
       COLORS[color],
       // `ink` on the fill, which inverts with the theme — black on the luminous dark accents, white on

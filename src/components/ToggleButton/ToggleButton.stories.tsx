@@ -83,7 +83,7 @@ export const Selected: Story = {
     const toggle = canvas.getByRole('button', { name: '24h' })
     await expect(toggle).toHaveAttribute('aria-pressed', 'true')
     // **Read through `waitFor`, because both of these properties are transitioned.** `Button`'s base
-    // carries `transition-[background-color,color,border-color,opacity] duration-[120ms]`, and a read
+    // carries `transition-[background-color,color,border-color,opacity] duration-(--duration-fast)`, and a read
     // taken while that is still running catches a frame of the animation rather than the colour: CI
     // got the selected fill back as `oklab(0.9198 -0.121905 -0.0203999)` — the same colour as the
     // token, but serialised in the space the animation interpolates in instead of the `oklch` it is

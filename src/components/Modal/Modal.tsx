@@ -26,7 +26,10 @@ import type {
  * design, and says exactly what it is.
  */
 const OVERLAY = [
-  'fixed inset-0 z-50 grid place-items-center overflow-y-auto p-4',
+  // `place-items-center-safe`: a dialog taller than the viewport is centered *safely*, so its top
+  // stays reachable instead of overflowing past the block-start edge, where no scroll can get to
+  // it. The dialog's own `max-h` below is what keeps that case rare.
+  'fixed inset-0 z-50 grid place-items-center-safe overflow-y-auto overscroll-contain p-4',
   'bg-black/50',
 ].join(' ')
 
@@ -35,9 +38,17 @@ const OVERLAY = [
  * the tooltip and the toast do — its own panel, and a hairline to say where it ends.
  */
 const DIALOG = [
-  'relative w-full max-w-md',
+  // **A limit, or the dialog has none.** Before this it was `w-full max-w-md` and nothing else,
+  // so a dialog longer than the screen pushed its own title off the top and its footer off the
+  // bottom, and the overlay's scroller could not reach either. Capped, it scrolls inside itself.
+  'relative max-h-[90dvh] w-full max-w-md overflow-y-auto overscroll-contain',
   'border border-border-strong bg-card rounded-xl p-6',
-  'outline-none',
+  'outline-1 -outline-offset-2 outline-transparent',
+  // **`:focus-visible`, not `data-[focus-visible]`.** React Aria's `Dialog` emits no data
+  // attributes of its own — no `data-focus-visible` among them — so a rule keyed on that attribute
+  // is inert on this element. Measured: the dialog matches `:focus-visible` and was left with a
+  // transparent outline. The controls inside it are real buttons and keep the data attribute.
+  'focus-visible:outline-ring',
 ].join(' ')
 
 /** The sheet's `.ds-panel-title`: 18px/600, measured off its Page Check reference. */
@@ -45,16 +56,20 @@ export const DIALOG_TITLE =
   'm-0 text-[18px] font-semibold tracking-[0.01em] text-foreground'
 
 export const DIALOG_DESCRIPTION =
-  'mt-2 text-[13px] leading-[1.5] text-foreground/70'
+  'mbs-2 text-[13px] leading-[1.5] text-foreground/70'
 
-export const DIALOG_FOOTER = 'mt-6 flex items-center justify-end gap-3'
+export const DIALOG_FOOTER = 'mbs-6 flex items-center justify-end gap-3'
 
 /** The same dismiss control the toast draws, for the same reason: it is the one that is often missed. */
 export const DIALOG_CLOSE = [
-  'absolute end-4 top-4 grid size-5 cursor-pointer place-items-center',
+  'absolute end-4 inset-bs-4 grid size-5 cursor-pointer place-items-center',
   'text-foreground/45',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-[color,opacity] duration-(--duration-fast) ease-pulse',
+  // A 20px × is a 20px target. The pseudo-element makes it 44 without moving the glyph, inside the
+  // dialog's 24px padding.
+  'after:absolute after:content-[""] after:-inset-3',
   'data-[hovered]:text-foreground',
+  'data-[pressed]:opacity-70',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
   'data-[focus-visible]:outline-ring',
 ].join(' ')

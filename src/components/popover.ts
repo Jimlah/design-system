@@ -11,14 +11,33 @@
 export const SURFACE = [
   'border border-border-strong bg-card rounded-xl',
   'shadow-[0_12px_32px_rgba(0,0,0,.7)]',
-  'outline-none',
+  // **A transparent outline at rest, never `outline-none`.** The property is shared —
+  // `outline-none` writes `--tw-outline-style`, which every `outline-<width>` reads
+  // back — so a ring written beside it can never draw. `Popover` is the part here that
+  // takes real focus (a popover with no focusable child is focusable itself).
+  'outline-1 -outline-offset-2 outline-transparent',
 ].join(' ')
 
-/** A popover that holds a single scrolling list, sized to the control it came from. */
-export const POPOVER = `flex w-(--trigger-width) flex-col overflow-hidden ${SURFACE}`
+/**
+ * A popover that holds a single scrolling list: **at least as wide as the control it came from, and
+ * wider when an option needs it.**
+ *
+ * `min-w`, not `w`. A trigger is sized for its own label — a `Select` says "Frankfurt", a `Menu` button
+ * says "Actions" — and a panel sized to exactly that cuts off the one option longer than the control,
+ * which is usually the option the reader opened the menu to find. Growing to fit the content is what a
+ * native popup does, and `w-(--trigger-width)` was the only rule here that could not.
+ *
+ * The `max-w` is the guard that growth needs: it is the window minus the same 1rem gutter the modal's
+ * overlay keeps, so a label long enough to run off the page truncates instead. `min-width` outranks
+ * `max-width` in CSS, so a trigger already wider than that cap (a full-width field on a phone) still
+ * gets its own width and is never squashed. React Aria writes `--trigger-width` as an inline custom
+ * property and no width of its own, so this class is what decides.
+ */
+export const POPOVER = `flex min-w-(--trigger-width) max-w-[calc(100vw-2rem)] flex-col overflow-clip ${SURFACE}`
 
 /** The list inside it. `max-h` so a long list scrolls rather than running off the page. */
-export const LIST = 'max-h-[264px] overflow-auto p-0 outline-none'
+export const LIST =
+  'max-h-[264px] overflow-auto overscroll-contain p-0 outline-none'
 
 /**
  * The sheet's `.ds-select-option`: 13px at 75%, with the accent reserved for the choice.
@@ -32,6 +51,7 @@ export const ITEM = [
   'px-3.5 py-[11px] text-[13px] text-foreground/75',
   'cursor-pointer select-none',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/12',
   'data-[focus-visible]:outline-none data-[focus-visible]:bg-foreground/7 data-[focus-visible]:text-foreground',
   'data-[selected]:text-primary',
   'data-[disabled]:cursor-not-allowed data-[disabled]:text-foreground/35',
@@ -61,6 +81,6 @@ export const SEARCH = 'border-b border-border-strong p-2'
  */
 export const SUBMENU_CARET = [
   'shrink-0 text-foreground/45',
-  'transition-[rotate] duration-[120ms] ease-pulse',
+  'motion-safe:transition-[rotate] motion-safe:duration-(--duration-fast) ease-pulse',
   'data-[open]:rotate-90',
 ].join(' ')

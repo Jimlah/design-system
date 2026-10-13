@@ -216,7 +216,23 @@ const config = defineConfig({
             DateRangePicker: ['Input', 'Button'],
           },
           ignore: {
-            Checkbox: ['src/components/Table/Table.tsx'],
+            // **`Form/tanstack.tsx` is the second exception, and a different kind of one.** That file
+            // renders each control as a *binding wrapper* — `<field.TextField>`, whose children are the
+            // consumer's `<field.TextField.Input />`. The rule sees `{children}` and cannot follow a
+            // render prop, so it reports a field whose `Input` is on the far side of a component
+            // boundary. The requirement is real, and it is still *checked*: it is enforced in the
+            // consumer's JSX, which is what `Form.stories.tsx` writes and where the rule reads it.
+            //
+            // It is filed per parent, so `Radio` and the rest still apply in this file — and an entry
+            // that stops being needed is one line to delete, which is why the exception lives here
+            // rather than in a second config block.
+            TextField: ['src/components/Form/tanstack.tsx'],
+            NumberField: ['src/components/Form/tanstack.tsx'],
+            SearchField: ['src/components/Form/tanstack.tsx'],
+            Checkbox: [
+              'src/components/Table/Table.tsx',
+              'src/components/Form/tanstack.tsx',
+            ],
           },
           // **The `Group` is required only when `Input` *and* `Icon` are both rendered**, and then
           // both must be inside it. Either one alone is fine on its own — `Input` alone is a good

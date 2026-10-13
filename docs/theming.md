@@ -151,6 +151,38 @@ compiles to `font-family: var(--type-mono)` and follows the element it is used o
 This is what the [`/create`](./create.md) page needed in order to offer a typeface at all, and it is the
 one token a value can move that a variable could not.
 
+**One size does grow with the screen.** `--text-display` is `clamp(2rem, 1.5rem + 2.5vw, 2.5rem)`, and
+the landing hero is its only consumer. The preferred value is written `rem + vw` — never `vw` alone, which
+would ignore the reader's font size — and its top is 2.5× its bottom, which is WCAG 1.4.4's limit for fluid
+text. The 10–18px chrome is deliberately fixed: this is a dense monitoring UI, and type that grew under it
+would fight the density it is built on.
+
+## Motion
+
+Three durations and one curve, declared once in `:root` and read by every transition in the library:
+
+| Token             | Utility                      | Value                          |
+| ----------------- | ---------------------------- | ------------------------------ |
+| `--duration-fast` | `duration-(--duration-fast)` | `120ms` — a state change       |
+| `--duration-base` | `duration-(--duration-base)` | `160ms` — something that moves |
+| `--duration-slow` | `duration-(--duration-slow)` | `200ms` — the ceiling          |
+| `--ease-pulse`    | `ease-pulse`                 | `cubic-bezier(0.4, 0, 0.2, 1)` |
+
+A component asks for them through the variable form of the utility, so retiming the whole system is these
+three numbers and nothing else. The transitions that _move_ something are additionally inside
+`motion-safe:` — movement is what someone who has asked for less motion wants less of, and the state
+change still happens.
+
+**They are in `:root` and not in `@theme inline`, on purpose.** Tailwind has no `--duration-*` theme
+namespace, so an entry in the theme block would produce neither a variable nor a utility;
+`var(--duration-fast)` inside `duration-(…)` is the form that works, and a one-off can still be written as
+`duration-[220ms]`. Four components that used 150ms before the tokens existed now read
+`--duration-fast` — one number for the system rather than two.
+
+The one thing that is not a utility is the overlay entry and exit animation, which lives in the OVERLAYS
+block of `styles.css`; that block carries the measurements behind it, including why the entry hangs off
+the mount and the exit off React Aria's `data-exiting`.
+
 ## What this costs in the registry
 
 The generator walks every `@theme` at-rule and every top-level rule, so the values and the theme
@@ -162,6 +194,24 @@ add on install are gone with them.
 Note that the CLI writes `cssVars.theme` back **inside `@theme inline`** in the consumer,
 measured against 4.21.4 — see [registry.md](./registry.md). That is the shape this file already
 uses, so a consumer gets the behaviour the components were written against.
+
+## Cascade layers, and the one reset that had to move
+
+**An unlayered rule outranks every layered rule, whatever the specificity.** Tailwind v4 emits its
+utilities into `@layer utilities`, so a single top-level reset in `styles.css` wins against every
+utility that sets the same property — and the one that was there set `min-width: 0` on `*`.
+
+That made **every `min-w-*` utility in the library inert**, and it was invisible in every way this repo
+usually checks: the class was in the source, in the class list, and in the compiled CSS, and the
+element reported `min-width: 0px`. It surfaced the day a dropdown was asked to be at least as wide as
+its trigger: the rule existed, and the panel measured **86px against a 106px trigger**, and the select
+menu **108px under a 320px field** — narrower than the control it belonged to, which is the bug the
+`min-w` was meant to fix.
+
+The reset now lives in `@layer base`, beside Tailwind's own preflight, and utilities win against it as
+they should. That is the rule to carry forward: **house rules go in a layer.** A reset, a base style or
+any other global belongs in `@layer base`; unlayered CSS is reserved for the emergency that would need
+to beat utilities.
 
 ## Using it
 

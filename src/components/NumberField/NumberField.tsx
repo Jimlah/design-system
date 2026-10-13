@@ -58,7 +58,7 @@ const COUNTER = [
 const STEPPER = [
   'flex flex-1 items-center justify-center',
   'cursor-pointer text-foreground/70',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:bg-foreground/5 data-[hovered]:text-foreground',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-[-3px]',
   'data-[focus-visible]:outline-ring',
@@ -161,7 +161,8 @@ export interface NumberFieldHintProps extends AriaTextProps {
 }
 
 export interface NumberFieldFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -297,16 +298,13 @@ export function NumberFieldHint({
  */
 export function NumberFieldFieldError({
   className,
-  children,
   ...props
 }: NumberFieldFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

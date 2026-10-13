@@ -209,7 +209,8 @@ export interface DatePickerHintProps extends AriaTextProps {
 }
 
 export interface DatePickerFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -379,6 +380,7 @@ export function DatePickerPopover({
 }: DatePickerPopoverProps) {
   return (
     <AriaPopover
+      data-slot="dropdown"
       className={[DATE_MENU, className].filter(Boolean).join(' ')}
       {...props}
     >
@@ -507,16 +509,13 @@ export function DatePickerHint({
  */
 export function DatePickerFieldError({
   className,
-  children,
   ...props
 }: DatePickerFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

@@ -15,7 +15,7 @@
     },
     {
       "path": "src/components/progress.ts",
-      "content": "/**\n * The sheet has no bar of any kind, so this is an invention — but a small one, and it borrows the\n * sheet's own language: square, hairline-thin, and its semantic colours rather than a new palette.\n *\n * Every constant here is shared by `ProgressBar` and `Meter`, the same split as `field.ts` between\n * `TextField`, `SearchArea` and `SearchField`. A progress bar and a meter are the same drawing of two\n * different facts, and the drawing is the thing that must not drift.\n */\n\n/** The column: a header line, then the rail. */\nexport const PROGRESS = 'flex flex-col gap-2'\n\n/** Label on the left, reading on the right — the sheet's own arrangement in a table row. */\nexport const HEADER = 'flex items-baseline justify-between gap-3'\n\n/** The sheet's field legend, quieter than the value it names. */\nexport const LABEL =\n  'text-[12px] uppercase tracking-[0.04em] text-foreground/55'\n\n/** The reading, in the sheet's tabular figures so it does not jitter as it counts. */\nexport const VALUE = 'text-[12px] tabular-nums text-foreground/70'\n\n/**\n * The empty part of a rail: a wash of the text colour rather than a panel, so it reads as the\n * unfinished part of the same thing. **Shared with `Slider`, which draws the same rail** — and it is\n * the wash that is shared, not the clip below it.\n */\nexport const TRACK_WASH = 'bg-foreground/12'\n\n/**\n * The bar's rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be\n * coloured — the reader cannot tell how full it is.\n *\n * `overflow-hidden` belongs to the **bar**, where the fill is the whole drawing. It is not part of what\n * a rail is: a slider's handle is 20px square on a 4px rail, and inheriting this clip painted it as a\n * 4px sliver. See `Slider`'s `RAIL` for the measurement.\n */\nexport const TRACK = 'relative h-1 w-full overflow-hidden ' + TRACK_WASH\n\n/**\n * The bar. Its width is a **value**, not a style — which is why it arrives as `--fill` and the\n * width stays a utility: `w-(--fill)` is in the class list like every other measurement here, and\n * the only thing written inline is the number React Aria computed.\n */\nexport const FILL = [\n  'h-full w-(--fill)',\n  'transition-[width] duration-200 ease-pulse',\n].join(' ')\n\n/**\n * What the bar is filled with. `accent` is a progress bar's — the thing being done wears the\n * system's one accent, as it does everywhere else. The other four are a meter's, and they are the\n * sheet's own semantic colours: a meter says how much, and how much is the only thing that decides\n * whether it is good news.\n */\nexport const TONE: Record<string, string> = {\n  accent: 'bg-primary',\n  success: 'bg-success',\n  warning: 'bg-warning',\n  danger: 'bg-destructive',\n  neutral: 'bg-secondary',\n}\n\n/**\n * Indeterminate is not a value, so there is no width to draw. React Aria renders\n * `isIndeterminate` as the **absence** of `aria-valuenow`, and `percentage` arrives `undefined`\n * rather than `0` — which is the difference between \"we do not know how far along this is\" and \"it\n * has not started\". The bar fills the rail and pulses.\n *\n * A moving stripe would say it better, and it would need keyframes this system does not have. The\n * pulse is Tailwind's own, which means nothing new was invented to say \"in progress\".\n */\nexport const INDETERMINATE = 'motion-safe:animate-pulse'\n",
+      "content": "/**\n * The sheet has no bar of any kind, so this is an invention — but a small one, and it borrows the\n * sheet's own language: square, hairline-thin, and its semantic colours rather than a new palette.\n *\n * Every constant here is shared by `ProgressBar` and `Meter`, the same split as `field.ts` between\n * `TextField`, `SearchArea` and `SearchField`. A progress bar and a meter are the same drawing of two\n * different facts, and the drawing is the thing that must not drift.\n */\n\n/** The column: a header line, then the rail. */\nexport const PROGRESS = 'flex flex-col gap-2'\n\n/** Label on the left, reading on the right — the sheet's own arrangement in a table row. */\nexport const HEADER = 'flex items-baseline justify-between gap-3'\n\n/** The sheet's field legend, quieter than the value it names. */\nexport const LABEL =\n  'text-[12px] uppercase tracking-[0.04em] text-foreground/55'\n\n/** The reading, in the sheet's tabular figures so it does not jitter as it counts. */\nexport const VALUE = 'text-[12px] tabular-nums text-foreground/70'\n\n/**\n * The empty part of a rail: a wash of the text colour rather than a panel, so it reads as the\n * unfinished part of the same thing. **Shared with `Slider`, which draws the same rail** — and it is\n * the wash that is shared, not the clip below it.\n */\nexport const TRACK_WASH = 'bg-foreground/12'\n\n/**\n * The bar's rail. 4px, because a bar is a measurement and a 1px one is a hairline that happens to be\n * coloured — the reader cannot tell how full it is.\n *\n * The clip belongs to the **bar**, where the fill is the whole drawing. It is not part of what\n * a rail is: a slider's handle is 20px square on a 4px rail, and inheriting this clip painted it as a\n * 4px sliver. See `Slider`'s `RAIL` for the measurement.\n */\nexport const TRACK = 'relative h-1 w-full overflow-clip ' + TRACK_WASH\n\n/**\n * The bar. Its width is a **value**, not a style — which is why it arrives as `--fill` and the\n * width stays a utility: `w-(--fill)` is in the class list like every other measurement here, and\n * the only thing written inline is the number React Aria computed.\n */\nexport const FILL = [\n  'h-full w-(--fill)',\n  'transition-[width] duration-(--duration-slow) ease-pulse',\n].join(' ')\n\n/**\n * What the bar is filled with. `accent` is a progress bar's — the thing being done wears the\n * system's one accent, as it does everywhere else. The other four are a meter's, and they are the\n * sheet's own semantic colours: a meter says how much, and how much is the only thing that decides\n * whether it is good news.\n */\nexport const TONE: Record<string, string> = {\n  accent: 'bg-primary',\n  success: 'bg-success',\n  warning: 'bg-warning',\n  danger: 'bg-destructive',\n  neutral: 'bg-secondary',\n}\n\n/**\n * Indeterminate is not a value, so there is no width to draw. React Aria renders\n * `isIndeterminate` as the **absence** of `aria-valuenow`, and `percentage` arrives `undefined`\n * rather than `0` — which is the difference between \"we do not know how far along this is\" and \"it\n * has not started\". The bar fills the rail and pulses.\n *\n * A moving stripe would say it better, and it would need keyframes this system does not have. The\n * pulse is Tailwind's own, which means nothing new was invented to say \"in progress\".\n */\nexport const INDETERMINATE = 'motion-safe:animate-pulse'\n",
       "type": "registry:lib",
       "target": "@ui/pulse/progress.ts"
     }
@@ -116,15 +116,17 @@
         "--sidebar-ring": "var(--primary)",
         "--radius": "0",
         "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+        "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+        "--duration-fast": "120ms",
+        "--duration-base": "160ms",
+        "--duration-slow": "200ms",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
         "overflow-wrap": "break-word",
         "font-synthesis": "none",
-        "color-scheme": "dark"
-      },
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
+        "color-scheme": "dark",
+        "overscroll-behavior-y": "none"
       },
       "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
@@ -151,8 +153,10 @@
         "line-height": "1.5",
         "letter-spacing": "0",
         "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
-        "text-rendering": "optimizeLegibility"
+        "-moz-osx-font-smoothing": "grayscale"
+      },
+      ":where(button, a, [role='button'])": {
+        "touch-action": "manipulation"
       },
       "::selection": {
         "background": "var(--primary)",

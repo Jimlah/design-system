@@ -88,7 +88,8 @@ export interface TextFieldHintProps extends AriaTextProps {
 }
 
 export interface TextFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 export interface TextFieldIconProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -223,18 +224,12 @@ export function TextFieldHint({
  * Exported as `TextFieldError` only so tooling can resolve it; consume the
  * compound form `TextField.Error`.
  */
-export function TextFieldError({
-  className,
-  children,
-  ...props
-}: TextFieldErrorProps) {
+export function TextFieldError({ className, ...props }: TextFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

@@ -216,7 +216,7 @@ export function Home() {
           <p className="font-mono text-[12px] tracking-[0.08em] text-primary uppercase">
             {index.length} components · {RECENT.length} suites green
           </p>
-          <h1 className="mt-4 text-[40px] leading-[1.05] font-semibold tracking-[-0.02em]">
+          <h1 className="mbs-4 text-(length:--text-display) leading-[1.05] font-semibold tracking-[-0.02em]">
             Pulse
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-[1.65] text-foreground/70">
@@ -279,10 +279,20 @@ export function Home() {
             <Link variant="caps" href={`${import.meta.env.BASE_URL}storybook/`}>
               Read the docs
             </Link>
+            {/*
+              **One link to every worked example, rather than one per example.** The board used to be
+              here on its own, and the leads dashboard would have made two — a toolbar that grows a
+              link per page is a toolbar that has become a table of contents. `/examples` is that
+              table of contents, and it lists the board, the dashboard, Create, the sign-in page and
+              this page itself, so nothing is reachable only from the page that happens to link it.
+            */}
+            <Link variant="caps" href={`${import.meta.env.BASE_URL}examples/`}>
+              See the examples
+            </Link>
           </Toolbar>
         </div>
 
-        <aside className="border border-border-strong bg-card p-5">
+        <aside className="flex flex-col gap-4 border border-border-strong bg-card p-5">
           <Meter value={82}>
             <Meter.Header>
               <Meter.Label>Token coverage</Meter.Label>
@@ -292,7 +302,7 @@ export function Home() {
               <Meter.Fill />
             </Meter.Track>
           </Meter>
-          <Separator className="my-4" />
+          <Separator />
           <ProgressBar value={64}>
             <ProgressBar.Header>
               <ProgressBar.Label>Dark contrast, 4.5:1</ProgressBar.Label>
@@ -302,7 +312,7 @@ export function Home() {
               <ProgressBar.Fill />
             </ProgressBar.Track>
           </ProgressBar>
-          <Separator className="my-4" />
+          <Separator />
           <div className="flex items-center gap-3">
             <Avatar alt="Ada Lovelace" color="primary" size="lg" />
             <div>
@@ -410,7 +420,7 @@ export function Home() {
             {['Inputs', 'Collections', 'Overlays', 'Charts', 'Display'].map(
               (group) => (
                 <Tabs.Panel key={group} id={group}>
-                  <ul className="grid gap-px border border-border-strong bg-border-soft sm:grid-cols-3">
+                  <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-px border border-border-strong bg-border-soft">
                     {shown
                       .filter((entry) => entry.group === group)
                       .map((entry) => (

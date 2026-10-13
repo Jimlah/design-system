@@ -1,11 +1,15 @@
 import {
+  FieldError as AriaFieldError,
   SwitchButton as AriaSwitchButton,
   SwitchField as AriaSwitchField,
 } from 'react-aria-components'
 import type {
+  FieldErrorProps as AriaFieldErrorProps,
   SwitchButtonProps as AriaSwitchButtonProps,
   SwitchFieldProps as AriaSwitchFieldProps,
 } from 'react-aria-components'
+
+import { ERROR } from '../field'
 
 /**
  * The sheet's `.ds-switch`.
@@ -65,7 +69,7 @@ const TRACK = [
   // Transparent at rest rather than `outline-none`, so the ring fades in with the
   // track's own colours instead of switching on and off.
   'outline-1 outline-offset-[3px] outline-(--switch-ring)',
-  'transition-[background-color,border-color,outline-color] duration-[160ms] ease-pulse',
+  'transition-[background-color,border-color,outline-color] duration-(--duration-base) ease-pulse',
 ].join(' ')
 
 /**
@@ -79,7 +83,7 @@ const TRACK = [
 const KNOB = [
   'absolute top-0.5 left-0.5 size-3.5 rounded-full',
   'bg-(--switch-knob) translate-x-(--switch-knob-x)',
-  'transition-[translate,background-color] duration-[160ms] ease-pulse',
+  'transition-[translate,background-color] duration-(--duration-base) ease-pulse',
   'motion-reduce:transition-none',
 ].join(' ')
 
@@ -141,6 +145,11 @@ export interface SwitchTextProps extends React.HTMLAttributes<HTMLSpanElement> {
   children?: React.ReactNode
 }
 
+export interface SwitchErrorProps extends AriaFieldErrorProps {
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
+}
+
 /**
  * The track and its knob. Use it as `Switch.Indicator`, inside a `Switch`.
  *
@@ -176,6 +185,28 @@ export function SwitchText({ className, children, ...props }: SwitchTextProps) {
     >
       {children}
     </span>
+  )
+}
+
+/**
+ * The message shown while the switch is `isInvalid`. Use it as `Switch.Error`.
+ *
+ * The switch already *paints* invalid — `CONTROL` turns its edge red above every other
+ * state — so without this slot a failed switch said something was wrong and could not
+ * say what. That matters most where a switch is required rather than merely on, which is
+ * the one case a switch has something to fail: a consent, a confirmation.
+ *
+ * React Aria renders nothing while the field is valid, so it is always safe to include.
+ *
+ * Exported as `SwitchError` only so tooling can resolve it; consume the compound form
+ * `Switch.Error`.
+ */
+export function SwitchError({ className, ...props }: SwitchErrorProps) {
+  return (
+    <AriaFieldError
+      className={[ERROR, className].filter(Boolean).join(' ')}
+      {...props}
+    />
   )
 }
 
@@ -218,6 +249,10 @@ function SwitchButton({
  * draws the track and slides the knob for you, and `Switch.Text` the label. A bare
  * text child still renders, it just misses the label styling.
  *
+ * `Switch.Error` is the message for an `isInvalid` switch — a required consent, a
+ * confirmation that was not given. The control already turns its edge red when it is
+ * invalid; this is where it says why.
+ *
  * Built on `SwitchField` + `SwitchButton`, which is the pair React Aria now points at —
  * `Switch` itself is deprecated in 1.22. `SwitchField` is the wrapper that owns the
  * value, so the label it renders is the control root and every state lands on it.
@@ -234,5 +269,5 @@ export const Switch = Object.assign(
       </AriaSwitchField>
     )
   },
-  { Indicator: SwitchIndicator, Text: SwitchText },
+  { Indicator: SwitchIndicator, Text: SwitchText, Error: SwitchError },
 )

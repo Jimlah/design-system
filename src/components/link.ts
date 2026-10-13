@@ -8,8 +8,10 @@
  */
 export const LINK = [
   'cursor-pointer bg-transparent',
-  'transition-[color,background-color,text-decoration-color] duration-[120ms]',
+  'transition-[color,background-color,text-decoration-color,opacity] duration-(--duration-fast)',
   'ease-pulse',
+  // A text link has no fill to deepen, so the press is the one thing it can do: dim the text.
+  'data-[pressed]:opacity-80',
   'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',
   'data-[focus-visible]:outline-ring',
 ].join(' ')

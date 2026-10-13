@@ -57,8 +57,9 @@ import type { FieldSize, IconPosition } from '../field'
 const CELL = [
   'flex size-8 items-center justify-center rounded-md',
   'text-[13px] text-foreground/75 tabular-nums cursor-pointer select-none',
-  'transition-colors duration-[120ms] ease-pulse',
+  'transition-colors duration-(--duration-fast) ease-pulse',
   'data-[hovered]:bg-foreground/7 data-[hovered]:text-foreground',
+  'data-[pressed]:bg-foreground/15',
   'data-[outside-month]:text-foreground/30',
   // A day outside `minValue`/`maxValue` is `data-unavailable`; a day in a wholly disabled calendar
   // is `data-disabled`. Both mean the same thing to the eye, so both are marked.
@@ -221,7 +222,8 @@ export interface DateRangePickerHintProps extends AriaTextProps {
 }
 
 export interface DateRangePickerFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -401,6 +403,7 @@ export function DateRangePickerPopover({
 }: DateRangePickerPopoverProps) {
   return (
     <AriaPopover
+      data-slot="dropdown"
       className={[DATE_MENU, className].filter(Boolean).join(' ')}
       {...props}
     >
@@ -544,16 +547,13 @@ export function DateRangePickerHint({
  */
 export function DateRangePickerFieldError({
   className,
-  children,
   ...props
 }: DateRangePickerFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

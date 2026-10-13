@@ -69,3 +69,21 @@ A scrim has to _darken_ in both themes, and no token does that: `--ink` is black
 theme and white in the light one, so it would haze a white page white and separate nothing. The
 overlay is `bg-black/50`, Tailwind's own, the same in both themes by design, and it says so in the
 file.
+
+### The dialog has a height, and the page behind it is not the scroller
+
+The first version was `relative w-full max-w-md` and nothing else, with the _overlay_ carrying
+`overflow-y-auto`. So a dialog taller than the viewport pushed its own title off the top and its footer
+off the bottom, and the overlay's scroller could not reach either — centring plus overflow is the case
+`place-items-center-safe` exists for. It is now `max-h-[90dvh] overflow-y-auto overscroll-contain`, so
+the dialog scrolls inside itself, and the overlay is centered safely: a dialog too tall for the screen
+keeps its top.
+
+### It fades in and out
+
+Every floating surface in this library used to appear and disappear in one frame. The Modal is the
+measured example: `animation-name: none`, `transition-duration: 0s`, `opacity: 1` at 0, 40, 120 and
+300ms after opening. The entry and exit now come from the OVERLAYS block in `styles.css` — the exit off
+React Aria's own `data-exiting`, the entry off the mount, because RAC 1.22.1's `data-entering` is set and
+removed inside one commit. That block carries the measurements, and the reason the scrim fades but does
+not move.

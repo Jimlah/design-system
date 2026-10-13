@@ -113,6 +113,7 @@ export const Placement: Story = {
 
     const host = panel.closest('[data-placement]') ?? panel
     await expect(host.getAttribute('data-placement')).toBeTruthy()
-    await expect(panel).toBeVisible()
+    // The panel fades in, so the first frame of its life is `opacity: 0`.
+    await waitFor(() => expect(panel).toBeVisible())
   },
 }

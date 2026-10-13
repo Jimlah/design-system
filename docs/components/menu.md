@@ -45,6 +45,16 @@ writing them would otherwise mean two slots for one decision — so the popover 
 `menuProps`. `Menu.Popover` draws the popover and the list together, as `Select.Menu` does, because a
 surface with no list in it and a list with nowhere to open are never useful apart.
 
+### The menu is at least as wide as the button that opened it
+
+`popover.ts`'s `POPOVER` sizes the panel from the trigger and lets it grow: a trigger is sized for its
+own label ("Actions"), and a menu sized to exactly that cuts off the one item longer than the control —
+usually the item the menu was opened to find. `min-w-(--trigger-width)`, capped at the window minus the
+1rem gutter the modal keeps, so nothing can run off the page. This was also where a whole-library bug
+came to light: the reset that set `min-width: 0` on `*` was unlayered, and an unlayered rule beats every
+Tailwind utility, so `min-w-*` had never applied anywhere. See
+[theming.md](../theming.md#cascade-layers-and-the-one-reset-that-had-to-move).
+
 ### The shadow is the second deliberate literal
 
 `popover.ts` carries `rgba(0,0,0,.7)` for the same reason the modal's scrim does: a shadow has to

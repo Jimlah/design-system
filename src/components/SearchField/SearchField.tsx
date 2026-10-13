@@ -112,7 +112,8 @@ export interface SearchFieldHintProps extends AriaTextProps {
 }
 
 export interface SearchFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 export interface SearchFieldIconProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -254,16 +255,13 @@ export function SearchFieldHint({
  */
 export function SearchFieldError({
   className,
-  children,
   ...props
 }: SearchFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

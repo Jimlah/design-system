@@ -52,6 +52,16 @@ The size therefore goes on `Sheet`, which this component owns — `SIZES[side]` 
 `side` is already known. The first version put it on the panel and rendered a **250×149** panel while
 the class list looked perfectly correct.
 
+### The panel scrolls, now that it has to
+
+The panel cannot be sized from outside (above), so it is exactly as tall as its layer — and for one
+round it also had no overflow of its own. A sheet whose content ran past the viewport therefore had no
+scrollbar anywhere, `mbs-auto` on the footer had no free space to claim, and the content below the fold
+was simply unreachable. `SheetContent` now carries `min-h-0 overflow-y-auto overscroll-contain`, and the
+edge-anchored sheets inset themselves from the home indicator and the notch
+(`env(safe-area-inset-*)` on `SIZES.bottom` and `SIZES.top`), which needs
+`viewport-fit=cover` in the root route's viewport meta — without it every inset is `0px`.
+
 ## The two earlier verdicts, revisited
 
 This component was built, removed, and rebuilt. Both reasons it was removed are worth recording as

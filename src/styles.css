@@ -144,6 +144,25 @@
      the typeface themeable at all. */
   --type-mono:
     'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* --- the one size that grows ---
+     The landing hero, and only it. The 10–18px chrome is deliberately fixed: this is a dense
+     monitoring UI, and type that grew under it would fight the density it is built on. The
+     preferred value is `rem + vw`, never `vw` alone, so it follows the reader's font size as
+     well as the viewport, and the top of the range is 2.5× the bottom — WCAG 1.4.4's limit for
+     fluid text. Measured from 320px (2rem) to 1440px (2.5rem). */
+  --text-display: clamp(2rem, 1.5rem + 2.5vw, 2.5rem);
+
+  /* --- motion ---
+     Three durations and one curve, named once so a transition never repeats a literal.
+     A component asks for `duration-(--duration-fast)`; a theme that wants a slower
+     system moves these three numbers and nothing else. 120ms is the house default for
+     a state change, 160ms is for something that moves, and 200ms is the ceiling — the
+     progress sweep. `--ease-pulse` is the curve, and it is declared in the `@theme`
+     block below because it is exposed as the `ease-pulse` utility. */
+  --duration-fast: 120ms;
+  --duration-base: 160ms;
+  --duration-slow: 200ms;
 }
 
 /* The single theme block. Every entry here is a name for a value above, so
@@ -219,13 +238,22 @@
    element rules, `-webkit-tap-highlight-color` and
    `-webkit-text-size-adjust`. These are the parts it does not.
    ============================================================ */
-*,
-*::before,
-*::after {
-  /* Lets a flex or grid item shrink below its content. The default is
-     `min-width: auto`, which is why a long word or a wide child overflows
-     its track. Anything that is sized and must not shrink needs `shrink-0`. */
-  min-width: 0;
+/* **`@layer base`, and that is not tidiness.** An unlayered normal declaration outranks *every*
+   layered one in the cascade, whatever the specificity — and Tailwind's utilities are emitted into
+   `@layer utilities`. Written at the top level, this one rule therefore defeated every `min-w-*`
+   utility in the library: `.min-w-(--trigger-width)` was in the compiled CSS and computed to
+   `0px` on the element. It was found by asking for a dropdown that is at least as wide as its
+   trigger and measuring one that was narrower (86px against a 106px trigger). Tailwind's own
+   preflight is layered for the same reason. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    /* Lets a flex or grid item shrink below its content. The default is
+       `min-width: auto`, which is why a long word or a wide child overflows
+       its track. Anything that is sized and must not shrink needs `shrink-0`. */
+    min-width: 0;
+  }
 }
 
 :root {
@@ -288,10 +316,135 @@ body {
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+}
+
+/* The reset removes the tap highlight (Tailwind's preflight does), so every pressable
+   element needs a press state of its own — and `touch-action: manipulation` is what lets
+   `click` fire without waiting to see whether a double-tap zoom is coming. */
+:where(button, a, [role='button']) {
+  touch-action: manipulation;
+}
+
+/* A desktop app shell: a trackpad stretch must not drag the fixed UI with the page.
+   Phones keep pull-to-refresh, which is a real gesture — hence the `-y` longhand and
+   never `none` on both axes, which would take swipe-back with it. */
+:root {
+  overscroll-behavior-y: none;
+}
+@media (any-pointer: coarse) {
+  :root {
+    overscroll-behavior-y: auto;
+  }
 }
 
 ::selection {
   background: var(--primary);
   color: var(--ink);
+}
+
+/* ============================================================
+   OVERLAYS
+
+   Before this block every floating surface in the library appeared and disappeared in one
+   frame: measured on the Modal, the dialog sat at `animation-name: none`,
+   `transition-duration: 0s` and `opacity: 1` at 0, 40, 120 and 300ms after opening, and the
+   node was gone the moment it closed.
+
+   The two halves hang off different hooks, and that is a measurement rather than a preference.
+
+   **The exit** uses React Aria's own: RAC writes `data-exiting` on an overlay as it leaves and
+   waits for whatever animation that element is running (react-aria/dist/private/utils/
+   animation.mjs). Measured on a dialog: `animation-name: pulse-leave`, opacity walking
+   1 → 0.97 → 0.35 → 0.10, the node gone at 200ms.
+
+   **The entry cannot use its `data-entering` companion.** RAC 1.22.1 sets that attribute and
+   takes it off again inside the same commit — it is already absent 10ms after the click, and a
+   MutationObserver on the document recorded no appearance of it at all. So the entry is declared
+   for the **mount** instead, which is the same moment and needs no hook: the surface is inserted,
+   the animation runs once, and a re-render does not restart it. Measured on a menu that had been
+   closed and reopened: opacity 0 → 0.65 → 1 over 150ms, and on a freshly pushed toast:
+   0.03 → 0.65 → 1.
+
+   The move is a fade everywhere, plus a small rise for the panels. It is deliberately
+   *not* put on the full-screen layers: translating a `fixed inset-0` scrim by 4px strips a
+   band of page unpainted along one edge for as long as the animation runs.
+
+   Under `prefers-reduced-motion` nothing is declared at all, so the surface simply appears
+   — the state change the user asked for, minus the movement. Measured: with the query
+   reduced, `animation-name` is `none` and the dialog is at `opacity: 1` on the first frame.
+
+   Toast is the one surface RAC gives no hook at all, entering or exiting (its `Toast` writes
+   only `data-hovered`, `data-focused` and `data-focus-visible`, and its own file says so): it
+   gets the same mount animation as the panels, keyed on `data-slot="toast"`, and its exit is the
+   one that still snaps.
+   ============================================================ */
+@keyframes pulse-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-panel-enter {
+  from {
+    opacity: 0;
+    translate: 0 0.25rem;
+  }
+}
+
+@keyframes pulse-panel-leave {
+  to {
+    opacity: 0;
+    translate: 0 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The entry. `:where()` keeps these at zero specificity, so the leaving rules below — which
+     carry an attribute and therefore a class's worth of weight — always win. Measured on a menu
+     that was closed and then opened: opacity 0 → 0.15 → 0.65 → 1 over 150ms, with `pulse-panel-enter`
+     running. */
+  :where(
+    [data-slot='modal'],
+    [data-slot='sheet-overlay'],
+    [data-slot='sheet'],
+    [data-slot='popover'],
+    [data-slot='menu'],
+    [data-slot='toast'],
+    [data-slot='dropdown'],
+    [role='tooltip']
+  ) {
+    animation: pulse-enter var(--duration-base) var(--ease-pulse);
+  }
+
+  /* The panels rise as well as fade; the scrims only fade. A toast is a panel in this sense — it
+     is the one surface React Aria gives no entering hook at all, so the mount is what it gets. */
+  :where(
+    [data-slot='popover'],
+    [data-slot='menu'],
+    [data-slot='dropdown'],
+    [data-slot='sheet'],
+    [data-slot='toast']
+  ) {
+    animation-name: pulse-panel-enter;
+  }
+
+  /* The exit, on the attribute React Aria really does leave behind. */
+  [data-exiting] {
+    animation: pulse-leave var(--duration-base) var(--ease-pulse) forwards;
+  }
+
+  :where(
+    [data-slot='popover'],
+    [data-slot='menu'],
+    [data-slot='dropdown'],
+    [data-slot='sheet']
+  )[data-exiting] {
+    animation-name: pulse-panel-leave;
+  }
 }

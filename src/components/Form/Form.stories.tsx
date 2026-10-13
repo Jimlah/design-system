@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent } from 'storybook/test'
+import { useState } from 'react'
 
+import { parseDate, parseTime } from '@internationalized/date'
 import { Button } from '../Button/Button'
 import { Checkbox } from '../Checkbox/Checkbox'
+import { Radio } from '../Radio/Radio'
 import { Select } from '../Select/Select'
 import { TextField } from '../TextField/TextField'
-import { Form, FormActions, FormLegend, FormSection } from './Form'
+import { Form, FormActions, FormLegend, FormSection, useAppForm } from './Form'
 
 const meta = {
   component: Form,
@@ -174,6 +177,10 @@ export const Fields: Story = {
         </TextField>
         <Select name="region" isRequired placeholder="Choose a region">
           <Select.Label>Region</Select.Label>
+          {/* `Select` renders no trigger of its own — a bare `Select.Button` places the value and the
+              caret — so without this line the select was a label and a menu with nothing between them,
+              which is what this story shipped for as long as it has existed. */}
+          <Select.Button />
           <Select.Menu>
             <Select.Option id="fra">fra1 · Frankfurt</Select.Option>
             <Select.Option id="iad">iad1 · Virginia</Select.Option>
@@ -206,6 +213,147 @@ export const Fields: Story = {
   },
 }
 
+/**
+ * The TanStack Form integration, in the shape a consumer writes it: `useAppForm` returns a form with
+ * this library's fields attached, and `<form.AppField>`'s render prop hands back that same form's
+ * field API *with the fields on it* — which is what makes `field.TextField` the compound component
+ * the docs promise rather than a name someone has to import twice.
+ */
+function TanStackBasics() {
+  const [saved, setSaved] = useState('')
+  const form = useAppForm({
+    defaultValues: { firstName: '', host: '' },
+    onSubmit: async ({ value }) => {
+      setSaved(JSON.stringify(value))
+    },
+  })
+
+  return (
+    <div className="flex w-80 flex-col gap-4">
+      <form.AppForm>
+        <form.Form>
+          <form.Form.Legend>New monitor</form.Form.Legend>
+          <form.Form.Section>
+            <form.AppField
+              name="firstName"
+              validators={{
+                onSubmit: ({ value }) =>
+                  value.trim() ? undefined : 'Enter a first name.',
+              }}
+            >
+              {(field) => (
+                <field.TextField>
+                  <field.TextField.Label>First name</field.TextField.Label>
+                  <field.TextField.Input placeholder="Ada" />
+                  <field.TextField.Error />
+                </field.TextField>
+              )}
+            </form.AppField>
+            <form.AppField
+              name="host"
+              validators={{
+                onSubmit: ({ value }) =>
+                  value.trim() ? undefined : 'Enter a hostname.',
+              }}
+            >
+              {(field) => (
+                <field.TextField>
+                  <field.TextField.Label>Hostname</field.TextField.Label>
+                  <field.TextField.Input placeholder="example.com" />
+                  <field.TextField.Hint>
+                    Lowercase alphanumeric and dashes only
+                  </field.TextField.Hint>
+                  <field.TextField.Error />
+                </field.TextField>
+              )}
+            </form.AppField>
+          </form.Form.Section>
+          <form.Form.Actions>
+            {/* `form.reset()` is TanStack's own; the saved value is this story's, so it goes back with
+                it. The button is also what lets the `play` below leave the form at rest — see the note
+                there. */}
+            <Button
+              type="button"
+              variant="ghost"
+              onPress={() => {
+                form.reset()
+                setSaved('')
+              }}
+            >
+              Reset
+            </Button>
+            <form.Submit>Save</form.Submit>
+          </form.Form.Actions>
+        </form.Form>
+      </form.AppForm>
+      {/* The form state, read live, so the story can assert that typing reached the form rather than
+          that the input holds what was typed into it — which is true whether or not anything is bound. */}
+      <form.Subscribe selector={(state) => state.values.firstName}>
+        {(firstName) => (
+          <output data-slot="value" className="text-muted-foreground">
+            {firstName}
+          </output>
+        )}
+      </form.Subscribe>
+      {saved ? (
+        <output data-slot="saved" className="text-muted-foreground">
+          {saved}
+        </output>
+      ) : null}
+    </div>
+  )
+}
+
+export const TanStackForm: Story = {
+  render: () => <TanStackBasics />,
+  parameters: {
+    docs: {
+      source: {
+        code: `const form = useAppForm({
+  defaultValues: { firstName: '', host: '' },
+  onSubmit: async ({ value }) => save(value),
+})
+
+<form.AppForm>
+  <form.Form>
+    <form.Form.Legend>New monitor</form.Form.Legend>
+    <form.Form.Section>
+      <form.AppField
+        name="firstName"
+        validators={{
+          onSubmit: ({ value }) =>
+            value.trim() ? undefined : 'Enter a first name.',
+        }}
+      >
+        {(field) => (
+          <field.TextField>
+            <field.TextField.Label>First name</field.TextField.Label>
+            <field.TextField.Input placeholder="Ada" />
+            <field.TextField.Error />
+          </field.TextField>
+        )}
+      </form.AppField>
+    </form.Form.Section>
+    <form.Form.Actions>
+      <Button type="button" variant="ghost" onPress={() => form.reset()}>
+        Reset
+      </Button>
+      <form.Submit>Save</form.Submit>
+    </form.Form.Actions>
+  </form.Form>
+</form.AppForm>`,
+      },
+    },
+  },
+  // **This story has no `play`, and that is deliberate.** Storybook runs a story's `play` when the
+  // story is *viewed* — measured in this repo's dev server and its static build, with the test-ish
+  // addons removed, so it is not an artefact of the test runner — which means a `play` that types into
+  // a form is a machine typing into this form while the person who opened it is trying to use it.
+  // That is what this story shipped as: clicking the Select picked an option nobody chose, and the
+  // closing Reset wiped what had been typed. The coverage lives in `Form.browser.test.tsx`, where
+  // nothing runs unless it is asked to.
+}
+
 export const Reset: Story = {
   // A real `type="reset"` button puts every field back to its default, which is the browser's own
   // behaviour and the reason not to build a "clear" button out of state.
@@ -219,4 +367,229 @@ export const Reset: Story = {
       '',
     )
   },
+}
+
+/**
+ * Every field-shaped control in the library, bound to one form — the proof that the integration is a
+ * pattern and not a single component. Each line here is the control's own documentation with the
+ * value taken away: nothing about how a `Select` is written, or a `Radio`, or a `Slider`, changes
+ * because it is now inside a form.
+ */
+function TanStackFieldsDemo() {
+  const form = useAppForm({
+    defaultValues: {
+      notes: '',
+      query: '',
+      quantity: 0,
+      region: null as string | null,
+      alerts: false,
+      channels: [] as string[],
+      autoRetry: false,
+      plan: '',
+      retention: 30,
+      startsOn: parseDate('2024-03-18'),
+      opensAt: parseTime('09:30'),
+      accent: '#71FFF6',
+    },
+    onSubmit: async () => {},
+  })
+
+  return (
+    <div className="flex w-96 flex-col gap-5">
+      <form.AppForm>
+        <form.Form>
+          <form.Form.Section>
+            <form.AppField name="notes">
+              {(field) => (
+                <field.TextArea>
+                  <field.TextArea.Label>Notes</field.TextArea.Label>
+                  <field.TextArea.Input rows={3} placeholder="What changed?" />
+                </field.TextArea>
+              )}
+            </form.AppField>
+
+            <form.AppField name="query">
+              {(field) => (
+                <field.SearchField>
+                  <field.SearchField.Label>
+                    Search monitors
+                  </field.SearchField.Label>
+                  <field.SearchField.Group>
+                    <field.SearchField.Icon />
+                    <field.SearchField.Input placeholder="Filter by name…" />
+                  </field.SearchField.Group>
+                </field.SearchField>
+              )}
+            </form.AppField>
+
+            <form.AppField name="quantity">
+              {(field) => (
+                <field.NumberField minValue={0} maxValue={10}>
+                  <field.NumberField.Label>Quantity</field.NumberField.Label>
+                  <field.NumberField.Group>
+                    <field.NumberField.Input />
+                    <field.NumberField.Counter />
+                  </field.NumberField.Group>
+                </field.NumberField>
+              )}
+            </form.AppField>
+
+            <form.AppField name="region">
+              {(field) => (
+                <field.Select placeholder="Choose a region">
+                  <field.Select.Label>Region</field.Select.Label>
+                  <field.Select.Button>
+                    <field.Select.Value />
+                    <field.Select.Icon />
+                  </field.Select.Button>
+                  <field.Select.Popover>
+                    <field.Select.OptionList>
+                      <field.Select.Option id="fra">
+                        fra1 · Frankfurt
+                      </field.Select.Option>
+                      <field.Select.Option id="iad">
+                        iad1 · Virginia
+                      </field.Select.Option>
+                    </field.Select.OptionList>
+                  </field.Select.Popover>
+                  <field.Select.Error />
+                </field.Select>
+              )}
+            </form.AppField>
+
+            <form.AppField name="alerts">
+              {(field) => (
+                <field.Checkbox>
+                  <field.Checkbox.Indicator />
+                  <field.Checkbox.Text>
+                    Email me when it goes down
+                  </field.Checkbox.Text>
+                </field.Checkbox>
+              )}
+            </form.AppField>
+
+            <form.AppField name="channels">
+              {(field) => (
+                <field.CheckboxGroup>
+                  <field.CheckboxGroup.Label>
+                    Channels
+                  </field.CheckboxGroup.Label>
+                  <Checkbox value="email">
+                    <Checkbox.Indicator />
+                    <Checkbox.Text>Email</Checkbox.Text>
+                  </Checkbox>
+                  <Checkbox value="sms">
+                    <Checkbox.Indicator />
+                    <Checkbox.Text>SMS</Checkbox.Text>
+                  </Checkbox>
+                  <field.CheckboxGroup.Hint>
+                    Applies to every monitor.
+                  </field.CheckboxGroup.Hint>
+                </field.CheckboxGroup>
+              )}
+            </form.AppField>
+
+            <form.AppField name="autoRetry">
+              {(field) => (
+                <field.Switch>
+                  <field.Switch.Indicator />
+                  <field.Switch.Text>
+                    Auto-retry failed checks
+                  </field.Switch.Text>
+                </field.Switch>
+              )}
+            </form.AppField>
+
+            <form.AppField name="plan">
+              {(field) => (
+                <field.Radio>
+                  <field.Radio.Label>Plan</field.Radio.Label>
+                  <Radio value="free">
+                    <Radio.Indicator />
+                    <Radio.Text>Free</Radio.Text>
+                  </Radio>
+                  <Radio value="pro">
+                    <Radio.Indicator />
+                    <Radio.Text>Pro</Radio.Text>
+                  </Radio>
+                </field.Radio>
+              )}
+            </form.AppField>
+
+            <form.AppField name="retention">
+              {(field) => (
+                <field.Slider minValue={0} maxValue={90}>
+                  <field.Slider.Header>
+                    <field.Slider.Label>Retention</field.Slider.Label>
+                    <field.Slider.Value />
+                  </field.Slider.Header>
+                  <field.Slider.Track>
+                    <field.Slider.Fill />
+                    <field.Slider.Thumb label="Days" />
+                  </field.Slider.Track>
+                  <field.Slider.Error />
+                </field.Slider>
+              )}
+            </form.AppField>
+
+            <form.AppField name="startsOn">
+              {(field) => (
+                <field.DateField>
+                  <field.DateField.Label>Starts on</field.DateField.Label>
+                  <field.DateField.Group>
+                    <field.DateField.Input />
+                  </field.DateField.Group>
+                </field.DateField>
+              )}
+            </form.AppField>
+
+            <form.AppField name="opensAt">
+              {(field) => (
+                <field.TimeField>
+                  <field.TimeField.Label>Opens at</field.TimeField.Label>
+                  <field.TimeField.Group>
+                    <field.TimeField.Input />
+                  </field.TimeField.Group>
+                </field.TimeField>
+              )}
+            </form.AppField>
+
+            <form.AppField name="accent">
+              {(field) => (
+                <field.ColorField>
+                  <field.ColorField.Label>Accent</field.ColorField.Label>
+                  <field.ColorField.Control>
+                    <field.ColorField.Swatch />
+                    <field.ColorField.Input />
+                  </field.ColorField.Control>
+                </field.ColorField>
+              )}
+            </form.AppField>
+          </form.Form.Section>
+          <form.Form.Actions>
+            <Button type="button" variant="ghost" onPress={() => form.reset()}>
+              Reset
+            </Button>
+          </form.Form.Actions>
+        </form.Form>
+      </form.AppForm>
+      <form.Subscribe selector={(state) => JSON.stringify(state.values)}>
+        {(values) => (
+          <output
+            data-slot="values"
+            className="break-all text-muted-foreground"
+          >
+            {values}
+          </output>
+        )}
+      </form.Subscribe>
+    </div>
+  )
+}
+
+export const TanStackFields: Story = {
+  render: () => <TanStackFieldsDemo />,
+  // The demo is the form: type in it, pick from the select, drag the rail, and watch the readout
+  // below change. It has no `play` for the reason recorded on `TanStackForm` above, and the coverage
+  // that used to be here is in `Form.browser.test.tsx`.
 }

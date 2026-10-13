@@ -18,15 +18,40 @@ the drift that file exists to prevent.
 </Slider>
 ```
 
-| Slot            | React Aria     | Notes                                                      |
-| --------------- | -------------- | ---------------------------------------------------------- |
-| `Slider`        | `Slider`       | The value. `size` is `sm \| md \| lg`, and `orientation`   |
-| `Slider.Header` | —              | The label and the reading on one line                      |
-| `Slider.Label`  | `Label`        | Names the rail — React Aria wires it, so there is no prop  |
-| `Slider.Value`  | `SliderOutput` | An `<output>`, which is the element for a control's result |
-| `Slider.Track`  | `SliderTrack`  | The rail. One `Fill` and one or more `Thumb`s              |
-| `Slider.Fill`   | `SliderFill`   | The filled part — the run to the thumb, or between two     |
-| `Slider.Thumb`  | `SliderThumb`  | A handle. `index` and `label` for a range                  |
+| Slot            | React Aria     | Notes                                                            |
+| --------------- | -------------- | ---------------------------------------------------------------- |
+| `Slider`        | `Slider`       | The value. `size` is `sm \| md \| lg`, and `orientation`         |
+| `Slider.Header` | —              | The label and the reading on one line                            |
+| `Slider.Label`  | `Label`        | Names the rail — React Aria wires it, so there is no prop        |
+| `Slider.Value`  | `SliderOutput` | An `<output>`, which is the element for a control's result       |
+| `Slider.Track`  | `SliderTrack`  | The rail. One `Fill` and one or more `Thumb`s                    |
+| `Slider.Fill`   | `SliderFill`   | The filled part — the run to the thumb, or between two           |
+| `Slider.Thumb`  | `SliderThumb`  | A handle. `index` and `label` for a range                        |
+| `Slider.Error`  | `FieldError`   | The message while `isInvalid` — React Aria supplies no such slot |
+
+## The one field React Aria does not supply
+
+`Slider` is not a field in React Aria. `useSlider` takes no `isInvalid` at all, a slider _thumb_'s is
+`@deprecated` with no replacement, and the component's own docs never mention `FieldError` — so
+there is no validation context for a slot to render from and no form message for it to show. Two things
+follow, and both are this library's rather than React Aria's:
+
+- **`isInvalid` is a prop of `Slider`.** It is what a form that has bound a slider to a value it
+  validated has, and what React Aria cannot give it. `Slider` publishes the field contexts itself
+  from that prop: the `FieldErrorContext` a `FieldError` renders from, and the
+  `FieldValidationContext` in `field.ts` that carries the id the message and the thumb share.
+- **The message is the caller's.** Every other `Error` slot in this library can be left empty and will
+  show whatever React Aria's own validation produced; this one shows its children. There is no React
+  Aria validation for a slider to surface, so that is the whole of what it can be given.
+
+**The invalid state has to reach the input, not only the eye.** The grip turns `--destructive` — the
+loudest mark on the rail — through a variable for the same reason `--slider-dim` is one: `data-invalid`
+is on the root and the grip is a descendant. And the thumb hands `isInvalid` and the message's id to
+React Aria's `SliderThumb`, whose range input is the element a screen reader reads the value from:
+`aria-invalid="true"`, with `aria-describedby` pointing at the message. **`isInvalid` is deprecated
+on a slider thumb with no replacement, and it is still the only thing that reaches that input.** The
+grip is a picture; a message a screen reader cannot be pointed at is a message for sighted users only.
+The assertion that keeps this honest reads the input's own attributes, not the painted grip.
 
 ### A range is the same component, twice
 
@@ -104,7 +129,8 @@ The grip the section above describes was not what the browser drew, and it took 
 rendered control to see it. Two separate faults, both from `Slider.Track` composing the progress bar's
 recipe instead of its own:
 
-1. **The rail clips.** `progress.ts` exports `TRACK` as `overflow-hidden`, which the bar can afford —
+1. **The rail clips.** `progress.ts` exports `TRACK` as clipping (`overflow-clip` now, `overflow-hidden`
+   when this was found), which the bar can afford —
    its fill is the whole drawing. A slider's handle is a **20px square on a 4px rail**, so the clip painted
    it as a 4px white notch at the end of the fill. React Aria's own docs CSS for a slider track has no
    overflow rule at all. What the two rails share is the **wash**, not the clip; that is now its own

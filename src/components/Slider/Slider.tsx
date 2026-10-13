@@ -1,4 +1,6 @@
 import {
+  FieldError as AriaFieldError,
+  FieldErrorContext as AriaFieldErrorContext,
   Label as AriaLabel,
   Slider as AriaSlider,
   SliderFill as AriaSliderFill,
@@ -7,6 +9,7 @@ import {
   SliderTrack as AriaSliderTrack,
 } from 'react-aria-components'
 import type {
+  FieldErrorProps as AriaFieldErrorProps,
   LabelProps as AriaLabelProps,
   SliderFillProps as AriaSliderFillProps,
   SliderOutputProps as AriaSliderOutputProps,
@@ -15,7 +18,9 @@ import type {
   SliderTrackProps as AriaSliderTrackProps,
 } from 'react-aria-components'
 
-import { FIELD_SIZES } from '../field'
+import { useContext, useId } from 'react'
+
+import { ERROR, FIELD_SIZES, FieldValidationContext, VALID } from '../field'
 import type { FieldSize } from '../field'
 import { FILL, HEADER, TONE, TRACK_WASH } from '../progress'
 
@@ -51,6 +56,11 @@ export interface SliderProps extends Omit<
   size?: FieldSize
   /** Keep it horizontal or stand it up; the rail and the thumb turn with it. */
   orientation?: AriaSliderProps['orientation']
+  /**
+   * Whether the value is invalid. **This one is ours, not React Aria's** — a slider is not a field
+   * there, so nothing else can tell it. See `Slider.Error`.
+   */
+  isInvalid?: boolean
   className?: string
   /** A `Slider.Label`, a `Slider.Value`, and a `Slider.Track` of one or more thumbs. */
   children?: React.ReactNode
@@ -89,6 +99,11 @@ export interface SliderFillProps extends Omit<
   tone?: keyof typeof TONE
 }
 
+export interface SliderErrorProps extends AriaFieldErrorProps {
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
+}
+
 export interface SliderThumbProps extends Omit<
   AriaSliderThumbProps,
   'className'
@@ -113,7 +128,7 @@ export interface SliderThumbProps extends Omit<
  * height paints a 1px line across a vertical slider and looks like a rendering fault.
  */
 const RAIL = [
-  // **Not `TRACK`, and the difference is the whole of a bug.** That rail is `overflow-hidden`, which
+  // **Not `TRACK`, and the difference is the whole of a bug.** That rail clips (`overflow-clip`), which
   // the bar can afford — its fill is the whole drawing. A slider's handle is 20px square on a 4px rail,
   // so the clip painted it as a **4px sliver**: a white notch at the end of the fill instead of a grip.
   //
@@ -191,9 +206,13 @@ const THUMB = [
   // **Full strength, not 70%.** At 70% the handle was a pale grey — measurably lighter than the page
   // but *duller than the teal fill it sits on*, so on the filled half of the rail it receded and a
   // reader said it was hard to see. It is the thing you grab; it should be the loudest mark on the
-  // rail, not the quietest. `--foreground` in this theme is white, and white reads against both the
-  // teal fill and the dark track without a border or a ring.
-  'bg-foreground',
+  // rail, not the quietest. `--slider-mark` is white in this theme, and white reads against both
+  // the teal fill and the dark track without a border or a ring.
+  //
+  // It is a variable rather than a utility because the handle is *also* where the invalid state has
+  // to show, and `data-invalid` is on the root — the fourth time a state on a parent travels this
+  // way, after `--slider-dim` two lines down.
+  'bg-(--slider-mark)',
   'data-[focus-visible]:outline-2 data-[focus-visible]:outline-offset-2 data-[focus-visible]:outline-ring',
   'data-[disabled]:cursor-not-allowed',
   // Read from the slider, not from the handle: `data-disabled` is on the **root** while the handle is
@@ -203,7 +222,7 @@ const THUMB = [
   'opacity-(--slider-dim)',
   // Hover is on the browser's pseudo-class rather than `data-hovered`: the handle is a 14px target and
   // the state has to arrive the moment the pointer is over it, which is what `:hover` guarantees.
-  'transition-[background-color,scale] duration-150 ease-pulse',
+  'motion-safe:transition-[background-color,scale] motion-safe:duration-(--duration-fast) ease-pulse',
   // **The state signals are scale, not colour.** With the handle already white at rest, hover and drag
   // have nothing left to brighten — so they grow. Dragging used to turn the handle teal, which is the
   // exact colour of the fill underneath it: invisible on the filled half of the rail, the same mistake
@@ -262,34 +281,60 @@ const OUTPUT = [
  * Home and End reach the ends, and every one of those is announced with the value it produced. A
  * slider that only responds to a pointer is unusable with a keyboard and invisible to a screen
  * reader, which is most of what a hand-rolled one gets wrong.
+ *
+ * **A slider is the one field here React Aria does not treat as a field**, so `isInvalid` and
+ * `Slider.Error` are this library's own: React Aria gives a slider no validation at all, and a
+ * slider bound to a form still has to be able to say what failed. `isInvalid` is what says so, and
+ * the thumb carries it to its range input — the element a screen reader reads — as `aria-invalid`
+ * plus a reference to the message.
  */
 function SliderRoot({
   size = 'md',
   orientation = 'horizontal',
+  isInvalid = false,
   className,
   children,
   ...props
 }: SliderProps) {
+  // **The error's id is minted here, and not in `Slider.Error`.** The message and the thumb that is
+  // described by it are two different slots, and only a component above both of them can own the
+  // name they share.
+  const errorId = useId()
+
   return (
-    <AriaSlider
-      orientation={orientation}
-      className={[
-        FIELD_SIZES[size],
-        RAIL_SIZE[size],
-        // Declared on the element that owns the attribute, and read by the handle below it.
-        '[--slider-dim:1] data-[disabled]:[--slider-dim:0.3]',
-        'flex flex-col gap-2',
-        'data-[orientation=horizontal]:w-64',
-        'data-[orientation=vertical]:h-40 data-[orientation=vertical]:w-fit',
-        'data-[disabled]:cursor-default',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      {...props}
+    // **A slider is not a field in React Aria, so it publishes the field contexts itself.** See
+    // `FieldValidationContext`. This is what makes `Slider.Error` possible at all: a
+    // `FieldError` renders nothing without a provider, and a `Slider` provides none.
+    <AriaFieldErrorContext.Provider
+      value={{ isInvalid, validationErrors: [], validationDetails: VALID }}
     >
-      {children}
-    </AriaSlider>
+      <FieldValidationContext.Provider value={{ isInvalid, errorId }}>
+        <AriaSlider
+          orientation={orientation}
+          data-invalid={isInvalid || undefined}
+          className={[
+            FIELD_SIZES[size],
+            RAIL_SIZE[size],
+            // Declared on the element that owns the attribute, and read by the handle below it.
+            '[--slider-dim:1] data-[disabled]:[--slider-dim:0.3]',
+            // The handle's colour, for the same reason: invalid is on the root and the mark is a
+            // descendant. The grip is the loudest thing on the rail, so a slider that failed turns
+            // the thing you look at — rather than the accent fill, which says how far along it is.
+            '[--slider-mark:var(--color-foreground)] data-[invalid]:[--slider-mark:var(--color-destructive)]',
+            'flex flex-col gap-2',
+            'data-[orientation=horizontal]:w-64',
+            'data-[orientation=vertical]:h-40 data-[orientation=vertical]:w-fit',
+            'data-[disabled]:cursor-default',
+            className,
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          {...props}
+        >
+          {children}
+        </AriaSlider>
+      </FieldValidationContext.Provider>
+    </AriaFieldErrorContext.Provider>
   )
 }
 
@@ -394,6 +439,37 @@ export function SliderFill({
 }
 
 /**
+ * The message shown while the slider is `isInvalid`. Use it as `Slider.Error`.
+ *
+ * **React Aria's slider is not a field, so this slot is this library's rather than React Aria's.**
+ * `Slider` has no `isInvalid` to read and no `FieldError` to render into — the two are the same
+ * fact, because a `FieldError` renders only from the context a field publishes. `Slider`
+ * publishes that context itself, from the `isInvalid` prop above it, which is what lets a slider
+ * bound to a form say what failed instead of only refusing to submit.
+ *
+ * What that costs is worth stating: the message is **the caller's**. Every other `Error` slot in
+ * this library can be left empty and will render whatever React Aria's own validation produced;
+ * this one renders its children. That is not a gap to close later — there is no React Aria
+ * validation for a slider to surface, and this is the whole of what one can be given.
+ *
+ * Exported as `SliderError` only so tooling can resolve it; consume the compound form
+ * `Slider.Error`.
+ */
+export function SliderError({ className, ...props }: SliderErrorProps) {
+  const validation = useContext(FieldValidationContext)
+  return (
+    <AriaFieldError
+      // The id the thumb points its `aria-describedby` at. It belongs to the control rather than
+      // to this slot, so that the message and the reference to it cannot drift apart.
+      id={validation?.errorId}
+      data-slot="error"
+      className={[ERROR, className].filter(Boolean).join(' ')}
+      {...props}
+    />
+  )
+}
+
+/**
  * A handle. Use it as `Slider.Thumb` — once for a value, twice for a range, with an `index` and a
  * `label` each so a screen reader can tell the two apart.
  *
@@ -401,12 +477,20 @@ export function SliderFill({
  * `Slider.Thumb`.
  */
 export function SliderThumb({ className, label, ...props }: SliderThumbProps) {
+  const validation = useContext(FieldValidationContext)
   return (
     <AriaSliderThumb
       // React Aria renders an inner wrapper around the input, so the input's parent is *not* the
       // styled handle. `data-slot` is the hook, as it is on the fill.
       data-slot="thumb"
       aria-label={label}
+      // **`isInvalid` is deprecated on a React Aria slider thumb, with no replacement — and it is
+      // still the only thing that reaches the range input.** The grip is a picture; the input is
+      // what a screen reader reads the value from, and it is what `aria-describedby` has to be
+      // put on. Dropping the prop would paint a red message at nobody who cannot see it, so it is
+      // used knowingly, and the assertion that keeps it honest is on the input's own attributes.
+      isInvalid={validation?.isInvalid || undefined}
+      aria-describedby={validation?.isInvalid ? validation.errorId : undefined}
       className={[THUMB, className].filter(Boolean).join(' ')}
       {...props}
     />
@@ -426,4 +510,5 @@ export const Slider = Object.assign(SliderRoot, {
   Track: SliderTrack,
   Fill: SliderFill,
   Thumb: SliderThumb,
+  Error: SliderError,
 })

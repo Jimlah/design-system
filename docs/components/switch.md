@@ -16,6 +16,29 @@ once rather than on submit.
 | `Switch`           | `SwitchField` + `SwitchButton` | Owns the state. `onChange(boolean)`, `name`, `value` |
 | `Switch.Indicator` | —                              | The track and its knob, drawn for you                |
 | `Switch.Text`      | —                              | The label                                            |
+| `Switch.Error`     | `FieldError`                   | The message for an `isInvalid` switch                |
+
+### `Switch.Error` is the half the invalid state was missing
+
+The control has always _painted_ invalid — `CONTROL` turns its edge red one step above every
+other state — while having nowhere to say what had failed. So a required switch announced
+`aria-invalid`, drew a red edge, and named no reason. That is the one case a switch actually
+has something to fail: a consent, a confirmation, a setting that must not be left on.
+
+It was added by the TanStack Form integration, which is where the gap became impossible to
+ignore — `field.Switch` is bound to a field that can carry a message, and had no slot to put
+it in. The slot is the same shape as every other control's — `FieldError` underneath, the
+shared `ERROR` recipe from `field.ts` on top — so nothing about it is new except its
+existence. React Aria renders nothing while the field is valid, so it is always safe to
+include.
+
+**It renders inside the label, so it is also part of the switch's accessible name.** `Switch`
+renders its children in `SwitchButton`, which is the `<label>`, and a `<label>` element's text is
+the name of the control inside it: measured, an invalid switch carrying this message introduces
+itself as `"Auto-retryYou must decide."`. React Aria's own docs put the description and the error
+_before_ the button instead — beside it, in the field wrapper. `Checkbox` and `Radio` render their
+children in the label the same way, so this is recorded rather than worked around in one of the
+three.
 
 ### `Switch` itself is deprecated
 

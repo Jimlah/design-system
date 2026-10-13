@@ -49,6 +49,15 @@ Focus also wins over invalid, as it does in the sheet (`:focus` out-specifies
 `.ds-input--error`). Typing inside a field you have already been told is wrong is
 when you least need the border shouting; the error message stays red throughout.
 
+**There is a second source of the destructive border: the browser's own `:user-invalid`.** `field.ts`
+and `TextArea` carry `user-invalid:not-data-[focused]:border-destructive`, so a field the user has left
+in a state the browser considers invalid reddens as they leave it, before anything is submitted and
+without a "touched" class or a blur listener. It is deliberately _only_ the border: React Aria reports
+`isInvalid` on submit, and that is what renders the `FieldError` and sets `aria-invalid`, so there is a
+window where the field is red and not yet named. The alternative — waiting for the submit — is worse
+for the same reason the browser's own validators exist: the moment someone leaves a field is when they
+can still do something about it.
+
 ### Two traps, both silent
 
 - **Always name the control's border colour.** A bare `border` utility falls back to

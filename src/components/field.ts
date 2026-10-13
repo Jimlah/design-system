@@ -2,10 +2,16 @@
  * The field anatomy, shared by every control that wears it — `TextField`,
  * `SearchField`, and the textarea, select, checkbox and radio still to come.
  *
- * Only the styling lives here. Each component defines its own slot components,
- * thin as they are, so that its docs and manifest describe its own API rather
- * than pointing at another component's.
+ * The styling lives here, and so does the one piece of field *state* React Aria
+ * leaves to us: the validation context `Slider` — the one field it does not treat
+ * as a field — publishes for its own `Error` slot. See
+ * `FieldValidationContext` at the bottom of this file.
+ *
+ * Each component defines its own slot components, thin as they are, so that its
+ * docs and manifest describe its own API rather than pointing at another
+ * component's.
  */
+import { createContext } from 'react'
 
 /**
  * The three control sizes. `size` is set once on the field and travels as two
@@ -104,13 +110,16 @@ export const INPUT = [
   'w-full font-mono rounded-md border border-(--field-border)',
   'h-(--field-control-h) px-3.5',
   'bg-muted text-foreground placeholder:text-foreground/35',
-  'transition-[border-color,background-color] duration-[120ms] ease-pulse',
+  'transition-[border-color,background-color] duration-(--duration-fast) ease-pulse',
   // Focus and invalid stay literal, so they outrank the published border and always
   // win — including on a read-only field, which is still focusable and still the
   // field the caret should be able to reach.
   'data-[hovered]:not-data-[focused]:border-(--field-hover)',
   'data-[focused]:outline-none data-[focused]:border-primary',
   'data-[invalid]:not-data-[focused]:border-destructive',
+  // The browser already knows when someone has left a field invalid, so the state needs no
+  // "touched" class and no blur listener — it only needed a rule. Same line in `TextArea`.
+  'user-invalid:not-data-[focused]:border-destructive',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40',
   // Read-only gets the cursor and nothing else that dims it. `opacity` here would
   // take the *value* down with it — at 40% the text measures 3.42:1, under the 4.5:1
@@ -152,3 +161,58 @@ export const ICON_POSITIONS = {
 } as const
 
 export type IconPosition = keyof typeof ICON_POSITIONS
+
+/**
+ * The invalid state of a control React Aria does not treat as a field, published by that control
+ * itself.
+ *
+ * **Every other field here reads its invalid state from React Aria.** `TextField`, `Select`,
+ * `Switch` and the rest are handed `isInvalid`, and React Aria publishes the
+ * `FieldErrorContext` their `Error` slot renders from. `Slider` is left out of that anatomy:
+ * `useSlider` takes no `isInvalid` at all, and a slider *thumb*'s is deprecated with no
+ * replacement — which is why this component's docs never showed a `FieldError`. (`TokenField` is
+ * left out for the same reason and stays out: its message can be neither rendered nor reached. See
+ * docs/components/tokenfield.md.)
+ *
+ * So `Slider` publishes the context itself, from an `isInvalid` prop the caller owns. That is
+ * exactly what an integration binding a slider to a form has: a value it validated and a failure it
+ * has to report. What it is *not* is React Aria's form validation — the `validationErrors` a
+ * `Form` carries are keyed by field name and read by React Aria's own fields, and a slider never
+ * sees them.
+ *
+ * **`errorId` is minted by the control, not by the slot**, because the message and the element it
+ * describes are two different slots and only the control can own the name they share.
+ */
+export const FieldValidationContext = createContext<FieldValidation | null>(
+  null,
+)
+
+export interface FieldValidation {
+  /** Whether the control's value is invalid. */
+  isInvalid: boolean
+  /** The id the control's error message wears, so the control is described by the message. */
+  errorId: string
+}
+
+/**
+ * The `ValidityState` of a field nothing is wrong with — React Aria's own shape for "there is no
+ * native input to ask", which is the situation for a slider.
+ *
+ * It is never read: `FieldError` looks only at `isInvalid` and `validationErrors`, and the
+ * rest travels to a render-function child that never asks. It is here because React Aria types the
+ * context as a `ValidationResult`, and a field that claims to be valid should carry a valid
+ * object rather than a cast.
+ */
+export const VALID: ValidityState = {
+  badInput: false,
+  customError: false,
+  patternMismatch: false,
+  rangeOverflow: false,
+  rangeUnderflow: false,
+  stepMismatch: false,
+  tooLong: false,
+  tooShort: false,
+  typeMismatch: false,
+  valid: true,
+  valueMissing: false,
+}

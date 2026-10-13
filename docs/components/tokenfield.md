@@ -67,6 +67,25 @@ React Aria 1.22's token field takes `isDisabled`, `isReadOnly`, `allowsNewlines`
 there is no `TokenField.Error`. This follows the house rule that a component is trimmed rather than
 shipped broken.
 
+**Building the slot anyway was tried, and both halves of a field's error fail on this control — so
+the verdict stands, now measured rather than predicted.** `FieldError` renders through
+`Text slot="errorMessage"`, and a field registers that slot in its own text context. A token field
+registers only `description`, so a `FieldError` inside one throws:
+`Invalid slot "errorMessage". Valid slot names are "description".` Registering the missing slot by
+hand does make the message render, which is why the second half was worth checking. It does not make
+it reachable:
+
+- **`TokenInput` filters its own props.** They go through `filterDOMProps`, which keeps `data-*`
+  always and `aria-*` only for the names a component asks for. A token input asks for
+  `aria-describedby` — its hint needs it — and **not** for `aria-invalid`, so an invalid state
+  cannot be announced on it at all.
+- **React Aria merges its own token props in last**, so the `aria-describedby` a slot would point at
+  the message is not merely dropped: it is replaced by the hint's.
+
+A red message under a control that cannot say it is invalid, and that cannot be described by the
+message, is exactly the slot this section was written to refuse. `Slider` is the one field React Aria
+leaves out that _could_ be given one — see [slider.md](./slider.md).
+
 ## No `placeholder` either
 
 A text field's placeholder belongs to its input element, and this container is a `role="textbox"`

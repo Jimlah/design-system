@@ -21,7 +21,7 @@
     },
     {
       "path": "src/components/link.ts",
-      "content": "/**\n * The sheet's links. Three treatments, each with its own hover — the sheet varies the *treatment*\n * rather than the colour, which is why these are variants and not one link with a size on it.\n *\n * All three are written against a real `<a>`: React Aria's `Link` renders one, so the middle-click,\n * the status bar, \"open in a new tab\" and the browser's own visited styling all work. A `div` with\n * an `onClick` is the thing this avoids.\n */\nexport const LINK = [\n  'cursor-pointer bg-transparent',\n  'transition-[color,background-color,text-decoration-color] duration-[120ms]',\n  'ease-pulse',\n  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',\n  'data-[focus-visible]:outline-ring',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-caps`: 14px, `-0.01em`, uppercase, white at 70% going to white on hover.\n * `lg` is its `.ds-link-caps--lg`, which changes the type size and nothing else.\n */\nexport const LINK_CAPS: Record<'sm' | 'lg', string> = {\n  sm: 'text-[14px]',\n  lg: 'text-[16px]',\n}\n\n/** The rest of `.ds-link-caps`, shared by both sizes. */\nexport const LINK_CAPS_BASE = [\n  'tracking-[-0.01em] uppercase',\n  'text-foreground/70',\n  'hover:text-foreground data-[hovered]:text-foreground',\n  // The page you are on, from the sheet's own `[aria-current=\"page\"] { color: teal }`.\n  'data-[current]:text-primary',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-url`: 12px, `-0.015em`, underlined, going teal on hover. The underline is\n * the whole affordance — it is the one link here that sits inside running text, where a colour\n * change alone would not mark it.\n */\nexport const LINK_URL = [\n  'text-[12px] tracking-[-0.015em] text-foreground',\n  'underline decoration-1 underline-offset-[3px]',\n  'hover:text-primary hover:decoration-primary',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-viewmore`: 16px, uppercase, in the accent — and the one link that *gains*\n * its underline on hover rather than losing it. It is a call to go and look at the rest, so it\n * wears the accent at rest and underlines itself when the pointer arrives.\n */\nexport const LINK_VIEWMORE = [\n  'text-[16px] tracking-[-0.01em] uppercase text-primary',\n  'no-underline',\n  'hover:underline hover:underline-offset-4',\n].join(' ')\n",
+      "content": "/**\n * The sheet's links. Three treatments, each with its own hover — the sheet varies the *treatment*\n * rather than the colour, which is why these are variants and not one link with a size on it.\n *\n * All three are written against a real `<a>`: React Aria's `Link` renders one, so the middle-click,\n * the status bar, \"open in a new tab\" and the browser's own visited styling all work. A `div` with\n * an `onClick` is the thing this avoids.\n */\nexport const LINK = [\n  'cursor-pointer bg-transparent',\n  'transition-[color,background-color,text-decoration-color,opacity] duration-(--duration-fast)',\n  'ease-pulse',\n  // A text link has no fill to deepen, so the press is the one thing it can do: dim the text.\n  'data-[pressed]:opacity-80',\n  'data-[focus-visible]:outline-1 data-[focus-visible]:outline-offset-2',\n  'data-[focus-visible]:outline-ring',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-caps`: 14px, `-0.01em`, uppercase, white at 70% going to white on hover.\n * `lg` is its `.ds-link-caps--lg`, which changes the type size and nothing else.\n */\nexport const LINK_CAPS: Record<'sm' | 'lg', string> = {\n  sm: 'text-[14px]',\n  lg: 'text-[16px]',\n}\n\n/** The rest of `.ds-link-caps`, shared by both sizes. */\nexport const LINK_CAPS_BASE = [\n  'tracking-[-0.01em] uppercase',\n  'text-foreground/70',\n  'hover:text-foreground data-[hovered]:text-foreground',\n  // The page you are on, from the sheet's own `[aria-current=\"page\"] { color: teal }`.\n  'data-[current]:text-primary',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-url`: 12px, `-0.015em`, underlined, going teal on hover. The underline is\n * the whole affordance — it is the one link here that sits inside running text, where a colour\n * change alone would not mark it.\n */\nexport const LINK_URL = [\n  'text-[12px] tracking-[-0.015em] text-foreground',\n  'underline decoration-1 underline-offset-[3px]',\n  'hover:text-primary hover:decoration-primary',\n].join(' ')\n\n/**\n * The sheet's `.ds-link-viewmore`: 16px, uppercase, in the accent — and the one link that *gains*\n * its underline on hover rather than losing it. It is a call to go and look at the rest, so it\n * wears the accent at rest and underlines itself when the pointer arrives.\n */\nexport const LINK_VIEWMORE = [\n  'text-[16px] tracking-[-0.01em] uppercase text-primary',\n  'no-underline',\n  'hover:underline hover:underline-offset-4',\n].join(' ')\n",
       "type": "registry:lib",
       "target": "@ui/pulse/link.ts"
     }
@@ -122,15 +122,17 @@
         "--sidebar-ring": "var(--primary)",
         "--radius": "0",
         "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+        "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+        "--duration-fast": "120ms",
+        "--duration-base": "160ms",
+        "--duration-slow": "200ms",
         "interpolate-size": "allow-keywords",
         "scrollbar-gutter": "stable",
         "text-wrap": "pretty",
         "overflow-wrap": "break-word",
         "font-synthesis": "none",
-        "color-scheme": "dark"
-      },
-      "*,\n*::before,\n*::after": {
-        "min-width": "0"
+        "color-scheme": "dark",
+        "overscroll-behavior-y": "none"
       },
       "[data-theme='dark'],\n.dark": {
         "color-scheme": "dark"
@@ -157,8 +159,10 @@
         "line-height": "1.5",
         "letter-spacing": "0",
         "-webkit-font-smoothing": "antialiased",
-        "-moz-osx-font-smoothing": "grayscale",
-        "text-rendering": "optimizeLegibility"
+        "-moz-osx-font-smoothing": "grayscale"
+      },
+      ":where(button, a, [role='button'])": {
+        "touch-action": "manipulation"
       },
       "::selection": {
         "background": "var(--primary)",

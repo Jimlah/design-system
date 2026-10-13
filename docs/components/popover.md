@@ -24,10 +24,10 @@ and by a click outside, but it traps nothing and hides nothing: the page behind 
 usable. Reach for `Modal` when the page is irrelevant to the decision and for this when it is the
 context.
 
-The surface is `popover.ts`'s, but **not `POPOVER` itself** — that one is `w-(--trigger-width)`, which
-is right for a select matched to its field and wrong for a panel with its own idea of how wide it
-should be. It is what `Menu`, `Select` and `ComboBox` are built on; this is the same surface with no
-list at all.
+The surface is `popover.ts`'s, but **not `POPOVER` itself** — that one holds a single scrolling list and
+is sized from the control it came from (`min-w-(--trigger-width)`, capped at the window), which is right
+for a menu over a button and wrong for a panel with its own idea of how wide it should be. It is what
+`Menu`, `Select` and `ComboBox` are built on; this is the same surface with no list at all.
 
 **Placement is a request, not an instruction.** `placement="bottom start"` opens downwards when there
 is room and flips when there is not, so the story asserts that React Aria reports where the panel

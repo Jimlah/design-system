@@ -16,7 +16,7 @@ a slot — so the compound form covers the whole control, not just its decoratio
 ```
 
 `Checkbox` mirrors it exactly, with `Checkbox.Group`, `.Indicator`, `.Text`, `.Label`,
-`.Hint` and `.FieldError`. The slots are explicit, like `Button.Icon` and `Button.Text`; a
+`.Hint` and `.Error`. The slots are explicit, like `Button.Icon` and `Button.Text`; a
 bare text child still renders, it just misses the label styling, so a missing slot degrades
 rather than disappears.
 
@@ -28,12 +28,28 @@ rather than disappears.
 | `.Text`              | —                              | One control's label                                           |
 | `.Label`             | `Label`                        | The group's legend — the same `.ds-field-legend` as a field   |
 | `.Hint`              | `Text`                         | `slot="description"`, so it is described-by                   |
-| `.FieldError`        | `FieldError`                   | Renders nothing while the group is valid                      |
+| `.Error`             | `FieldError`                   | Renders nothing while the group is valid                      |
 
 `isRequired` and `isInvalid` live on the **group**, not the control: a `Radio` outside one
 has no group state to read. React Aria splits validity two ways — the group gets
 `data-invalid` as a styling hook, while `aria-invalid` goes on each control, because the
 group is not a focusable thing a screen reader could land on.
+
+### Two things a control reports through its group, and not through itself
+
+**`.Error` and `.Hint` belong to the group, because the group is the field.** `Checkbox` is React
+Aria's deprecated `Checkbox`, which is a `<label>` and publishes no field context: no
+`FieldErrorContext` for a `FieldError` to render from, and no text context for `.Hint` to be wired
+into. Measured in the browser, a lone `<Checkbox isInvalid>` announces `aria-invalid="true"` and
+draws a red box while rendering **no message at all**, and its hint is a word beside it that the
+control is not described by. Inside a `Checkbox.Group` both work, because the group is the field
+that publishes them.
+
+**A `.Hint` or an `.Error` inside the control is also part of its accessible name.** React Aria
+renders those children inside the `<label>`, and a `<label>` element's text _is_ the name of the
+control inside it: measured, a checkbox carrying both introduced itself as
+`"ConsentApplies to every monitor.You must consent."`. React Aria's own docs put the description and
+the error _beside_ the button rather than inside it, which is where the group's two already are.
 
 ### State travels as custom properties, not group variants
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, userEvent, waitFor } from 'storybook/test'
 
-import { Switch, SwitchIndicator, SwitchText } from './Switch'
+import { Switch, SwitchError, SwitchIndicator, SwitchText } from './Switch'
 
 const meta = {
   component: Switch,
@@ -10,6 +10,7 @@ const meta = {
   subcomponents: {
     'Switch.Indicator': SwitchIndicator,
     'Switch.Text': SwitchText,
+    'Switch.Error': SwitchError,
   },
   tags: ['autodocs', 'ai-generated'],
   parameters: {
@@ -154,10 +155,11 @@ export const States: Story = {
       <Switch defaultSelected isInvalid>
         <Switch.Indicator />
         <Switch.Text>Invalid — accept to continue</Switch.Text>
+        <Switch.Error>Accept to continue</Switch.Error>
       </Switch>
     </div>
   ),
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     // Read-only is not disabled: it stays focusable and announced, it just cannot be
     // changed — and unlike a disabled switch it does not dim, because which side the
     // knob is on is the content.
@@ -191,6 +193,17 @@ export const States: Story = {
     await expect(getComputedStyle(invalidTrack).backgroundColor).toBe(
       'oklch(0.9198 0.1236 189.5)',
     )
+
+    // **A failed switch can now say what failed, and that is the half this control was missing.** Its
+    // edge already turned red above every other state, so the state was announced and styled and had
+    // nowhere to name itself. The message is reached through the **input's own `aria-describedby`**,
+    // which is also what a screen reader reads — a query that cannot land on the wrong node.
+    const describedBy = invalid.getAttribute('aria-describedby') ?? ''
+    const message = canvasElement.querySelector(
+      `#${CSS.escape(describedBy)}`,
+    ) as HTMLElement
+    await expect(message).toHaveTextContent('Accept to continue')
+    await expect(message).toHaveClass(/text-destructive/)
   },
 }
 
