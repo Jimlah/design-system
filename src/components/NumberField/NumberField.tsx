@@ -161,7 +161,8 @@ export interface NumberFieldHintProps extends AriaTextProps {
 }
 
 export interface NumberFieldFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -297,16 +298,13 @@ export function NumberFieldHint({
  */
 export function NumberFieldFieldError({
   className,
-  children,
   ...props
 }: NumberFieldFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

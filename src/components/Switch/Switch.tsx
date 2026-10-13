@@ -146,7 +146,8 @@ export interface SwitchTextProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 export interface SwitchErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -200,18 +201,12 @@ export function SwitchText({ className, children, ...props }: SwitchTextProps) {
  * Exported as `SwitchError` only so tooling can resolve it; consume the compound form
  * `Switch.Error`.
  */
-export function SwitchError({
-  className,
-  children,
-  ...props
-}: SwitchErrorProps) {
+export function SwitchError({ className, ...props }: SwitchErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

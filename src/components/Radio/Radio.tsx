@@ -138,7 +138,8 @@ export interface RadioHintProps extends AriaTextProps {
 }
 
 export interface RadioFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -222,18 +223,12 @@ export function RadioHint({ className, children, ...props }: RadioHintProps) {
  * Exported as `RadioFieldError` only so tooling can resolve it; consume the
  * compound form `Radio.Error`.
  */
-export function RadioFieldError({
-  className,
-  children,
-  ...props
-}: RadioFieldErrorProps) {
+export function RadioFieldError({ className, ...props }: RadioFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

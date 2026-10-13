@@ -97,7 +97,8 @@ export interface TextAreaHintProps extends AriaTextProps {
 }
 
 export interface TextAreaFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -169,16 +170,13 @@ export function TextAreaHint({
  */
 export function TextAreaFieldError({
   className,
-  children,
   ...props
 }: TextAreaFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

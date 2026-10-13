@@ -406,7 +406,8 @@ export interface SelectHintProps extends AriaTextProps {
 }
 
 export interface SelectFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -770,16 +771,13 @@ export function SelectHint({ className, children, ...props }: SelectHintProps) {
  */
 export function SelectFieldError({
   className,
-  children,
   ...props
 }: SelectFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

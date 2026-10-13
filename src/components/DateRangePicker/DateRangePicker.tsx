@@ -222,7 +222,8 @@ export interface DateRangePickerHintProps extends AriaTextProps {
 }
 
 export interface DateRangePickerFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -546,16 +547,13 @@ export function DateRangePickerHint({
  */
 export function DateRangePickerFieldError({
   className,
-  children,
   ...props
 }: DateRangePickerFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

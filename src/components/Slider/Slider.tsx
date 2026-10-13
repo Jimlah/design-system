@@ -100,7 +100,8 @@ export interface SliderFillProps extends Omit<
 }
 
 export interface SliderErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 export interface SliderThumbProps extends Omit<
@@ -454,11 +455,7 @@ export function SliderFill({
  * Exported as `SliderError` only so tooling can resolve it; consume the compound form
  * `Slider.Error`.
  */
-export function SliderError({
-  className,
-  children,
-  ...props
-}: SliderErrorProps) {
+export function SliderError({ className, ...props }: SliderErrorProps) {
   const validation = useContext(FieldValidationContext)
   return (
     <AriaFieldError
@@ -468,9 +465,7 @@ export function SliderError({
       data-slot="error"
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

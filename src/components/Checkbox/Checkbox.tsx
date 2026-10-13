@@ -216,7 +216,8 @@ export interface CheckboxHintProps extends AriaTextProps {
 }
 
 export interface CheckboxFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -319,16 +320,13 @@ export function CheckboxHint({
  */
 export function CheckboxFieldError({
   className,
-  children,
   ...props
 }: CheckboxFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 

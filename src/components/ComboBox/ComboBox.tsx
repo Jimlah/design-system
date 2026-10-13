@@ -300,7 +300,8 @@ export interface ComboBoxHintProps extends AriaTextProps {
 }
 
 export interface ComboBoxFieldErrorProps extends AriaFieldErrorProps {
-  children?: React.ReactNode
+  /** The message, or a function of the field's validation result. */
+  children?: AriaFieldErrorProps['children']
 }
 
 /**
@@ -592,16 +593,13 @@ export function ComboBoxHint({
  */
 export function ComboBoxFieldError({
   className,
-  children,
   ...props
 }: ComboBoxFieldErrorProps) {
   return (
     <AriaFieldError
       className={[ERROR, className].filter(Boolean).join(' ')}
       {...props}
-    >
-      {children}
-    </AriaFieldError>
+    />
   )
 }
 
