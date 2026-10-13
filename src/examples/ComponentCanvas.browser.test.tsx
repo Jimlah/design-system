@@ -360,6 +360,41 @@ test('reset restores the camera and leaves what a preview holds alone', async ()
   expect((input as HTMLInputElement).value).toBe('api.internal')
 })
 
+test('a camera move writes the transform and re-renders none of the previews', async () => {
+  // **The one performance contract this page has, and the reason the columns are memoized.** A drag
+  // changes the camera every frame, and the world holds every preview in the library — 292 of them,
+  // ~5,000 elements of React Aria. A commit that reached them re-rendered all of it sixty times a
+  // second; measured on this page that was 450ms a frame. Counting one preview's renders across a
+  // camera move is how it stays true: a timing assertion would only report it on a slow machine,
+  // and a render count is the same claim the memo makes.
+  const preview = CANVAS_CATEGORIES[0].groups[0].rows[0].previews[0]
+  const Preview = preview.Component
+  let renders = 0
+  preview.Component = () => {
+    renders += 1
+    return <Preview />
+  }
+  try {
+    await mountCanvas()
+    const root = document.querySelector<HTMLElement>(
+      '[data-slot="canvas"]',
+    ) as HTMLElement
+    root.focus()
+    const before = transform()
+    const rendersBefore = renders
+    // The probe has to be watching something: a counter that was never rendered would make the
+    // assertion below pass by saying nothing.
+    expect(rendersBefore).toBeGreaterThan(0)
+
+    await userEvent.keyboard('{ArrowRight}')
+    await vi.waitFor(() => expect(transform()).not.toBe(before))
+
+    expect(renders).toBe(rendersBefore)
+  } finally {
+    preview.Component = Preview
+  }
+})
+
 test('a preview link is held, a group link moves the camera, and neither navigates', async () => {
   const before = window.location.pathname
   await mountCanvas()
