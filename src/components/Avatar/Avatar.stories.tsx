@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/tanstack-react'
 import { expect, screen, userEvent, waitFor } from 'storybook/test'
 
-import { Avatar } from './Avatar'
+import { Card } from '../Card/Card'
+import { Avatar, AvatarGroup } from './Avatar'
 
 /** A real, loadable image with no network involved. */
 const IMAGE =
@@ -9,6 +10,9 @@ const IMAGE =
 
 const meta = {
   component: Avatar,
+  // The KEY is the name shown in the docs and manifest — use the compound form.
+  // The VALUE must be the named export; see the same rule in Button.stories.tsx.
+  subcomponents: { 'Avatar.Group': AvatarGroup },
   tags: ['autodocs', 'ai-generated'],
   parameters: {
     layout: 'centered',
@@ -199,3 +203,330 @@ export const Previewable: Story = {
     )
   },
 }
+
+/* ==========================================================================
+   Avatar.Group — several of them
+   ========================================================================== */
+
+/** The face boxes of one group, in the order they are stacked. */
+const faceBoxes = (group: HTMLElement) =>
+  [...group.querySelectorAll<HTMLElement>('[data-slot=avatar]')].map((node) =>
+    node.getBoundingClientRect(),
+  )
+
+/** How far each face steps past the one before it: the avatar's width less the overlap. */
+const step = (group: HTMLElement) => {
+  const boxes = faceBoxes(group)
+  return Math.round(boxes[1].left - boxes[0].left)
+}
+
+/**
+ * The colour of the ring that cuts a face out of the one behind it.
+ *
+ * **From the painted shadow, not from `--tw-ring-color`.** That property holds the token *expression* —
+ * `light-dark(oklch(100% 0 none), oklch(0% 0 none))` — because an unregistered custom property is not
+ * resolved at computed-value time. The box-shadow is, so the layer carrying the ring's 2px spread is what
+ * the browser is actually painting, and it is that colour which has to equal the surface's.
+ */
+const ringColour = (node: Element) =>
+  (
+    getComputedStyle(node)
+      .boxShadow.split(', ')
+      .find((layer) => layer.includes('2px')) ?? ''
+  )
+    .replace(' 0px 0px 0px 2px', '')
+    .trim()
+
+export const Group: Story = {
+  args: { alt: 'Ada Lovelace' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar.Group label="4 teammates">
+  <Avatar alt="Ada Lovelace" src="/ada.png" />
+  <Avatar alt="Grace Hopper" src="/grace.png" />
+  <Avatar alt="Karen Spärck Jones" />
+</Avatar.Group>`,
+      },
+    },
+  },
+  render: () => (
+    <Avatar.Group label="4 teammates">
+      {TEAM.map((name, index) => (
+        // The first has a picture and the rest have initials, which is what a real stack looks like —
+        // and both are the same box, so the ring and the overlap do not care which it is.
+        <Avatar key={name} alt={name} src={index === 0 ? IMAGE : undefined} />
+      ))}
+    </Avatar.Group>
+  ),
+  play: async ({ canvas, canvasElement }) => {
+    // **The group is a real `role="group"` with a name**, which is the whole of what React Aria's `Group`
+    // buys here: a screen reader says "4 teammates, group" and then the four names inside it.
+    const group = canvas.getByRole('group', { name: '4 teammates' })
+    await expect(group).toHaveAttribute('data-slot', 'avatar-group')
+
+    // Four faces, each still its own picture with its own name.
+    const faces = canvas.getAllByRole('img')
+    await expect(faces).toHaveLength(4)
+    await expect(
+      canvas.getByRole('img', { name: 'Grace Hopper' }),
+    ).toBeVisible()
+
+    // **The overlap, measured rather than asserted by class.** A quarter of a 24px avatar is covered, so
+    // the second face starts 18px along — and every size below moves that number with it.
+    await expect(step(group)).toBe(18)
+
+    // ...and the cut-out ring is the page the group is standing on, not a colour of its own.
+    await expect(ringColour(faces[0])).toBe(
+      getComputedStyle(document.body).backgroundColor,
+    )
+    // The ring follows the avatar's own radius, which this system squares off.
+    await expect(
+      parseFloat(getComputedStyle(faces[0]).borderTopLeftRadius),
+    ).toBe(0)
+
+    await expect(
+      canvasElement.querySelectorAll('[data-slot=avatar-group]'),
+    ).toHaveLength(1)
+  },
+}
+
+export const GroupSizes: Story = {
+  args: { alt: 'Ada Lovelace' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar.Group size="lg" label="3 teammates">…</Avatar.Group>
+<Avatar.Group size="sm">
+  <Avatar alt="Ada Lovelace" size="lg" />
+  <Avatar alt="Grace Hopper" />
+</Avatar.Group>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <Avatar.Group key={size} size={size} label={size}>
+          {TEAM.slice(0, 3).map((name) => (
+            <Avatar key={name} alt={name} />
+          ))}
+        </Avatar.Group>
+      ))}
+      {/* An avatar that names its own size is the exception, and it keeps it — a group sizes its
+          children by default, it does not overrule them. */}
+      <Avatar.Group size="sm" label="one of these is not like the others">
+        <Avatar alt="Ada Lovelace" size="lg" />
+        <Avatar alt="Grace Hopper" />
+      </Avatar.Group>
+    </div>
+  ),
+  // **Three sizes that are three sizes**, and three overlaps that follow them: the overlap is a quarter
+  // of the avatar, so 24px steps 18, 32 steps 24 and 40 steps 30.
+  play: async ({ canvas }) => {
+    const widths = ['sm', 'md', 'lg'].map(
+      (size) =>
+        canvas
+          .getByRole('group', { name: size })
+          .querySelector('[data-slot=avatar]') as HTMLElement,
+    )
+    await expect(
+      widths.map((node) => Math.round(node.getBoundingClientRect().width)),
+    ).toEqual([24, 32, 40])
+
+    const steps = ['sm', 'md', 'lg'].map((size) =>
+      step(canvas.getByRole('group', { name: size })),
+    )
+    await expect(steps).toEqual([18, 24, 30])
+
+    // The exception, checked: 40px inside a group that is handing out 24.
+    const mixed = canvas.getByRole('group', {
+      name: 'one of these is not like the others',
+    })
+    const own = [...mixed.querySelectorAll<HTMLElement>('[data-slot=avatar]')]
+    await expect(
+      own.map((node) => Math.round(node.getBoundingClientRect().width)),
+    ).toEqual([40, 24])
+  },
+}
+
+export const GroupLabel: Story = {
+  args: { alt: 'Ada Lovelace' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar.Group label="4 teammates">…</Avatar.Group>
+<Avatar.Group label="4 teammates" aria-label="People on this board">…</Avatar.Group>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      <Avatar.Group label="4 teammates">
+        {TEAM.map((name) => (
+          <Avatar key={name} alt={name} />
+        ))}
+      </Avatar.Group>
+      {/* `aria-label` is the caller's name and wins over the visible one, which is what a group whose
+          visible text is not a good name — a count, an abbreviation — needs. */}
+      <Avatar.Group label="4 teammates" aria-label="People on this board">
+        {TEAM.map((name) => (
+          <Avatar key={name} alt={name} />
+        ))}
+      </Avatar.Group>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // Found by its name, which is the label's own text: the label names the group rather than sitting
+    // beside it unconnected.
+    const named = canvas.getByRole('group', { name: '4 teammates' })
+    await expect(named).toHaveTextContent('4 teammates')
+    // ...and the name really came from that text, not from a hardcoded string.
+    const label = named.querySelector(
+      '[data-slot=avatar-group-label]',
+    ) as HTMLElement
+    await expect(label.id).not.toBe('')
+    await expect(named.getAttribute('aria-labelledby')).toBe(label.id)
+
+    // **The label sits after the stack, clear of it.** It is a child of the same flex row, so it is one
+    // class away from inheriting the overlap the faces wear — measured, and it did.
+    const faces = [...named.querySelectorAll<HTMLElement>('[data-slot=avatar]')]
+    const lastFace = faces.at(-1) as HTMLElement
+    await expect(
+      label.getBoundingClientRect().left >=
+        lastFace.getBoundingClientRect().right,
+    ).toBe(true)
+
+    const overridden = canvas.getByRole('group', {
+      name: 'People on this board',
+    })
+    await expect(overridden).toBeInTheDocument()
+    // The visible label is still there — it is overridden as a name, not hidden.
+    await expect(overridden).toHaveTextContent('4 teammates')
+  },
+}
+
+export const GroupOverflow: Story = {
+  args: { alt: 'Ada Lovelace' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar.Group label="5 teammates" max={3}>…</Avatar.Group>
+<Avatar.Group label="8 teammates" max={3} overflowCount={5}>…</Avatar.Group>`,
+      },
+    },
+  },
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      {/* Five faces, three of them shown. */}
+      <Avatar.Group label="5 teammates" max={3}>
+        {[...TEAM, 'Katherine Johnson'].map((name) => (
+          <Avatar key={name} alt={name} />
+        ))}
+      </Avatar.Group>
+      {/* Four faces and a set of five the page has not loaded: the counter says the caller's number
+          rather than counting the children, which is the case for any list that arrives a page at a
+          time. */}
+      <Avatar.Group label="8 teammates" max={3} overflowCount={5}>
+        {TEAM.map((name) => (
+          <Avatar key={name} alt={name} />
+        ))}
+      </Avatar.Group>
+      {/* A fragment is looked through rather than counted as one child — the same stack, written the
+          other way round. */}
+      <Avatar.Group label="fragment" max={2}>
+        <>
+          {[...TEAM, 'Katherine Johnson'].map((name) => (
+            <Avatar key={name} alt={name} />
+          ))}
+        </>
+      </Avatar.Group>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // **The faces are gone, not hidden**: three avatars in the DOM and a counter, and the two that were
+    // left out are nowhere in the accessibility tree either.
+    const trimmed = canvas.getByRole('group', { name: '5 teammates' })
+    await expect(trimmed.querySelectorAll('[data-slot=avatar]')).toHaveLength(3)
+    await expect(
+      trimmed.querySelector('[data-slot=avatar-group-overflow]'),
+    ).toHaveTextContent('+2')
+    await expect(
+      canvas.queryByRole('img', { name: 'Katherine Johnson' }),
+    ).not.toBeInTheDocument()
+
+    // The counter is named for what it means rather than for the characters it draws.
+    const counter = trimmed.querySelector(
+      '[data-slot=avatar-group-overflow]',
+    ) as HTMLElement
+    await expect(counter.getAttribute('aria-label')).toBe('2 more')
+    await expect(counter.getAttribute('role')).toBe('img')
+    // It is the avatar's own box, so the stack stays one height.
+    await expect(Math.round(counter.getBoundingClientRect().height)).toBe(24)
+
+    // The caller's number, when the children are not the whole group.
+    await expect(
+      canvas
+        .getByRole('group', { name: '8 teammates' })
+        .querySelector('[data-slot=avatar-group-overflow]'),
+    ).toHaveTextContent('+5')
+
+    // ...and the fragment was flattened: two faces shown, three counted.
+    const nested = canvas.getByRole('group', { name: 'fragment' })
+    await expect(nested.querySelectorAll('[data-slot=avatar]')).toHaveLength(2)
+    await expect(
+      nested.querySelector('[data-slot=avatar-group-overflow]'),
+    ).toHaveTextContent('+3')
+  },
+}
+
+export const GroupOnPanel: Story = {
+  args: { alt: 'Ada Lovelace' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<Avatar.Group label="3 on call" className="[--avatar-ring:var(--color-card)]">
+  …
+</Avatar.Group>`,
+      },
+    },
+  },
+  render: () => (
+    <Card className="w-80">
+      <Card.Header>
+        <Card.Title>On call</Card.Title>
+      </Card.Header>
+      <Card.Content>
+        {/* **The ring is the surface the stack stands on**, so on a panel it is the panel's colour and
+            not the page's — one custom property, declared by the caller, which is why this is possible
+            without a second component. */}
+        <Avatar.Group
+          label="3 on call"
+          className="[--avatar-ring:var(--color-card)]"
+        >
+          {TEAM.slice(0, 3).map((name) => (
+            <Avatar key={name} alt={name} />
+          ))}
+        </Avatar.Group>
+      </Card.Content>
+    </Card>
+  ),
+  play: async ({ canvas, canvasElement }) => {
+    const card = canvasElement.querySelector('[data-slot=card]') as HTMLElement
+    const face = canvas
+      .getByRole('group', { name: '3 on call' })
+      .querySelector('[data-slot=avatar]') as Element
+
+    // The panel's colour, and not the page's — which is the whole point of the property.
+    await expect(ringColour(face)).toBe(getComputedStyle(card).backgroundColor)
+    await expect(ringColour(face)).not.toBe(
+      getComputedStyle(document.body).backgroundColor,
+    )
+  },
+} /** Four teammates' names, and a fifth when a counter is the point. */
+const TEAM = [
+  'Ada Lovelace',
+  'Grace Hopper',
+  'Karen Spärck Jones',
+  'Mary Jackson',
+]

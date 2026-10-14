@@ -75,3 +75,48 @@ test('paints its fill from the real stylesheet, and an outline paints none', asy
     'rgba(0, 0, 0, 0)',
   )
 })
+
+test('an icon that names its own size keeps it, and one that does not tracks the label', async () => {
+  // **Three cases in one render, because the difference between them is the whole contract.** An icon
+  // slot has to size an icon nobody sized — the library's own stories put a bare `<svg>` in one — and it
+  // has to leave one alone when the caller says how big it is. It used to do only the first, and the
+  // second was invisible until it was measured: the dashboard's twenty icon buttons ask for `size-4`
+  // and every one of them rendered at 8px, the cap height of an 11px label, because the wrapper's own
+  // descendant rule outranks the child's class however the two are ordered.
+  const screen = await render(
+    <>
+      <Button size="sm">
+        <Button.Icon>
+          <svg viewBox="0 0 16 16" className="size-4" />
+        </Button.Icon>
+        <Button.Text>Sized</Button.Text>
+      </Button>
+      <Button size="sm">
+        <Button.Icon>
+          <svg viewBox="0 0 16 16" />
+        </Button.Icon>
+        <Button.Text>Bare small</Button.Text>
+      </Button>
+      <Button size="lg">
+        <Button.Icon>
+          <svg viewBox="0 0 16 16" />
+        </Button.Icon>
+        <Button.Text>Bare large</Button.Text>
+      </Button>
+    </>,
+  )
+
+  const height = (name: string) =>
+    (
+      screen
+        .getByRole('button', { name })
+        .element()
+        .querySelector('svg') as SVGElement
+    ).getBoundingClientRect().height
+
+  // The size the caller asked for, in the units the scale means: `size-4` is 1rem.
+  expect(Math.round(height('Sized'))).toBe(16)
+  // A bare icon tracks the label instead — smaller than a fixed one, and smaller at 11px than at 14px.
+  expect(height('Bare small')).toBeLessThan(16)
+  expect(height('Bare large')).toBeGreaterThan(height('Bare small'))
+})

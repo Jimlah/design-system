@@ -8,6 +8,7 @@ import {
 } from 'react'
 import type { Selection } from 'react-aria-components'
 
+import { ActionBar } from '../components/ActionBar/ActionBar'
 import { Avatar } from '../components/Avatar/Avatar'
 import { Button } from '../components/Button/Button'
 import { Menu } from '../components/Menu/Menu'
@@ -963,60 +964,38 @@ function LeadCard({
    ========================================================================== */
 
 /**
- * The bar that appears when rows are checked.
+ * What can be done to a selection — the page's own decision, handed to `ActionBar` as its children.
  *
- * It sits on the page rather than in the flow — a selection is a mode, and a mode that pushes the
- * table down as it appears is a mode that moves the thing you were reading. The surface is the
- * system's own card with a hairline rather than an inverted pill, and that is `Button`'s doing:
- * a label's colour comes from `--btn`, which every colour sets *on the button itself*, so a bar cannot
- * hand its own buttons the background colour without reaching into their recipe. The panel says the
- * same thing — this is a surface over the page, not part of it — without that.
+ * **The bar itself used to be written out here, and no longer is.** It was a local panel: absolutely
+ * positioned over the page, its own "Selected: 2" label, two separators and a Discard button. All of
+ * that is the component's now — the sentence, the clear control, the floating surface and the one tab
+ * stop the arrow keys walk — so what is left is the part that was always this page's: which actions
+ * this board offers a checked row. Its "Discard" is `ActionBar`'s clear control, unchanged in meaning.
  */
-function SelectionBar({
-  count,
-  onDiscard,
-  onAction,
-}: {
-  count: number
-  onDiscard: () => void
-  onAction: (id: string) => void
-}) {
+function SelectionActions({ onAction }: { onAction: (id: string) => void }) {
   return (
-    <div
-      data-slot="selection-bar"
-      className="pointer-events-none absolute inset-x-0 bottom-5 flex justify-center"
-    >
-      <div className="pointer-events-auto flex items-center gap-1 rounded-xl border border-border-strong bg-card p-1.5">
-        <span className="px-3 text-[11px] uppercase tracking-[0.04em] text-muted-foreground">
-          Selected: {count}
-        </span>
-        <Separator orientation="vertical" className="mx-1 h-6" />
-        {SELECTION_ACTIONS.map((action) => (
-          <Button
-            key={action.id}
-            variant="ghost"
-            color={action.id === 'delete' ? 'danger' : 'neutral'}
-            size="sm"
-            onPress={() => onAction(action.id)}
-          >
-            <Button.Icon>
-              {action.id === 'edit' ? (
-                <IconPencil className="size-4" />
-              ) : action.id === 'assign' ? (
-                <IconAssign className="size-4" />
-              ) : (
-                <IconTrash className="size-4" />
-              )}
-            </Button.Icon>
-            <Button.Text>{action.label}</Button.Text>
-          </Button>
-        ))}
-        <Separator orientation="vertical" className="mx-1 h-6" />
-        <Button variant="default" color="neutral" size="sm" onPress={onDiscard}>
-          <Button.Text>Discard</Button.Text>
+    <>
+      {SELECTION_ACTIONS.map((action) => (
+        <Button
+          key={action.id}
+          variant="ghost"
+          color={action.id === 'delete' ? 'danger' : 'neutral'}
+          size="sm"
+          onPress={() => onAction(action.id)}
+        >
+          <Button.Icon>
+            {action.id === 'edit' ? (
+              <IconPencil className="size-4" />
+            ) : action.id === 'assign' ? (
+              <IconAssign className="size-4" />
+            ) : (
+              <IconTrash className="size-4" />
+            )}
+          </Button.Icon>
+          <Button.Text>{action.label}</Button.Text>
         </Button>
-      </div>
-    </div>
+      ))}
+    </>
   )
 }
 
@@ -1061,13 +1040,23 @@ export function DashboardEmail({
   }
 
   return (
+    // **The page is the window, not a panel on one.** It used to be an inset card — `p-6` of page around
+    // a 96rem-wide, `border-strong`-edged box — which is the right frame for a screenshot of a dashboard
+    // and the wrong one for a dashboard. The sidebar is the window's left edge, the table scrolls in the
+    // window's own body, and the only thing the frame did here was spend 24px of every edge and cap the
+    // board at 1536px on the wide screens a board like this is actually read on.
+    //
+    // So the frame is gone rather than restyled: no padding, no max-width, no `mx-auto`, and no border
+    // either — a hairline that was an inset edge is a line drawn around the viewport once there is
+    // nothing behind it. The outer element is the window at `h-dvh` and the app fills it, which is also
+    // what keeps the one scroll region on the page inside the table rather than on the document.
     <div
       data-slot="dashboard-email"
-      className="relative min-h-dvh bg-muted p-6 text-foreground"
+      className="relative h-dvh overflow-hidden bg-background text-foreground"
     >
       <div
         data-slot="dashboard-app"
-        className="mx-auto flex h-[calc(100dvh-3rem)] max-w-[96rem] overflow-hidden rounded-xl border border-border-strong bg-background"
+        className="flex h-full w-full overflow-hidden bg-background"
       >
         <Sidebar />
 
@@ -1110,18 +1099,19 @@ export function DashboardEmail({
                   <IconBell className="size-4" />
                 </Button.Icon>
               </Button>
-              <span className="mx-2 flex items-center">
-                {TEAMMATES.map((name, index) => (
-                  <span key={name} className={cls(index > 0 && '-ms-3')}>
-                    <span className="block rounded-full ring-2 ring-background">
-                      <Avatar alt={name} size="sm" />
-                    </span>
-                  </span>
+              {/* **Four wrappers, a ring per face and a hardcoded "+5" were this stack's own
+                  version of `Avatar.Group`.** The overlap, the cut-out and the counter are the
+                  component's now: four loaded out of nine, so the counter says the caller's number
+                  rather than counting the four children it was given. */}
+              <Avatar.Group
+                aria-label="9 teammates"
+                overflowCount={5}
+                className="mx-2"
+              >
+                {TEAMMATES.map((name) => (
+                  <Avatar key={name} alt={name} />
                 ))}
-                <span className="-ms-3 grid size-8 place-items-center rounded-full bg-muted text-[11px] text-muted-foreground ring-2 ring-background">
-                  +5
-                </span>
-              </span>
+              </Avatar.Group>
               <Button variant="default" color="primary" size="sm">
                 <Button.Icon>
                   <IconShare className="size-4" />
@@ -1388,13 +1378,15 @@ export function DashboardEmail({
           </Tabs>
         </main>
 
-        {selected.size > 0 ? (
-          <SelectionBar
-            count={selected.size}
-            onDiscard={() => setSelected(new Set())}
-            onAction={runAction}
-          />
-        ) : null}
+        {/* The bar is the library's, and its own `0` is the whole condition: nothing selected renders
+            nothing, controls and all, so the page no longer asks. `onClearSelection` is a request — the
+            table owns the selection and answers it — which is why this is the one line of state here. */}
+        <ActionBar
+          selectedItemCount={selected.size}
+          onClearSelection={() => setSelected(new Set())}
+        >
+          <SelectionActions onAction={runAction} />
+        </ActionBar>
       </div>
 
       {/* A `Modal` is always mounted and knows whether it is open; the card inside it exists only

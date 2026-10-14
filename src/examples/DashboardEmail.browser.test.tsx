@@ -7,6 +7,7 @@ import {
   LEADS,
   ME,
   SCORE_SEGMENTS,
+  SELECTION_ACTIONS,
   formatDay,
   formatDelta,
   isOverdue,
@@ -269,11 +270,12 @@ test('a tab narrows the table, and the search narrows the view', async () => {
   )
 })
 
-test('checking a row raises the bar, and Discard takes it back down', async () => {
+test('checking a row raises the bar, and its clear control takes it back down', async () => {
   await renderPage()
 
   // Nothing is selected, so there is no bar — a mode that is on with nothing in it is a mode that lies.
-  expect(document.querySelector('[data-slot="selection-bar"]')).toBeNull()
+  // `ActionBar` answers that itself: at zero it renders nothing at all rather than an empty panel.
+  expect(document.querySelector('[data-slot="action-bar"]')).toBeNull()
 
   // React Aria's checkbox is a real input inside a label, so this is what a person actually ticks.
   const boxes = [
@@ -285,15 +287,30 @@ test('checking a row raises the bar, and Discard takes it back down', async () =
   await userEvent.click(boxes[0])
   await userEvent.click(boxes[1])
 
-  const bar = document.querySelector('[data-slot="selection-bar"]')
-  expect(bar?.textContent).toContain('Selected: 2')
+  const bar = document.querySelector('[data-slot="action-bar"]')
+  expect(bar).not.toBeNull()
+  // The count is the component's sentence now, not the page's — "Selected: 2" was the panel this page
+  // used to draw for itself.
+  expect(bar?.textContent).toContain('2 selected')
 
-  await userEvent.click(
-    [...(bar?.querySelectorAll('button') ?? [])].find((button) =>
-      button.textContent.includes('Discard'),
-    ) as HTMLElement,
-  )
-  expect(document.querySelector('[data-slot="selection-bar"]')).toBeNull()
+  // ...and the bar is a toolbar with a name, holding the three actions the page offers a checked row.
+  const toolbar = bar?.querySelector('[role="toolbar"]')
+  expect(toolbar?.getAttribute('aria-label')).toBe('Selection actions')
+  for (const label of SELECTION_ACTIONS.map((action) => action.label)) {
+    expect(toolbar?.textContent).toContain(label)
+  }
+
+  // **Clearing is proven by the rows, not by the bar going away.** The bar reports `onClearSelection`;
+  // whether anything was cleared is the table's answer, so both halves are read.
+  const clear = [...(bar?.querySelectorAll('button') ?? [])].find(
+    (button) => button.getAttribute('aria-label') === 'Clear selection',
+  ) as HTMLElement
+  await userEvent.click(clear)
+
+  await vi.waitFor(() => {
+    expect(document.querySelector('[data-slot="action-bar"]')).toBeNull()
+  })
+  expect([...boxes].filter((box) => box.checked).length).toBe(0)
 })
 
 test('a lead opens out of its row into a card, and the card opens into the record', async () => {

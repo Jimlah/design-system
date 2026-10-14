@@ -88,6 +88,8 @@ const CATEGORY_OF = {
   RangeCalendar: 'date',
   DatePicker: 'date',
   DateRangePicker: 'date',
+  TimePicker: 'date',
+  ActionBar: 'overlay',
   Modal: 'overlay',
   Sheet: 'overlay',
   Popover: 'overlay',
@@ -118,6 +120,7 @@ const CATEGORY_OF = {
   DotMap: 'chart',
   ProgressBar: 'feedback',
   Meter: 'feedback',
+  Skeleton: 'feedback',
 }
 
 /**

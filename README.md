@@ -93,7 +93,7 @@ project installs it instead of copying it out of this one.
 npx shadcn@latest registry add @pulse=https://jimlah.github.io/design-system/r/{name}.json
 npx shadcn@latest add @pulse/button     # one component, and everything it imports
 npx shadcn@latest add @pulse/text-field
-npx shadcn@latest add @pulse/pulse      # the whole library: 54 components and the theme
+npx shadcn@latest add @pulse/pulse      # the whole library: 57 components and the theme
 npx shadcn@latest add @pulse/theme      # the tokens and Overpass Mono on their own
 ```
 

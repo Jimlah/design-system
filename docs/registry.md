@@ -17,7 +17,7 @@ another project installs it with `npx shadcn add` instead of copying it out of t
 ```bash
 npx shadcn@latest registry add @pulse=https://jimlah.github.io/design-system/r/{name}.json
 npx shadcn@latest add @pulse/button     # one component, and everything it imports
-npx shadcn@latest add @pulse/pulse      # the whole library: 54 components and the theme
+npx shadcn@latest add @pulse/pulse      # the whole library: 57 components and the theme
 npx shadcn@latest add @pulse/theme      # the tokens and Overpass Mono on their own
 ```
 
@@ -35,12 +35,12 @@ In development, `npm run dev` serves the built registry at
 
 ## What is in it
 
-56 items: the `theme`, one `pulse` bundle, and one item per component.
+59 items: the `theme`, one `pulse` bundle, and one item per component.
 
 | Item                      | Type             | What it is                                                      |
 | ------------------------- | ---------------- | --------------------------------------------------------------- |
 | `theme`                   | `registry:theme` | The tokens, the reset they are drawn against, and Overpass Mono |
-| `pulse`                   | `registry:block` | All 54 components in one item, with the theme                   |
+| `pulse`                   | `registry:block` | All 57 components in one item, with the theme                   |
 | `button`, `text-field`, … | `registry:ui`    | One component, self-contained                                   |
 
 Item names are the kebab-case component names (`text-field`, `color-swatch-picker`), so
@@ -153,7 +153,7 @@ Against shadcn 4.21.4, in a scratch consumer whose `components.json` points `ali
 - `add <url>/r/theme.json`, `add <url>/r/text-field.json` and `add <url>/r/pulse.json` (64
   files) each completed, and `add @pulse/text-field` through a registered namespace wrote
   `pulse/TextField/TextField.tsx` and `pulse/field.ts`.
-- `list` and `search` against `/r/registry.json` reported all 56 items.
+- `list` and `search` against `/r/registry.json` reported every item in the catalogue.
 - `tsc --noEmit` over the installed tree was clean — which is what proves the relative imports
   survived the move.
 - Compiling the consumer's stylesheet with Tailwind v4 produced `.bg-primary`, `.text-muted-foreground`,

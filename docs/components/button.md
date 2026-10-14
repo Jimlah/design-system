@@ -9,15 +9,34 @@ The first component, and the one the whole system's state vocabulary came from.
 </Button>
 ```
 
-| Slot          | React Aria | Notes                                                      |
-| ------------- | ---------- | ---------------------------------------------------------- |
-| `Button`      | `Button`   | `variant` × `color` × `size`, plus `block` and `isPending` |
-| `Button.Icon` | —          | Decorative; `aria-hidden`, sizes in `cap`                  |
-| `Button.Text` | —          | The label; truncates rather than wrapping                  |
+| Slot          | React Aria | Notes                                                                            |
+| ------------- | ---------- | -------------------------------------------------------------------------------- |
+| `Button`      | `Button`   | `variant` × `color` × `size`, plus `block` and `isPending`                       |
+| `Button.Icon` | —          | Decorative; `aria-hidden`, sized in `cap` unless the icon names its own `size-*` |
+| `Button.Text` | —          | The label; truncates rather than wrapping                                        |
 
 `variant` is the _shape_ — `default`, `outline`, `ghost`, `text`, `icon` — and `color` is the
 _meaning_ — `primary`, `secondary`, `neutral`, `success`, `danger`. The two are separate because
 every combination is real: a ghost danger button is a row action that destroys something.
+
+## An icon is sized by its label — unless it names a size
+
+`Button.Icon` sizes its child in `cap`, the height of the font's capital letters, so one icon works
+at every `size` without a per-variant number. An icon that carries a `size-*` of its own keeps that
+instead:
+
+```tsx
+<Button.Icon>{trash}</Button.Icon>                      // 1cap — about 8px at sm, 10px at lg
+<Button.Icon><Trash className="size-4" /></Button.Icon>  // 16px, whatever the label does
+```
+
+**The second form is what an icon-only control needs**, because there is no label there for a cap to
+track: a 32px square with an 8px glyph is a smudge, not an icon. It is also the only form that works
+at all — `.parent > svg { height: 1cap }` outranks a plain `.size-4` on the child whatever order the
+two land in, so before the wrapper's rule grew its `:not([class*=size-])` the size passed to an icon
+was silently dead. Measured on `DashboardEmail`, whose twenty icon buttons asked for `size-4` and
+drew 8px glyphs. `Button.browser.test.tsx` holds both halves: a sized icon at 16px, and a bare one
+that tracks the label — smaller at 11px than at 14px.
 
 ## Loading keeps the box
 
