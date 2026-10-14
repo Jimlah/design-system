@@ -10,16 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as CanvasRouteImport } from './routes/canvas'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as DashboardEmailRouteImport } from './routes/dashboard-email'
 import { Route as ExamplesRouteImport } from './routes/examples'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ApiChatRouteImport } from './routes/api.chat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BoardRoute = BoardRouteImport.update({
@@ -52,73 +59,92 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
   '/board': typeof BoardRoute
   '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
   '/board': typeof BoardRoute
   '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
   '/board': typeof BoardRoute
   '/canvas': typeof CanvasRoute
   '/create': typeof CreateRoute
   '/dashboard-email': typeof DashboardEmailRoute
   '/examples': typeof ExamplesRoute
   '/login': typeof LoginRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/assistant'
     | '/board'
     | '/canvas'
     | '/create'
     | '/dashboard-email'
     | '/examples'
     | '/login'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/assistant'
     | '/board'
     | '/canvas'
     | '/create'
     | '/dashboard-email'
     | '/examples'
     | '/login'
+    | '/api/chat'
   id:
     | '__root__'
     | '/'
+    | '/assistant'
     | '/board'
     | '/canvas'
     | '/create'
     | '/dashboard-email'
     | '/examples'
     | '/login'
+    | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistantRoute: typeof AssistantRoute
   BoardRoute: typeof BoardRoute
   CanvasRoute: typeof CanvasRoute
   CreateRoute: typeof CreateRoute
   DashboardEmailRoute: typeof DashboardEmailRoute
   ExamplesRoute: typeof ExamplesRoute
   LoginRoute: typeof LoginRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/board': {
@@ -172,17 +205,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistantRoute: AssistantRoute,
   BoardRoute: BoardRoute,
   CanvasRoute: CanvasRoute,
   CreateRoute: CreateRoute,
   DashboardEmailRoute: DashboardEmailRoute,
   ExamplesRoute: ExamplesRoute,
   LoginRoute: LoginRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

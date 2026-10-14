@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/ai": "^0.69.0",
+    "@tanstack/ai-openai": "^0.30.0",
+    "@tanstack/ai-react": "^0.30.4",
     "@tanstack/react-devtools": "0.10.13",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-router": "1.170.42",
@@ -31,7 +34,8 @@
     "react": "^19.2.0",
     "react-aria-components": "^1.22.1",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "latest",

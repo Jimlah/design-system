@@ -38,6 +38,10 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jimlah.github.io/design-system/assistant/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://jimlah.github.io/design-system/examples/</loc>
     <priority>0.6</priority>
   </url>

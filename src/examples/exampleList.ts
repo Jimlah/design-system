@@ -39,6 +39,13 @@ export const EXAMPLES: Example[] = [
     shows: ['Table', 'Tabs', 'Nav', 'Modal', 'Menu', 'Sparkline', 'Avatar'],
   },
   {
+    path: 'assistant',
+    title: 'Assistant',
+    summary:
+      'A conversation streamed into these components, with one tool whose result is drawn as a chart and a row of chips, and a panel that decides where the requests go.',
+    shows: ['BarChart', 'TagGroup', 'Sheet', 'TextArea', 'Skeleton'],
+  },
+  {
     path: 'board',
     title: 'Task board',
     summary:
