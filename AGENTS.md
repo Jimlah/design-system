@@ -638,6 +638,8 @@ rule's own options, next to the requirement it excepts:
     DatePicker: ['Input', 'Button'],
     // Same pair, same reason: a range picker without its `Button` cannot open a calendar.
     DateRangePicker: ['Input', 'Button'],
+    // And again for the wheel: a time picker without its `Button` has a panel it cannot open.
+    TimePicker: ['Input', 'Button'],
   },
   // When *every* listed member is present, the container is required and they must be inside it.
   groups: {
@@ -648,6 +650,7 @@ rule's own options, next to the requirement it excepts:
     NumberField: { container: 'Group', members: ['Input', 'Counter'] },
     DatePicker: { container: 'Group', members: ['Input', 'Button'] },
     DateRangePicker: { container: 'Group', members: ['Input', 'Button'] },
+    TimePicker: { container: 'Group', members: ['Input', 'Button'] },
   },
   ignore: {
     // `Table.Selection`'s checkbox: the row is its label, so it has an `Indicator` and no `Text`.
@@ -772,6 +775,7 @@ on, and the mistakes that were already made there, so they are not made again.
 
 | Component               | Doc                                                                    | What it is                                                                                                        |
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `ActionBar`             | [actionbar.md](./docs/components/actionbar.md)                         | The actions for what is selected — a bar that arrives when rows are chosen and goes away when nothing is.         |
 | `Accordion`             | [accordion.md](./docs/components/accordion.md)                         | The sheet has no accordion in it — the second component here with nothing to copy, after the date picker — so th… |
 | `Avatar`                | [avatar.md](./docs/components/avatar.md)                               | Who something belongs to. Invented — the sheet has nothing person-shaped.                                         |
 | `BarChart`              | [barchart.md](./docs/components/barchart.md)                           | A histogram with one bar in the accent. From the replica's `drawBars`.                                            |
@@ -807,6 +811,7 @@ on, and the mistakes that were already made there, so they are not made again.
 | `Separator`             | [separator.md](./docs/components/separator.md)                         | The sheet's five dividers, which is why there are five.                                                           |
 | `SharedElement`         | [sharedelement.md](./docs/components/sharedelement.md)                 | An element that animates between parents when it moves.                                                           |
 | `Sheet`                 | [sheet.md](./docs/components/sheet.md)                                 | A panel that slides in from an edge — a task's details without leaving the page.                                  |
+| `Skeleton`              | [skeleton.md](./docs/components/skeleton.md)                           | A placeholder that keeps the layout of the content it stands in for.                                              |
 | `Slider`                | [slider.md](./docs/components/slider.md)                               | A value chosen by dragging a handle along a rail.                                                                 |
 | `Sparkline`             | [sparkline.md](./docs/components/sparkline.md)                         | A series over time in a table cell. No axes, from the replica's `drawSpark`.                                      |
 | `Switch`                | [switch.md](./docs/components/switch.md)                               | The sheet's .ds-switch.                                                                                           |
@@ -816,6 +821,7 @@ on, and the mistakes that were already made there, so they are not made again.
 | `TextArea`              | [textarea.md](./docs/components/textarea.md)                           | The sheet's .ds-textarea: the field anatomy with a control that takes more than one line.                         |
 | `TextField`             | [textfield.md](./docs/components/textfield.md)                         | The second component, and the anatomy the rest of the form controls reuse — textarea, select, checkbox and radio… |
 | `TimeField`             | [timefield.md](./docs/components/timefield.md)                         | A time typed into a field — DateField's sibling.                                                                  |
+| `TimePicker`            | [timepicker.md](./docs/components/timepicker.md)                       | A time, typed or chosen — TimeField with a wheel behind a trigger, drawn for you and left open while the hour, …  |
 | `Toast`                 | [toast.md](./docs/components/toast.md)                                 | The sheet has no toast either — the third component here with nothing to copy, after the date picker and the acc… |
 | `ToggleButton`          | [togglebutton.md](./docs/components/togglebutton.md)                   | A button that stays down.                                                                                         |
 | `ToggleButtonGroup`     | [togglebuttongroup.md](./docs/components/togglebuttongroup.md)         | A row of buttons where one — or several — is on. A segmented control.                                             |

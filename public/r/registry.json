@@ -168,7 +168,7 @@
       "name": "pulse",
       "type": "registry:block",
       "title": "Pulse - every component",
-      "description": "The whole Pulse library in one item: all 55 components and the theme they are drawn in.",
+      "description": "The whole Pulse library in one item: all 58 components and the theme they are drawn in.",
       "categories": [
         "library"
       ],
@@ -331,6 +331,11 @@
           "path": "src/components/Accordion/Accordion.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/Accordion/Accordion.tsx"
+        },
+        {
+          "path": "src/components/ActionBar/ActionBar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/ActionBar/ActionBar.tsx"
         },
         {
           "path": "src/components/Avatar/Avatar.tsx",
@@ -523,6 +528,11 @@
           "target": "@ui/pulse/Sheet/Sheet.tsx"
         },
         {
+          "path": "src/components/Skeleton/Skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Skeleton/Skeleton.tsx"
+        },
+        {
           "path": "src/components/Slider/Slider.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/Slider/Slider.tsx"
@@ -566,6 +576,11 @@
           "path": "src/components/TimeField/TimeField.tsx",
           "type": "registry:ui",
           "target": "@ui/pulse/TimeField/TimeField.tsx"
+        },
+        {
+          "path": "src/components/TimePicker/TimePicker.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/TimePicker/TimePicker.tsx"
         },
         {
           "path": "src/components/Toast/Toast.tsx",
@@ -824,6 +839,180 @@
       ]
     },
     {
+      "name": "action-bar",
+      "type": "registry:ui",
+      "title": "ActionBar",
+      "description": "The actions for what is selected — a bar that arrives when rows are chosen and leaves when nothing is. React Aria has no ActionBar, so it is built here out of the two things that do exist: React Aria's Toolbar, which makes the bar one tab stop, and the sheet's floating surface, which the popover, the sheet and the toast already share.",
+      "categories": [
+        "overlay"
+      ],
+      "dependencies": [
+        "react-aria-components@^1.22.1"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-destructive-foreground": "var(--destructive-foreground)",
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-success-foreground": "var(--success-foreground)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "color-chart-1": "var(--chart-1)",
+          "color-chart-2": "var(--chart-2)",
+          "color-chart-3": "var(--chart-3)",
+          "color-chart-4": "var(--chart-4)",
+          "color-chart-5": "var(--chart-5)",
+          "color-sidebar": "var(--sidebar)",
+          "color-sidebar-foreground": "var(--sidebar-foreground)",
+          "color-sidebar-primary": "var(--sidebar-primary)",
+          "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+          "color-sidebar-accent": "var(--sidebar-accent)",
+          "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+          "color-sidebar-border": "var(--sidebar-border)",
+          "color-sidebar-ring": "var(--sidebar-ring)",
+          "color-border-strong": "var(--border-strong)",
+          "color-border-soft": "var(--border-soft)",
+          "color-ink": "var(--ink)",
+          "font-mono": "var(--type-mono)",
+          "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "radius-sm": "calc(var(--radius) * 0.6)",
+          "radius-md": "calc(var(--radius) * 0.8)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) * 1.4)",
+          "radius-2xl": "calc(var(--radius) * 1.8)",
+          "radius-3xl": "calc(var(--radius) * 2.2)",
+          "radius-4xl": "calc(var(--radius) * 2.6)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          ":root": {
+            "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+            "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+            "--card-foreground": "var(--foreground)",
+            "--popover": "var(--card)",
+            "--popover-foreground": "var(--foreground)",
+            "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+            "--primary-foreground": "var(--ink)",
+            "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+            "--secondary-foreground": "var(--ink)",
+            "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+            "--destructive-foreground": "var(--ink)",
+            "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+            "--warning-foreground": "var(--ink)",
+            "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+            "--success-foreground": "var(--ink)",
+            "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+            "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+            "--accent": "var(--muted)",
+            "--accent-foreground": "var(--foreground)",
+            "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+            "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+            "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+            "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+            "--ring": "var(--primary)",
+            "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+            "--chart-2": "var(--primary)",
+            "--chart-3": "var(--warning)",
+            "--chart-4": "var(--success)",
+            "--chart-5": "var(--destructive)",
+            "--sidebar": "var(--card)",
+            "--sidebar-foreground": "var(--foreground)",
+            "--sidebar-primary": "var(--primary)",
+            "--sidebar-primary-foreground": "var(--ink)",
+            "--sidebar-accent": "var(--muted)",
+            "--sidebar-accent-foreground": "var(--foreground)",
+            "--sidebar-border": "var(--border-soft)",
+            "--sidebar-ring": "var(--primary)",
+            "--radius": "0",
+            "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+            "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+            "--duration-fast": "120ms",
+            "--duration-base": "160ms",
+            "--duration-slow": "200ms",
+            "interpolate-size": "allow-keywords",
+            "scrollbar-gutter": "stable",
+            "text-wrap": "pretty",
+            "overflow-wrap": "break-word",
+            "font-synthesis": "none",
+            "color-scheme": "dark",
+            "overscroll-behavior-y": "none"
+          },
+          "[data-theme='dark'],\n.dark": {
+            "color-scheme": "dark"
+          },
+          "[data-theme='light']": {
+            "color-scheme": "light"
+          },
+          "[data-theme='system']": {
+            "color-scheme": "light dark"
+          },
+          "h1,\nh2,\nh3,\nh4": {
+            "text-wrap": "balance"
+          },
+          "input,\ntextarea,\nselect": {
+            "font-size": "max(16px, 1rem)"
+          },
+          "body": {
+            "margin": "0",
+            "min-height": "100svh",
+            "background": "var(--background)",
+            "color": "var(--foreground)",
+            "font-family": "var(--font-mono)",
+            "font-size": "14px",
+            "line-height": "1.5",
+            "letter-spacing": "0",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale"
+          },
+          ":where(button, a, [role='button'])": {
+            "touch-action": "manipulation"
+          },
+          "::selection": {
+            "background": "var(--primary)",
+            "color": "var(--ink)"
+          }
+        }
+      },
+      "docs": "The actions for what is selected — a bar that arrives when rows are chosen and leaves when nothing\nis. React Aria has no `ActionBar`, so it is built here out of the two things that do exist: React\nAria's `Toolbar`, which makes the bar one tab stop, and the sheet's floating surface, which the\npopover, the sheet and the toast already share.\n\n```tsx\nconst [selected, setSelected] = useState<Selection>(new Set(['fra1', 'iad1']))\n\n<Table\n  aria-label=\"Monitors\"\n  selectionMode=\"multiple\"\n  selectedKeys={selected}\n  onSelectionChange={setSelected}\n>\n  …\n</Table>\n\n<ActionBar\n  selectedItemCount={selected === 'all' ? 'all' : selected.size}\n  onClearSelection={() => setSelected(new Set())}\n>\n  <Button size=\"sm\" variant=\"ghost\" color=\"neutral\">\n    Restart\n  </Button>\n  <Button size=\"sm\" variant=\"ghost\" color=\"danger\">\n    Take down\n  </Button>\n</ActionBar>\n```\n\n| Prop                | Type              | Notes                                                             |\n| ------------------- | ----------------- | ----------------------------------------------------------------- |\n| `selectedItemCount` | `number \\| 'all'` | `0` renders nothing; `'all'` renders \"All selected\"               |\n| `onClearSelection`  | `() => void`      | The clear button, and Escape while the bar has focus              |\n| `isEmphasized`      | `boolean`         | The accent on the bar's boundary and its count, on by default off |\n| `aria-label`        | `string`          | Names the toolbar. Defaults to \"Selection actions\"                |\n| `className`         | `string`          | Appended to the surface's own list                                |\n| `children`          | `ReactNode`       | The actions — `Button`s, one per thing that can be done to them   |\n\n**It is a `role=\"toolbar\"` with a name**, not a `div` with buttons in it, and that is the whole of what\nReact Aria adds: the bar is **one tab stop** and the arrow keys walk it, so four actions cost a\nkeyboard user one press of Tab rather than four. The name is a prop rather than a fixed string because\na page can have more than one bar — a table's and a chart's — and \"Selection actions\" twice tells a\nscreen reader nothing about which is which.\n\n**It is not `Toolbar` with a different class list.** `Toolbar` is `flex items-center gap-1` on a\n`rounded-md` surface with a `p-1` inset; this is a much larger bar on a `rounded-xl` floating panel.\nAppending one class list to the other would leave two radii, two paddings and two sets of gaps on one\nelement, and which of each wins is decided by the order Tailwind emits them rather than the order they\nare written — so the two components share the primitive and not the recipe.\n\n### The count is the bar's, the selection is not\n\n`selectedItemCount` and `onClearSelection` are React Spectrum's own pair, and they are what a design\nsystem can honestly publish: **the bar reflects a selection, it does not own one.** The collection\nowns it — React Aria's `Table`, `GridList` and `Tree` all report theirs through\n`onSelectionChange` — and a bar holding its own copy would be a second source of truth for the same\nfact, and the one that goes stale first.\n\nThat makes `onClearSelection` a **request**, exactly as `TagGroup`'s `onRemove` is: it says what the\nuser asked for and leaves the collection to do it. The consequence is a testing rule rather than a\nnaming one — clearing is only proven by the rows being unchecked, never by the callback having been\ncalled, which is the mistake `TagGroup` already made once. `ActionBar.browser.test.tsx` asserts both\nhalves.\n\n`'all'` is in the union because \"412 selected\" and \"everything selected\" are different facts about a\nfilter, and only the caller knows which one it has — a table that has selected every row _of what\nmatches_ is not a table with 412 rows chosen, and the wording should not pretend otherwise.\n\nThe count is a `role=\"status\"` live region. The bar appearing is otherwise a purely visual event:\nwithout it, a keyboard user who has just chosen a row is told nothing at all.\n\n### Escape leaves selection mode, and only from inside the bar\n\nReact Spectrum scopes that key to the bar's own element and so does this, for a reason worth stating:\nthe selection belongs to a table the reader may be scrolled away from, so a key that empties it from\nanywhere on the page throws work away with no visible source. Inside the bar, Escape is the way out of\nselection mode — it is the same contract the reference has.\n\n**And it is the key React Aria's own collections already answer.** `useSelectableCollection` defaults\n`escapeKeyBehavior` to `'clearSelection'`, so a table or a grid list clears its own selection on\nEscape with the bar nowhere near it — measured here rather than read off: a click on a row followed by\nEscape empties the selection with focus still on the row. The bar is therefore not inventing a key; it\nis saying the same thing in the second place a keyboard user ends up. That is also why the browser test\ncontrasts the bar with a page _button_ rather than with the table: a table would have answered on its\nown, and the test would have proven React Aria's behaviour while claiming the bar's.\n\n### `isEmphasized` is the accent boundary, not a repaint of everything inside\n\nS2's emphasized bar flips to a high-contrast container and asks every button inside it to render in a\nstatic colour — \"the container decides how its controls look\". That mechanism does not exist in this\nsystem: every control sets its own `--btn` and derives its hover, pressed and disabled states from it,\nso a container that repainted its children would leave a ghost button's accent label on an accent fill\nand read as nothing at all. Emphasis here is therefore the accent on the bar's **own** boundary and\ncount: it says which bar is the live one without taking a single decision away from the controls in\nit.\n\nThe class is a `data-[emphasized]:` variant rather than a second `border-*` utility, and that is not\ncosmetic. The surface already declares `border-border-strong`; two border-colour utilities on one\nelement resolve by the order Tailwind emits them in the compiled stylesheet, so a component that looks\nright in the source can render in the wrong colour and nothing in the file will show it. The attribute\nselector outranks the plain utility whatever the order. The `Emphasized` story compares the bar's\nboundary with the accent **as painted on a probe element in the same story**, so the assertion holds in\neither theme and fails the moment the variant stops outranking the surface.\n\n### What is deliberately not here\n\n- **No `scrollRef`, and none of the container arithmetic that goes with it.** In Spectrum it positions\n  the bar inside a collection's own scroll container and offsets it by that container's scrollbar\n  width — and returns an `actionBarHeight` so the collection can reserve room for it. This library's\n  collections are ordinary elements the caller composes, so there is no such container to measure. The\n  bar is `fixed` to the viewport, which is where a bar over a page wants to be; a page whose last row\n  must stay clickable wants a little bottom padding of its own.\n- **No exit animation.** The entry is the shared mount animation in `styles.css`, keyed on\n  `data-slot=\"action-bar\"` — the same one every panel gets — and it respects\n  `prefers-reduced-motion` like the rest. The exit has no hook to hang off: `useExitAnimation` is\n  private to React Spectrum, and holding a bar with nothing selected mounted for 160ms to fade it out\n  would be a state machine for polish.\n- **The two sentences are English**, like `TagGroup`'s \"Remove\" and `Toast`'s \"Dismiss\". The count is\n  the one string that has to agree with `selectedItemCount`, so it stays the component's; a system\n  that needs another language needs it in the other three places too.\n\n### Where the tests are, and why they are split\n\nThe states are stories: `Hidden` is the control for the bar existing at all, `AllSelected` is the\n`'all'` wording, `Emphasized` is the variant winning, and `Keyboard` is the arrow keys walking the\nbar and staying inside it.\n\n**`Default` carries no `play` at all**, because a `play` runs when a story is _viewed_: one that chose\nrows and then cleared them would be a machine working the same table the reader opened, and it would\nleave them on a page with no bar to try. What that story demonstrates is covered in\n`ActionBar.browser.test.tsx`, where nothing runs unless it is asked to — choosing a row brings the bar\nup with the count that row implies, the header's select-all reads \"All selected\", clearing is proven\nby the rows and not by the request, and Escape clears from inside the bar while leaving the page\noutside it alone. The arrangement, and the reason for it, is the one `Form.browser.test.tsx` records.",
+      "files": [
+        {
+          "path": "src/components/ActionBar/ActionBar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/ActionBar/ActionBar.tsx"
+        },
+        {
+          "path": "src/components/Button/Button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Button/Button.tsx"
+        },
+        {
+          "path": "src/components/popover.ts",
+          "type": "registry:lib",
+          "target": "@ui/pulse/popover.ts"
+        }
+      ]
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
@@ -978,7 +1167,7 @@
           }
         }
       },
-      "docs": "Who something belongs to — a monitor's owner, an alert's assignee — as a picture or as initials.\n\n```tsx\n<Avatar alt=\"Ada Lovelace\" src=\"/ada.png\" />\n<Avatar alt=\"Ada Lovelace\" />          // initials, when there is no picture\n<Avatar alt=\"fra1\" color=\"primary\" />  // a machine's name works the same way\n```\n\n| prop            | default   | notes                                                  |\n| --------------- | --------- | ------------------------------------------------------ |\n| `alt`           | —         | required; a **name**, and it becomes the initials      |\n| `src`           | —         | omit it, or let it fail, and the initials are used     |\n| `size`          | `md`      | `sm` 24px, `md` 32px, `lg` 40px                        |\n| `color`         | `neutral` | `Button`'s five                                        |\n| `isPreviewable` | `false`   | opens the avatar large in a modal; it becomes a button |\n\n## The fourth component with nothing to copy\n\n`pulse-replica/` has no avatar, no user chip and nothing person-shaped at all — after the date picker, the\naccordion and the toast, this is the fourth component here invented rather than replicated. So every\ndecision comes from the system's own language:\n\n- **Square by default, and a circle never.** The sheet squares off its controls and makes exactly two\n  exceptions, the checkbox's 2px and the radio's circle; a round avatar would be a **third**, so the box\n  wears the control step of the radius scale — `rounded-md`, which is `0` in the sheet and a soft square\n  under a theme. It is the one place a designer expects a circle, which is why it is stated rather than\n  left to look like an oversight.\n- **A fill carrying `ink`**, like every other filled control: black on the luminous dark-theme accents,\n  white on the deep light-theme ones. The five colours are literally `Button`'s table, so an avatar cannot\n  drift away from the palette it sits beside.\n- **Mono, uppercase, letterspaced initials** — the face every other label here wears.\n\n## Initials are derived, and the edges are checked\n\nThe first letter of the first and last words, or the first two letters of a single word:\n\n| `alt`             | initials |\n| ----------------- | -------- |\n| `Ada Lovelace`    | `AL`     |\n| `Ada B. Lovelace` | `AL`     |\n| `fra1`            | `FR`     |\n| `\"  \"`            | `?`      |\n\nA middle name does not change it, because the surname is what distinguishes two Adas. A name with no letters\nat all still has to render something, so it gets `?` rather than an empty box — the one case where the\nfallback invents rather than derives.\n\nA generic silhouette was the alternative and was rejected: it says \"somebody\", and in a monitoring system\n_which_ somebody is the entire content of the cell.\n\n## A broken image falls back to initials, not to nothing\n\n`onError` swaps the `<img>` for the initials. This is not an edge case — an avatar URL that 404s, a service\nwith no picture, a directory that has not synced — it is the state a real dashboard spends most of its life\nin, and the failure mode of not handling it is an empty box. `BrokenImage` is a story with a source that\ncannot load, and it asserts the initials appear and the `<img>` is gone.\n\n## The name is announced once\n\nThe wrapper is `role=\"img\"` with `aria-label={alt}` and the inner `<img>` is `alt=\"\"`. Giving both a name\nannounces the same person twice; giving only the image one leaves the initials case — the majority case —\nwith no name at all.\n\nThe `Default` story asserts the picture **actually arrived** by checking `naturalWidth`: an `<img>` in the\nDOM proves nothing on its own, because a 404 leaves one behind.\n\n## `isPreviewable` changes the element, not the styling\n\n```tsx\n<Avatar alt=\"Ada Lovelace\" src=\"/ada.png\" isPreviewable />\n```\n\nOff — the default — this is a `<span role=\"img\" aria-label>`, a picture the tab order correctly skips. On, it\nis a **real `<button>`** that opens the avatar at 224px in a `Modal`, because a picture that answers a click\nhas to be reachable by keyboard and announced as something you can press. It is `react-aria-components`'\nown `Button` rather than this system's: the styled one brings a fill, a size and a padding, and this element\nis an avatar that happens to be pressable.\n\nTwo consequences worth stating:\n\n- **The accessible name changes from `alt` to `Preview {alt}`.** The name alone would not say what pressing\n  it does. The initials stay `aria-hidden` either way, so the name is announced once.\n- **The tab order changes.** An avatar in a list or a table cell is decoration; making every one of them a\n  tab stop is why this is opt-in rather than automatic.\n\nThe modal's title is the `alt`, so the dialog is announced by the name it is showing. `Previewable` asserts\nall of it: that the element is a `BUTTON`, that no dialog exists until it is pressed, that the open dialog's\naccessible name is the name, that the preview measures over 200px, that the picture decoded, and that\nclosing puts it away.",
+      "docs": "Who something belongs to — a monitor's owner, an alert's assignee — as a picture or as initials.\n\n```tsx\n<Avatar alt=\"Ada Lovelace\" src=\"/ada.png\" />\n<Avatar alt=\"Ada Lovelace\" />          // initials, when there is no picture\n<Avatar alt=\"fra1\" color=\"primary\" />  // a machine's name works the same way\n```\n\n| prop            | default   | notes                                                  |\n| --------------- | --------- | ------------------------------------------------------ |\n| `alt`           | —         | required; a **name**, and it becomes the initials      |\n| `src`           | —         | omit it, or let it fail, and the initials are used     |\n| `size`          | `md`      | `sm` 24px, `md` 32px, `lg` 40px                        |\n| `color`         | `neutral` | `Button`'s five                                        |\n| `isPreviewable` | `false`   | opens the avatar large in a modal; it becomes a button |\n\n## `Avatar.Group` — several of them\n\n```tsx\n<Avatar.Group label=\"4 teammates\">\n  <Avatar alt=\"Ada Lovelace\" src=\"/ada.png\" />\n  <Avatar alt=\"Grace Hopper\" />\n  <Avatar alt=\"Karen Spärck Jones\" />\n</Avatar.Group>\n```\n\n| prop            | default | notes                                                            |\n| --------------- | ------- | ---------------------------------------------------------------- |\n| `children`      | —       | the avatars; the ring and the overlap apply to direct children   |\n| `size`          | `sm`    | `sm` 24px, `md` 32px, `lg` 40px — handed to every avatar inside  |\n| `label`         | —       | text after the stack; **also the group's accessible name**       |\n| `max`           | —       | how many to show before the rest are counted as `+N`             |\n| `overflowCount` | —       | what the counter says, when the children are not the whole group |\n| `aria-label`    | —       | names the group outright, overriding `label`                     |\n\n### It is `Avatar.Group`, not an `AvatarGroup`\n\n**It is not a component that happens to contain avatars — it is what several avatars _are_.** The size it\ntakes, the box it draws, the name it carries and the colour it fills with are all `Avatar`'s, once per\nface, and the compound form is what says so: a reader who has `Avatar` has `Avatar.Group`. That is the\nsame call `Button.Icon` and `Toolbar.Group` make, and it keeps the library's index of components a list\nof things rather than a list of arrangements.\n\n### The faces are one object, and the ring is what says so\n\nEach avatar covers a **quarter** of the one before it — 18px steps for `sm`, 24 for `md`, 30 for `lg` —\nand is cut out of it by a 2px ring in the surface the stack is standing on:\n\n```tsx\n<Avatar.Group label=\"3 on call\" className=\"[--avatar-ring:var(--color-card)]\">\n```\n\n**That ring is the whole trick.** Without it the overlapping faces merge into a smear; with the ring in the\nwrong colour, it draws a line around a stack that is sitting on something else. `--avatar-ring` is declared\non the group and defaults to the page, so a stack inside a panel moves it with one class — the same\nmechanism `Button`'s colours use, and the reason it is a property rather than a prop.\n\nThe ring follows the element's own radius, which is the avatar's `rounded-md`: this system squares\neverything, and a circular cut-out around a square face is what a hand-rolled stack tends to draw.\n\n### `size` travels to the children, and can be overruled\n\nThe group sizes every avatar inside it through a context of its own, so a stack is sized once rather than at\neach face — and an avatar that names its own `size` still wins, which is what lets one face in a row be the\nperson the row is about. Its default is `sm`, one step below a lone avatar's `md`: a stack is a summary,\nnot a portrait. `GroupSizes` asserts all three sizes and the exception, by measuring the boxes.\n\n### The counter is the one thing the reference has not got\n\nSpectrum's avatar group ends at the avatars and a label. This one counts, because the page it was built for\nhad already invented that by hand — four faces and a hardcoded `+5` in the markup — and a number written\ninto a page is a number nobody maintains. `max` trims the stack; `overflowCount` says what the counter\nreads when the children are not the whole group, which is the case for any list that arrives a page at a\ntime: three loaded faces out of eight teammates is `max={3} overflowCount={5}`.\n\nThe counter is a **picture rather than a word**: it reads `+5` and is named \"5 more\", so a screen reader\nhears what the eye sees rather than a plus sign. It draws in the avatars' own box at the panel's quieter\nfill, so the stack stays one height.\n\n### The label is the accessible name\n\nA group of faces with no name is an unexplained run of names, so `label` names it: the text is rendered\nafter the stack and wired up as the group's `aria-labelledby`. `aria-label` overrides it, for the group\nwhose visible text is a count or an abbreviation rather than a name. `GroupLabel` asserts both, and that\nthe name really came from the label's own id rather than from a hardcoded string.\n\n## The fourth component with nothing to copy\n\n`pulse-replica/` has no avatar, no user chip and nothing person-shaped at all — after the date picker, the\naccordion and the toast, this is the fourth component here invented rather than replicated. So every\ndecision comes from the system's own language:\n\n- **Square by default, and a circle never.** The sheet squares off its controls and makes exactly two\n  exceptions, the checkbox's 2px and the radio's circle; a round avatar would be a **third**, so the box\n  wears the control step of the radius scale — `rounded-md`, which is `0` in the sheet and a soft square\n  under a theme. It is the one place a designer expects a circle, which is why it is stated rather than\n  left to look like an oversight.\n- **A fill carrying `ink`**, like every other filled control: black on the luminous dark-theme accents,\n  white on the deep light-theme ones. The five colours are literally `Button`'s table, so an avatar cannot\n  drift away from the palette it sits beside.\n- **Mono, uppercase, letterspaced initials** — the face every other label here wears.\n\n## Initials are derived, and the edges are checked\n\nThe first letter of the first and last words, or the first two letters of a single word:\n\n| `alt`             | initials |\n| ----------------- | -------- |\n| `Ada Lovelace`    | `AL`     |\n| `Ada B. Lovelace` | `AL`     |\n| `fra1`            | `FR`     |\n| `\"  \"`            | `?`      |\n\nA middle name does not change it, because the surname is what distinguishes two Adas. A name with no letters\nat all still has to render something, so it gets `?` rather than an empty box — the one case where the\nfallback invents rather than derives.\n\nA generic silhouette was the alternative and was rejected: it says \"somebody\", and in a monitoring system\n_which_ somebody is the entire content of the cell.\n\n## A broken image falls back to initials, not to nothing\n\n`onError` swaps the `<img>` for the initials. This is not an edge case — an avatar URL that 404s, a service\nwith no picture, a directory that has not synced — it is the state a real dashboard spends most of its life\nin, and the failure mode of not handling it is an empty box. `BrokenImage` is a story with a source that\ncannot load, and it asserts the initials appear and the `<img>` is gone.\n\n## The name is announced once\n\nThe wrapper is `role=\"img\"` with `aria-label={alt}` and the inner `<img>` is `alt=\"\"`. Giving both a name\nannounces the same person twice; giving only the image one leaves the initials case — the majority case —\nwith no name at all.\n\nThe `Default` story asserts the picture **actually arrived** by checking `naturalWidth`: an `<img>` in the\nDOM proves nothing on its own, because a 404 leaves one behind.\n\n## `isPreviewable` changes the element, not the styling\n\n```tsx\n<Avatar alt=\"Ada Lovelace\" src=\"/ada.png\" isPreviewable />\n```\n\nOff — the default — this is a `<span role=\"img\" aria-label>`, a picture the tab order correctly skips. On, it\nis a **real `<button>`** that opens the avatar at 224px in a `Modal`, because a picture that answers a click\nhas to be reachable by keyboard and announced as something you can press. It is `react-aria-components`'\nown `Button` rather than this system's: the styled one brings a fill, a size and a padding, and this element\nis an avatar that happens to be pressable.\n\nTwo consequences worth stating:\n\n- **The accessible name changes from `alt` to `Preview {alt}`.** The name alone would not say what pressing\n  it does. The initials stay `aria-hidden` either way, so the name is announced once.\n- **The tab order changes.** An avatar in a list or a table cell is decoration; making every one of them a\n  tab stop is why this is opt-in rather than automatic.\n\nThe modal's title is the `alt`, so the dialog is announced by the name it is showing. `Previewable` asserts\nall of it: that the element is a `BUTTON`, that no dialog exists until it is pressed, that the open dialog's\naccessible name is the name, that the preview measures over 200px, that the picture decoded, and that\nclosing puts it away.",
       "files": [
         {
           "path": "src/components/Avatar/Avatar.tsx",
@@ -1488,7 +1677,7 @@
           }
         }
       },
-      "docs": "The first component, and the one the whole system's state vocabulary came from.\n\n```tsx\n<Button variant=\"outline\" color=\"danger\" size=\"md\" onPress={remove}>\n  <Button.Icon>{trash}</Button.Icon>\n  <Button.Text>Delete monitor</Button.Text>\n</Button>\n```\n\n| Slot          | React Aria | Notes                                                      |\n| ------------- | ---------- | ---------------------------------------------------------- |\n| `Button`      | `Button`   | `variant` × `color` × `size`, plus `block` and `isPending` |\n| `Button.Icon` | —          | Decorative; `aria-hidden`, sizes in `cap`                  |\n| `Button.Text` | —          | The label; truncates rather than wrapping                  |\n\n`variant` is the _shape_ — `default`, `outline`, `ghost`, `text`, `icon` — and `color` is the\n_meaning_ — `primary`, `secondary`, `neutral`, `success`, `danger`. The two are separate because\nevery combination is real: a ghost danger button is a row action that destroys something.\n\n## Loading keeps the box\n\n`isPending` leaves the content in place but unpainted and centres a spinner over it, so the button\ndoes not resize or shift its row when the action starts. React Aria supplies the rest: **no native\n`disabled`**, so it stays focusable, presses are blocked, and the state is announced.\n\nTwo hiding mechanisms, and they are **not** interchangeable:\n\n| Content             | Mechanism            | Why                                                                                                        |\n| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------- |\n| Text (bare or slot) | `text-transparent`   | `visibility` would drop it from the accessibility tree, and while loading the label is often the only name |\n| Decorative icon     | `visibility: hidden` | carries no text, so no name is lost, and its box still holds the width                                     |\n\nA bare text child can only be reached by the colour route; no `> *` rule matches a text node. The\nspinner then repaints itself in `--btn-fg`, the colour the label would have had, because the\nbutton's own colour is transparent while loading — that differs per variant, and hardcoding `ink`\nthere paints a black spinner on the black page for `outline`, `ghost` and `text`.\n\n`isDisabled` and `isPending` together are coherent but not free: the dim still applies, so it reads\nas unavailable, and the cursor defers to disabled (`not-allowed`, not `progress`) since the spinner\nalready says work is in flight. The rough edge is that `opacity` compounds onto children, so the\nspinner dims along with everything else and is faint — most visibly in the light theme.\n\n## States move the colour, they do not replace it\n\nThe sheet declares `hover: #FFF` on its one accent, and that does not survive five semantic colours:\na danger button that turns the same white as everything else has stopped meaning danger. It is\nbarely available anyway — these fills sit at L 92%, leaving 8% of headroom toward white.\n\nSo hover and pressed **deepen the button's own colour**, toward `--ink`:\n\n```\nrest → hover 12% toward ink → pressed 22% toward ink\n```\n\nMixing with `--ink` rather than `black` is what makes the recipes work in both themes: `ink`\ninverts with the fills, so the same 12% deepens the luminous dark-theme accents and lightens the\ndeep light-theme ones.\n\n**Declare a recipe on the element that sets its base.** A custom property is substituted where it is\n_declared_, so a recipe written on `:root` that reads `var(--btn)` finds nothing, becomes invalid,\nand silently paints transparent. This is why the recipes live in this component's BASE class list\nand not in `styles.css`.\n\n`ToggleButton` composes these same constants — `BUTTON_BASE`, `BUTTON_VARIANTS`, `BUTTON_SIZES` — and\nso does its `.Icon` and `.Text`, through thin wrappers. A toggle that drifted a pixel from the button\nbeside it would be the most visible kind of drift there is.\n\n**Still open:** the `outline` button's border is the accent at 40%, which measures 2.45:1 on the dark\npage and 1.76:1 on the light. It needs roughly 49% and 69% respectively, so no single alpha fixes it\nand raising it would visibly thicken the button. Left alone because it is the one boundary that is\narguably decorative — a button always carries a label at full accent strength, which identifies it,\nwhereas an empty input has only its own edge.",
+      "docs": "The first component, and the one the whole system's state vocabulary came from.\n\n```tsx\n<Button variant=\"outline\" color=\"danger\" size=\"md\" onPress={remove}>\n  <Button.Icon>{trash}</Button.Icon>\n  <Button.Text>Delete monitor</Button.Text>\n</Button>\n```\n\n| Slot          | React Aria | Notes                                                                            |\n| ------------- | ---------- | -------------------------------------------------------------------------------- |\n| `Button`      | `Button`   | `variant` × `color` × `size`, plus `block` and `isPending`                       |\n| `Button.Icon` | —          | Decorative; `aria-hidden`, sized in `cap` unless the icon names its own `size-*` |\n| `Button.Text` | —          | The label; truncates rather than wrapping                                        |\n\n`variant` is the _shape_ — `default`, `outline`, `ghost`, `text`, `icon` — and `color` is the\n_meaning_ — `primary`, `secondary`, `neutral`, `success`, `danger`. The two are separate because\nevery combination is real: a ghost danger button is a row action that destroys something.\n\n## An icon is sized by its label — unless it names a size\n\n`Button.Icon` sizes its child in `cap`, the height of the font's capital letters, so one icon works\nat every `size` without a per-variant number. An icon that carries a `size-*` of its own keeps that\ninstead:\n\n```tsx\n<Button.Icon>{trash}</Button.Icon>                      // 1cap — about 8px at sm, 10px at lg\n<Button.Icon><Trash className=\"size-4\" /></Button.Icon>  // 16px, whatever the label does\n```\n\n**The second form is what an icon-only control needs**, because there is no label there for a cap to\ntrack: a 32px square with an 8px glyph is a smudge, not an icon. It is also the only form that works\nat all — `.parent > svg { height: 1cap }` outranks a plain `.size-4` on the child whatever order the\ntwo land in, so before the wrapper's rule grew its `:not([class*=size-])` the size passed to an icon\nwas silently dead. Measured on `DashboardEmail`, whose twenty icon buttons asked for `size-4` and\ndrew 8px glyphs. `Button.browser.test.tsx` holds both halves: a sized icon at 16px, and a bare one\nthat tracks the label — smaller at 11px than at 14px.\n\n## Loading keeps the box\n\n`isPending` leaves the content in place but unpainted and centres a spinner over it, so the button\ndoes not resize or shift its row when the action starts. React Aria supplies the rest: **no native\n`disabled`**, so it stays focusable, presses are blocked, and the state is announced.\n\nTwo hiding mechanisms, and they are **not** interchangeable:\n\n| Content             | Mechanism            | Why                                                                                                        |\n| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------- |\n| Text (bare or slot) | `text-transparent`   | `visibility` would drop it from the accessibility tree, and while loading the label is often the only name |\n| Decorative icon     | `visibility: hidden` | carries no text, so no name is lost, and its box still holds the width                                     |\n\nA bare text child can only be reached by the colour route; no `> *` rule matches a text node. The\nspinner then repaints itself in `--btn-fg`, the colour the label would have had, because the\nbutton's own colour is transparent while loading — that differs per variant, and hardcoding `ink`\nthere paints a black spinner on the black page for `outline`, `ghost` and `text`.\n\n`isDisabled` and `isPending` together are coherent but not free: the dim still applies, so it reads\nas unavailable, and the cursor defers to disabled (`not-allowed`, not `progress`) since the spinner\nalready says work is in flight. The rough edge is that `opacity` compounds onto children, so the\nspinner dims along with everything else and is faint — most visibly in the light theme.\n\n## States move the colour, they do not replace it\n\nThe sheet declares `hover: #FFF` on its one accent, and that does not survive five semantic colours:\na danger button that turns the same white as everything else has stopped meaning danger. It is\nbarely available anyway — these fills sit at L 92%, leaving 8% of headroom toward white.\n\nSo hover and pressed **deepen the button's own colour**, toward `--ink`:\n\n```\nrest → hover 12% toward ink → pressed 22% toward ink\n```\n\nMixing with `--ink` rather than `black` is what makes the recipes work in both themes: `ink`\ninverts with the fills, so the same 12% deepens the luminous dark-theme accents and lightens the\ndeep light-theme ones.\n\n**Declare a recipe on the element that sets its base.** A custom property is substituted where it is\n_declared_, so a recipe written on `:root` that reads `var(--btn)` finds nothing, becomes invalid,\nand silently paints transparent. This is why the recipes live in this component's BASE class list\nand not in `styles.css`.\n\n`ToggleButton` composes these same constants — `BUTTON_BASE`, `BUTTON_VARIANTS`, `BUTTON_SIZES` — and\nso does its `.Icon` and `.Text`, through thin wrappers. A toggle that drifted a pixel from the button\nbeside it would be the most visible kind of drift there is.\n\n**Still open:** the `outline` button's border is the accent at 40%, which measures 2.45:1 on the dark\npage and 1.76:1 on the light. It needs roughly 49% and 69% respectively, so no single alpha fixes it\nand raising it would visibly thicken the button. Left alone because it is the one boundary that is\narguably decorative — a button always carries a label at full accent strength, which identifies it,\nwhereas an empty input has only its own edge.",
       "files": [
         {
           "path": "src/components/Button/Button.tsx",
@@ -7034,6 +7223,168 @@
       ]
     },
     {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "A placeholder that keeps the layout of the content it stands in for.",
+      "categories": [
+        "feedback"
+      ],
+      "dependencies": [],
+      "cssVars": {
+        "theme": {
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-destructive-foreground": "var(--destructive-foreground)",
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-success-foreground": "var(--success-foreground)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "color-chart-1": "var(--chart-1)",
+          "color-chart-2": "var(--chart-2)",
+          "color-chart-3": "var(--chart-3)",
+          "color-chart-4": "var(--chart-4)",
+          "color-chart-5": "var(--chart-5)",
+          "color-sidebar": "var(--sidebar)",
+          "color-sidebar-foreground": "var(--sidebar-foreground)",
+          "color-sidebar-primary": "var(--sidebar-primary)",
+          "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+          "color-sidebar-accent": "var(--sidebar-accent)",
+          "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+          "color-sidebar-border": "var(--sidebar-border)",
+          "color-sidebar-ring": "var(--sidebar-ring)",
+          "color-border-strong": "var(--border-strong)",
+          "color-border-soft": "var(--border-soft)",
+          "color-ink": "var(--ink)",
+          "font-mono": "var(--type-mono)",
+          "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "radius-sm": "calc(var(--radius) * 0.6)",
+          "radius-md": "calc(var(--radius) * 0.8)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) * 1.4)",
+          "radius-2xl": "calc(var(--radius) * 1.8)",
+          "radius-3xl": "calc(var(--radius) * 2.2)",
+          "radius-4xl": "calc(var(--radius) * 2.6)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          ":root": {
+            "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+            "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+            "--card-foreground": "var(--foreground)",
+            "--popover": "var(--card)",
+            "--popover-foreground": "var(--foreground)",
+            "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+            "--primary-foreground": "var(--ink)",
+            "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+            "--secondary-foreground": "var(--ink)",
+            "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+            "--destructive-foreground": "var(--ink)",
+            "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+            "--warning-foreground": "var(--ink)",
+            "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+            "--success-foreground": "var(--ink)",
+            "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+            "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+            "--accent": "var(--muted)",
+            "--accent-foreground": "var(--foreground)",
+            "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+            "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+            "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+            "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+            "--ring": "var(--primary)",
+            "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+            "--chart-2": "var(--primary)",
+            "--chart-3": "var(--warning)",
+            "--chart-4": "var(--success)",
+            "--chart-5": "var(--destructive)",
+            "--sidebar": "var(--card)",
+            "--sidebar-foreground": "var(--foreground)",
+            "--sidebar-primary": "var(--primary)",
+            "--sidebar-primary-foreground": "var(--ink)",
+            "--sidebar-accent": "var(--muted)",
+            "--sidebar-accent-foreground": "var(--foreground)",
+            "--sidebar-border": "var(--border-soft)",
+            "--sidebar-ring": "var(--primary)",
+            "--radius": "0",
+            "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+            "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+            "--duration-fast": "120ms",
+            "--duration-base": "160ms",
+            "--duration-slow": "200ms",
+            "interpolate-size": "allow-keywords",
+            "scrollbar-gutter": "stable",
+            "text-wrap": "pretty",
+            "overflow-wrap": "break-word",
+            "font-synthesis": "none",
+            "color-scheme": "dark",
+            "overscroll-behavior-y": "none"
+          },
+          "[data-theme='dark'],\n.dark": {
+            "color-scheme": "dark"
+          },
+          "[data-theme='light']": {
+            "color-scheme": "light"
+          },
+          "[data-theme='system']": {
+            "color-scheme": "light dark"
+          },
+          "h1,\nh2,\nh3,\nh4": {
+            "text-wrap": "balance"
+          },
+          "input,\ntextarea,\nselect": {
+            "font-size": "max(16px, 1rem)"
+          },
+          "body": {
+            "margin": "0",
+            "min-height": "100svh",
+            "background": "var(--background)",
+            "color": "var(--foreground)",
+            "font-family": "var(--font-mono)",
+            "font-size": "14px",
+            "line-height": "1.5",
+            "letter-spacing": "0",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale"
+          },
+          ":where(button, a, [role='button'])": {
+            "touch-action": "manipulation"
+          },
+          "::selection": {
+            "background": "var(--primary)",
+            "color": "var(--ink)"
+          }
+        }
+      },
+      "docs": "A placeholder that keeps the layout of the content it stands in for.\n\n```tsx\n<Skeleton isLoading={isLoading}>\n  <Card>\n    <Card.Header>\n      <Card.Title>Uptime</Card.Title>\n      <Card.Description>api-gateway · last 24 hours</Card.Description>\n    </Card.Header>\n    <Card.Content>Every monitor answered inside its window.</Card.Content>\n  </Card>\n</Skeleton>\n\n<Skeleton className=\"h-4 w-40\" />\n```\n\n| Prop        | Type        | Default | What it is                                                             |\n| ----------- | ----------- | ------- | ---------------------------------------------------------------------- |\n| `children`  | `ReactNode` | —       | the content being stood in for. With none, the placeholder is a box.   |\n| `isLoading` | `boolean`   | `true`  | `false` renders the children as they are, with no element of its own.  |\n| `className` | `string`    | —       | the placeholder's own box: `h-4 w-40`, `size-10 rounded-full`, `h-24`. |\n\n## How React Spectrum's works, and what had to change here\n\nReact Spectrum's `Skeleton` **renders no element at all**. It publishes a context — `SkeletonContext`\nand `useIsSkeleton` — and the components that can be skeletonised read it and draw themselves as\nshimmering boxes: `Text`, `Image`, `Icon`, `Link`, `StatusLight`, `Badge` and `Meter`. Form\ncomponents inside one are disabled. So the placeholder is composed of the components' real shapes,\nand the docs can list exactly which components are affected — which is also the catch: a component\nthat does not read the context keeps rendering as itself.\n\nIts shimmer is one class, `loadingStyle`: a three-stop gradient 300% as wide as the box, plus\n`* { visibility: hidden }`. The sweep is a Web Animation rather than a CSS keyframe, so that every\nskeleton on the page can be given `startTime = 0` and share one phase, and it is not created at all\nunder `prefers-reduced-motion`.\n\n**This library has no `Text`, no `Image` and no `Icon`** — the sheet has no typography component —\nso there is nothing for that context to attach to, and a skeleton cannot be built out of components\nthat are not here. The shimmer therefore goes on the element this component renders, which wraps the\ncontent instead. The property that matters survives: the content is hidden but **still laid out**, so\nthe placeholder's box is the box the real content will occupy, and the page does not move when it\narrives. What is lost is one gradient per component; what is gained is that any markup can be\nskeletonised without the per-component opt-in React Spectrum's own library needed.\n\nThe context is published anyway, and it is the one part of the React Spectrum mechanism that had to\nsurvive, because it is the only way a _consumer's_ component can tell it is inside a placeholder and\nskip work nobody can see. `Skeleton.stories.tsx`'s `OptIn` story is one.\n\n### The gradient is mixed from the placeholder's own colour\n\nThe highlight is `color-mix(in oklch, var(--foreground) 12%, var(--muted))`, not a second grey. Every\nhover and pressed state in this system already derives from its base rather than substituting a\ncolour, and the same rule pays off here: `--foreground` inverts with the theme, so one declaration\nlightens the dark theme's placeholder and darkens the light theme's. 12% is `TRACK_WASH`'s wash — a\nstep you can see across a card and cannot mistake for a border.\n\nThe stops sit at 33% and 66% of a gradient that is three times the box's width, which is why a\nplaceholder at rest — the reduced-motion case — shows the flat `--muted` end of it rather than a\nband parked in the middle of the box.\n\n### `visibility`, not `display`\n\n`[&_*]:invisible` takes the subtree out of the picture **and the accessibility tree** while leaving\nevery box exactly where it was. `display: none` would collapse the placeholder to nothing, which is\nthe one thing a skeleton must not do; and hiding the _wrapper_ instead would hide the shimmer as\nwell.\n\n### Three things are not left to the caller\n\n- **The subtree is `inert`.** Nothing inside is visible, so nothing inside may be tabbed to, clicked\n  or announced. That is also how React Spectrum disables the form components in a skeleton, without a\n  second prop for a consumer to remember. `Skeleton.browser.test.tsx` presses a button inside one and\n  checks focus does not land.\n- **The sweep is synchronised across the page.** Every skeleton sets its `startTime` to `0`, React\n  Spectrum's own technique. A CSS keyframe starts when each element mounts, so two placeholders that\n  appeared a second apart are visibly out of step and read as two things loading rather than one\n  screen. `Synchronized` is the story that measures it.\n- **`prefers-reduced-motion` is honoured**, and what is left is a _still_ placeholder rather than no\n  placeholder: the movement the reader asked to be spared, not the state.\n\n### No element at all once it is loaded\n\nWith `isLoading={false}` this component renders its children and nothing else — no wrapper to work\naround, and no `data-slot=\"skeleton\"` in the page. **The root only exists while the placeholder\ndoes**, which is worth knowing before writing a test that queries it: the honest assertion while\nloaded is that it is _absent_, not that it is invisible. `Loaded` is that story.\n\n## Granularity is the caller's\n\nWrap a whole card and it shimmers as one surface; wrap each line and each one shimmers on its own.\nThe second is how a skeleton screen is usually drawn, and it needs no content at all — a bare\nplaceholder is sized entirely by `className`:\n\n```tsx\n<div className=\"flex flex-col gap-3\">\n  <Skeleton className=\"h-4 w-40\" />\n  <Skeleton className=\"h-3 w-full\" />\n  <div className=\"flex items-center gap-3\">\n    <Skeleton className=\"size-10 rounded-full\" />\n    <div className=\"flex flex-1 flex-col gap-2\">\n      <Skeleton className=\"h-3 w-32\" />\n      <Skeleton className=\"h-3 w-20\" />\n    </div>\n  </div>\n</div>\n```\n\n**The wrapper is a block box**, which is what a placeholder surface is: it is the container's width\nand the content's height. A placeholder that has to sit _inside_ a line of running text therefore\ndoes not have a form here — put the bar in a block-level parent, sized as a line, or wrap the line\nit belongs to.\n\n**A placeholder is not a spinner.** A spinner says something specific is happening and is used for\none control's pending state (`isPending` on `Button`); a skeleton is used when a _region_ is being\nfetched and its shape is already known. Using both in the same region says it twice.",
+      "files": [
+        {
+          "path": "src/components/Skeleton/Skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/Skeleton/Skeleton.tsx"
+        }
+      ]
+    },
+    {
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",
@@ -8560,6 +8911,186 @@
           "path": "src/components/field.ts",
           "type": "registry:lib",
           "target": "@ui/pulse/field.ts"
+        }
+      ]
+    },
+    {
+      "name": "time-picker",
+      "type": "registry:ui",
+      "title": "TimePicker",
+      "description": "A time, typed or chosen — TimeField with a picker attached.",
+      "categories": [
+        "date"
+      ],
+      "dependencies": [
+        "@internationalized/date@^3.12.4",
+        "react-aria-components@^1.22.1"
+      ],
+      "cssVars": {
+        "theme": {
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-destructive-foreground": "var(--destructive-foreground)",
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-success-foreground": "var(--success-foreground)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "color-chart-1": "var(--chart-1)",
+          "color-chart-2": "var(--chart-2)",
+          "color-chart-3": "var(--chart-3)",
+          "color-chart-4": "var(--chart-4)",
+          "color-chart-5": "var(--chart-5)",
+          "color-sidebar": "var(--sidebar)",
+          "color-sidebar-foreground": "var(--sidebar-foreground)",
+          "color-sidebar-primary": "var(--sidebar-primary)",
+          "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+          "color-sidebar-accent": "var(--sidebar-accent)",
+          "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+          "color-sidebar-border": "var(--sidebar-border)",
+          "color-sidebar-ring": "var(--sidebar-ring)",
+          "color-border-strong": "var(--border-strong)",
+          "color-border-soft": "var(--border-soft)",
+          "color-ink": "var(--ink)",
+          "font-mono": "var(--type-mono)",
+          "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "radius-sm": "calc(var(--radius) * 0.6)",
+          "radius-md": "calc(var(--radius) * 0.8)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) * 1.4)",
+          "radius-2xl": "calc(var(--radius) * 1.8)",
+          "radius-3xl": "calc(var(--radius) * 2.2)",
+          "radius-4xl": "calc(var(--radius) * 2.6)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          ":root": {
+            "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+            "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+            "--card-foreground": "var(--foreground)",
+            "--popover": "var(--card)",
+            "--popover-foreground": "var(--foreground)",
+            "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+            "--primary-foreground": "var(--ink)",
+            "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+            "--secondary-foreground": "var(--ink)",
+            "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+            "--destructive-foreground": "var(--ink)",
+            "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+            "--warning-foreground": "var(--ink)",
+            "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+            "--success-foreground": "var(--ink)",
+            "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+            "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+            "--accent": "var(--muted)",
+            "--accent-foreground": "var(--foreground)",
+            "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+            "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+            "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+            "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+            "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+            "--ring": "var(--primary)",
+            "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+            "--chart-2": "var(--primary)",
+            "--chart-3": "var(--warning)",
+            "--chart-4": "var(--success)",
+            "--chart-5": "var(--destructive)",
+            "--sidebar": "var(--card)",
+            "--sidebar-foreground": "var(--foreground)",
+            "--sidebar-primary": "var(--primary)",
+            "--sidebar-primary-foreground": "var(--ink)",
+            "--sidebar-accent": "var(--muted)",
+            "--sidebar-accent-foreground": "var(--foreground)",
+            "--sidebar-border": "var(--border-soft)",
+            "--sidebar-ring": "var(--primary)",
+            "--radius": "0",
+            "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+            "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+            "--duration-fast": "120ms",
+            "--duration-base": "160ms",
+            "--duration-slow": "200ms",
+            "interpolate-size": "allow-keywords",
+            "scrollbar-gutter": "stable",
+            "text-wrap": "pretty",
+            "overflow-wrap": "break-word",
+            "font-synthesis": "none",
+            "color-scheme": "dark",
+            "overscroll-behavior-y": "none"
+          },
+          "[data-theme='dark'],\n.dark": {
+            "color-scheme": "dark"
+          },
+          "[data-theme='light']": {
+            "color-scheme": "light"
+          },
+          "[data-theme='system']": {
+            "color-scheme": "light dark"
+          },
+          "h1,\nh2,\nh3,\nh4": {
+            "text-wrap": "balance"
+          },
+          "input,\ntextarea,\nselect": {
+            "font-size": "max(16px, 1rem)"
+          },
+          "body": {
+            "margin": "0",
+            "min-height": "100svh",
+            "background": "var(--background)",
+            "color": "var(--foreground)",
+            "font-family": "var(--font-mono)",
+            "font-size": "14px",
+            "line-height": "1.5",
+            "letter-spacing": "0",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale"
+          },
+          ":where(button, a, [role='button'])": {
+            "touch-action": "manipulation"
+          },
+          "::selection": {
+            "background": "var(--primary)",
+            "color": "var(--ink)"
+          }
+        }
+      },
+      "docs": "A time, typed or chosen — `TimeField` with a picker attached.\n\n```tsx\n<TimePicker defaultValue={parseTime('09:30')} minuteStep={15}>\n  <TimePicker.Label>Opens at</TimePicker.Label>\n  <TimePicker.Group>\n    <TimePicker.Input />\n    <TimePicker.Button />\n  </TimePicker.Group>\n  <TimePicker.Hint>Business hours only.</TimePicker.Hint>\n</TimePicker>\n```\n\n| Slot                | React Aria   | Notes                                      |\n| ------------------- | ------------ | ------------------------------------------ |\n| `TimePicker`        | `TimeField`  | Owns the value. `size` is `sm \\| md \\| lg` |\n| `TimePicker.Label`  | `Label`      | The shared field legend                    |\n| `TimePicker.Group`  | `Group`      | Leaves room for the chevron                |\n| `TimePicker.Input`  | `DateInput`  | The segments, drawn from the render props  |\n| `TimePicker.Button` | `Button`     | The chevron that opens the wheel           |\n| `TimePicker.Hint`   | `Text`       | `slot=\"description\"`                       |\n| `TimePicker.Error`  | `FieldError` | Renders nothing while valid                |\n\n### The wheel is drawn for you, and it stays open\n\nA picker without a wheel is not a picker, so `TimePicker` renders the popover and the three columns\nitself, and the field is the entire API — as in `DatePicker`, the popover and its contents are\ninternal and cannot be replaced.\n\n**Picking does not close it, and that is the one place this differs from `DatePicker`.** A day is one\ndecision, so choosing one closes the calendar. A time is two, three or four — hour, minute, and then\nseconds or a day period if the field has them — and closing after the hour would send the reader back to\nthe field to start again. Enter and Escape close it; Escape is React Aria's own, and Enter is captured\nbefore the option under the keyboard can consume it, because by then the option has nothing left to do:\nthe value was committed when the arrows moved focus onto it.\n\n### It is `TimeField`, not a second time field\n\n`TimePicker` wraps React Aria's `TimeField`, so the segments, the label, the hint, the error and the\nvalidation are the field's — the same ones `TimeField` publishes, through the same `field.ts` and\n`date.tsx` recipes. What the picker adds is the trigger, the panel and the wheel; what it does not add\nis a second way to type a time.\n\nThe value is a `TimeValue`, not a string. `parseTime('09:30')` reads an ISO time and `onChange` hands\nback the same shape, which is what keeps the segments, the order they appear in and the wheel's own\nnumbering following the locale rather than a format the code chose.\n\n### Every column follows a segment\n\n**The wheel offers exactly what the field shows, and that is a rule rather than a coincidence.** A\n`TimePicker` built with `granularity=\"second\"` has a second segment, so its wheel has a seconds column;\na minute field has neither and gets neither; a 24-hour locale has no day period to name, so there is no\nAM/PM column. Offering seconds to a field that cannot show them writes a value nobody can read back, and\nhiding them from a field that has them throws away the precision it was built for.\n\nThat is why the seconds column appears from `granularity` and not from a prop of its own: the segments\nare the field's own answer, read from the `TimeFieldState` React Aria publishes, which is the same state\nthat draws them. `secondStep` then decides how far apart the seconds in that column are — one by default,\nso every second the field can hold — and `minuteStep` does the same for the minutes.\n\n### The wheel asks the field what its hour cycle is\n\n**Nothing here decides between 12-hour and 24-hour time.** The hour column is built from the hour\nsegment's own `minValue`/`maxValue`, and the day-period column exists only when the field's segments\ncontain a `dayPeriod` — both read from the `TimeFieldState` React Aria publishes, which is the same\nstate that draws the segments. An `en-US` clock gets twelve hours and an AM/PM column; `en-GB` gets\ntwenty-four and none; a locale whose hour runs `0–11` gets that. A second, independent decision about\nthe hour cycle is how a wheel ends up offering 12 next to a field that has no such segment.\n\nThe AM/PM labels come from the same formatter the field uses, so a `ja-JP` field reads `午前` in the\nsegment and in the wheel. Hardcoded `AM`/`PM` would put the two halves of one component at odds.\n\n### What the columns had to decide\n\n| State                        | Treatment                                |\n| ---------------------------- | ---------------------------------------- |\n| out of `minValue`/`maxValue` | dimmed to 30%, and skipped by the arrows |\n| chosen                       | filled with the accent, carrying `ink`   |\n| hovered / focused            | the sheet's faint wash                   |\n\nOut-of-range times stay in the column rather than being removed — a column with holes in it is harder\nto read than one where the gaps are marked. A **whole hour** is only dimmed when every minute in it is\noutside the window: with `minValue` at `09:30`, hour 09 is offered because 09:59 is inside it, and a\ncolumn that dropped the hour a reader is living in would be unusable. Choosing it then **clamps** —\n09:00 lands on 09:30 — so arrow-scrubbing across a boundary stays inside the window instead of asking\nthe field to reject its own value.\n\nThe hover and focus washes are qualified with `not-data-[selected]` so a chosen time keeps the accent\nunder the pointer and under the keyboard. Written without it, the two rules set the same property at the\nsame specificity, and which one wins is the order Tailwind emits them in — a coin toss the source\ncannot show you.\n\n### The behaviour is React Aria's, not a re-implementation\n\nEach column is a React Aria `ListBox`, and the wheel's whole keyboard story is that choice:\n\n- **`selectionBehavior=\"replace\"` commits as focus moves**, so `ArrowDown` changes the value with no\n  Space to confirm — the reason a wheel beats typing into segments.\n- **`autoFocus` lands on the value that is set**, not on the first row, because React Aria's autofocus\n  prefers a selected key. It also scrolls that option into view.\n- **`disabledKeys` keeps the arrows off everything outside `minValue`/`maxValue`**, and typeahead\n  (`45` in the minutes column) comes free with the collection.\n- **Left and right move between the columns**, landing on the value each one holds so the next arrow\n  steps from what is set — and the seconds column is part of that walk, not an afterthought beside it.\n  The direction follows the locale: in RTL, `ArrowLeft` moves forward. Tab also moves between them,\n  because React Aria treats each list as one tab stop.\n\nThe wheel is a row of columns rather than a clock face for the same reason: a list box can be read,\ntyped into and walked with the arrow keys, and its options carry `data-selected` and `data-disabled` for\nthe eye. There are three of them for a minute field and four when the field holds seconds — which is also\nwhy a seconds wheel is wider than the field it belongs to, and the popover grows to fit the wheel rather\nthan the trigger.\n\n### Four things this cost, all worth writing down\n\n- **A bare `Time` cannot be committed.** React Aria types `setValue` for a date field and takes every\n  plain value through `toCalendar`, which asks the value for its calendar — and `@internationalized/date`'s\n  `Time` deliberately has none, so `timeState.setValue(new Time(9, 30))` throws. The wheel commits a\n  `CalendarDateTime` carrying the field's own date, and `useTimeFieldState` maps what it emits back\n  through `toTime`, so `onChange` still receives a `Time`.\n- **`timeValue` is declared non-nullable and is `null` while the field is empty**, because React Stately\n  computes it from the value. An empty field opens the wheel on its **placeholder** rather than on a\n  time this component picked — the same midnight the segments are showing, or whatever `placeholderValue`\n  says. That is why `placeholderValue` is published here and not on `TimeField`.\n- **`minValue`, `maxValue` and `placeholderValue` are not on the state.** React Aria consumes all three\n  when it builds `TimeFieldState` and does not publish them again, so they travel to the wheel through\n  this component's own context rather than being read back off the state.\n- **React Aria scrolls the column it focuses, and only that one.** The hours column is autofocused when\n  the wheel opens, so it arrives on the value that is set — and a seconds column of sixty opened at `00`\n  with the second it was set to somewhere below the fold, which looks exactly like a column that ignored\n  the value. The wheel now scrolls every column to its own selected row, on the render _after_ the\n  collection exists (React Aria builds it a commit late, which is why its own autofocus retries), and\n  again whenever what the wheel is showing changes — but not while a reader is scrolling a column they\n  are browsing, because browsing changes no value.\n\n### Form behaviour is the field's\n\nA `TimePicker` carries exactly the form plumbing a `TimeField` has, because it _is_ one — native\nconstraint validation through `validationBehavior`, the `FieldError` slot, `validate`, and React Aria's\nhidden input. It does not add a hidden input of its own, and that is deliberate: React Aria sets the\nhidden input's `form` attribute to `''` (`react-aria-components/src/HiddenDateInput.tsx`) so a time\nfield's value is not submitted with a form. A second, submittable input here would make `TimePicker` and\n`TimeField` disagree about the same value.\n\n### The trigger is disabled with the field\n\nReact Aria's own `DatePicker` leaves its chevron enabled on a disabled field, and the input dims alone.\nHere the trigger dims and disables with it: a picker that cannot be edited must not open a panel that\nwould write to it. Read-only is not an exception — there is nothing to invite a click on.",
+      "files": [
+        {
+          "path": "src/components/TimePicker/TimePicker.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pulse/TimePicker/TimePicker.tsx"
+        },
+        {
+          "path": "src/components/date.tsx",
+          "type": "registry:lib",
+          "target": "@ui/pulse/date.tsx"
+        },
+        {
+          "path": "src/components/field.ts",
+          "type": "registry:lib",
+          "target": "@ui/pulse/field.ts"
+        },
+        {
+          "path": "src/components/popover.ts",
+          "type": "registry:lib",
+          "target": "@ui/pulse/popover.ts"
         }
       ]
     },

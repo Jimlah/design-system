@@ -85,6 +85,7 @@ function useComponentIndex() {
         'TextArea',
         'TextField',
         'TimeField',
+        'TimePicker',
         'ToggleButton',
         'ToggleButtonGroup',
         'TokenField',
@@ -102,6 +103,7 @@ function useComponentIndex() {
         'Virtualizer',
       ],
       Overlays: [
+        'ActionBar',
         'Menu',
         'Modal',
         'Popover',
@@ -131,6 +133,7 @@ function useComponentIndex() {
         'RangeCalendar',
         'Separator',
         'SharedElement',
+        'Skeleton',
         'VisuallyHidden',
       ],
     }

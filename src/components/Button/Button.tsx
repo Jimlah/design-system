@@ -219,11 +219,20 @@ const ICON_SIZES: Record<NonNullable<ButtonProps['size']>, string> = {
  * position in the markup decides, so there is no `position` prop to keep in
  * sync.
  *
- * The child `<svg>` is sized in `cap`, the height of the font's capital
- * letters, so one icon works at every `size` without a per-variant number: at
- * 11px the icon is smaller than at 14px, which is what the eye expects. The
- * markup needs a `viewBox` for `w-auto` to follow the drawing's ratio.
- * Never set a px `width`/`height` on it — a fixed icon does not track the text.
+ * **The child `<svg>` is sized in `cap` — the height of the font's capital
+ * letters — unless it names a size of its own.** A bare icon therefore works at
+ * every `size` without a per-variant number: at 11px it is smaller than at 14px,
+ * which is what the eye expects, and the markup needs a `viewBox` for `w-auto` to
+ * follow the drawing's ratio.
+ *
+ * An icon carrying its own `size-*` keeps it, and that escape hatch is not a
+ * nicety: an **icon-only** control has no label for a cap to track — a 32px square
+ * with an 8px glyph is a smudge, not an icon. It is the same shape shadcn's own
+ * button uses, and it is load-bearing rather than stylistic: `.parent > svg { height:
+ * 1cap }` outranks a plain `.size-4` on the child whatever order the two land in, so
+ * without the `:not()` a sized icon is sized by its parent and the caller's class is
+ * silently dead — measured on this repo's own leads dashboard, where twenty buttons
+ * asked for `size-4` and drew 8px glyphs.
  *
  * Exported as `ButtonIcon` only so tooling can resolve it; consume the
  * compound form `Button.Icon`.
@@ -233,7 +242,13 @@ export function ButtonIcon({ children }: ButtonIconProps) {
     <span
       data-slot="icon"
       aria-hidden="true"
-      className="inline-flex shrink-0 items-center [&>svg]:block [&>svg]:h-[1cap] [&>svg]:w-auto [&>svg]:shrink-0"
+      className={[
+        'inline-flex shrink-0 items-center',
+        '[&>svg]:block [&>svg]:shrink-0',
+        // The default, and only for an icon that did not name its own size — see the note above.
+        '[&>svg:not([class*=size-])]:h-[1cap]',
+        '[&>svg:not([class*=size-])]:w-auto',
+      ].join(' ')}
     >
       {children}
     </span>

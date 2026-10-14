@@ -16,6 +16,76 @@ Who something belongs to — a monitor's owner, an alert's assignee — as a pic
 | `color`         | `neutral` | `Button`'s five                                        |
 | `isPreviewable` | `false`   | opens the avatar large in a modal; it becomes a button |
 
+## `Avatar.Group` — several of them
+
+```tsx
+<Avatar.Group label="4 teammates">
+  <Avatar alt="Ada Lovelace" src="/ada.png" />
+  <Avatar alt="Grace Hopper" />
+  <Avatar alt="Karen Spärck Jones" />
+</Avatar.Group>
+```
+
+| prop            | default | notes                                                            |
+| --------------- | ------- | ---------------------------------------------------------------- |
+| `children`      | —       | the avatars; the ring and the overlap apply to direct children   |
+| `size`          | `sm`    | `sm` 24px, `md` 32px, `lg` 40px — handed to every avatar inside  |
+| `label`         | —       | text after the stack; **also the group's accessible name**       |
+| `max`           | —       | how many to show before the rest are counted as `+N`             |
+| `overflowCount` | —       | what the counter says, when the children are not the whole group |
+| `aria-label`    | —       | names the group outright, overriding `label`                     |
+
+### It is `Avatar.Group`, not an `AvatarGroup`
+
+**It is not a component that happens to contain avatars — it is what several avatars _are_.** The size it
+takes, the box it draws, the name it carries and the colour it fills with are all `Avatar`'s, once per
+face, and the compound form is what says so: a reader who has `Avatar` has `Avatar.Group`. That is the
+same call `Button.Icon` and `Toolbar.Group` make, and it keeps the library's index of components a list
+of things rather than a list of arrangements.
+
+### The faces are one object, and the ring is what says so
+
+Each avatar covers a **quarter** of the one before it — 18px steps for `sm`, 24 for `md`, 30 for `lg` —
+and is cut out of it by a 2px ring in the surface the stack is standing on:
+
+```tsx
+<Avatar.Group label="3 on call" className="[--avatar-ring:var(--color-card)]">
+```
+
+**That ring is the whole trick.** Without it the overlapping faces merge into a smear; with the ring in the
+wrong colour, it draws a line around a stack that is sitting on something else. `--avatar-ring` is declared
+on the group and defaults to the page, so a stack inside a panel moves it with one class — the same
+mechanism `Button`'s colours use, and the reason it is a property rather than a prop.
+
+The ring follows the element's own radius, which is the avatar's `rounded-md`: this system squares
+everything, and a circular cut-out around a square face is what a hand-rolled stack tends to draw.
+
+### `size` travels to the children, and can be overruled
+
+The group sizes every avatar inside it through a context of its own, so a stack is sized once rather than at
+each face — and an avatar that names its own `size` still wins, which is what lets one face in a row be the
+person the row is about. Its default is `sm`, one step below a lone avatar's `md`: a stack is a summary,
+not a portrait. `GroupSizes` asserts all three sizes and the exception, by measuring the boxes.
+
+### The counter is the one thing the reference has not got
+
+Spectrum's avatar group ends at the avatars and a label. This one counts, because the page it was built for
+had already invented that by hand — four faces and a hardcoded `+5` in the markup — and a number written
+into a page is a number nobody maintains. `max` trims the stack; `overflowCount` says what the counter
+reads when the children are not the whole group, which is the case for any list that arrives a page at a
+time: three loaded faces out of eight teammates is `max={3} overflowCount={5}`.
+
+The counter is a **picture rather than a word**: it reads `+5` and is named "5 more", so a screen reader
+hears what the eye sees rather than a plus sign. It draws in the avatars' own box at the panel's quieter
+fill, so the stack stays one height.
+
+### The label is the accessible name
+
+A group of faces with no name is an unexplained run of names, so `label` names it: the text is rendered
+after the stack and wired up as the group's `aria-labelledby`. `aria-label` overrides it, for the group
+whose visible text is a count or an abbreviation rather than a name. `GroupLabel` asserts both, and that
+the name really came from the label's own id rather than from a hardcoded string.
+
 ## The fourth component with nothing to copy
 
 `pulse-replica/` has no avatar, no user chip and nothing person-shaped at all — after the date picker, the

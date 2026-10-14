@@ -409,7 +409,13 @@ body {
      carry an attribute and therefore a class's worth of weight — always win. Measured on a menu
      that was closed and then opened: opacity 0 → 0.15 → 0.65 → 1 over 150ms, with `pulse-panel-enter`
      running. */
+  /* **The action bar is the one surface here that arrives because of something the user did rather
+     than because they opened it** — choosing a row is what puts it on the page, and every time it
+     appears it does so with the page underneath unchanged. So it gets the same entry the panels get.
+     Its exit is the one nothing is declared for: `data-exiting` is written by React Aria's overlays,
+     and a bar whose reason to exist has gone should not linger to look pretty. */
   :where(
+    [data-slot='action-bar'],
     [data-slot='modal'],
     [data-slot='sheet-overlay'],
     [data-slot='sheet'],
@@ -425,6 +431,7 @@ body {
   /* The panels rise as well as fade; the scrims only fade. A toast is a panel in this sense — it
      is the one surface React Aria gives no entering hook at all, so the mount is what it gets. */
   :where(
+    [data-slot='action-bar'],
     [data-slot='popover'],
     [data-slot='menu'],
     [data-slot='dropdown'],

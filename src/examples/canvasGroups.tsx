@@ -9,6 +9,7 @@ import {
 import { parseDate, parseTime } from '@internationalized/date'
 
 import { Accordion } from '../components/Accordion/Accordion'
+import { ActionBar } from '../components/ActionBar/ActionBar'
 import { Avatar } from '../components/Avatar/Avatar'
 import { BarChart } from '../components/BarChart/BarChart'
 import { Breadcrumbs } from '../components/Breadcrumbs/Breadcrumbs'
@@ -49,6 +50,7 @@ import {
   SharedElementTransition,
 } from '../components/SharedElement/SharedElement'
 import { Sheet } from '../components/Sheet/Sheet'
+import { Skeleton } from '../components/Skeleton/Skeleton'
 import { Slider } from '../components/Slider/Slider'
 import { Sparkline } from '../components/Sparkline/Sparkline'
 import { Switch } from '../components/Switch/Switch'
@@ -437,6 +439,14 @@ const MONITORS_THOUSAND = Array.from({ length: 1000 }, (_, index) => ({
  * request from every visitor's browser to somewhere this project does not control. Sixteen bytes of
  * SVG keep the example honest.
  */
+/** Four names for the avatar previews: enough to overlap, few enough to read. */
+const TEAM_NAMES = [
+  'Ada Lovelace',
+  'Grace Hopper',
+  'Karen Spärck Jones',
+  'Mary Jackson',
+]
+
 const AVATAR_SRC =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
@@ -474,6 +484,41 @@ function ToastPreview() {
           </Toast>
         )}
       </Toast.Region>
+    </>
+  )
+}
+
+/**
+ * The action bar's own demo: a selection, and the bar that appears over the page while there is one.
+ *
+ * **It starts with nothing selected, so the canvas shows no bar until this button is pressed**, and
+ * pressing it puts the bar at the bottom of the *viewport* rather than in this slot — the component is
+ * `fixed`, which is what it does over a real page and the same trade the toast's region makes here. A
+ * bar pinned over the canvas is a bar doing its actual job; a bar with its position overridden would be
+ * a picture of one.
+ */
+function ActionBarPreview() {
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  return (
+    <>
+      <Button
+        size="sm"
+        variant="outline"
+        onPress={() => setSelected(new Set(['fra1', 'iad1']))}
+      >
+        Choose two rows
+      </Button>
+      <ActionBar
+        selectedItemCount={selected.size}
+        onClearSelection={() => setSelected(new Set())}
+      >
+        <Button size="sm" variant="ghost" color="neutral">
+          Restart
+        </Button>
+        <Button size="sm" variant="ghost" color="danger">
+          Take down
+        </Button>
+      </ActionBar>
     </>
   )
 }
@@ -2227,6 +2272,23 @@ const CATEGORIES: CanvasCategory[] = [
         ],
       },
       {
+        id: 'action-bar',
+        title: 'ActionBar',
+        rows: [
+          {
+            axis: 'what it is',
+            previews: [
+              one(
+                'two',
+                'two rows chosen — press to select, and the bar appears over the page',
+                () => <ActionBarPreview />,
+                'medium',
+              ),
+            ],
+          },
+        ],
+      },
+      {
         id: 'toast',
         title: 'Toast',
         rows: [
@@ -3026,6 +3088,35 @@ const CATEGORIES: CanvasCategory[] = [
             ),
           },
           {
+            axis: 'several',
+            previews: [
+              one(
+                'group',
+                'Avatar.Group: four faces, cut out of each other',
+                () => (
+                  <Avatar.Group label="4 teammates">
+                    {TEAM_NAMES.map((name) => (
+                      <Avatar key={name} alt={name} />
+                    ))}
+                  </Avatar.Group>
+                ),
+                'medium',
+              ),
+              one(
+                'group-counted',
+                'max and overflowCount: the rest as a counter',
+                () => (
+                  <Avatar.Group label="9 teammates" max={3} overflowCount={5}>
+                    {TEAM_NAMES.map((name) => (
+                      <Avatar key={name} alt={name} />
+                    ))}
+                  </Avatar.Group>
+                ),
+                'medium',
+              ),
+            ],
+          },
+          {
             axis: 'source',
             previews: [
               one('initials', 'no src, so the initials are drawn', () => (
@@ -3571,6 +3662,74 @@ const CATEGORIES: CanvasCategory[] = [
                 </Meter>
               )),
             ),
+          },
+        ],
+      },
+      {
+        id: 'skeleton',
+        title: 'Skeleton',
+        rows: [
+          {
+            axis: 'what it stands in for',
+            previews: [
+              one(
+                'card',
+                'a card of mock content, laid out as the real one will be',
+                () => (
+                  <Skeleton>
+                    <Card>
+                      <Card.Header>
+                        <Card.Title>Uptime</Card.Title>
+                        <Card.Description>
+                          api-gateway · last 24 hours
+                        </Card.Description>
+                      </Card.Header>
+                      <Card.Content>
+                        Every monitor answered inside its window.
+                      </Card.Content>
+                    </Card>
+                  </Skeleton>
+                ),
+                'medium',
+              ),
+              one(
+                'lines',
+                'lines sized by the caller, the way a skeleton screen is drawn',
+                () => (
+                  <div className="flex w-full flex-col gap-2">
+                    <Skeleton className="h-3 w-40" />
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                ),
+                'medium',
+              ),
+            ],
+          },
+          {
+            axis: 'loaded',
+            previews: [
+              one(
+                'isLoading-false',
+                'isLoading={false}, which renders no element of its own',
+                () => (
+                  <Skeleton isLoading={false}>
+                    <Card>
+                      <Card.Header>
+                        <Card.Title>Uptime</Card.Title>
+                        <Card.Description>
+                          api-gateway · last 24 hours
+                        </Card.Description>
+                      </Card.Header>
+                      <Card.Content>
+                        Every monitor answered inside its window.
+                      </Card.Content>
+                    </Card>
+                  </Skeleton>
+                ),
+                'medium',
+              ),
+            ],
           },
         ],
       },

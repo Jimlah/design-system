@@ -214,6 +214,9 @@ const config = defineConfig({
             // The same pair, and the same reason: a range picker without its `Button` cannot
             // open a calendar.
             DateRangePicker: ['Input', 'Button'],
+            // And again, for the wheel: a time picker without its `Button` has a panel it cannot
+            // open. It also inherits `TimeField`'s anatomy, so its `Input` is not optional either.
+            TimePicker: ['Input', 'Button'],
           },
           ignore: {
             // **`Form/tanstack.tsx` is the second exception, and a different kind of one.** That file
@@ -250,6 +253,7 @@ const config = defineConfig({
               container: 'Group',
               members: ['Input', 'Button'],
             },
+            TimePicker: { container: 'Group', members: ['Input', 'Button'] },
           },
         },
       ],

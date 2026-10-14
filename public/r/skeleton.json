@@ -1,0 +1,164 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "A placeholder that keeps the layout of the content it stands in for.",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "src/components/Skeleton/Skeleton.tsx",
+      "content": "import {\n  createContext,\n  useCallback,\n  useContext,\n  useEffect,\n  useRef,\n  useState,\n} from 'react'\nimport type { ReactNode } from 'react'\n\n/**\n * Whether a `Skeleton` above this point is standing in for content.\n *\n * This is the whole of React Spectrum's mechanism: its `Skeleton` renders no element at all, it\n * publishes a context, and the components that can be skeletonised — `Text`, `Image`, `Icon`,\n * `Link`, `StatusLight`, `Badge` and `Meter` — read it and draw themselves as placeholders. A\n * component that does not read it keeps rendering, which is why the docs can list exactly which\n * ones are affected.\n *\n * **This library's components do not need to read it**, because the shimmer below goes on an\n * element that wraps the content rather than on each component's own root (see `Skeleton`). The\n * context stays public anyway, and that is not decoration: it is the only way a *consumer's* own\n * component — a chart, a monitor tile — can tell that it is inside a placeholder and skip work it\n * would otherwise do to draw something nobody can see. `Skeleton.stories.tsx` has one.\n */\nconst SkeletonContext = createContext(false)\n\n/**\n * Whether the content here is a placeholder.\n *\n * ```tsx\n * function Uptime({percent}: {percent: number}) {\n *   // Nothing under a skeleton is visible, so there is no point measuring a chart into it.\n *   if (useIsSkeleton()) return <div className=\"h-6 w-24\" />\n *   return <div>{percent}%</div>\n * }\n * ```\n */\nexport function useIsSkeleton(): boolean {\n  return useContext(SkeletonContext)\n}\n\n/**\n * The shimmer, as one class list.\n *\n * A three-stop gradient whose middle band is the highlight, laid out 300% as wide as the box so\n * that the sweep has somewhere to travel, and never repeated. The stops are at 33% and 66% of the\n * *gradient*, which is why a box at rest — one with no animation, under reduced motion — shows the\n * flat `--muted` end of it rather than a band parked in the middle.\n *\n * **The highlight is mixed from the base colour rather than picked as a second grey**, the same\n * move every hover and pressed state in this system makes: `--foreground` inverts with the theme,\n * so one rule lightens the dark theme's placeholder and darkens the light theme's. 12% is\n * `TRACK_WASH`'s wash — a step you can see across a card and cannot mistake for a border.\n *\n * `[&_*]:invisible` is what makes the content a placeholder. `visibility`, not `display`, because\n * a skeleton is a promise about *where things will be*: the subtree leaves the picture and the\n * accessibility tree while its boxes stay exactly where the real content will land, which is the\n * whole reason the page does not jump when the content arrives.\n */\nconst SHIMMER = [\n  '[&_*]:invisible',\n  'bg-no-repeat',\n  '[background-image:linear-gradient(to_right,var(--muted)_33%,color-mix(in_oklch,var(--foreground)_12%,var(--muted))_50%,var(--muted)_66%)]',\n  '[background-size:300%_100%]',\n].join(' ')\n\n/** The sweep takes two seconds, eased at both ends, and never stops. */\nconst SWEEP_DURATION = 2000\n\n/**\n * Whether the reader has asked for less motion, read from the media query and watched, so that\n * turning it on stops a running sweep rather than waiting for the next mount.\n *\n * Read in an effect, never during render: this app is server-rendered, where `window` does not\n * exist, and a preference read at render time would also be a preference that never changes.\n */\nfunction usePrefersReducedMotion(): boolean {\n  const [reduced, setReduced] = useState(false)\n\n  useEffect(() => {\n    const query = window.matchMedia('(prefers-reduced-motion: reduce)')\n    const update = () => setReduced(query.matches)\n    update()\n    query.addEventListener('change', update)\n    return () => query.removeEventListener('change', update)\n  }, [])\n\n  return reduced\n}\n\nexport interface SkeletonProps {\n  /**\n   * The content being stood in for — mock data inside your real markup, or nothing at all when the\n   * placeholder is a bare box sized by `className`.\n   */\n  children?: ReactNode\n  /**\n   * Whether the content is still being fetched. `true` by default, because a `Skeleton` that is\n   * not standing in for anything is a blank box; pass `false` and the children render as they are,\n   * with no element of this component's own in the page.\n   */\n  isLoading?: boolean\n  /**\n   * The placeholder's own box: `h-4 w-40` for a line of text, `size-10 rounded-full` for an\n   * avatar, `h-24` for a chart. A placeholder wrapped *around* content needs none of this — it\n   * takes the content's size — and a bare one is sized entirely from here.\n   */\n  className?: string\n}\n\n/**\n * A placeholder that keeps the layout of the content it stands in for.\n *\n * ```tsx\n * // Mock data inside your real component, the way React Spectrum's docs do it: the placeholder is\n * // laid out by the markup it is standing in for, so the page does not move when it arrives.\n * <Skeleton isLoading={isLoading}>\n *   <Card>\n *     <Card.Header>\n *       <Card.Title>Uptime</Card.Title>\n *       <Card.Description>api-gateway · last 24 hours</Card.Description>\n *     </Card.Header>\n *     <Card.Content>Every monitor answered within its window.</Card.Content>\n *   </Card>\n * </Skeleton>\n *\n * // One line on its own, sized by the caller rather than by content:\n * <Skeleton className=\"h-4 w-40\" />\n * ```\n *\n * **React Spectrum's `Skeleton` renders no element of its own.** It publishes a context and its\n * own `Text`, `Image`, `Icon`, `Link`, `StatusLight`, `Badge` and `Meter` read it and swap\n * themselves for a shimmering box, so the placeholder is composed of the components' real\n * shapes. This library has no `Text` and no `Image` — the sheet has no typography component —\n * and a skeleton cannot be built out of components that are not here. So the shimmer goes on this\n * element, which wraps the content instead: **the content is hidden but still laid out, so the box\n * is the size the content really is**, which is the property that matters. What you lose is one\n * gradient per component and what you gain is that any markup in this library can be skeletonised\n * without the component opt-in React Spectrum needed.\n *\n * The granularity is the caller's. Wrap a whole card and it shimmers as one surface; wrap each line\n * and each one shimmers on its own, which is how a skeleton screen is normally drawn:\n *\n * ```tsx\n * <div className=\"flex flex-col gap-3\">\n *   <Skeleton className=\"h-4 w-40\" />\n *   <Skeleton className=\"h-3 w-full\" />\n * </div>\n * ```\n *\n * Three things are deliberately *not* left to the caller:\n *\n * - **The sweep is synchronised across the page.** The shimmer is a Web Animation rather than a\n *   CSS keyframe, and every skeleton sets its `startTime` to `0` — React Spectrum's own technique.\n *   A CSS animation starts when each element mounts, so two placeholders that appeared a second\n *   apart are visibly out of step, which reads as two things loading rather than one screen.\n * - **`prefers-reduced-motion` is honoured**, and what is left is a flat placeholder rather than no\n *   placeholder: the state change the reader asked for, minus the movement.\n * - **The subtree is `inert`.** Nothing inside is visible, so nothing inside may be tabbed to,\n *   clicked or announced — which is also how React Spectrum disables the form components in a\n *   skeleton. There is no separate \"disabled inside a skeleton\" prop for a consumer to remember.\n */\nexport function Skeleton({\n  children,\n  isLoading = true,\n  className,\n}: SkeletonProps) {\n  const reducedMotion = usePrefersReducedMotion()\n  const animation = useRef<Animation | null>(null)\n\n  /**\n   * Start the sweep when the box attaches, and leave it alone afterwards. A re-render replaces this\n   * callback's identity, so React calls it again with the same element — which must not restart the\n   * animation, and does not: it only runs when there is no animation yet.\n   */\n  const shimmer = useCallback(\n    (element: HTMLDivElement | null) => {\n      const shouldAnimate = isLoading && !reducedMotion\n      if (\n        shouldAnimate &&\n        !animation.current &&\n        element &&\n        typeof element.animate === 'function'\n      ) {\n        // `startTime` 0 rather than \"now\": every skeleton on the page is then at the same point in\n        // the same sweep, so the whole screen pulses as one surface.\n        animation.current = element.animate(\n          [{ backgroundPosition: '100%' }, { backgroundPosition: '0%' }],\n          {\n            duration: SWEEP_DURATION,\n            iterations: Infinity,\n            easing: 'ease-in-out',\n          },\n        )\n        animation.current.startTime = 0\n      } else if (!shouldAnimate && animation.current) {\n        animation.current.cancel()\n        animation.current = null\n      }\n    },\n    [isLoading, reducedMotion],\n  )\n\n  useEffect(\n    () => () => {\n      animation.current?.cancel()\n      animation.current = null\n    },\n    [],\n  )\n\n  if (!isLoading) {\n    return (\n      <SkeletonContext.Provider value={false}>\n        {children}\n      </SkeletonContext.Provider>\n    )\n  }\n\n  return (\n    <SkeletonContext.Provider value={true}>\n      <div\n        data-slot=\"skeleton\"\n        ref={shimmer}\n        inert\n        className={[SHIMMER, className].filter(Boolean).join(' ')}\n      >\n        {children}\n      </div>\n    </SkeletonContext.Provider>\n  )\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/pulse/Skeleton/Skeleton.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-background": "var(--background)",
+      "color-foreground": "var(--foreground)",
+      "color-card": "var(--card)",
+      "color-card-foreground": "var(--card-foreground)",
+      "color-popover": "var(--popover)",
+      "color-popover-foreground": "var(--popover-foreground)",
+      "color-primary": "var(--primary)",
+      "color-primary-foreground": "var(--primary-foreground)",
+      "color-secondary": "var(--secondary)",
+      "color-secondary-foreground": "var(--secondary-foreground)",
+      "color-muted": "var(--muted)",
+      "color-muted-foreground": "var(--muted-foreground)",
+      "color-accent": "var(--accent)",
+      "color-accent-foreground": "var(--accent-foreground)",
+      "color-destructive": "var(--destructive)",
+      "color-destructive-foreground": "var(--destructive-foreground)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "color-success": "var(--success)",
+      "color-success-foreground": "var(--success-foreground)",
+      "color-border": "var(--border)",
+      "color-input": "var(--input)",
+      "color-ring": "var(--ring)",
+      "color-chart-1": "var(--chart-1)",
+      "color-chart-2": "var(--chart-2)",
+      "color-chart-3": "var(--chart-3)",
+      "color-chart-4": "var(--chart-4)",
+      "color-chart-5": "var(--chart-5)",
+      "color-sidebar": "var(--sidebar)",
+      "color-sidebar-foreground": "var(--sidebar-foreground)",
+      "color-sidebar-primary": "var(--sidebar-primary)",
+      "color-sidebar-primary-foreground": "var(--sidebar-primary-foreground)",
+      "color-sidebar-accent": "var(--sidebar-accent)",
+      "color-sidebar-accent-foreground": "var(--sidebar-accent-foreground)",
+      "color-sidebar-border": "var(--sidebar-border)",
+      "color-sidebar-ring": "var(--sidebar-ring)",
+      "color-border-strong": "var(--border-strong)",
+      "color-border-soft": "var(--border-soft)",
+      "color-ink": "var(--ink)",
+      "font-mono": "var(--type-mono)",
+      "ease-pulse": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "radius-sm": "calc(var(--radius) * 0.6)",
+      "radius-md": "calc(var(--radius) * 0.8)",
+      "radius-lg": "var(--radius)",
+      "radius-xl": "calc(var(--radius) * 1.4)",
+      "radius-2xl": "calc(var(--radius) * 1.8)",
+      "radius-3xl": "calc(var(--radius) * 2.2)",
+      "radius-4xl": "calc(var(--radius) * 2.6)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      ":root": {
+        "--background": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--foreground": "light-dark(oklch(18% 0 none), oklch(100% 0 none))",
+        "--card": "light-dark(oklch(97.5% 0 none), oklch(17.22% 0.0115 260.6))",
+        "--card-foreground": "var(--foreground)",
+        "--popover": "var(--card)",
+        "--popover-foreground": "var(--foreground)",
+        "--primary": "light-dark(oklch(55% 0.0931 189.5), oklch(91.98% 0.1236 189.5))",
+        "--primary-foreground": "var(--ink)",
+        "--secondary": "light-dark(oklch(52% 0 none), oklch(80.47% 0 none))",
+        "--secondary-foreground": "var(--ink)",
+        "--destructive": "light-dark(oklch(55% 0.1236 29), oklch(78.5% 0.1236 29))",
+        "--destructive-foreground": "var(--ink)",
+        "--warning": "light-dark(oklch(55% 0.1103 91.2), oklch(87.33% 0.1505 91.2))",
+        "--warning-foreground": "var(--ink)",
+        "--success": "light-dark(oklch(55% 0.1236 145), oklch(91.98% 0.1236 145))",
+        "--success-foreground": "var(--ink)",
+        "--muted": "light-dark(oklch(94.5% 0 none), oklch(22.5% 0.009 255.6))",
+        "--muted-foreground": "color-mix(in oklch, var(--foreground) 70%, transparent)",
+        "--accent": "var(--muted)",
+        "--accent-foreground": "var(--foreground)",
+        "--ink": "light-dark(oklch(100% 0 none), oklch(0% 0 none))",
+        "--border": "color-mix(in oklch, var(--foreground) 62%, transparent)",
+        "--border-strong": "color-mix(in oklch, var(--foreground) 40%, transparent)",
+        "--border-soft": "color-mix(in oklch, var(--foreground) 30%, transparent)",
+        "--input": "color-mix(in oklch, var(--foreground) 45%, transparent)",
+        "--ring": "var(--primary)",
+        "--chart-1": "light-dark(oklch(45% 0 none), oklch(52% 0 none))",
+        "--chart-2": "var(--primary)",
+        "--chart-3": "var(--warning)",
+        "--chart-4": "var(--success)",
+        "--chart-5": "var(--destructive)",
+        "--sidebar": "var(--card)",
+        "--sidebar-foreground": "var(--foreground)",
+        "--sidebar-primary": "var(--primary)",
+        "--sidebar-primary-foreground": "var(--ink)",
+        "--sidebar-accent": "var(--muted)",
+        "--sidebar-accent-foreground": "var(--foreground)",
+        "--sidebar-border": "var(--border-soft)",
+        "--sidebar-ring": "var(--primary)",
+        "--radius": "0",
+        "--type-mono": "'Overpass Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+        "--text-display": "clamp(2rem, 1.5rem + 2.5vw, 2.5rem)",
+        "--duration-fast": "120ms",
+        "--duration-base": "160ms",
+        "--duration-slow": "200ms",
+        "interpolate-size": "allow-keywords",
+        "scrollbar-gutter": "stable",
+        "text-wrap": "pretty",
+        "overflow-wrap": "break-word",
+        "font-synthesis": "none",
+        "color-scheme": "dark",
+        "overscroll-behavior-y": "none"
+      },
+      "[data-theme='dark'],\n.dark": {
+        "color-scheme": "dark"
+      },
+      "[data-theme='light']": {
+        "color-scheme": "light"
+      },
+      "[data-theme='system']": {
+        "color-scheme": "light dark"
+      },
+      "h1,\nh2,\nh3,\nh4": {
+        "text-wrap": "balance"
+      },
+      "input,\ntextarea,\nselect": {
+        "font-size": "max(16px, 1rem)"
+      },
+      "body": {
+        "margin": "0",
+        "min-height": "100svh",
+        "background": "var(--background)",
+        "color": "var(--foreground)",
+        "font-family": "var(--font-mono)",
+        "font-size": "14px",
+        "line-height": "1.5",
+        "letter-spacing": "0",
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale"
+      },
+      ":where(button, a, [role='button'])": {
+        "touch-action": "manipulation"
+      },
+      "::selection": {
+        "background": "var(--primary)",
+        "color": "var(--ink)"
+      }
+    }
+  },
+  "docs": "A placeholder that keeps the layout of the content it stands in for.\n\n```tsx\n<Skeleton isLoading={isLoading}>\n  <Card>\n    <Card.Header>\n      <Card.Title>Uptime</Card.Title>\n      <Card.Description>api-gateway · last 24 hours</Card.Description>\n    </Card.Header>\n    <Card.Content>Every monitor answered inside its window.</Card.Content>\n  </Card>\n</Skeleton>\n\n<Skeleton className=\"h-4 w-40\" />\n```\n\n| Prop        | Type        | Default | What it is                                                             |\n| ----------- | ----------- | ------- | ---------------------------------------------------------------------- |\n| `children`  | `ReactNode` | —       | the content being stood in for. With none, the placeholder is a box.   |\n| `isLoading` | `boolean`   | `true`  | `false` renders the children as they are, with no element of its own.  |\n| `className` | `string`    | —       | the placeholder's own box: `h-4 w-40`, `size-10 rounded-full`, `h-24`. |\n\n## How React Spectrum's works, and what had to change here\n\nReact Spectrum's `Skeleton` **renders no element at all**. It publishes a context — `SkeletonContext`\nand `useIsSkeleton` — and the components that can be skeletonised read it and draw themselves as\nshimmering boxes: `Text`, `Image`, `Icon`, `Link`, `StatusLight`, `Badge` and `Meter`. Form\ncomponents inside one are disabled. So the placeholder is composed of the components' real shapes,\nand the docs can list exactly which components are affected — which is also the catch: a component\nthat does not read the context keeps rendering as itself.\n\nIts shimmer is one class, `loadingStyle`: a three-stop gradient 300% as wide as the box, plus\n`* { visibility: hidden }`. The sweep is a Web Animation rather than a CSS keyframe, so that every\nskeleton on the page can be given `startTime = 0` and share one phase, and it is not created at all\nunder `prefers-reduced-motion`.\n\n**This library has no `Text`, no `Image` and no `Icon`** — the sheet has no typography component —\nso there is nothing for that context to attach to, and a skeleton cannot be built out of components\nthat are not here. The shimmer therefore goes on the element this component renders, which wraps the\ncontent instead. The property that matters survives: the content is hidden but **still laid out**, so\nthe placeholder's box is the box the real content will occupy, and the page does not move when it\narrives. What is lost is one gradient per component; what is gained is that any markup can be\nskeletonised without the per-component opt-in React Spectrum's own library needed.\n\nThe context is published anyway, and it is the one part of the React Spectrum mechanism that had to\nsurvive, because it is the only way a _consumer's_ component can tell it is inside a placeholder and\nskip work nobody can see. `Skeleton.stories.tsx`'s `OptIn` story is one.\n\n### The gradient is mixed from the placeholder's own colour\n\nThe highlight is `color-mix(in oklch, var(--foreground) 12%, var(--muted))`, not a second grey. Every\nhover and pressed state in this system already derives from its base rather than substituting a\ncolour, and the same rule pays off here: `--foreground` inverts with the theme, so one declaration\nlightens the dark theme's placeholder and darkens the light theme's. 12% is `TRACK_WASH`'s wash — a\nstep you can see across a card and cannot mistake for a border.\n\nThe stops sit at 33% and 66% of a gradient that is three times the box's width, which is why a\nplaceholder at rest — the reduced-motion case — shows the flat `--muted` end of it rather than a\nband parked in the middle of the box.\n\n### `visibility`, not `display`\n\n`[&_*]:invisible` takes the subtree out of the picture **and the accessibility tree** while leaving\nevery box exactly where it was. `display: none` would collapse the placeholder to nothing, which is\nthe one thing a skeleton must not do; and hiding the _wrapper_ instead would hide the shimmer as\nwell.\n\n### Three things are not left to the caller\n\n- **The subtree is `inert`.** Nothing inside is visible, so nothing inside may be tabbed to, clicked\n  or announced. That is also how React Spectrum disables the form components in a skeleton, without a\n  second prop for a consumer to remember. `Skeleton.browser.test.tsx` presses a button inside one and\n  checks focus does not land.\n- **The sweep is synchronised across the page.** Every skeleton sets its `startTime` to `0`, React\n  Spectrum's own technique. A CSS keyframe starts when each element mounts, so two placeholders that\n  appeared a second apart are visibly out of step and read as two things loading rather than one\n  screen. `Synchronized` is the story that measures it.\n- **`prefers-reduced-motion` is honoured**, and what is left is a _still_ placeholder rather than no\n  placeholder: the movement the reader asked to be spared, not the state.\n\n### No element at all once it is loaded\n\nWith `isLoading={false}` this component renders its children and nothing else — no wrapper to work\naround, and no `data-slot=\"skeleton\"` in the page. **The root only exists while the placeholder\ndoes**, which is worth knowing before writing a test that queries it: the honest assertion while\nloaded is that it is _absent_, not that it is invisible. `Loaded` is that story.\n\n## Granularity is the caller's\n\nWrap a whole card and it shimmers as one surface; wrap each line and each one shimmers on its own.\nThe second is how a skeleton screen is usually drawn, and it needs no content at all — a bare\nplaceholder is sized entirely by `className`:\n\n```tsx\n<div className=\"flex flex-col gap-3\">\n  <Skeleton className=\"h-4 w-40\" />\n  <Skeleton className=\"h-3 w-full\" />\n  <div className=\"flex items-center gap-3\">\n    <Skeleton className=\"size-10 rounded-full\" />\n    <div className=\"flex flex-1 flex-col gap-2\">\n      <Skeleton className=\"h-3 w-32\" />\n      <Skeleton className=\"h-3 w-20\" />\n    </div>\n  </div>\n</div>\n```\n\n**The wrapper is a block box**, which is what a placeholder surface is: it is the container's width\nand the content's height. A placeholder that has to sit _inside_ a line of running text therefore\ndoes not have a form here — put the bar in a block-level parent, sized as a line, or wrap the line\nit belongs to.\n\n**A placeholder is not a spinner.** A spinner says something specific is happening and is used for\none control's pending state (`isPending` on `Button`); a skeleton is used when a _region_ is being\nfetched and its shape is already known. Using both in the same region says it twice.",
+  "categories": [
+    "feedback"
+  ],
+  "type": "registry:ui"
+}
