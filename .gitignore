@@ -4,6 +4,8 @@ dist
 dist-ssr
 *.local
 .env
+# The design-taste working files: the drawn direction and the inspector's screenshots. Not the site.
+.taste-skill/
 .nitro
 .tanstack
 .wrangler

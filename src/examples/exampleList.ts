@@ -70,7 +70,7 @@ export const EXAMPLES: Example[] = [
     path: '',
     title: 'The landing page',
     summary:
-      'Every component in the library with its stories, used at length rather than lined up in boxes.',
-    shows: ['all 42 components'],
+      'The case for the library rather than an index of it: what Pulse is, the five worked pages as folder bands, the measurements behind every claim, and the install — with one control that repaints the whole page.',
+    shows: ['Table', 'ToggleButtonGroup', 'TextField', 'Link', 'Button'],
   },
 ]

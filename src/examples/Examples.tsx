@@ -9,8 +9,8 @@ import { EXAMPLES } from './exampleList'
  * something you can find rather than something you have to already know the address of.
  *
  * **It is an example too, and it is in the list.** The alternative — a page of links that nothing
- * links to — is the same problem one level up, so the landing page's toolbar points here, and this
- * page's first entry is the landing page. There is no fourth place to look.
+ * links to — is the same problem one level up, so the landing page's navigation points here, and the
+ * list carries the landing page itself. There is no fourth place to look.
  *
  * Two decisions worth keeping:
  *

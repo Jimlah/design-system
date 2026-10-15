@@ -17,9 +17,9 @@ Everything below is published to GitHub Pages — no server, no build step, just
 | A worked example: a task board | <https://jimlah.github.io/design-system/board/>          |
 | The registry, as JSON          | <https://jimlah.github.io/design-system/r/registry.json> |
 
-The landing page is the entry point and carries a live index of every component; the **documentation
-is the reference** — one page per component, with its props, its stories and the decisions behind it.
-Search for a component and the docs are where you should land.
+The landing page is the case for using this library: what it is, what is measured, and the install.
+The **documentation is the reference** — one page per component, with its props, its stories and the
+decisions behind it. Search for a component and the docs are where you should land.
 
 ## What this is, and the rules it holds itself to
 
@@ -68,24 +68,24 @@ The landing page, the docs and the registry are one app, built with
 [TanStack Start](https://tanstack.com/start) and [Tailwind CSS v4](https://tailwindcss.com/). Routes
 are files in `src/routes/`:
 
-| Route                          | What it is                                                                                                                                                  |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                            | The landing page: a live component index, and the components doing their actual jobs                                                                        |
-| `/canvas/`                     | Every component on one plane, grouped by kind, with a camera you can drive                                                                                  |
-| `/storybook/`                  | The documentation — the built Storybook, served by this app                                                                                                 |
-| `/create/`                     | A theme builder in the shape of [shadcn's](https://ui.shadcn.com/create): pick colours, watch the real components repaint, copy the token block or the link |
-| `/board/`                      | A worked example end to end: drag cards between four columns, each a sheet's worth of detail, with undo and local storage                                   |
-| `/examples/`                   | The index of the worked examples, each doing one job end to end                                                                                             |
-| `/login/`, `/dashboard-email/` | Two more pages built the same way: a sign-in page, and a leads dashboard                                                                                    |
+| Route                          | What it is                                                                                                                                                                                            |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                            | The landing page: the argument for the library — what it is, the five examples as folder bands, the measurements, the questions and the install, with the theme switch that flips the page it sits on |
+| `/canvas/`                     | Every component on one plane, grouped by kind, with a camera you can drive                                                                                                                            |
+| `/storybook/`                  | The documentation — the built Storybook, served by this app                                                                                                                                           |
+| `/create/`                     | A theme builder in the shape of [shadcn's](https://ui.shadcn.com/create): pick colours, watch the real components repaint, copy the token block or the link                                           |
+| `/board/`                      | A worked example end to end: drag cards between four columns, each a sheet's worth of detail, with undo and local storage                                                                             |
+| `/examples/`                   | The index of the worked examples, each doing one job end to end                                                                                                                                       |
+| `/login/`, `/dashboard-email/` | Two more pages built the same way: a sign-in page, and a leads dashboard                                                                                                                              |
 
 Pages live in `src/examples/` and are tested by `*.browser.test.tsx` under the `components` project.
 They are **not** components: they have no story and are not in the registry, because a story is what
-publishes something as part of this library's API. See [`docs/create.md`](./docs/create.md) and
-[`docs/board.md`](./docs/board.md) for what each of those two cost to build.
+publishes something as part of this library's API. See [`docs/pulse.md`](./docs/pulse.md),
+[`docs/create.md`](./docs/create.md) and [`docs/board.md`](./docs/board.md) for what building those cost.
 
 A local `npm run dev` serves the docs at <http://localhost:3000/storybook/> too — the last
-`npm run build-storybook` — so the landing page's component links open real documentation instead of
-linking back to `/`. The Storybook _dev server_ cannot be mounted under a prefix (it hands its preview
+`npm run build-storybook` — so a link to the docs is the documentation rather than a page that links
+back to `/`. The Storybook _dev server_ cannot be mounted under a prefix (it hands its preview
 iframe a module graph of root-absolute URLs), so `:6006` stays the live, always-current one; see
 `storybookBuild()` in [`vite.config.ts`](./vite.config.ts).
 
@@ -137,7 +137,7 @@ behaviour it is built around.
 <https://jimlah.github.io/design-system/>. GitHub Pages has no server behind it, so the app is built
 twice: normally it is server-rendered, and with `DEPLOY_BASE` set the routes are **prerendered** to
 real HTML and every URL is prefixed for the repository subpath. That one variable becomes Vite's
-`base`, the router's `basepath`, and the prefix on the landing page's Storybook links — which is why
+`base`, the router's `basepath`, and the prefix on every internal link — which is why
 the subpath is written down once. `npm run seo` checks a built site in that shape: one title,
 description, canonical and `og:url` per page, the sitemap and the prerendered pages agreeing in both
 directions. Assemble a deploy locally with:

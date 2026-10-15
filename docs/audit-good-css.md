@@ -9,6 +9,12 @@ right yardstick to hold against it.
 **Nothing in the source was changed.** The only file this audit adds is this one. Every finding is a
 measurement or a quote, and every fix is a concrete line.
 
+**A later change to note before reading it.** The landing page this audit examined, `src/components/Home.tsx`
+and its story, has since been removed: the landing page is now `src/examples/Pulse.tsx`, which is an example
+rather than a component. Findings quoted against `Home.tsx` are kept as they were written — they are the
+record of the audit, and the rules they argue for are in `docs/pulse.md` now — but their line numbers point
+at a file the repository no longer carries.
+
 ## Method, and how to read the evidence
 
 Three kinds of evidence, marked in every finding:

@@ -65,8 +65,11 @@ The same applies in the other direction: `npm test` right after
   that exist to show the components being _used_ — `Login` and the theme builder, `Create` — and each
   is tested by a `Foo.browser.test.tsx` under the `components` project instead. A story is what carries the docs page
   and what puts a component into the manifest this repo's MCP tools serve, so a story for an example
-  would publish a page as part of the library's API. `Home` predates the rule and keeps its story,
-  because that story is the app's own SSR-and-CSS check.
+  would publish a page as part of the library's API. `Home` was the exception — the old landing page,
+  which kept a story as the app's own SSR-and-CSS check — and it has been removed: the landing page is
+  now `src/examples/Pulse.tsx`, an example like the rest, held by `Pulse.browser.test.tsx`. What the app
+  renders on the server is checked by the build, which renders every route through the server and
+  prerenders them all under `DEPLOY_BASE`.
 - Do **not** export components from files under `src/routes/`. TanStack Router cannot
   code-split route files with extra exports, and Storybook's components manifest cannot
   resolve a component that is not imported from a non-route module. Keep route files thin
@@ -566,9 +569,9 @@ manifest went from **239 published props to 329**.
 | `ToggleButton` | 3      | 8     | `isSelected`, `onChange`                     |
 | `Tree`         | 1      | 9     | `selectionMode`, `expandedKeys`              |
 
-Final count: **332 props across 42 components**. The three that still publish two or fewer should:
-`Home` (a page, no props at all), `ColorSwatch` (`color` genuinely is its only prop) and `Toolbar`
-(`orientation` — the bar has nothing else of its own). Nothing is left under-reporting.
+Final count: **332 props across 42 components**. The two that still publish two or fewer should:
+`ColorSwatch` (`color` genuinely is its only prop) and `Toolbar` (`orientation` — the bar has nothing
+else of its own). Nothing is left under-reporting.
 
 **tsc is the correctness check for this work.** Writing `AriaToggleButtonProps['isPending']` when no
 such prop exists is a compile error, so the declarations cannot be guessed — which is how React Aria's
@@ -712,7 +715,7 @@ configured, because nothing has asked for it, and adding a component by analogy 
 **`ignore` exists so the requirement list is declared exactly once.** The first version of this used a second,
 file-scoped config entry that restated the map without `Checkbox`. It worked, and it was wrong: the day a
 third parent joins `rules`, every such entry has to be found and updated by hand and nothing reports the ones
-missed — the same staleness `Home`'s component index is generated to avoid. `ignore` is additive, so adding a
+missed — the same staleness `registry.json` is generated to avoid. `ignore` is additive, so adding a
 parent touches one object. Patterns are `*`/`**` globs matched against the repo-relative path.
 
 `ignore` is per **parent**, not per file, which is the whole point here: `Radio` is still required in

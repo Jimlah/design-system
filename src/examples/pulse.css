@@ -1,0 +1,225 @@
+/*
+  The Pulse page's own stylesheet.
+
+  Everything else on this page is a Tailwind utility, and every colour it names comes from a token in
+  src/styles.css. This file holds only the four things a utility class cannot express: the shape the
+  page is built from, the tints derived from the accent, the entrance choreography, and the scale that
+  turns one real control into the page's loudest moment.
+
+  **No colour is written out here.** The tints are color-mix() of --primary into --card, which is the
+  same rule the components follow: one base value drives its whole family, in both themes, because every
+  token is a light-dark() pair and this page never redeclares one.
+*/
+
+/* ============================================================
+   THE MOTIF
+   One shape runs the page: a bar. It is the replica's histogram bar, the one mark in this system that
+   is a measured value rather than a thing that carries text (src/styles.css says so beside `--chart-1`),
+   and it is the shape of the primary button, of every tab on the page, and of the footer's five letters.
+   Below: that one shape at four very different scales, cut the same way every time.
+   ============================================================ */
+
+/* The hero's stage: one bar, enormous, with its top-left corner cut.
+   The cut is the tab, the shouldered corner the folder bands and the index cards wear at 22-24px,
+   here at 34px on a shape the height of the screen. It is the only decoration on the page. */
+.bar-cut {
+  clip-path: polygon(0 34px, 34px 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* A folder band with its tab rising from the top edge. One filled shape, not a box with a block on top:
+   the tab and the band are cut by the same polygon. --tab-x and --tab-w place the tab. */
+.folder-band {
+  clip-path: polygon(
+    0 46px,
+    var(--tab-x) 46px,
+    var(--tab-x) 0,
+    calc(var(--tab-x) + var(--tab-w)) 0,
+    calc(var(--tab-x) + var(--tab-w) + 24px) 46px,
+    100% 46px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* An index card the same way, at 44px, with a narrower shoulder.
+   The tab's step and width are breakpoints rather than numbers in the markup, because a row of tabs that
+   steps further than its card is wide takes the page sideways with it: measured at 768px, six cards each
+   stepping 132px put the last tab 92px past the viewport. */
+.index-card {
+  --tab-w: 7rem;
+  --tab-step: 2.5rem;
+  /* The card's own index, which the page sets inline; the tab's left edge follows from it. */
+  --tab-x: calc(1.5rem + var(--tab-i, 0) * var(--tab-step));
+}
+
+@media (min-width: 640px) {
+  .index-card {
+    --tab-step: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .index-card {
+    --tab-w: 11rem;
+    --tab-step: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .index-card {
+    --tab-step: 8.25rem;
+  }
+}
+
+.index-card {
+  clip-path: polygon(
+    0 44px,
+    var(--tab-x) 44px,
+    var(--tab-x) 0,
+    calc(var(--tab-x) + var(--tab-w)) 0,
+    calc(var(--tab-x) + var(--tab-w) + 22px) 44px,
+    100% 44px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* A closed panel's name, reading upward at the foot of its sliver. `writing-mode` is the only way to
+   rotate text without taking its box out of the layout, and the second turn is what makes it read up. */
+.panel-name {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* The footer's wordmark: five bars of different heights, bottoms on one line. */
+.mark-letter {
+  display: block;
+  width: clamp(2.6rem, 7.6vw, 8.5rem);
+  height: var(--letter-h, 100%);
+}
+
+/* ============================================================
+   THE TINTS
+   Five steps of the accent mixed into the panel tone, which is what gives the accordion its
+   dark-to-light order. Derived, so a theme that moves --primary moves the whole ladder.
+   ============================================================ */
+.tint-0 {
+  background: var(--card);
+}
+.tint-1 {
+  background: color-mix(in oklch, var(--primary) 5%, var(--card));
+}
+.tint-2 {
+  background: color-mix(in oklch, var(--primary) 11%, var(--card));
+}
+.tint-3 {
+  background: color-mix(in oklch, var(--primary) 19%, var(--card));
+}
+.tint-4 {
+  background: color-mix(in oklch, var(--primary) 29%, var(--card));
+}
+
+/* ============================================================
+   THE POSTER CONTROL
+   The one control on this page is a real ToggleButtonGroup, not a copy of one drawn at a bigger size.
+   Scaling it with a transform keeps every one of its proportions (the 1px boundary, the segment's
+   shared divider, the label's 13px) exactly as the component drew them. That is the point of blowing a
+   control up: what you see is the component, not an illustration of it.
+   ============================================================ */
+.poster-control {
+  transform: scale(var(--poster-scale, 6));
+  transform-origin: 0 50%;
+}
+@media (max-width: 700px) {
+  .poster-control {
+    /* 268px of group at 1.9 is 509px, which is 130vw on a 390px screen: the far end is cropped by the
+       section and the near segment is still under a thumb. */
+    --poster-scale: 1.9;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .poster-control {
+    --poster-scale: 3.8;
+  }
+}
+
+/* ============================================================
+   MOTION
+   Signature move: the hero's stage opens from its left edge while the fragment on it settles from
+   1.12. Then every section's parts arrive in order, and one picture drifts.
+
+   **Nothing here is load-bearing.** The reveal classes only exist once the page has put `data-anim`
+   on its own root from an effect, so a reader without JavaScript, or with reduced motion, gets the
+   whole page at rest and nothing is left invisible.
+   ============================================================ */
+
+[data-anim='on'] [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+[data-anim='on'] [data-reveal].is-in {
+  animation: pulse-rise 640ms var(--ease-pulse) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes pulse-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+[data-anim='on'] .shutter {
+  animation: pulse-wipe 1100ms var(--ease-pulse) both;
+}
+[data-anim='on'] .shutter-once {
+  animation: pulse-settle 1500ms var(--ease-pulse) both;
+}
+
+@keyframes pulse-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes pulse-settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* The one moving picture: a slow drift on the canvas clip's still, so the page carries a picture that
+   moves even where the clip itself is not playing. */
+@media (prefers-reduced-motion: no-preference) {
+  .drift {
+    animation: pulse-drift 19s var(--ease-pulse) infinite alternate;
+  }
+}
+@keyframes pulse-drift {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.045) translateY(-1.5%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .shutter,
+  .shutter-once,
+  .drift {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

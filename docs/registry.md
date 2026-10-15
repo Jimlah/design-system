@@ -8,9 +8,8 @@ another project installs it with `npx shadcn add` instead of copying it out of t
 - **Served items** — `public/r/<name>.json`, built from the catalogue, committed, and copied into
   `dist/client` by `vp build`.
 - **Rebuild after changing a component** — `npm run registry:build`.
-- **What is not in it** — `Home.tsx`, the app's landing page; the stories and tests; and
-  `src/examples/`, which holds page bodies shown to _readers_ rather than components shipped to
-  _consumers_.
+- **What is not in it** — the stories and tests, and `src/examples/`, which holds page bodies shown to
+  _readers_ rather than components shipped to _consumers_ — the landing page among them.
 
 ## Consuming it
 

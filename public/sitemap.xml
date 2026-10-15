@@ -3,10 +3,11 @@
   Hand-kept, like robots.txt beside it, and for the same reason: this is fetched by a crawler rather
   than rendered by the app, so it cannot be derived from the route tree. Add a route, add it here.
 
-  Seven addresses. The landing page is the entry point; the docs are where the reference material
-  lives and the reason a component search should land on this site at all; the examples index is
-  where the worked pages are listed, and Create is the theme builder, which is a page of its own
-  rather than a corner of the landing page.
+  Nine addresses. The landing page is the entry point, and it is the case for using this library rather
+  than an index of it: what Pulse is, what is measured, and the install. The docs are where the reference
+  material lives and the reason a component search should land on this site at all; the examples index is
+  where the worked pages are listed, and Create is the theme builder, which is a page of its own rather
+  than a corner of the landing page.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

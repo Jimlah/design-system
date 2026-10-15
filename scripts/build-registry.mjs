@@ -400,8 +400,9 @@ function build() {
   const files = sourceFiles()
   const graph = importGraph(files)
 
-  // A component is a directory with an entry file named after it. Home.tsx is the app's landing page
-  // - the one page body in src/components - and is not part of the library a consumer installs.
+  // A component is a directory with an entry file named after it. Every page body in this repository
+  // lives in src/examples/ - and the landing page with it - so what is under src/components/ is the
+  // library a consumer installs, and nothing else.
   const names = readdirSync(SRC, { withFileTypes: true })
     .filter(function (entry) {
       return entry.isDirectory()
